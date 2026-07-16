@@ -16,8 +16,13 @@ export function esBot(valorHoneypot: unknown): boolean {
  * `true` si el formulario se completó sospechosamente rápido.
  * @param inicioMs  epoch ms en que se montó el flujo (lo pone el cliente).
  * @param ahoraMs   epoch ms de la recepción en el servidor.
+ * @param umbralMs  umbral mínimo; el endpoint lo puede bajar por env (p. ej. 0 en e2e).
  */
-export function demasiadoRapido(inicioMs: number, ahoraMs: number): boolean {
+export function demasiadoRapido(
+  inicioMs: number,
+  ahoraMs: number,
+  umbralMs: number = TIEMPO_MINIMO_MS,
+): boolean {
   if (!Number.isFinite(inicioMs) || !Number.isFinite(ahoraMs)) return true;
-  return ahoraMs - inicioMs < TIEMPO_MINIMO_MS;
+  return ahoraMs - inicioMs < umbralMs;
 }

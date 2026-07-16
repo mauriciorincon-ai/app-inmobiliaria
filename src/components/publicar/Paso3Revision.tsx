@@ -82,7 +82,7 @@ export default function Paso3Revision({
             Autorizo el tratamiento de mis datos según la{" "}
             <Link
               href="/privacidad"
-              className="font-semibold text-purple underline"
+              className="font-semibold text-purple-600 underline"
             >
               política de privacidad
             </Link>{" "}

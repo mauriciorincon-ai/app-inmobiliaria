@@ -4,7 +4,7 @@
 @theme {
   --color-ink: #191a1d;
   --color-gray: #424854;
-  --color-mute: #7b8190;
+  --color-mute: #6b7280; /* oscurecido vs. la base (#7b8190) para cumplir contraste AA en texto pequeño */
   --color-purple: #7b5dd6;
   --color-purple-600: #6b4bd0;
   --color-purple-soft: #bda1f2;

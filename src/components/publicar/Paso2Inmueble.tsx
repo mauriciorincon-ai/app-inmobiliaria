@@ -36,7 +36,7 @@ export default function Paso2Inmueble({ datos, errores, set }: Props) {
 
       <fieldset>
         <legend className="text-sm font-semibold text-ink">
-          ¿Vendes o arriendas?<span className="text-purple"> *</span>
+          ¿Vendes o arriendas?<span className="text-purple-600"> *</span>
         </legend>
         <div className="mt-2 flex gap-3">
           {OPERACIONES.map((op) => {

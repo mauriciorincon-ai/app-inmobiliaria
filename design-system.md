@@ -17,20 +17,20 @@
 
 ## Tokens de color (Tailwind v4 `@theme`, en `globals.css`)
 
-| Token                 | Valor     | Uso                                    |
-| --------------------- | --------- | -------------------------------------- |
-| `--color-ink`         | `#191a1d` | Tinta: titulares, texto fuerte, footer |
-| `--color-gray`        | `#424854` | Texto de párrafo                       |
-| `--color-mute`        | `#7b8190` | Texto secundario, etiquetas            |
-| `--color-purple`      | `#7b5dd6` | **Acento**: CTAs, píldoras, énfasis    |
-| `--color-purple-600`  | `#6b4bd0` | Hover del acento                       |
-| `--color-purple-soft` | `#bda1f2` | Acento suave                           |
-| `--color-purple-200`  | `#cdbaf2` | Bordes/realces suaves                  |
-| `--color-purple-tint` | `#ebe9fc` | Fondos de chip, píldoras de toggle     |
-| `--color-lilac`       | `#e8dcff` | Bandas pastel                          |
-| `--color-cream`       | `#fbf9f6` | Fondos suaves (`.section-soft`)        |
-| `--color-mint`        | `#e6f4ee` | Bandas pastel                          |
-| `--color-sky`         | `#e7eefb` | Fondos fríos                           |
+| Token                 | Valor     | Uso                                                     |
+| --------------------- | --------- | ------------------------------------------------------- |
+| `--color-ink`         | `#191a1d` | Tinta: titulares, texto fuerte, footer                  |
+| `--color-gray`        | `#424854` | Texto de párrafo                                        |
+| `--color-mute`        | `#6b7280` | Texto secundario (oscurecido vs. base `#7b8190` por AA) |
+| `--color-purple`      | `#7b5dd6` | **Acento**: CTAs, píldoras, énfasis                     |
+| `--color-purple-600`  | `#6b4bd0` | Hover del acento                                        |
+| `--color-purple-soft` | `#bda1f2` | Acento suave                                            |
+| `--color-purple-200`  | `#cdbaf2` | Bordes/realces suaves                                   |
+| `--color-purple-tint` | `#ebe9fc` | Fondos de chip, píldoras de toggle                      |
+| `--color-lilac`       | `#e8dcff` | Bandas pastel                                           |
+| `--color-cream`       | `#fbf9f6` | Fondos suaves (`.section-soft`)                         |
+| `--color-mint`        | `#e6f4ee` | Bandas pastel                                           |
+| `--color-sky`         | `#e7eefb` | Fondos fríos                                            |
 
 Blob decorativo del hero: `#FFD23F` (amarillo). No tokenizado (uso único).
 

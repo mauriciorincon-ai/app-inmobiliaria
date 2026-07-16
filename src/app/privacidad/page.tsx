@@ -34,7 +34,7 @@ export default function Privacidad() {
               personales, escríbenos a{" "}
               <a
                 href={`mailto:${CONTACTO}`}
-                className="font-semibold text-purple underline"
+                className="font-semibold text-purple-600 underline"
               >
                 {CONTACTO}
               </a>
@@ -78,7 +78,7 @@ export default function Privacidad() {
               legal de conservarlos. Para ejercerlos, escríbenos a{" "}
               <a
                 href={`mailto:${CONTACTO}`}
-                className="font-semibold text-purple underline"
+                className="font-semibold text-purple-600 underline"
               >
                 {CONTACTO}
               </a>

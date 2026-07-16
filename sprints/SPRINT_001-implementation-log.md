@@ -9,7 +9,7 @@
 - **Fase 0 — Setup** — ✅ completa
 - **Fase 1 — Motor/núcleo** — ✅ completa (validación de BD diferida — ver nota)
 - **Fase 2 — UI** — ✅ completa (visual/teclado/Lighthouse = gate manual + Fase 4)
-- Fase 3 — Integración + e2e — pendiente
+- **Fase 3 — Integración + e2e** — ✅ completa (a11y + wizard validados local; DB+happy-path en CI)
 - Fase 4 — Calidad y cierre — pendiente
 
 ---
@@ -94,6 +94,23 @@
   **Decisión de diseño:** el arte del hero es una **ilustración SVG** (no la foto de la base) →
   elimina el bloqueo de licencia de imágenes de la página base y aligera el LCP. Con esto,
   **"confirmar licencia de fotos" sale del checklist de aprovisionamiento** de este sprint.
+
+- 2026-07-15 — **Fase 3 completa.** Endpoint `POST /api/registro` (runtime nodejs): re-validación
+  zod + honeypot/time-trap + IP hasheada con pepper + RPC + request-id/timing (pino) + reportError
+  - 429. Capa lib: `logger` (pino con fallback console-JSON), `supabase/{client,server}` (navegador,
+    servidor con cookies, anónimo). **Panel** `/operador`: login password + guard server con
+    allowlist `OPERADOR_EMAIL`, tabla con estados vacío/cargando/error/contenido, cerrar sesión.
+    CI: job `e2e` levanta Supabase local + siembra operador; `quality`/`lighthouse` con env dummy.
+    `lighthouse-urls.json` → 4 rutas. Workflow `supabase-ping` semanal. **ADR 002** (schema/RPC/RLS).
+    **Validado LOCALMENTE con navegador (sin Docker):** axe limpio en las 5 rutas + los 3 pasos
+    (tras oscurecer `--color-mute` a AA); wizard (errores por campo, WhatsApp inválido, borrador
+    persiste tras recargar). typecheck + lint + 44 unit + build verdes.
+
+  **Pendiente de validación en CI (necesita Docker, no disponible local — K1):** happy-path e2e
+  completo (registro → panel), RLS negativa, reintento de red con éxito, y la migración/RPC contra
+  Postgres real. **El primer `supabase start` real ocurre en el job `e2e` de CI al abrir el PR.**
+  Los selectores del happy-path ya están probados (mismos patrones que los tests de UI que sí
+  corrieron). Si CI falla, se itera sobre el PR.
 
 ### Nota — validación de BD diferida (consecuencia de K1)
 

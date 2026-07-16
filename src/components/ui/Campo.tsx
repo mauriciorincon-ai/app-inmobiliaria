@@ -92,7 +92,7 @@ export default function Campo(props: Props) {
     <div>
       <label htmlFor={id} className="block text-sm font-semibold text-ink">
         {label}
-        {requerido && <span className="text-purple"> *</span>}
+        {requerido && <span className="text-purple-600"> *</span>}
       </label>
       {hint && (
         <p id={hintId} className="mt-1 text-xs text-mute">

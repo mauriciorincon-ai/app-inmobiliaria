@@ -121,7 +121,7 @@ export default function Hero() {
             <p className="text-xs font-medium text-mute">Comisión</p>
             <p className="text-xl font-bold text-ink">
               $0{" "}
-              <span className="text-sm font-medium text-purple">para ti</span>
+              <span className="text-sm font-medium text-purple-600">para ti</span>
             </p>
           </div>
         </div>

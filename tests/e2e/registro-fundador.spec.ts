@@ -51,11 +51,9 @@ test("un vendedor se registra y el operador lo ve en el panel", async ({
 
   await expect(page).toHaveURL(/\/operador$/);
 
-  // Diagnóstico temporal: recarga limpia + vuelca el contenido del panel al log de CI.
-  await page.goto("/operador");
-  const contenido = await page.getByRole("main").innerText();
-  console.log("PANEL_DIAG_START\n" + contenido + "\nPANEL_DIAG_END");
-
-  await expect(page.getByText(barrioUnico)).toBeVisible({ timeout: 10000 });
-  await expect(page.getByText("Ana Fundadora")).toBeVisible();
+  // Anclado a LA fila de este registro (el barrio es único por corrida; el nombre no: los dos
+  // proyectos de Playwright insertan cada uno el suyo y ambos aparecen en el panel).
+  const fila = page.getByRole("row").filter({ hasText: barrioUnico });
+  await expect(fila).toBeVisible({ timeout: 10000 });
+  await expect(fila.getByText("Ana Fundadora")).toBeVisible();
 });

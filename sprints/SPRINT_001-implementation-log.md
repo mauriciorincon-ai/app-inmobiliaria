@@ -128,6 +128,22 @@
   `p_ip_hash=null` y la RPC salta el rate limit (en prod nunca se activa). Se añade un test
   dedicado del rate limit a nivel RPC (no pasa por el endpoint, sigue cubriéndolo).
 
+- 2026-07-15 — **CI del PR #1, iteraciones 3–7 → VERDE COMPLETO** (`quality` ✅ `e2e` ✅
+  `lighthouse` ✅; 28 tests e2e contra Postgres real). Cadena de causas resueltas:
+  - **Iter 3–4 (diagnóstico):** el panel renderizaba con el operador autenticado pero el SELECT
+    devolvía error que la UI tragaba sin loggear. Se añadió log del error (code/message/details)
+    → y se descubrió **K4**: Playwright DESCARTA el stdout del webServer por defecto (pino
+    loggea a stdout) — fix: `stdout: "pipe"` en `playwright.config.ts`.
+  - **Iter 6 (causa raíz):** **K5 — el stack local de Supabase NO otorga privilegios de tabla
+    por defecto a `authenticated`** sobre tablas creadas por migración: el SELECT del panel
+    moría con permission denied. El flujo anon nunca lo delató porque la RPC `SECURITY DEFINER`
+    salta los grants. Fix en la migración: GRANT SELECT/UPDATE explícito a `authenticated` +
+    REVOKE explícito a `anon` (endurece y documenta). También se fijó el hint de FK del embed
+    (`!inmuebles_vendedor_id_fkey`) para no depender del schema cache.
+  - **Iter 7:** último fallo era del TEST (strict mode: "Ana Fundadora" aparecía 2 veces — cada
+    proyecto de Playwright inserta su propia fila). Fix: aserción anclada a la fila del barrio
+    único. Diagnóstico temporal retirado.
+
 ### Nota — validación de BD diferida (consecuencia de K1)
 
 Sin runtime de contenedores local, **no se pudo correr `supabase db reset` ni el smoke SQL de la

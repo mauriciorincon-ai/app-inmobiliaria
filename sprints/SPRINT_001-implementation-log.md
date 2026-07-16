@@ -7,7 +7,7 @@
 ## Fases
 
 - **Fase 0 — Setup** — ✅ completa
-- Fase 1 — Motor/núcleo — pendiente
+- **Fase 1 — Motor/núcleo** — ✅ completa (validación de BD diferida — ver nota)
 - Fase 2 — UI — pendiente
 - Fase 3 — Integración + e2e — pendiente
 - Fase 4 — Calidad y cierre — pendiente
@@ -72,3 +72,19 @@
   wrangler). `.env.example` ampliado (Supabase + operador + pepper). `coverage/**` y
   `.open-next/**` a los ignores de ESLint. ADR 001 escrito. `typecheck` + `lint` + `build`
   verdes.
+- 2026-07-15 — **Fase 1 completa.** Migración `20260715000001_captacion_fundadores.sql`
+  (enums, `vendedores`/`inmuebles`/`registro_intentos`, RLS, RPC `registrar_fundador`
+  SECURITY DEFINER con consentimiento + rate-limit por IP + transacción, RPC `ping`).
+  `config.toml`: signups OFF. Seed `scripts/crear-operador.mjs` (Admin API, idempotente).
+  Motor puro: `engine/format/{whatsapp,cop}`, `engine/registro/{schema,wizard,anti-spam}`;
+  tipos `types/registro`, `lib/supabase/types`. Script `test` con `--coverage`; cobertura
+  enfocada en `src/engine`. **44 unit tests verdes, cobertura 100%/98% (>80%).** lint limpio.
+
+### Nota — validación de BD diferida (consecuencia de K1)
+
+Sin runtime de contenedores local, **no se pudo correr `supabase db reset` ni el smoke SQL de la
+RPC** (criterio original de «fase 1 completa»). La migración se escribió con revisión cuidadosa.
+**Se validará realmente en:** (a) el job `e2e` de CI (Docker en ubuntu-latest levanta el stack),
+y/o (b) contra Supabase cloud en Fase 4. **Acción pendiente del usuario para validar en local
+antes del PR:** instalar Docker Desktop o Colima (permite `supabase start` + `pnpm test:e2e`
+locales). No bloquea Fases 1–2; sí es necesario para reproducir el e2e localmente.

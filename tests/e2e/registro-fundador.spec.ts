@@ -50,6 +50,12 @@ test("un vendedor se registra y el operador lo ve en el panel", async ({
   await page.getByRole("button", { name: "Entrar" }).click();
 
   await expect(page).toHaveURL(/\/operador$/);
-  await expect(page.getByText(barrioUnico)).toBeVisible();
+
+  // Diagnóstico temporal: recarga limpia + vuelca el contenido del panel al log de CI.
+  await page.goto("/operador");
+  const contenido = await page.getByRole("main").innerText();
+  console.log("PANEL_DIAG_START\n" + contenido + "\nPANEL_DIAG_END");
+
+  await expect(page.getByText(barrioUnico)).toBeVisible({ timeout: 10000 });
   await expect(page.getByText("Ana Fundadora")).toBeVisible();
 });

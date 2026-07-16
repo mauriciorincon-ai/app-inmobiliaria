@@ -66,6 +66,16 @@ jobs:
       - name: Sembrar el operador
         run: node scripts/crear-operador.mjs
       - run: pnpm test:e2e        # happy path por la UI + validaciones + RLS negativa + axe
+      - name: Subir artefactos de Playwright si algo falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
 
   lighthouse:
     runs-on: ubuntu-latest

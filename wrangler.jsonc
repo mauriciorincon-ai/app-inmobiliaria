@@ -1,0 +1,15 @@
+{
+  // Deploy a Cloudflare Workers vía OpenNext (ADR 001). El build lo genera `opennextjs-cloudflare
+  // build`. Requiere nodejs_compat + compatibility_date >= 2024-09-23 para las APIs Node del endpoint.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "app-inmobiliaria",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
+  // Las variables (NEXT_PUBLIC_SUPABASE_URL/ANON_KEY, OPERADOR_EMAIL, RATE_LIMIT_PEPPER, etc.) se
+  // configuran como secrets/vars del proyecto en el dashboard de Cloudflare, no aquí.
+}

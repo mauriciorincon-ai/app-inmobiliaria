@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --coverage --passWithNoTests",
     "test:e2e": "playwright test --pass-with-no-tests",
+    "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "prepare": "git config core.hooksPath githooks"
   },
   "dependencies": {

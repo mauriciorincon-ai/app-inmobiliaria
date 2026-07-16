@@ -18,3 +18,7 @@ onlyBuiltDependencies:
 ignoredBuiltDependencies:
   - '@sentry/cli'
   - workerd
+overrides:
+  # postcss <8.5.10: XSS por </style> sin escapar (moderate, transitivo de next/sentry/opennext).
+  # Herramienta de build (Tailwind); forzamos la versión parchada.
+  postcss@<8.5.10: '>=8.5.10'

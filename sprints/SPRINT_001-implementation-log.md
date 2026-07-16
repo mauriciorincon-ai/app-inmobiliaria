@@ -10,7 +10,7 @@
 - **Fase 1 — Motor/núcleo** — ✅ completa (validación de BD diferida — ver nota)
 - **Fase 2 — UI** — ✅ completa (visual/teclado/Lighthouse = gate manual + Fase 4)
 - **Fase 3 — Integración + e2e** — ✅ completa (a11y + wizard validados local; DB+happy-path en CI)
-- Fase 4 — Calidad y cierre — pendiente
+- **Fase 4 — Calidad y cierre** — ✅ completa (summary + PR; aprobación visual del usuario pendiente)
 
 ---
 

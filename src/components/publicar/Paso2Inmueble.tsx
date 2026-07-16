@@ -44,7 +44,7 @@ export default function Paso2Inmueble({ datos, errores, set }: Props) {
             return (
               <label
                 key={op}
-                className={`flex-1 cursor-pointer rounded-2xl border px-4 py-3 text-center text-sm font-semibold transition-colors ${
+                className={`flex-1 cursor-pointer rounded-2xl border px-4 py-3 text-center text-sm font-semibold transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-purple ${
                   activo
                     ? "border-purple bg-purple text-white"
                     : "border-purple-200 bg-white text-ink hover:border-purple"

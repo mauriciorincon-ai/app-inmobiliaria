@@ -5,6 +5,10 @@ allowBuilds:
   esbuild: true
   '@tailwindcss/oxide': true
   '@sentry/cli': false
+  # workerd (runtime de Cloudflare, transitivo de wrangler/opennext): su build nativo solo hace
+  # falta para `wrangler dev`/deploy (Fase 4). Se deja ignorado para no descargar binario en cada
+  # `pnpm install` de CI; se reevalúa al desplegar (ADR 001).
+  workerd: false
 onlyBuiltDependencies:
   - sharp
   - unrs-resolver
@@ -13,3 +17,4 @@ onlyBuiltDependencies:
   - '@tailwindcss/oxide'
 ignoredBuiltDependencies:
   - '@sentry/cli'
+  - workerd

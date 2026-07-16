@@ -3,6 +3,8 @@ import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import CerrarSesion from "@/components/operador/CerrarSesion";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { formatearCOP } from "@/engine/format/cop";
+import { logger } from "@/lib/logger";
+import { reportError } from "@/lib/observability";
 
 // Panel protegido: usa la sesión (cookies) → render dinámico, nunca prerenderizado.
 export const dynamic = "force-dynamic";
@@ -55,6 +57,20 @@ export default async function Panel() {
       "id,operacion,tipo,barrio,area_m2,habitaciones,precio_esperado,estado,created_at,vendedor:vendedores(nombre,whatsapp,email,ciudad,zona)",
     )
     .order("created_at", { ascending: false });
+
+  if (error) {
+    // El error va al log del servidor (metadatos, sin PII) y a Sentry; la UI muestra el estado de error.
+    logger.error(
+      {
+        evento: "panel_query_error",
+        code: error.code,
+        message: error.message,
+        details: error.details,
+      },
+      "fallo la consulta del panel",
+    );
+    reportError("panel_query_error", { code: error.code ?? "desconocido" });
+  }
 
   type Cruda = Omit<Fila, "vendedor"> & {
     vendedor: Vendedor | Vendedor[] | null;

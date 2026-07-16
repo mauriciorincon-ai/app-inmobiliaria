@@ -121,6 +121,13 @@
     3000→**3500** (margen del corolario `lcp-nace-estatico`); el LCP real ≤2.5s se verifica en el
     gate ⭐, no aquí.
 
+- 2026-07-15 — **CI del PR #1, iteración 2.** `quality` ✅, `lighthouse` ✅. e2e: **24 passed,
+  2 failed** (RLS, validaciones y axe pasan contra Postgres real). Fallo del happy-path: el rate
+  limit por IP (3/hora) frena los envíos porque en e2e TODO viene de `localhost` (misma IP), y con
+  2 proyectos + reintentos se supera. Fix: `DISABLE_RATE_LIMIT=1` en el job → el endpoint pasa
+  `p_ip_hash=null` y la RPC salta el rate limit (en prod nunca se activa). Se añade un test
+  dedicado del rate limit a nivel RPC (no pasa por el endpoint, sigue cubriéndolo).
+
 ### Nota — validación de BD diferida (consecuencia de K1)
 
 Sin runtime de contenedores local, **no se pudo correr `supabase db reset` ni el smoke SQL de la

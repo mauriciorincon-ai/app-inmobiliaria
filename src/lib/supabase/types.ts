@@ -47,7 +47,7 @@ export type RegistrarFundadorArgs = {
   p_habitaciones: number;
   p_precio: number;
   p_consentimiento: boolean;
-  p_ip_hash: string;
+  p_ip_hash: string | null;
 };
 
 export type Database = {

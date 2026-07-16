@@ -36,6 +36,9 @@ jobs:
     env:
       OPERADOR_EMAIL: operador@innmobiliaria.test
       REGISTRO_MIN_MS: "0"
+      # Todos los envíos del e2e vienen de localhost (misma IP); sin esto el rate limit por IP
+      # (3/hora) frenaría el happy-path corriendo en 2 proyectos + reintentos.
+      DISABLE_RATE_LIMIT: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

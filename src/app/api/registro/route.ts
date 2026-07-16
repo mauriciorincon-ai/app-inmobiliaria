@@ -75,7 +75,10 @@ export async function POST(req: NextRequest) {
     }
 
     const payload = construirPayload(parsed.data);
-    const ipHash = await hashIp(req);
+    // En e2e todos los envíos vienen de localhost (misma IP) → el rate limit por IP los frenaría.
+    // Con DISABLE_RATE_LIMIT=1 pasamos ip_hash=null y la RPC salta el rate limit. En prod nunca se activa.
+    const ipHash =
+      process.env.DISABLE_RATE_LIMIT === "1" ? null : await hashIp(req);
     const supabase = crearClienteAnon();
 
     const { data, error } = await supabase.rpc("registrar_fundador", {

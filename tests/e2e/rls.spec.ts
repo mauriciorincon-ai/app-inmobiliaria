@@ -63,3 +63,22 @@ test("la RPC rechaza el registro sin consentimiento", async () => {
   );
   expect(error).not.toBeNull();
 });
+
+test("la RPC aplica rate limit por IP (3/hora)", async () => {
+  const supabase = createClient(url, anon);
+  const ip = `ratelimit-${Date.now()}`;
+  // Las 3 primeras del mismo ip_hash pasan.
+  for (let i = 0; i < 3; i++) {
+    const { error } = await supabase.rpc(
+      "registrar_fundador",
+      argsValidos({ p_ip_hash: ip }),
+    );
+    expect(error).toBeNull();
+  }
+  // La 4ª supera el límite y es rechazada.
+  const { error } = await supabase.rpc(
+    "registrar_fundador",
+    argsValidos({ p_ip_hash: ip }),
+  );
+  expect(error).not.toBeNull();
+});

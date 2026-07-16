@@ -28,5 +28,8 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    // Sin esto Playwright DESCARTA el stdout del servidor (pino loggea a stdout) y los errores
+    // del server component quedan invisibles en CI.
+    stdout: "pipe",
   },
 });

@@ -74,6 +74,17 @@ create trigger inmuebles_updated_at
   for each row execute function public.tocar_updated_at();
 
 -- ---------------------------------------------------------------------------
+-- Privilegios de tabla (explícitos — no dependemos de default privileges del stack)
+-- ---------------------------------------------------------------------------
+-- anon NO recibe ningún privilegio directo: su única vía es la RPC SECURITY DEFINER.
+revoke all on public.vendedores        from anon;
+revoke all on public.inmuebles         from anon;
+revoke all on public.registro_intentos from anon, authenticated;
+
+grant select         on public.vendedores to authenticated;
+grant select, update on public.inmuebles  to authenticated;
+
+-- ---------------------------------------------------------------------------
 -- Row Level Security
 -- ---------------------------------------------------------------------------
 alter table public.vendedores        enable row level security;

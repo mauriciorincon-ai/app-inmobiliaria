@@ -54,7 +54,9 @@ export default async function Panel() {
   const { data, error } = await supabase
     .from("inmuebles")
     .select(
-      "id,operacion,tipo,barrio,area_m2,habitaciones,precio_esperado,estado,created_at,vendedor:vendedores(nombre,whatsapp,email,ciudad,zona)",
+      // Hint de FK explícito (!inmuebles_vendedor_id_fkey): el embed no depende de la detección
+      // automática de la relación en el schema cache de PostgREST.
+      "id,operacion,tipo,barrio,area_m2,habitaciones,precio_esperado,estado,created_at,vendedor:vendedores!inmuebles_vendedor_id_fkey(nombre,whatsapp,email,ciudad,zona)",
     )
     .order("created_at", { ascending: false });
 

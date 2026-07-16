@@ -8,7 +8,7 @@
 
 - **Fase 0 — Setup** — ✅ completa
 - **Fase 1 — Motor/núcleo** — ✅ completa (validación de BD diferida — ver nota)
-- Fase 2 — UI — pendiente
+- **Fase 2 — UI** — ✅ completa (visual/teclado/Lighthouse = gate manual + Fase 4)
 - Fase 3 — Integración + e2e — pendiente
 - Fase 4 — Calidad y cierre — pendiente
 
@@ -79,6 +79,21 @@
   Motor puro: `engine/format/{whatsapp,cop}`, `engine/registro/{schema,wizard,anti-spam}`;
   tipos `types/registro`, `lib/supabase/types`. Script `test` con `--coverage`; cobertura
   enfocada en `src/engine`. **44 unit tests verdes, cobertura 100%/98% (>80%).** lint limpio.
+
+- 2026-07-15 — **Fase 2 completa.** Sistema visual portado: `design-system.md`, tokens `@theme`
+  - clases de marca en `globals.css` (con `:focus-visible` que la base no tenía), Poppins,
+    `layout.tsx` es-CO + `robots: noindex`. Motion `SmoothScroll` (fiel) + `Reveal` **corregido**
+    (guard reduced-motion + clase `.reveal`). UI `Logo`/`Boton`/`Campo` (label real + error por
+    campo). **Landing** (Navbar, Hero, Dolores, ComoFunciona, QueViene, Faq accesible, CtaFinal,
+    Footer) con copy seller-first y solo cifras citables. **Wizard** 3 pasos (persistencia
+    localStorage, validación por campo, honeypot+time-trap, envío con estados red/error).
+    **Confirmación** stateless + **Privacidad** Ley 1581. build verde: 5 rutas prerenderizadas
+    estáticas. **LCP-estático verificado:** el `<h1>` del hero y el heading del paso 1 están en el
+    HTML prerenderizado, cero `opacity:0`. lint + typecheck limpios.
+
+  **Decisión de diseño:** el arte del hero es una **ilustración SVG** (no la foto de la base) →
+  elimina el bloqueo de licencia de imágenes de la página base y aligera el LCP. Con esto,
+  **"confirmar licencia de fotos" sale del checklist de aprovisionamiento** de este sprint.
 
 ### Nota — validación de BD diferida (consecuencia de K1)
 

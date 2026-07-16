@@ -52,12 +52,14 @@ jobs:
       - name: Levantar Supabase local
         run: pnpm exec supabase start
       - name: Exportar URL/keys al entorno del job
+        # `supabase status -o env` emite KEY="valor" (con comillas); al volcarlo a $GITHUB_ENV las
+        # comillas quedarían DENTRO del valor y romperían createClient. El sed las quita.
         run: |
           pnpm exec supabase status -o env \
             --override-name api.url=NEXT_PUBLIC_SUPABASE_URL \
             --override-name auth.anon_key=NEXT_PUBLIC_SUPABASE_ANON_KEY \
             --override-name auth.service_role_key=SUPABASE_SERVICE_ROLE_KEY \
-            >> "$GITHUB_ENV"
+            | sed -E 's/^([A-Z_]+)="(.*)"$/\1=\2/' >> "$GITHUB_ENV"
       - name: Sembrar el operador
         run: node scripts/crear-operador.mjs
       - run: pnpm test:e2e        # happy path por la UI + validaciones + RLS negativa + axe

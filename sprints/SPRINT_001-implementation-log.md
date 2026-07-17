@@ -144,6 +144,16 @@
     proyecto de Playwright inserta su propia fila). Fix: aserción anclada a la fila del barrio
     único. Diagnóstico temporal retirado.
 
+- 2026-07-16 — **Aprovisionamiento ejecutado (runbook `docs/APROVISIONAMIENTO.md`).** Proyecto
+  Supabase cloud creado (sa-east-1, GitHub OAuth; "auto expose new tables" OFF + "automatic RLS"
+  ON), repo vinculado, **migraciones aplicadas y verificadas en cloud** (ping OK como anon;
+  SELECT anon denegado 42501; registro sintético por el endpoint → fila con vendedor E.164).
+  Signups OFF + operador creado y confirmado. Secrets del keep-alive en GitHub.
+  - **K6 — con "auto expose" OFF, `service_role` tampoco recibe grants:** los scripts de backend
+    (seed/ops de S2+) morían con permission denied pese al BYPASSRLS (RLS ≠ privilegios de
+    tabla). Fix: migración `20260716000001_grants_service_role.sql` (GRANT ALL de las 3 tablas +
+    sequences a `service_role`). Descubierto verificando la fila de humo con la Admin API.
+
 ### Nota — validación de BD diferida (consecuencia de K1)
 
 Sin runtime de contenedores local, **no se pudo correr `supabase db reset` ni el smoke SQL de la

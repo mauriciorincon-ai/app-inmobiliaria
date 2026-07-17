@@ -17,14 +17,30 @@
 El orden importa: primero la base de datos (sin ella la app no tiene dónde escribir), luego se
 prueba desde local, luego los secrets del cron, y de último el deploy a Cloudflare.
 
+## Con qué cuenta entrar a cada servicio (recomendación)
+
+El operador tiene dos identidades que terminan en el mismo lugar: el Gmail personal y la cuenta
+de GitHub `mauriciorincon-ai` (que a su vez se autentica con ese Gmail). Recomendación por
+servicio:
+
+| Servicio               | Entra con                                              | Por qué                                                                                                                                                                                                                                                                               |
+| ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Supabase**           | **"Continue with GitHub"** (`mauriciorincon-ai`)       | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
+| **Cloudflare**         | **El Gmail directo (email + contraseña propia + 2FA)** | Cloudflare será la casa de la infraestructura (Workers hoy, R2 en S2, dominio y DNS en H2a). Para la cuenta que sostendrá el dominio conviene una credencial de primera mano, no una cadena de SSO: si un día GitHub/Google fallan o se bloquean, el acceso a tu DNS no cae con ellos |
+| **GitHub** (ya existe) | —                                                      | Sigue como está                                                                                                                                                                                                                                                                       |
+
+**Regla raíz:** como TODO (GitHub → Supabase, y la recuperación de Cloudflare) desemboca en el
+Gmail, ese correo es el punto único de falla — **activa 2FA en el Gmail** si no lo tiene, y
+2FA en Cloudflare al crearla.
+
 ---
 
 ## Bloque 1 — Proyecto Supabase cloud
 
 ### 1.1 [TÚ] Crear la cuenta y el proyecto (~3 min)
 
-1. Entra a <https://supabase.com> → **Start your project** → crea la cuenta (puedes usar tu
-   cuenta de GitHub `mauriciorincon-ai`, es lo más simple).
+1. Entra a <https://supabase.com> → **Start your project** → crea la cuenta con
+   **"Continue with GitHub"** (`mauriciorincon-ai`) — ver la tabla de cuentas al inicio.
 2. **New project**, con estos valores:
    - **Name:** `app-inmobiliaria`
    - **Database password:** genera una fuerte y **guárdala en tu gestor de contraseñas** — se
@@ -119,8 +135,10 @@ gh workflow run supabase-ping.yml   # disparo manual para verificar que queda ve
 
 ### 3.1 [TÚ] Crear la cuenta y autorizar wrangler (~3 min)
 
-1. Crea la cuenta en <https://dash.cloudflare.com/sign-up> (plan free; **esta misma cuenta
-   servirá para R2/fotos en el S2**).
+1. Crea la cuenta en <https://dash.cloudflare.com/sign-up> con **el Gmail directo (email +
+   contraseña propia) y activa 2FA de una vez** — no uses SSO aquí: esta cuenta sostendrá la
+   infraestructura (Workers hoy, **R2/fotos en S2, dominio y DNS en H2a**) y conviene que no
+   dependa de otra sesión para entrar (ver la tabla de cuentas al inicio). Plan free.
 2. En la terminal integrada:
 
 ```bash

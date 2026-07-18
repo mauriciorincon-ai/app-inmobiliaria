@@ -222,15 +222,28 @@ NEXT_PUBLIC_APP_URL=https://app-inmobiliaria.rinconai.workers.dev
 
 ```bash
 # CORS: permitir PUT directo desde el navegador (localhost + la URL de prod).
-pnpm exec wrangler r2 bucket cors put innmobiliaria-fotos --rules '[{"AllowedOrigins":["http://localhost:3000","https://app-inmobiliaria.rinconai.workers.dev"],"AllowedMethods":["PUT"],"AllowedHeaders":["content-type"]}]'
-# vars públicas en wrangler.jsonc (Claude las edita): NEXT_PUBLIC_R2_PUBLIC_URL, NEXT_PUBLIC_APP_URL, R2_ACCOUNT_ID, R2_BUCKET
-# secrets del Worker (se leen de .env.local, nunca se muestran):
-pnpm exec wrangler secret put R2_ACCESS_KEY_ID
-pnpm exec wrangler secret put R2_SECRET_ACCESS_KEY
+# OJO wrangler 4.x: es `cors set <bucket> --file <json>` (el `cors put --rules` quedó OBSOLETO) y
+# el JSON debe tener forma {"rules":[{"allowed":{"origins":[...],"methods":["PUT"],"headers":["content-type"]}}]}.
+cat > /tmp/r2-cors.json <<'JSON'
+{"rules":[{"allowed":{"origins":["http://localhost:3000","https://app-inmobiliaria.rinconai.workers.dev"],"methods":["PUT"],"headers":["content-type"]}}]}
+JSON
+pnpm exec wrangler r2 bucket cors set innmobiliaria-fotos --file /tmp/r2-cors.json
+pnpm exec wrangler r2 bucket cors list innmobiliaria-fotos   # verificar
+# vars públicas en wrangler.jsonc (Claude las edita): NEXT_PUBLIC_R2_PUBLIC_URL, NEXT_PUBLIC_APP_URL, R2_BUCKET
+# secrets del Worker (se leen de .env.local por stdin, nunca se muestran; R2_ACCOUNT_ID va como
+# SECRET, no en wrangler.jsonc — repo público). En zsh NO uses ${!VAR} (bad substitution):
+set -a; . ./.env.local; set +a
+printf '%s' "$R2_ACCOUNT_ID"        | pnpm exec wrangler secret put R2_ACCOUNT_ID
+printf '%s' "$R2_ACCESS_KEY_ID"     | pnpm exec wrangler secret put R2_ACCESS_KEY_ID
+printf '%s' "$R2_SECRET_ACCESS_KEY" | pnpm exec wrangler secret put R2_SECRET_ACCESS_KEY
 # migración 2 a la nube + deploy:
-pnpm exec supabase db push
+pnpm exec supabase db push --yes    # (--dry-run primero para previsualizar)
 pnpm deploy:cf
 ```
+
+> **Nota (inmobiliaria S2, deploy real):** la subida de secrets puede devolver un `10013 "unknown
+error"` transitorio de la API de Cloudflare — reintenta el mismo `secret put` y pasa. Verifica
+> con `wrangler secret list`. La prueba de humo (4.4) confirma firma+PUT+GET público en vivo.
 
 ### 4.4 [TÚ] Prueba de humo de fotos
 

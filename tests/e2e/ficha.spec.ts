@@ -19,7 +19,8 @@ test("la ficha muestra el inmueble y NO expone contacto sin opt-in", async ({
   await expect(fila).toBeVisible({ timeout: 10000 });
   await fila.getByRole("link", { name: /Ver ficha/i }).click();
 
-  await expect(page).toHaveURL(/\/i\/apartamento-suba-[0-9a-f]{6}$/);
+  // El barrio es único (`Suba {timestamp}`) → el slug queda `apartamento-suba-{timestamp}-{6hex}`.
+  await expect(page).toHaveURL(/\/i\/apartamento-suba-\d+-[0-9a-f]{6}$/);
   await expect(
     page.getByRole("heading", { name: new RegExp(`en ${barrio}`) }),
   ).toBeVisible();

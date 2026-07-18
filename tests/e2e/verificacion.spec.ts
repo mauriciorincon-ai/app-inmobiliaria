@@ -21,15 +21,30 @@ test("el operador verifica un inmueble y el sello ⭐ aparece en la ficha", asyn
   await fila.getByRole("button", { name: /Verificar/i }).click();
   await fila.getByLabel(/matrícula/i).fill("50N-9876543");
   await fila.getByRole("checkbox").check(); // "Vi el CTL original…"
-  await fila.getByRole("button", { name: /Confirmar/i }).click();
+  // `.click()` no espera al handler async; aguardamos la RESPUESTA del RPC para saber que la
+  // verificación se persistió antes de recargar (si no, el reload correría contra un RPC en vuelo).
+  await Promise.all([
+    page.waitForResponse(
+      (r) =>
+        r.url().includes("/rpc/marcar_verificado") &&
+        r.request().method() === "POST",
+    ),
+    fila.getByRole("button", { name: /Confirmar/i }).click(),
+  ]);
 
-  // La fila pasa a "Propietario verificado".
-  await expect(fila.getByText(/Propietario verificado/i)).toBeVisible({
-    timeout: 10000,
-  });
+  // Recargamos para un render fresco y determinista del panel (evita la carrera con el
+  // router.refresh() del diálogo bajo workers paralelos) y acotamos el sello a LA fila del test:
+  // /operador muestra TODOS los inmuebles y otros tests verifican varios.
+  await page.reload();
+  const filaVerificada = page.getByRole("row").filter({ hasText: barrio });
+  await expect(filaVerificada.getByText(/Propietario verificado/i)).toBeVisible(
+    { timeout: 10000 },
+  );
 
-  // Y el sello aparece en la ficha pública.
-  await fila.getByRole("link", { name: /Ver ficha/i }).click();
+  // Y el sello aparece en la ficha pública. Esperamos la navegación in-tab ANTES de aseverar, si
+  // no la aserción caería sobre el DOM de /operador (con muchos sellos) → strict violation.
+  await filaVerificada.getByRole("link", { name: /Ver ficha/i }).click();
+  await page.waitForURL(/\/i\//);
   await expect(page.getByText(/⭐ Propietario verificado/i)).toBeVisible();
 });
 

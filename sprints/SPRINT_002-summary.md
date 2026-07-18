@@ -86,7 +86,17 @@ leer-dimensiones,fotos-cliente}`.
   por-path (aditivo + raíz-comodín, verificado en fuente lhci) → excluir es lo honesto, no aflojar.
 - **K9 — `getByRole("alert")` ambiguo** por el `__next-route-announcer__` vacío de Next (2 matches).
   Fix: `getByText(/muy pequeña|cámara/i)`.
+- **K9-bis — checkbox controlado async → `.click()`, no `.check()`.** El opt-in (`checked={activo}`,
+  estado del servidor) hacía flip-flop con `.check()` ("did not change its state"). Fix: `.click()`
+  - aseverar el resultado observable (score→80). A `testing-patterns` (reglas 6 y 7).
+- **K10 — specs `ficha`/`verificacion` estrenándose contra Postgres real** (4 fallos): slug con
+  timestamp del barrio único (regex), sello global matcheando filas de workers paralelos (acotado),
+  carrera de navegación (`waitForURL` antes de aseverar) y `.click()` sin esperar el RPC async
+  (`waitForResponse` + `reload`). Todos del lado del test.
 - Fricción transitoria: Docker Hub `toomanyrequests` en `supabase start` (se recuperó solo).
+- **CI VERDE en la 5ª corrida** (commit 8c4d775): `quality` + `e2e` + `lighthouse`. El e2e tomó 5
+  iteraciones porque, sin Docker local (K1), el primer contacto de CADA spec con Postgres real fue
+  en CI.
 
 ## Qué salió bien / qué generó fricción
 

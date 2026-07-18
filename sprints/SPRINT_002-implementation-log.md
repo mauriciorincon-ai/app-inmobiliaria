@@ -157,3 +157,30 @@ de seguridad (la key aleatoria atada al inmueble + expiración de 10 min son el 
   `<div role="alert" aria-live="assertive">` vacío en cada página; el strict mode de Playwright
   falló al matchear 2 alerts. Fix: `getByText(/muy pequeña|cámara/i)` apunta al `<p>` del error sin
   ambigüedad. (Candidato a `testing-patterns`: en e2e, evitar `getByRole("alert")` desnudo.)
+
+### Cuarta CI del PR #2 — el opt-in flip-flop y los specs nuevos contra Postgres real
+
+- **K9-bis — checkbox CONTROLADO async → `.click()`, no `.check()`.** El opt-in de contacto es
+  `checked={activo}` (estado del servidor tras el RPC + refetch). `.check()` hace clic, ve que
+  sigue sin marcar, y **reintenta** → flip-flop ("Clicking the checkbox did not change its state").
+  Fix: un solo `.click()`; el score (que sube a 80) es la señal real. Añadido a `testing-patterns`
+  (reglas anti-flakiness 6 y 7).
+- **K10 — los specs `ficha`/`verificacion` (nuevos de S2) se estrenaron contra Postgres real y
+  revelaron supuestos** (48 pasaban; estos 4 nunca habían corrido por caer antes en K7/opt-in):
+  1. `ficha.spec` — el barrio único es `${base} ${Date.now()}` → el slug queda
+     `apartamento-suba-{timestamp}-{6hex}`; la regex de URL no contemplaba el timestamp.
+  2. `verificacion.spec` — el sello `getByText` **global** matcheaba **5-6 filas** (los workers
+     paralelos verifican varios inmuebles) → acotado a la fila del barrio único.
+  3. `verificacion.spec` — **carrera de navegación:** la aserción del sello caía sobre el DOM de
+     `/operador` (aún presente) antes de que "Ver ficha" navegara → `waitForURL(/i/)` primero.
+  4. `verificacion.spec` — `.click()` en Confirmar **no espera** al `confirmar()` async →
+     `waitForResponse(/rpc/marcar_verificado)` + `page.reload()` para un render determinista.
+     Lección: **sin Docker local (K1 sin pagar), el primer contacto de CADA spec con Postgres real es
+     en la CI** — por eso el e2e tomó 5 iteraciones (K7 → opt-in → ficha/verificacion). Con Colima,
+     estos 4 se habrían cazado en local en minutos.
+
+### CI VERDE ✅ (5ª corrida, commit 8c4d775)
+
+`quality` + `e2e` (happy path + mi-anuncio + ficha + verificacion + rls + a11y contra Postgres
+real) + `lighthouse` (Lantern, 5 URLs públicas) — los tres en verde. La migración 2 aplicó limpio
+en todas las corridas. Sprint listo para PR ready → gate ⭐ del usuario → merge.

@@ -92,8 +92,10 @@ export default async function Panel() {
               Registros
             </h1>
             <p className="mt-1 text-sm text-mute">
-              {filas.length} {filas.length === 1 ? "inmueble" : "inmuebles"}{" "}
-              publicados como fundador
+              {filas.length}{" "}
+              {filas.length === 1
+                ? "inmueble publicado como fundador"
+                : "inmuebles publicados como fundador"}
             </p>
           </div>
           <CerrarSesion />

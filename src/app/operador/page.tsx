@@ -1,10 +1,15 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import CerrarSesion from "@/components/operador/CerrarSesion";
+import MarcarVerificado from "@/components/operador/MarcarVerificado";
+import BotonReContacto from "@/components/operador/BotonReContacto";
+import SelloNivel from "@/components/ficha/SelloNivel";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { formatearCOP } from "@/engine/format/cop";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
+import type { NivelVerificacion } from "@/lib/supabase/types";
 
 // Panel protegido: usa la sesión (cookies) → render dinámico, nunca prerenderizado.
 export const dynamic = "force-dynamic";
@@ -25,9 +30,11 @@ type Fila = {
   area_m2: number;
   habitaciones: number;
   precio_esperado: number;
-  estado: string;
+  slug: string;
+  nivel_verificacion: NivelVerificacion;
   created_at: string;
   vendedor: Vendedor | null;
+  n_fotos: number;
 };
 
 const fecha = (iso: string) =>
@@ -37,7 +44,20 @@ const fecha = (iso: string) =>
     year: "numeric",
   });
 
-export default async function Panel() {
+const FILTROS = [
+  { clave: "todos", etiqueta: "Todos" },
+  { clave: "por-verificar", etiqueta: "Por verificar" },
+  { clave: "verificados", etiqueta: "Verificados" },
+] as const;
+
+export default async function Panel({
+  searchParams,
+}: {
+  searchParams: Promise<{ ver?: string }>;
+}) {
+  const { ver } = await searchParams;
+  const filtro = FILTROS.some((f) => f.clave === ver) ? ver : "todos";
+
   const supabase = await crearClienteServidor();
   const {
     data: { user },
@@ -51,17 +71,21 @@ export default async function Panel() {
     user.email.toLowerCase() === process.env.OPERADOR_EMAIL.toLowerCase();
   if (!permitido) redirect("/operador/login");
 
-  const { data, error } = await supabase
+  let consulta = supabase
     .from("inmuebles")
     .select(
-      // Hint de FK explícito (!inmuebles_vendedor_id_fkey): el embed no depende de la detección
-      // automática de la relación en el schema cache de PostgREST.
-      "id,operacion,tipo,barrio,area_m2,habitaciones,precio_esperado,estado,created_at,vendedor:vendedores!inmuebles_vendedor_id_fkey(nombre,whatsapp,email,ciudad,zona)",
+      // Hint de FK explícito + conteo de fotos embebido.
+      "id,operacion,tipo,barrio,area_m2,habitaciones,precio_esperado,slug,nivel_verificacion,created_at,vendedor:vendedores!inmuebles_vendedor_id_fkey(nombre,whatsapp,email,ciudad,zona),fotos(count)",
     )
     .order("created_at", { ascending: false });
+  if (filtro === "por-verificar")
+    consulta = consulta.eq("nivel_verificacion", "fundador");
+  if (filtro === "verificados")
+    consulta = consulta.eq("nivel_verificacion", "verificado");
+
+  const { data, error } = await consulta;
 
   if (error) {
-    // El error va al log del servidor (metadatos, sin PII) y a Sentry; la UI muestra el estado de error.
     logger.error(
       {
         evento: "panel_query_error",
@@ -74,32 +98,52 @@ export default async function Panel() {
     reportError("panel_query_error", { code: error.code ?? "desconocido" });
   }
 
-  type Cruda = Omit<Fila, "vendedor"> & {
+  type Cruda = Omit<Fila, "vendedor" | "n_fotos"> & {
     vendedor: Vendedor | Vendedor[] | null;
+    fotos: { count: number }[] | null;
   };
   const filas: Fila[] = ((data ?? []) as unknown as Cruda[]).map((r) => ({
     ...r,
     vendedor: Array.isArray(r.vendedor) ? (r.vendedor[0] ?? null) : r.vendedor,
+    n_fotos: r.fotos?.[0]?.count ?? 0,
   }));
 
   return (
     <>
       <EncabezadoInterior />
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto max-w-6xl px-6 py-10">
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-ink">
               Registros
             </h1>
             <p className="mt-1 text-sm text-mute">
-              {filas.length}{" "}
-              {filas.length === 1
-                ? "inmueble publicado como fundador"
-                : "inmuebles publicados como fundador"}
+              {filas.length} {filas.length === 1 ? "inmueble" : "inmuebles"} en
+              esta vista
             </p>
           </div>
           <CerrarSesion />
         </div>
+
+        {/* Cola de verificación: filtros por nivel. */}
+        <nav className="mt-6 flex gap-2" aria-label="Filtrar registros">
+          {FILTROS.map((f) => (
+            <Link
+              key={f.clave}
+              href={
+                f.clave === "todos" ? "/operador" : `/operador?ver=${f.clave}`
+              }
+              aria-current={filtro === f.clave ? "page" : undefined}
+              className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                filtro === f.clave
+                  ? "bg-purple text-white"
+                  : "bg-purple-tint text-purple-600 hover:bg-purple-200"
+              }`}
+            >
+              {f.etiqueta}
+            </Link>
+          ))}
+        </nav>
 
         {error ? (
           <div
@@ -111,21 +155,24 @@ export default async function Panel() {
           </div>
         ) : filas.length === 0 ? (
           <div className="mt-10 rounded-[2rem] bg-cream px-6 py-16 text-center">
-            <p className="text-lg font-bold text-ink">Aún no hay registros</p>
+            <p className="text-lg font-bold text-ink">
+              No hay registros en esta vista
+            </p>
             <p className="mt-2 text-sm text-gray">
-              Cuando un vendedor publique su inmueble, aparecerá aquí.
+              Cambia el filtro o espera a que un vendedor publique.
             </p>
           </div>
         ) : (
           <div className="mt-8 overflow-x-auto rounded-2xl border border-purple-200">
-            <table className="w-full min-w-[720px] text-left text-sm">
+            <table className="w-full min-w-[880px] text-left text-sm">
               <thead className="bg-cream text-xs uppercase tracking-wide text-mute">
                 <tr>
                   <th className="px-4 py-3 font-semibold">Fecha</th>
                   <th className="px-4 py-3 font-semibold">Contacto</th>
                   <th className="px-4 py-3 font-semibold">Inmueble</th>
-                  <th className="px-4 py-3 font-semibold">Precio</th>
-                  <th className="px-4 py-3 font-semibold">Estado</th>
+                  <th className="px-4 py-3 font-semibold">Fotos</th>
+                  <th className="px-4 py-3 font-semibold">Nivel</th>
+                  <th className="px-4 py-3 font-semibold">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-purple-200">
@@ -145,18 +192,32 @@ export default async function Panel() {
                         {f.operacion} · {f.tipo}
                       </p>
                       <p className="text-mute">
-                        {f.barrio} · {f.area_m2} m² · {f.habitaciones} hab
+                        {f.barrio} · {formatearCOP(f.precio_esperado)}
                       </p>
+                      <Link
+                        href={`/i/${f.slug}`}
+                        className="text-xs font-semibold text-purple-600 underline-offset-2 hover:underline"
+                      >
+                        Ver ficha →
+                      </Link>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 font-semibold text-ink">
-                      {formatearCOP(f.precio_esperado)}
+                    <td className="whitespace-nowrap px-4 py-3 text-mute">
+                      {f.n_fotos}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-block rounded-full bg-purple-tint px-3 py-1 text-xs font-semibold text-purple-600">
-                        {f.estado === "publicado_fundador"
-                          ? "Fundador"
-                          : f.estado}
-                      </span>
+                      <SelloNivel nivel={f.nivel_verificacion} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col gap-2">
+                        {f.nivel_verificacion === "fundador" && (
+                          <MarcarVerificado inmuebleId={f.id} />
+                        )}
+                        <BotonReContacto
+                          inmuebleId={f.id}
+                          nombre={f.vendedor?.nombre ?? ""}
+                          whatsapp={f.vendedor?.whatsapp ?? ""}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}

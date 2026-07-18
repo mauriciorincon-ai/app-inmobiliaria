@@ -62,3 +62,43 @@ NEXT_PUBLIC_R2_PUBLIC_URL`) + `NEXT_PUBLIC_APP_URL` (metadataBase/OG). Los secre
 
 El usuario eligió Colima (vs. Supabase cloud dev). Pendiente: `brew install colima docker` +
 `colima start` → luego valido la suite e2e S1 en local por primera vez.
+
+---
+
+## Fase 1 — Migración 2 + motor puro (✓)
+
+- **Migración `20260718000001_inmueble_completo.sql`:** tabla `fotos` (portada única por índice
+  parcial), 7 columnas en `inmuebles`, enum NUEVO `nivel_verificacion` (no se tocó
+  `estado_inmueble`), `generar_slug` con anticolisión + backfill de filas S1, `registrar_fundador`
+  → jsonb `{id,slug,token}` (drop+recreate por cambio de retorno), 9 RPCs SECURITY DEFINER con
+  GRANTs/REVOKEs explícitos. `obtener_ficha` es whitelist (whatsapp solo con opt-in; matrícula/email
+  jamás).
+- **Token:** 256 bits base64url (43 chars) generado en Postgres (pgcrypto), solo hash SHA-256 en BD,
+  sin pepper (la entropía ES la defensa). Sin expiración; rotación por el operador.
+- **Motores puros (cobertura 98%):** `engine/fotos/gate` (mín 1200/720px, ≤20MB, máx 12),
+  `engine/score` (base 40 + [15,5,4,3,3] + 15 desc + 5 portada + 10 contacto; **ancla 55% con la
+  primera foto**; 100% NO exige verificación), `engine/slug` (espejo del SQL), `engine/token`. 90
+  unit tests.
+- **Validación de BD:** diferida a CI/Colima (K1 sin pagar aún). La migración se escribió con
+  revisión cuidadosa siguiendo el patrón K5/K6 del S1.
+
+## Fase 2 — Fotos→R2 + mi-anuncio + confirmación (✓)
+
+- **Presign:** `POST /api/fotos/presign` (runtime nodejs) valida token + re-evalúa gate +
+  límite → 2 URLs firmadas. `src/lib/r2.ts` (aws4fetch), `fotos-url.ts` (URLs públicas, client-safe),
+  `leer-dimensiones.ts` (createImageBitmap, inyectable), `fotos-cliente.ts` (pipeline con import
+  dinámico de la compresión).
+- **Pantalla `/mi-anuncio`:** shell estático (LCP-safe) + `MiAnuncio` (resuelve token del fragment,
+  5 estados) + `ScoreCompletitud` (goal-gradient en vivo) + `SubidorFotos` + `GaleriaEditable` +
+  `EditorDescripcion` + `OptInContacto` + `ChecklistEspacios`.
+- **Magic link:** el Wizard guarda el link en sessionStorage; `/confirmacion` monta
+  `MagicLinkGuardar` (nada si visita directa → conserva su prerender estático).
+- **Testing Library entra** (paga deuda S1): 15 tests de componente + cleanup en `tests/setup.ts`.
+  e2e `mi-anuncio.spec` + `r2-mock` (intercepta R2; gate/compresión/presign/RPC reales).
+- **Deps nuevas:** `@testing-library/user-event` (no estaba).
+
+### Desviación del plan (menor) — spike R2: content-type no se firma
+
+Ver Fase 0: con `signQuery`, aws4fetch no firma el content-type. `presignPut(key)` quedó sin ese
+parámetro; el navegador envía `Content-Type: image/webp` en el PUT y R2 lo persiste. Sin impacto
+de seguridad (la key aleatoria atada al inmueble + expiración de 10 min son el control).

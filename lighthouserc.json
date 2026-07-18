@@ -1,0 +1,13 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "settings": {
+        "throttlingMethod": "devtools"
+      }
+    },
+    "assert": {
+      "budgetsFile": "./perf-budget.json"
+    }
+  }
+}

@@ -1,20 +1,11 @@
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import type { Page } from "@playwright/test";
 
-const AQUI = dirname(fileURLToPath(import.meta.url));
+// Playwright transpila los specs a CommonJS → nada de import.meta.url; los paths salen del cwd
+// (Playwright corre desde la raíz del repo).
 const FOTO_WEBP = readFileSync(
-  join(
-    AQUI,
-    "..",
-    "..",
-    "..",
-    "docs",
-    "kit-de-prueba",
-    "fotos",
-    "valida-1600x1200.jpg",
-  ),
+  join(process.cwd(), "docs", "kit-de-prueba", "fotos", "valida-1600x1200.jpg"),
 );
 
 // Intercepta R2 en e2e: no hay bucket real. El PUT presigned se responde 200 (y se registra para

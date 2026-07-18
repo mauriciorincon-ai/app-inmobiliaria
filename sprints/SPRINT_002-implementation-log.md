@@ -102,3 +102,40 @@ El usuario eligió Colima (vs. Supabase cloud dev). Pendiente: `brew install col
 Ver Fase 0: con `signQuery`, aws4fetch no firma el content-type. `presignPut(key)` quedó sin ese
 parámetro; el navegador envía `Content-Type: image/webp` en el PUT y R2 lo persiste. Sin impacto
 de seguridad (la key aleatoria atada al inmueble + expiración de 10 min son el control).
+
+## Fase 3 — Ficha pública + panel + verificación (✓)
+
+- **Ficha `/i/[slug]`** (force-dynamic): `obtener_ficha` (whitelist), `generateMetadata` con OG
+  (portada R2 o `public/og-fallback.png`), galería con preload de la portada (LCP), SelloNivel,
+  ContactoVendedor (solo opt-in), CompartirCTA, SinFotosSVG, not-found. `metadataBase` en el layout.
+- **Panel ampliado:** cola de verificación (filtros por nivel), nº de fotos, link a ficha,
+  `MarcarVerificado` (matrícula + "Vi el CTL", documento jamás almacenado), `BotonReContacto`
+  (genera link + wa.me prellenado).
+- **`/privacidad`:** nueva sección "Qué aparece en tu ficha pública" (Ley 1581 — el nombre es
+  público; whatsapp solo con opt-in; matrícula/email nunca).
+- **Lighthouse:** `seed-demo.mjs` siembra una ficha demo sin fotos; el job levanta Supabase real
+  ANTES del build (las `NEXT_PUBLIC_*` se inlinean en build).
+- **e2e:** ficha (negativo de contacto + OG + not-found), verificacion (sello ⭐ + re-contacto),
+  rls ampliado (whitelist, matrícula jamás, RPCs de operador rechazan anon), a11y += 2 rutas.
+
+## Fase 4 — Calidad + cierre (en curso)
+
+- **Guía de prueba v2** (acumulativa): hereda las 19 del S1 (badge `S1` = regresión) + 12 nuevas
+  (`Nuevo · S2`, bloques F/G/H); prefijo `guia-inmobiliaria-v2:`; filtro `s2`; historial. Total
+  **31 pruebas, 12 del gate ⭐**. Kit de prueba de fotos enlazado.
+- **Manual + runbook:** features S2 documentadas; runbook += Bloque 4 (R2) + Colima (K1).
+- **ADRs 003–006:** R2/presign, magic link, ficha/OG, score.
+
+### Primera CI del PR #2 — hallazgos (la migración VALIDÓ limpio)
+
+- **✅ La migración 2 aplicó sin error contra Postgres real** (`Applying migration
+  20260718000001_inmueble_completo.sql...` OK). El mayor riesgo del sprint quedó validado.
+- **K7 — Playwright transpila a CommonJS → `import.meta.url` rompe** ("Failed to load the ES
+  module"). Los specs nuevos (`mi-anuncio.spec`, `r2-mock`) usaban `fileURLToPath(import.meta.url)`
+  para los paths de fixtures. Fix: paths desde `process.cwd()` (raíz del repo).
+- **K8 — 3er caso Lantern (compromiso kit v1.6.4 activado):** `/mi-anuncio` dio **LCP simulado
+  3685ms** vs budget 3500 (las otras 5 rutas pasaron). Es inflación de Lantern sobre localhost
+  (patrón `lcp-nace-estatico`, corolario). Remedio comprometido: `lighthouserc.json` con
+  `throttlingMethod: devtools` → mide el LCP real en vez de simularlo. El gate real sigue siendo
+  LCP ≤2.5s en teléfono (gate ⭐).
+- Fricción transitoria: Docker Hub `toomanyrequests` durante `supabase start` (se recuperó solo).

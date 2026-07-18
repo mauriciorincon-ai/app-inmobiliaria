@@ -1,6 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { interceptarR2 } from "./utils/r2-mock";
 
 // Flujo completo de "mi anuncio" POR LA UI (lección habla S2): registrar → tomar el magic link de
@@ -8,25 +7,10 @@ import { interceptarR2 } from "./utils/r2-mock";
 // score subir en vivo. R2 se intercepta (no hay bucket en CI); el gate, la compresión, el
 // presign y las RPCs son reales contra Postgres. Datos 100% sintéticos.
 
-const AQUI = dirname(fileURLToPath(import.meta.url));
-const FOTO_VALIDA = join(
-  AQUI,
-  "..",
-  "..",
-  "docs",
-  "kit-de-prueba",
-  "fotos",
-  "valida-1600x1200.jpg",
-);
-const FOTO_BAJA = join(
-  AQUI,
-  "..",
-  "..",
-  "docs",
-  "kit-de-prueba",
-  "fotos",
-  "baja-resolucion-320x240.jpg",
-);
+// Playwright transpila a CommonJS → paths desde el cwd (raíz del repo), sin import.meta.url.
+const FOTOS = join(process.cwd(), "docs", "kit-de-prueba", "fotos");
+const FOTO_VALIDA = join(FOTOS, "valida-1600x1200.jpg");
+const FOTO_BAJA = join(FOTOS, "baja-resolucion-320x240.jpg");
 
 async function registrarYObtenerLink(page: Page): Promise<string> {
   const barrioUnico = `Chapinero ${Date.now()}`;

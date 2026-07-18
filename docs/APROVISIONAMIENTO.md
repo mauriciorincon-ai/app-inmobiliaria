@@ -186,6 +186,73 @@ El deploy imprime la URL: `https://app-inmobiliaria.<tu-subdominio>.workers.dev`
 
 ---
 
+## Bloque 4 — Cloudflare R2 para fotos (Sprint 002)
+
+Las fotos viven en **Cloudflare R2** (jamás Supabase Storage), en la MISMA cuenta del Worker.
+Free tier: 10 GB + egress US$0. **[TÚ]** en el dashboard de Cloudflare:
+
+### 4.1 [TÚ] Activar R2 + crear el bucket (~3 min)
+
+1. Dashboard de Cloudflare → **R2** → **Enable R2**. (Puede pedir un método de pago de respaldo
+   para verificar la cuenta; **no hay cobro esperado** en el free tier — verifícalo.)
+2. **Create bucket**: nombre exacto `innmobiliaria-fotos`, location automática.
+3. Bucket → **Settings** → **Public access** → habilita el dominio **r2.dev** → copia la URL
+   `https://pub-<hash>.r2.dev` (es tu `NEXT_PUBLIC_R2_PUBLIC_URL`).
+
+### 4.2 [TÚ] Crear el API token S3 (~2 min)
+
+R2 → **Manage R2 API Tokens** → **Create API token** → permiso **Object Read & Write**, scoped al
+bucket `innmobiliaria-fotos`. Copia el **Access Key ID** y el **Secret Access Key** (el secret se
+muestra UNA vez). El **Account ID** está en la barra lateral de R2. Estos tres van SOLO a
+`.env.local` y a `wrangler secret` — **jamás al chat ni al commit**.
+
+En `.env.local`:
+
+```bash
+# (pega los valores reales del dashboard; estos son solo marcadores)
+R2_ACCOUNT_ID=tu-account-id
+R2_ACCESS_KEY_ID=tu-access-key-id
+R2_SECRET_ACCESS_KEY=tu-secret-access-key
+R2_BUCKET=innmobiliaria-fotos
+NEXT_PUBLIC_R2_PUBLIC_URL=https://pub-tuhash.r2.dev
+NEXT_PUBLIC_APP_URL=https://app-inmobiliaria.rinconai.workers.dev
+```
+
+### 4.3 [CLAUDE] CORS del bucket + vars/secrets del Worker + deploy
+
+```bash
+# CORS: permitir PUT directo desde el navegador (localhost + la URL de prod).
+pnpm exec wrangler r2 bucket cors put innmobiliaria-fotos --rules '[{"AllowedOrigins":["http://localhost:3000","https://app-inmobiliaria.rinconai.workers.dev"],"AllowedMethods":["PUT"],"AllowedHeaders":["content-type"]}]'
+# vars públicas en wrangler.jsonc (Claude las edita): NEXT_PUBLIC_R2_PUBLIC_URL, NEXT_PUBLIC_APP_URL, R2_ACCOUNT_ID, R2_BUCKET
+# secrets del Worker (se leen de .env.local, nunca se muestran):
+pnpm exec wrangler secret put R2_ACCESS_KEY_ID
+pnpm exec wrangler secret put R2_SECRET_ACCESS_KEY
+# migración 2 a la nube + deploy:
+pnpm exec supabase db push
+pnpm deploy:cf
+```
+
+### 4.4 [TÚ] Prueba de humo de fotos
+
+Con el deploy listo, abre tu enlace **"mi anuncio"** en el teléfono → sube una foto real → debe
+aparecer en la galería y en la ficha `/i/…`; pega la ficha en WhatsApp y verifica la vista previa.
+
+## Deuda K1 — Colima (Supabase local para e2e reproducible)
+
+Para correr los e2e fuera de CI (deuda del S1):
+
+```bash
+brew install colima docker
+colima start
+pnpm exec supabase start   # aplica migraciones
+pnpm exec supabase status -o env ...   # exporta URL/keys a .env.local (o usa el bloque de CI)
+pnpm test:e2e
+```
+
+Alternativa si no quieres runtime local: un proyecto Supabase cloud "dev" (~5 min en el dash).
+
+---
+
 ## Al terminar
 
 - [ ] Registro de prueba visible en el panel de la preview.

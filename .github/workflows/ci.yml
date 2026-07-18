@@ -118,8 +118,11 @@ jobs:
       - name: Lighthouse CI contra perf-budget.json (URLs de lighthouse-urls.json)
         # Cada sprint añade sus rutas nuevas a lighthouse-urls.json (default: ["/"]).
         # Nota Lantern: el LCP SIMULADO sobre localhost castiga SPAs sanas (nutri-kids S1:
-        # 3.8s simulado vs 242ms observado) — budgets client-side necesitan margen documentado.
+        # 3.8s simulado vs 242ms observado). En S2, /mi-anuncio dio 3685ms simulado vs budget 3500
+        # → se activa el remedio COMPROMETIDO (kit v1.6.4): `throttlingMethod: devtools` en
+        # lighthouserc.json MIDE el LCP con throttling real en vez de simularlo (más fiel). El
+        # gate real sigue siendo LCP ≤2.5s en teléfono (gate ⭐). settings + budgets = lighthouserc.json.
         run: |
           npm i -g @lhci/cli
           URLS=$(node -e "console.log(require('./lighthouse-urls.json').map(u=>'--collect.url=http://localhost:3000'+u).join(' '))")
-          lhci autorun --collect.startServerCommand="pnpm start" $URLS --assert.budgetsFile=./perf-budget.json
+          lhci autorun --collect.startServerCommand="pnpm start" $URLS

@@ -117,6 +117,11 @@ usuario: aprobación visual (gate ⭐) y aprovisionamiento (Supabase cloud + Clo
 - El régimen de la app asume validación local de Supabase (docker). Para máquinas sin runtime de
   contenedores, el método podría contemplar explícitamente "provisionar Supabase cloud temprano"
   o exigir Docker/Colima como prerrequisito del sprint con capa de datos.
+- **Ver `sprints/SPRINT_001-retrospectiva.md`** — retrospectiva comparativa completa (por qué
+  este S1 rindió tanto más que los S1 previos del pipeline) con 6 enseñanzas propuestas para el
+  método: promoción de K3–K6 a patrón wiki/kit, condiciones para escalar el alcance de un S1,
+  "base declarada" como figura formal, runbook [TÚ]/[CLAUDE] como plantilla, nube temprana sin
+  Docker, y validación del gate de arranque en su estreno.
 
 ## Deuda técnica aceptada
 

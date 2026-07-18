@@ -121,8 +121,15 @@ export async function POST(req: NextRequest) {
       return json(500, { error: "servidor" });
     }
 
+    // registrar_fundador devuelve { id, slug, token }. El token va al cliente EN CLARO una sola
+    // vez (nunca se loggea) para armar el magic link; en BD solo vive su hash.
     log.info({ evento: "registro_ok", ms: Date.now() - t0 }, "registro creado");
-    return json(200, { ok: true, id: data });
+    return json(200, {
+      ok: true,
+      id: data?.id,
+      slug: data?.slug,
+      token: data?.token,
+    });
   } catch (e) {
     reportError("registro_excepcion", {
       requestId,

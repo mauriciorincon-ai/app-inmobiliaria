@@ -184,3 +184,20 @@ de seguridad (la key aleatoria atada al inmueble + expiración de 10 min son el 
 `quality` + `e2e` (happy path + mi-anuncio + ficha + verificacion + rls + a11y contra Postgres
 real) + `lighthouse` (Lantern, 5 URLs públicas) — los tres en verde. La migración 2 aplicó limpio
 en todas las corridas. Sprint listo para PR ready → gate ⭐ del usuario → merge.
+
+### Deploy real de fotos (post-CI, [CLAUDE] tras aprovisionar el usuario R2)
+
+`supabase db push` (migración 2 al cloud) → 3 secrets R2 al Worker (`R2_ACCOUNT_ID` dio un `10013`
+transitorio, pasó al reintento) → vars públicas en `wrangler.jsonc` → CORS (`cors set --file`, ver
+runbook) → `deploy:cf` (v `f330475e`) → **prueba de humo verde** (presign+PUT+GET público r2.dev
+200/200 image-webp/204). App S2 sirviendo; `/operador` redirige a login (RSC redirect) y RLS bloquea
+todo dato sin sesión (verificado en vivo, cero PII).
+
+### Consideración futura (lanzamiento) — rate limit por IP y CGNAT
+
+El rate limit del registro (ADR-002, S1: 3/hora + 10/día) cuenta por **IP hasheada**, no por
+vendedor (el flujo público es anónimo, sin cuentas). Válido para fase 1 (volumen bajo). **Al
+lanzar con tráfico móvil masivo**, el **CGNAT** de operadoras colombianas mete a muchos vendedores
+tras una sola IP pública → podrían chocar colectivamente contra el 3/hora sin culpa. Revisar
+entonces: subir los techos, o combinar la IP con otra señal suave. No se toca ahora (decisión del
+usuario 2026-07-18: para fase 1, IP ≈ vendedor es un modelo válido).

@@ -12,11 +12,14 @@ pr: https://github.com/mauriciorincon-ai/app-inmobiliaria/pull/2
 
 ## Outcome
 
-**Sí (pendiente gate ⭐ del usuario + aprovisionamiento R2).** El anuncio del fundador pasa de
-"registrado" a **completo, verificable y compartible**: sube fotos con gate determinista →
-Cloudflare R2, ve su score de completitud subir en vivo por su magic link, tiene una ficha pública
-`/i/[slug]` con OG para WhatsApp, y el operador puede verificarlo (nivel 2 ⭐, CTL visto jamás
-almacenado) y re-contactar a los fundadores del S1. Todo determinista, cero IA.
+**Sí.** El anuncio del fundador pasa de "registrado" a **completo, verificable y compartible**:
+sube fotos con gate determinista → Cloudflare R2, ve su score de completitud subir en vivo por su
+magic link, tiene una ficha pública `/i/[slug]` con OG para WhatsApp, y el operador puede
+verificarlo (nivel 2 ⭐, CTL visto jamás almacenado) y re-contactar a los fundadores del S1. Todo
+determinista, cero IA. **R2 aprovisionado y desplegado en vivo** (prueba de humo verde:
+presign+PUT+GET público). El **gate ⭐ exhaustivo (recorrido en teléfono) lo difiere el usuario al
+S3** (decisión 2026-07-18: probó exhaustivamente en S1, confía en S2, hará la prueba profunda en el
+cierre del MVP); el pipeline queda verificado por CI (e2e contra Postgres real) + humo de R2.
 
 ## Qué se construyó
 
@@ -54,7 +57,9 @@ leer-dimensiones,fotos-cliente}`.
 - **IA embebida** — ✅ N/A (cero IA; el gate de fotos es determinista).
 - **Manual + Guía** — ✅ `MANUAL-DE-USO` actualizado; `GUIA-DE-PRUEBA.html` **v2 acumulativa** (31
   pruebas, 12 gate ⭐) + kit de prueba de fotos.
-- **Revisión de diseño** — ⏳ PENDIENTE: aprobación visual del usuario sobre la preview (gate ⭐).
+- **Revisión de diseño** — ⏭️ DIFERIDA al S3 por decisión del usuario (confía en S2 tras el S1
+  exhaustivo; el recorrido profundo en teléfono se hace en el cierre del MVP). Sistema visual
+  obedece `design-system.md`; e2e con axe en las rutas nuevas.
 
 ## Métricas técnicas
 
@@ -63,7 +68,7 @@ leer-dimensiones,fotos-cliente}`.
 - Ficha con OG (portada real / fallback) — ✅. Contacto solo opt-in con test negativo — ✅.
 - Nivel 2 operando (matrícula + fecha; documento jamás en la app) — ✅.
 - Re-contacto de fundadores S1 — ✅.
-- Recorrido completar anuncio <5 min desde el teléfono — ⏳ gate ⭐ del usuario.
+- Recorrido completar anuncio <5 min desde el teléfono — ⏭️ diferido al S3 (gate ⭐ del cierre MVP).
 
 ## Decisiones no anticipadas (ADRs)
 

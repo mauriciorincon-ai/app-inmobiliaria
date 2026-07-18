@@ -1,0 +1,15 @@
+/* Entrada de Tailwind SOLO para el bundle de design-sync (la app usa globals.css directo).
+   Los @source inline() garantizan que el agente de Claude Design tenga disponible el
+   vocabulario completo de la marca aunque una clase aún no se use en la app. */
+@import "../src/app/globals.css";
+
+/* Colores de marca en todas las caras habituales */
+@source inline("{bg,text,border}-{ink,gray,mute,purple,purple-600,purple-soft,purple-200,purple-tint,lilac,cream,mint,sky,white}");
+
+/* Sombras, radios y tipografía de la marca */
+@source inline("shadow-{card,soft} rounded-{xl,2xl,3xl,full} font-{medium,semibold,bold,extrabold} tracking-tight leading-tight");
+@source inline("text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl} text-center");
+
+/* Utilidades de layout de uso común en las pantallas de la app */
+@source inline("{p,px,py,pt,pb}-{0..12} {m,mx,my,mt,mb}-{0..12} gap-{1..10}");
+@source inline("flex flex-col flex-wrap inline-flex items-center items-start justify-center justify-between grid grid-cols-{1..4} w-full max-w-{md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl} mx-auto");

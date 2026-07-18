@@ -9,6 +9,11 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    # Env Supabase DUMMY: el cliente se crea de forma perezosa (nunca en build/prerender), pero
+    # damos valores placebo para que nada falle si algo los leyera.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-para-build
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -18,13 +23,22 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
-      - run: pnpm test            # vitest run --coverage (umbral 70% en vitest.config)
+      - run: pnpm test            # vitest run --coverage (umbral 80% en src/engine)
       - run: pnpm build
       - run: pnpm audit --audit-level high
 
   e2e:
     runs-on: ubuntu-latest
     needs: quality
+    # Email del operador (no es secreto) + time-trap desactivado para que el llenado rápido de
+    # Playwright no lo dispare. La contraseña y el pepper se GENERAN aleatorios en un step (nunca
+    # literales en el repo — el hook gitleaks lo exige).
+    env:
+      OPERADOR_EMAIL: operador@innmobiliaria.test
+      REGISTRO_MIN_MS: "0"
+      # Todos los envíos del e2e vienen de localhost (misma IP); sin esto el rate limit por IP
+      # (3/hora) frenaría el happy-path corriendo en 2 proyectos + reintentos.
+      DISABLE_RATE_LIMIT: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -33,11 +47,42 @@ jobs:
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:e2e        # incluye scans axe (@axe-core/playwright)
+      - name: Generar credenciales de prueba (sintéticas, efímeras)
+        run: |
+          echo "OPERADOR_PASSWORD=op-$(openssl rand -hex 12)" >> "$GITHUB_ENV"
+          echo "RATE_LIMIT_PEPPER=$(openssl rand -hex 16)" >> "$GITHUB_ENV"
+      # Stack Supabase real (Docker preinstalado en ubuntu-latest); `start` aplica las migraciones.
+      - name: Levantar Supabase local
+        run: pnpm exec supabase start
+      - name: Exportar URL/keys al entorno del job
+        # `supabase status -o env` emite KEY="valor" (con comillas); al volcarlo a $GITHUB_ENV las
+        # comillas quedarían DENTRO del valor y romperían createClient. El sed las quita.
+        run: |
+          pnpm exec supabase status -o env \
+            --override-name api.url=NEXT_PUBLIC_SUPABASE_URL \
+            --override-name auth.anon_key=NEXT_PUBLIC_SUPABASE_ANON_KEY \
+            --override-name auth.service_role_key=SUPABASE_SERVICE_ROLE_KEY \
+            | sed -E 's/^([A-Z_]+)="(.*)"$/\1=\2/' >> "$GITHUB_ENV"
+      - name: Sembrar el operador
+        run: node scripts/crear-operador.mjs
+      - run: pnpm test:e2e        # happy path por la UI + validaciones + RLS negativa + axe
+      - name: Subir artefactos de Playwright si algo falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
 
   lighthouse:
     runs-on: ubuntu-latest
     needs: quality
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-para-build
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

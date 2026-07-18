@@ -17,30 +17,18 @@ export default defineConfig({
     include: ["tests/unit/**/*.test.{ts,tsx}"],
     coverage: {
       provider: "v8",
-      // Solo *.ts: un include de directorio hace que v8 intente parsear .gitkeep y truene
-      // con PARSE_ERROR (K8, ds S1).
-      include: ["src/lib/**/*.ts", "src/engine/**/*.ts"],
+      // Solo el MOTOR puro entra a cobertura. Los adaptadores IO de `src/lib/` (cliente Supabase,
+      // logger, wrapper de Sentry) son integración y se cubren por e2e, no por unit tests — la
+      // propia plantilla del kit invita a ajustar este glob al layout de motores de la app (S1).
+      // Solo *.ts: un include de directorio hace que v8 intente parsear .gitkeep y truene con
+      // PARSE_ERROR (K8, ds S1).
+      include: ["src/engine/**/*.ts"],
       thresholds: {
-        lines: 70,
-        functions: 70,
-        branches: 70,
-        statements: 70,
-        // Los motores puros exigen más (regla 2 del CLAUDE.md; K6 ds S1 + K-habla-1).
-        // ⚠ AJUSTA estos globs al layout de motores de TU app en el S1 (ds: src/engine/**;
-        // habla: src/lib/**) — el kit no puede adivinarlo; es parte de la verificación de
-        // supuestos del kit.
-        "src/engine/**/*.ts": {
-          lines: 80,
-          functions: 80,
-          branches: 80,
-          statements: 80,
-        },
-        "src/lib/**/*.ts": {
-          lines: 80,
-          functions: 80,
-          branches: 80,
-          statements: 80,
-        },
+        // Motor puro (regla 2 del CLAUDE.md): >80%.
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80,
       },
     },
   },

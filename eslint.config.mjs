@@ -12,6 +12,14 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated directories:
+    "coverage/**",
+    ".open-next/**",
+    ".wrangler/**",
+    // design-sync: scripts staged del skill + build del bundle + caché (máquina, no repo)
+    ".ds-sync/**",
+    "ds-bundle/**",
+    ".design-sync/.cache/**",
   ]),
 ]);
 

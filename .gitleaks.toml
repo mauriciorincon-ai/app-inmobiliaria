@@ -1,0 +1,13 @@
+# Config de gitleaks del repo: extiende la config por defecto y allowlista SOLO falsos
+# positivos verificados. Regla: cada entrada es un VALOR EXACTO público por diseño — jamás
+# un patrón amplio (un patrón genérico de JWT dejaría pasar una service_role key real).
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Supabase ANON key del proyecto (pública por diseño: viaja al navegador; la RLS protege). Es la de wrangler.jsonc. Su payload codifica role=anon — una service_role key no calza con esta cadena."
+regexTarget = "secret"
+regexes = [
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYXRqb2h2dWZ5aHV6ZXZvdGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMzg4NTMsImV4cCI6MjA5OTgxNDg1M30''',
+]

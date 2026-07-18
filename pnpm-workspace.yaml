@@ -5,11 +5,19 @@ allowBuilds:
   esbuild: true
   '@tailwindcss/oxide': true
   '@sentry/cli': false
+  # workerd (runtime de Cloudflare): habilitado desde el aprovisionamiento S1 — lo necesitan
+  # `pnpm preview:cf` y `pnpm deploy:cf` (ADR 001). CI no lo usa (sus jobs no despliegan).
+  workerd: true
 onlyBuiltDependencies:
   - sharp
   - unrs-resolver
   - '@swc/core'
   - esbuild
   - '@tailwindcss/oxide'
+  - workerd
 ignoredBuiltDependencies:
   - '@sentry/cli'
+overrides:
+  # postcss <8.5.10: XSS por </style> sin escapar (moderate, transitivo de next/sentry/opennext).
+  # Herramienta de build (Tailwind); forzamos la versión parchada.
+  postcss@<8.5.10: '>=8.5.10'

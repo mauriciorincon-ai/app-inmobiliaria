@@ -1,26 +1,123 @@
 @import "tailwindcss";
 
+/* Tokens portados de la página base (design-system.md). Tailwind v4 CSS-first: sin config JS. */
+@theme {
+  --color-ink: #191a1d;
+  --color-gray: #424854;
+  --color-mute: #6b7280; /* oscurecido vs. la base (#7b8190) para cumplir contraste AA en texto pequeño */
+  --color-purple: #7b5dd6;
+  --color-purple-600: #6b4bd0;
+  --color-purple-soft: #bda1f2;
+  --color-purple-200: #cdbaf2;
+  --color-purple-tint: #ebe9fc;
+  --color-lilac: #e8dcff;
+  --color-cream: #fbf9f6;
+  --color-mint: #e6f4ee;
+  --color-sky: #e7eefb;
+
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-poppins);
+
+  --shadow-card: 0 18px 40px -18px rgba(25, 26, 29, 0.18);
+  --shadow-soft: 0 10px 30px -12px rgba(25, 26, 29, 0.12);
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #191a1d;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: auto;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Foco visible por teclado (gap de la base: no tenía). Anillo del acento de marca. */
+:focus-visible {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Píldora morada para resaltar una palabra clave en un titular. */
+.pill {
+  display: inline-block;
+  background: var(--color-purple);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0.05em 0.5em;
+  line-height: 1.05;
+  transform: rotate(-1.5deg);
+}
+
+/* Subrayado dibujado a mano. */
+.underline-doodle {
+  position: relative;
+  white-space: nowrap;
+}
+.underline-doodle::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: -0.12em;
+  height: 0.38em;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M2 9 C40 3 80 13 120 7 C150 3 180 9 198 5' stroke='%237b5dd6' stroke-width='3.5' fill='none' stroke-linecap='round'/></svg>")
+    no-repeat center/100% 100%;
+}
+
+/* Banda con gradiente pastel. */
+.pastel-band {
+  background: linear-gradient(110deg, var(--color-mint) 0%, #eef1fb 42%, var(--color-lilac) 100%);
+}
+
+.section-soft {
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-cream) 100%);
+}
+
+/* Float decorativo (blob del hero). Solo transform → no toca el LCP. Se apaga con reduced-motion. */
+@keyframes flotar {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(14px);
+  }
+}
+.flota {
+  animation: flotar 3s ease-in-out infinite;
+}
+
+/* Fallback reduced-motion: contenido de Reveal siempre visible + apaga flotaciones. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .flota {
+    animation: none !important;
+  }
 }

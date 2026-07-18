@@ -1,10 +1,7 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3,
-      "settings": {
-        "throttlingMethod": "devtools"
-      }
+      "numberOfRuns": 3
     },
     "assert": {
       "budgetsFile": "./perf-budget.json"

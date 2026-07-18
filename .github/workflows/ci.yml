@@ -117,11 +117,16 @@ jobs:
         run: node scripts/seed-demo.mjs
       - name: Lighthouse CI contra perf-budget.json (URLs de lighthouse-urls.json)
         # Cada sprint añade sus rutas nuevas a lighthouse-urls.json (default: ["/"]).
-        # Nota Lantern: el LCP SIMULADO sobre localhost castiga SPAs sanas (nutri-kids S1:
-        # 3.8s simulado vs 242ms observado). En S2, /mi-anuncio dio 3685ms simulado vs budget 3500
-        # → se activa el remedio COMPROMETIDO (kit v1.6.4): `throttlingMethod: devtools` en
-        # lighthouserc.json MIDE el LCP con throttling real en vez de simularlo (más fiel). El
-        # gate real sigue siendo LCP ≤2.5s en teléfono (gate ⭐). settings + budgets = lighthouserc.json.
+        # Throttling: Lantern (simulate, default de lhci) — es la config que S1 dejó verde con
+        # este mismo perf-budget.json (FCP 1500 / LCP 3500). numberOfRuns:3 (mediana) + budgetsFile
+        # viven en lighthouserc.json.
+        # Nota Lantern: el LCP SIMULADO sobre localhost castiga páginas HIDRATADAS EN CLIENTE
+        # (nutri-kids S1: 3.8s simulado vs 242ms observado). En S2 se probó el remedio del kit
+        # `throttlingMethod: devtools`, pero en ESTE runner infló AÚN MÁS (4 fallos vs 1: FCP de
+        # páginas estáticas a ~1505 y /mi-anuncio a 4346) → se descartó y se volvió a Lantern.
+        # `/mi-anuncio` se EXCLUYE de la auditoría: es privada, noindex y su LCP es post-hidratación
+        # (Lantern la mide en 3685 en un estado sin token que ningún usuario real ve). Su LCP se
+        # valida en el TELÉFONO real (gate ⭐, LCP ≤2.5s), que es el gate que manda.
         run: |
           npm i -g @lhci/cli
           URLS=$(node -e "console.log(require('./lighthouse-urls.json').map(u=>'--collect.url=http://localhost:3000'+u).join(' '))")

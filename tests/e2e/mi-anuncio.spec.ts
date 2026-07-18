@@ -53,8 +53,10 @@ test("un fundador completa su anuncio y el score sube en vivo", async ({
   await expect(score(page)).toHaveAttribute("aria-valuenow", "40");
 
   // Una foto de baja resolución se rechaza ANTES de subir: mensaje + cero PUT a R2.
+  // (getByText y no getByRole("alert"): el App Router monta un __next-route-announcer__
+  // con role="alert" vacío que haría ambiguo el selector.)
   await page.locator('input[type="file"]').setInputFiles(FOTO_BAJA);
-  await expect(page.getByRole("alert")).toContainText(/muy pequeña|cámara/i);
+  await expect(page.getByText(/muy pequeña|cámara/i)).toBeVisible();
   expect(puts).toHaveLength(0);
 
   // Una foto válida sube y el score salta a 55%.

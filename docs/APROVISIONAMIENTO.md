@@ -153,14 +153,16 @@ En el S1 se dejó el build nativo de `workerd` ignorado (no hacía falta para CI
 
 ### 3.3 [CLAUDE] Variables del Worker
 
-Los valores públicos van como `vars` en `wrangler.jsonc` (versionados, no son secretos); los
-sensibles como secrets del Worker:
+Los valores GENUINAMENTE públicos van como `vars` en `wrangler.jsonc` (versionados, no son
+secretos); el resto como secrets del Worker. **Ojo: `OPERADOR_EMAIL` NO se versiona** — el repo
+es público y es un correo personal (anti-harvesting); va como secret aunque no sea "secreto":
 
 ```bash
 # vars en wrangler.jsonc (Claude edita el archivo):
-#   NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, OPERADOR_EMAIL
-# secret (se lee de .env.local, nunca se muestra):
+#   NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
+# secrets (se leen de .env.local, nunca se muestran):
 pnpm exec wrangler secret put RATE_LIMIT_PEPPER
+pnpm exec wrangler secret put OPERADOR_EMAIL
 ```
 
 > Nota técnica: las `NEXT_PUBLIC_*` también se inyectan en el bundle del navegador en tiempo de

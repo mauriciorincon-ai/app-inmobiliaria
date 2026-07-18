@@ -154,6 +154,22 @@
     tabla). Fix: migración `20260716000001_grants_service_role.sql` (GRANT ALL de las 3 tablas +
     sequences a `service_role`). Descubierto verificando la fila de humo con la Admin API.
 
+- 2026-07-17 — **Bloque 1 CERRADO: prueba de humo 1.6 confirmada por el usuario.** Su registro
+  por el wizard llegó a cloud (`registro_ok` 1477 ms en el log del dev server) y el panel muestra
+  los 2 registros (el de humo + el suyo). De paso se cazó y corrigió la concordancia del contador
+  («1 inmueble publicados» → singular/plural, commit `a24e350`). CI del PR verde 3/3 tras los
+  últimos commits.
+- 2026-07-17 — **Bloque 3 [CLAUDE] preparado (sin esperar el login de Cloudflare):** `workerd`
+  habilitado (`pnpm-workspace.yaml`), vars públicas en `wrangler.jsonc`, build OpenNext OK y
+  **preview local del Worker (workerd) validada**: las 5 rutas responden; `/operador` sin sesión
+  redirige a login (la variante «streamed» de Next devuelve 200 + `NEXT_REDIRECT`; lo único
+  servido antes del guard es el esqueleto estático de `loading.tsx` — cero datos).
+  - **Decisión de seguridad (desvía el runbook, runbook actualizado):** `OPERADOR_EMAIL` NO va
+    como var versionada en `wrangler.jsonc` — el repo es público y es un correo personal
+    (anti-harvesting/phishing). Va como secret del Worker junto a `RATE_LIMIT_PEPPER`.
+  - Pendiente [TÚ]: cuenta Cloudflare (Gmail directo + 2FA, sin SSO) + `pnpm exec wrangler
+login`; luego [CLAUDE]: `wrangler secret put` ×2 + `pnpm deploy:cf` → URL `workers.dev`.
+
 ### Nota — validación de BD diferida (consecuencia de K1)
 
 Sin runtime de contenedores local, **no se pudo correr `supabase db reset` ni el smoke SQL de la

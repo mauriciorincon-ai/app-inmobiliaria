@@ -9,7 +9,12 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  // Solo valores GENUINAMENTE públicos (la anon key viaja al navegador; la RLS protege).
+  // OPERADOR_EMAIL y RATE_LIMIT_PEPPER van como SECRETS del Worker (`wrangler secret put`):
+  // el repo es público y el correo del operador no se versiona (anti-harvesting/phishing).
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://teatjohvufyhuzevothr.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYXRqb2h2dWZ5aHV6ZXZvdGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMzg4NTMsImV4cCI6MjA5OTgxNDg1M30.yCHksqJn55VvYKXMuSvov0E-JFZuXgm81ypU8a8OEf0"
   }
-  // Las variables (NEXT_PUBLIC_SUPABASE_URL/ANON_KEY, OPERADOR_EMAIL, RATE_LIMIT_PEPPER, etc.) se
-  // configuran como secrets/vars del proyecto en el dashboard de Cloudflare, no aquí.
 }

@@ -170,6 +170,17 @@
   - Pendiente [TÚ]: cuenta Cloudflare (Gmail directo + 2FA, sin SSO) + `pnpm exec wrangler
 login`; luego [CLAUDE]: `wrangler secret put` ×2 + `pnpm deploy:cf` → URL `workers.dev`.
 
+- 2026-07-17 — **Bloque 3 COMPLETO: app desplegada en Cloudflare Workers.** Cuenta creada
+  (Gmail directo + TOTP 2FA), wrangler autorizado por OAuth. Fricción: el link de onboarding
+  que imprime `wrangler deploy` para registrar el subdominio `workers.dev` da 404 en el
+  dashboard nuevo — se registró por API (`PUT /accounts/{id}/workers/subdomain`, subdominio
+  `rinconai`, con el token OAuth local del CLI). Deploy OK + secrets `OPERADOR_EMAIL` y
+  `RATE_LIMIT_PEPPER` cargados. **Verificado en producción:** 5 rutas 200 (el SSL del
+  subdominio nuevo tardó ~1 min en emitirse), `meta robots noindex,nofollow` presente, y POST
+  sintético al endpoint → `{ok:true}` con fila en Supabase cloud (pino + WebCrypto + RPC
+  funcionan en workerd). **URL preview H1:** <https://app-inmobiliaria.rinconai.workers.dev>.
+  Queda del sprint: gate ⭐ de la guía en teléfono + aprobación visual + merge del PR #1.
+
 ### Nota — validación de BD diferida (consecuencia de K1)
 
 Sin runtime de contenedores local, **no se pudo correr `supabase db reset` ni el smoke SQL de la

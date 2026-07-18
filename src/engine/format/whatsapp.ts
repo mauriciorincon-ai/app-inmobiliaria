@@ -33,3 +33,27 @@ export function normalizarWhatsapp(entrada: string): string | null {
 export function esWhatsappValido(entrada: string): boolean {
   return normalizarWhatsapp(entrada) !== null;
 }
+
+/**
+ * Construye un enlace `wa.me` que abre WhatsApp con un mensaje prellenado. Acepta E.164
+ * (`+573001234567`) o cualquier forma normalizable; se queda solo con los dígitos (wa.me no
+ * lleva el `+`). Usado por el botón de re-contacto del panel.
+ */
+export function construirWaMe(numero: string, texto: string): string {
+  const e164 = normalizarWhatsapp(numero) ?? numero;
+  const digitos = e164.replace(/\D/g, "");
+  return `https://wa.me/${digitos}?text=${encodeURIComponent(texto)}`;
+}
+
+/**
+ * Mensaje de re-contacto para un fundador del S1: lo invita a completar su anuncio con su magic
+ * link. Copy es-CO, sin cifras no citables. `nombre` se recorta al primer nombre.
+ */
+export function mensajeReContacto(nombre: string, link: string): string {
+  const primerNombre = nombre.trim().split(/\s+/)[0] || "hola";
+  return (
+    `Hola ${primerNombre}, te saludamos de Innmobiliaria. Tu inmueble ya está publicado como ` +
+    `fundador. Ahora puedes completarlo con fotos y descripción para que luzca mejor — entra ` +
+    `desde este enlace (es solo tuyo, guárdalo): ${link}`
+  );
+}

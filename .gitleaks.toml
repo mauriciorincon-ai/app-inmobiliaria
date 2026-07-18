@@ -11,3 +11,22 @@ regexTarget = "secret"
 regexes = [
   '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYXRqb2h2dWZ5aHV6ZXZvdGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMzg4NTMsImV4cCI6MjA5OTgxNDg1M30''',
 ]
+
+# Carnada canónica de gitleaks (kit v1.6.3): AKIAQ7RTZ4PXKM2WNB3S es un valor FAKE verificado que
+# el delta obliga a DOCUMENTAR en CLAUDE.md, el skill de testing y la bitácora (para que nadie
+# improvise un secreto de prueba débil). Se allowlista SOLO en esos archivos de documentación
+# (condition = "AND": path Y regex deben coincidir) — en CUALQUIER otro archivo sigue disparando,
+# así el gate sigue vivo y la carnada sigue sirviendo para probar el hook.
+[[allowlists]]
+condition = "AND"
+description = "Carnada canónica gitleaks documentada (kit v1.6.3), scoped a docs."
+paths = [
+  '''CLAUDE\.md''',
+  '''\.claude/skills/testing-patterns\.md''',
+  '''sprints/.*\.md''',
+  '''\.gitleaks\.toml''',
+]
+regexTarget = "secret"
+regexes = [
+  '''AKIAQ7RTZ4PXKM2WNB3S''',
+]

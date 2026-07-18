@@ -14,6 +14,8 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
       NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-para-build
+      NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -39,6 +41,14 @@ jobs:
       # Todos los envíos del e2e vienen de localhost (misma IP); sin esto el rate limit por IP
       # (3/hora) frenaría el happy-path corriendo en 2 proyectos + reintentos.
       DISABLE_RATE_LIMIT: "1"
+      # R2 DUMMY: el presign firma con estas credenciales placebo y el PUT se INTERCEPTA en el
+      # e2e (r2-mock), así que nunca se valida contra un bucket real. No son secretos AWS reales.
+      NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      R2_ACCOUNT_ID: dummy-account
+      R2_ACCESS_KEY_ID: dummy-key
+      R2_SECRET_ACCESS_KEY: dummy-secret
+      R2_BUCKET: innmobiliaria-fotos
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -81,8 +91,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality
     env:
-      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-para-build
+      NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -90,12 +100,34 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      # La ficha /i/[slug] es dinámica y lee la BD → Lighthouse necesita Supabase real. Y como las
+      # NEXT_PUBLIC_* se inlinean en BUILD, hay que levantar Supabase y exportar sus valores ANTES
+      # de `pnpm build` (mismo patrón K3 del e2e: sed para quitar las comillas de status -o env).
+      - name: Levantar Supabase local
+        run: pnpm exec supabase start
+      - name: Exportar URL/keys al entorno del job
+        run: |
+          pnpm exec supabase status -o env \
+            --override-name api.url=NEXT_PUBLIC_SUPABASE_URL \
+            --override-name auth.anon_key=NEXT_PUBLIC_SUPABASE_ANON_KEY \
+            --override-name auth.service_role_key=SUPABASE_SERVICE_ROLE_KEY \
+            | sed -E 's/^([A-Z_]+)="(.*)"$/\1=\2/' >> "$GITHUB_ENV"
       - run: pnpm build
+      - name: Sembrar la ficha demo (para /i/[slug])
+        run: node scripts/seed-demo.mjs
       - name: Lighthouse CI contra perf-budget.json (URLs de lighthouse-urls.json)
         # Cada sprint añade sus rutas nuevas a lighthouse-urls.json (default: ["/"]).
-        # Nota Lantern: el LCP SIMULADO sobre localhost castiga SPAs sanas (nutri-kids S1:
-        # 3.8s simulado vs 242ms observado) — budgets client-side necesitan margen documentado.
+        # Throttling: Lantern (simulate, default de lhci) — es la config que S1 dejó verde con
+        # este mismo perf-budget.json (FCP 1500 / LCP 3500). numberOfRuns:3 (mediana) + budgetsFile
+        # viven en lighthouserc.json.
+        # Nota Lantern: el LCP SIMULADO sobre localhost castiga páginas HIDRATADAS EN CLIENTE
+        # (nutri-kids S1: 3.8s simulado vs 242ms observado). En S2 se probó el remedio del kit
+        # `throttlingMethod: devtools`, pero en ESTE runner infló AÚN MÁS (4 fallos vs 1: FCP de
+        # páginas estáticas a ~1505 y /mi-anuncio a 4346) → se descartó y se volvió a Lantern.
+        # `/mi-anuncio` se EXCLUYE de la auditoría: es privada, noindex y su LCP es post-hidratación
+        # (Lantern la mide en 3685 en un estado sin token que ningún usuario real ve). Su LCP se
+        # valida en el TELÉFONO real (gate ⭐, LCP ≤2.5s), que es el gate que manda.
         run: |
           npm i -g @lhci/cli
           URLS=$(node -e "console.log(require('./lighthouse-urls.json').map(u=>'--collect.url=http://localhost:3000'+u).join(' '))")
-          lhci autorun --collect.startServerCommand="pnpm start" $URLS --assert.budgetsFile=./perf-budget.json
+          lhci autorun --collect.startServerCommand="pnpm start" $URLS

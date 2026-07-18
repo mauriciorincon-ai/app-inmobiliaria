@@ -58,6 +58,26 @@ export default function Privacidad() {
           </section>
 
           <section>
+            <h2 className="text-lg font-bold text-ink">
+              Qué aparece en tu ficha pública
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed">
+              Cada inmueble tiene una ficha con un enlace propio que puedes
+              compartir. En ella se muestran los datos del inmueble (tipo, zona,
+              área, habitaciones, precio), las fotos que subas, tu{" "}
+              <span className="font-medium">nombre</span> como quien publica y,
+              si tu inmueble es verificado, ese sello. Tu{" "}
+              <span className="font-medium">
+                WhatsApp solo aparece si tú lo activas
+              </span>{" "}
+              (opción de contacto, desactivable cuando quieras); por defecto no
+              se muestra. Tu correo y el número de matrícula nunca son públicos.
+              Mientras dure esta etapa, las fichas no las indexan los
+              buscadores.
+            </p>
+          </section>
+
+          <section>
             <h2 className="text-lg font-bold text-ink">Tu autorización</h2>
             <p className="mt-2 text-sm leading-relaxed">
               Al marcar la casilla de consentimiento en el registro, autorizas

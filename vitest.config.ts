@@ -14,7 +14,10 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./tests/setup.ts"],
-    include: ["tests/unit/**/*.test.{ts,tsx}"],
+    // unit = motor puro (con umbral de cobertura); component = Testing Library sobre la lógica de
+    // UI nueva del S2 (score en vivo, gate de fotos, editor, opt-in, magic link). El umbral 80×4
+    // aplica solo al motor (coverage.include); los tests de componente son regresión, no cobertura.
+    include: ["tests/unit/**/*.test.{ts,tsx}", "tests/component/**/*.test.tsx"],
     coverage: {
       provider: "v8",
       // Solo el MOTOR puro entra a cobertura. Los adaptadores IO de `src/lib/` (cliente Supabase,

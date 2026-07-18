@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { esWhatsappValido, normalizarWhatsapp } from "@/engine/format/whatsapp";
+import {
+  esWhatsappValido,
+  normalizarWhatsapp,
+  construirWaMe,
+  mensajeReContacto,
+} from "@/engine/format/whatsapp";
 
 describe("normalizarWhatsapp", () => {
   it("normaliza 10 dígitos locales a E.164", () => {
@@ -44,5 +49,36 @@ describe("esWhatsappValido", () => {
   it("es true para números normalizables y false si no", () => {
     expect(esWhatsappValido("3001234567")).toBe(true);
     expect(esWhatsappValido("abc")).toBe(false);
+  });
+});
+
+describe("construirWaMe", () => {
+  it("arma wa.me solo con dígitos (sin +) y el texto codificado", () => {
+    const url = construirWaMe("+573001234567", "Hola, ¿cómo estás?");
+    expect(url).toBe(
+      "https://wa.me/573001234567?text=Hola%2C%20%C2%BF" +
+        encodeURIComponent("cómo estás?"),
+    );
+  });
+
+  it("normaliza formas locales antes de construir el enlace", () => {
+    expect(construirWaMe("300 123 4567", "hola")).toBe(
+      "https://wa.me/573001234567?text=hola",
+    );
+  });
+});
+
+describe("mensajeReContacto", () => {
+  it("usa el primer nombre e incluye el link", () => {
+    const link = "https://innmobiliaria.co/mi-anuncio#t=xyz";
+    const msg = mensajeReContacto("Ana María Vélez", link);
+    expect(msg).toMatch(/^Hola Ana,/);
+    expect(msg).toContain(link);
+  });
+
+  it("no menciona cifras y degrada con nombre vacío", () => {
+    const msg = mensajeReContacto("   ", "https://x/mi-anuncio#t=z");
+    expect(msg).toContain("Hola hola");
+    expect(msg).not.toMatch(/\d+%/);
   });
 });

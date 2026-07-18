@@ -1,0 +1,10 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "budgetsFile": "./perf-budget.json"
+    }
+  }
+}

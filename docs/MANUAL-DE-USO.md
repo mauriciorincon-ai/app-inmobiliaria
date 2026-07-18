@@ -47,11 +47,36 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   autorización no se puede enviar. Si intentas publicar muchas veces seguidas desde la misma
   conexión, el sistema te pedirá esperar (anti-abuso).
 
-### Confirmación de fundador · desde Sprint 001
+### Confirmación de fundador · desde Sprint 001 (mejorado en S2)
 
-- **Qué hace:** confirma que el inmueble quedó registrado y explica qué sigue (fotos, verificación,
-  apertura a compradores ~octubre).
-- **Cómo se usa:** aparece sola al terminar el registro (`/confirmacion`).
+- **Qué hace:** confirma que el inmueble quedó registrado y explica qué sigue. **Desde el S2
+  muestra tu enlace privado "mi anuncio"** para que lo guardes y completes tu anuncio cuando
+  quieras.
+- **Cómo se usa:** aparece sola al terminar el registro (`/confirmacion`). Copia el enlace (botón
+  **"Copiar enlace"**) o toca **"Completar mi anuncio ahora"**. Guárdalo: es solo tuyo.
+
+### Completar tu anuncio: fotos + descripción · desde Sprint 002
+
+- **Qué hace:** con tu enlace privado, subes fotos y escribes la descripción; una barra muestra
+  qué tan completo está tu anuncio y sube en vivo a medida que avanzas.
+- **Cómo se usa:** abre tu enlace **"mi anuncio"** (de la confirmación) desde el teléfono.
+  1. **Fotos:** toca "agregar fotos" y elige de tu cámara o galería (hasta 12). Cada foto se
+     comprime sola. Puedes elegir la **portada** y **eliminar** las que no quieras. Una foto muy
+     pequeña se rechaza con un aviso claro.
+  2. **Descripción:** escribe al menos unas líneas siguiendo la guía; toca **"Guardar"**.
+  3. **Contacto:** activa la casilla si quieres que tu WhatsApp aparezca en la ficha pública (es
+     opcional y reversible).
+- **Limitaciones conocidas:** necesitas tu enlace privado para entrar (viene en la confirmación o
+  te lo reenvía el operador). Las fotos se guardan comprimidas para cargar rápido.
+
+### Ficha pública compartible · desde Sprint 002
+
+- **Qué hace:** cada inmueble tiene una página propia (`/i/…`) que puedes compartir por WhatsApp;
+  al pegar el enlace se ve una vista previa con la foto de portada, el barrio y el precio.
+- **Cómo se usa:** comparte el enlace de tu ficha con quien quieras. Muestra las fotos, los datos
+  y —solo si tú lo activaste— un botón para escribirte por WhatsApp.
+- **Limitaciones conocidas:** en esta etapa las fichas no aparecen en buscadores (es privado
+  hasta el lanzamiento). Tu correo y el número de matrícula nunca son públicos.
 
 ### Política de privacidad (Ley 1581) · desde Sprint 001
 
@@ -61,25 +86,36 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
 - **Limitaciones conocidas:** el correo de contacto del responsable es provisional hasta la
   publicación oficial de la landing.
 
-### Panel del operador · desde Sprint 001
+### Panel del operador · desde Sprint 001 (ampliado en S2)
 
 - **Qué hace:** muestra al equipo de Innmobiliaria todos los inmuebles registrados (contacto,
-  datos del inmueble, estado y fecha), del más reciente al más antiguo.
+  datos, número de fotos, nivel y fecha). **Desde el S2** trae la **cola de verificación**
+  (filtros "Por verificar" / "Verificados"), el botón para **verificar** un inmueble y el de
+  **re-contactar** al vendedor por WhatsApp.
 - **Cómo entra el operador:**
   1. Ve a `/operador` (o `/operador/login`).
   2. Escribe el **correo** autorizado del operador y la **contraseña**.
-  3. Toca **"Entrar"**. Verás la tabla de registros. Usa **"Cerrar sesión"** para salir.
-  - Solo el correo autorizado puede entrar; no hay registro público de cuentas.
-- **Limitaciones conocidas:** es una tabla de solo lectura (aún no se editan estados desde aquí).
+  3. Toca **"Entrar"**. Usa **"Cerrar sesión"** para salir. Solo el correo autorizado puede entrar.
+- **Verificar un inmueble (nivel 2 ⭐):** el vendedor te comparte su Certificado de Tradición y
+  Libertad (CTL); tú lo **ves** (nunca se sube a la app), confirmas que el titular coincide, y en
+  la fila tocas **"Verificar ⭐"**, escribes el **número de matrícula** y marcas "Vi el CTL
+  original". El inmueble gana el sello **"Propietario verificado"** en su ficha. Solo se guardan
+  la matrícula y la fecha; el documento nunca se almacena.
+- **Re-contactar a un fundador:** el botón **"Re-contactar por WhatsApp"** genera un enlace nuevo
+  para su anuncio y abre WhatsApp con un mensaje listo que lo invita a completar sus fotos.
+- **Limitaciones conocidas:** la verificación la hace una persona (no es automática).
 
 ## Preguntas frecuentes
 
 - **¿Cuánto cuesta publicar?** Nada. Publicar como fundador es gratis y no cobramos comisión.
-- **¿Me piden documentos o el CTL?** No. En el registro solo se pide lo básico.
+- **¿Me piden documentos o el CTL?** No para publicar. El CTL es opcional y solo si quieres el
+  sello "Propietario verificado"; lo muestras una vez y nunca se sube a la app.
 - **¿Sirve para arriendo?** Sí, aunque el mensaje lidera con la venta directa.
+- **¿Quién ve mi WhatsApp?** Nadie en la ficha pública, a menos que tú actives esa opción.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                     |
-| ------ | ------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador |
+| Sprint | Features añadidas a este manual                                                                                                                           |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                       |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel |

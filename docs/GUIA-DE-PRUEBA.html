@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Innmobiliaria — Guía de prueba (Sprint 001)</title>
+    <title>Innmobiliaria — Guía de prueba (Sprint 002)</title>
     <style>
       :root {
         --bg: #fbf9f6;
@@ -202,6 +202,16 @@
         background: var(--tint);
         color: var(--purple-600);
       }
+      .o-s2 {
+        background: #e6f4ee;
+        color: #15803d;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s2 {
+          background: #052e16;
+          color: #4ade80;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -250,16 +260,17 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 001 — La puerta fundadora</h1>
+      <h1>Sprint 002 — El inmueble completo</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada sprint hereda las
-        pruebas del anterior (regresión) y añade las nuevas. Hoy, siendo el primer sprint, todo es
-        <span class="origen o-s1">Nuevo · S1</span>.
+        pruebas del anterior (regresión, marcadas con su sprint <span class="origen o-s1">S1</span>)
+        y añade las nuevas <span class="origen o-s2">Nuevo · S2</span>. Este sprint suma fotos,
+        ficha pública y verificación.
       </p>
       <div class="urlbox">
         Pruébalo en la <b>preview del PR</b> (la que te comparto al abrir el Pull Request). URL de
-        esta rama: <code>sprint-001/puerta-fundadora</code>. En un teléfono real cuando el filtro lo
-        pida.
+        esta rama: <code>sprint-002/inmueble-completo</code>. En un teléfono real cuando el filtro
+        lo pida.
       </div>
 
       <div class="barra">
@@ -271,7 +282,8 @@
         <div class="filtros" id="filtros">
           <button data-filtro="todo" aria-pressed="true">Ver todo</button>
           <button data-filtro="clave" aria-pressed="false">⭐ Solo el gate mínimo</button>
-          <button data-filtro="s1" aria-pressed="false">Solo lo nuevo del S1</button>
+          <button data-filtro="s2" aria-pressed="false">Solo lo nuevo del S2</button>
+          <button data-filtro="s1" aria-pressed="false">Solo lo del S1</button>
         </div>
       </div>
 
@@ -285,7 +297,7 @@
             <div>
               <label for="a1" class="qué"
                 >En un teléfono real, el titular del hero aparece <b>al instante</b> al abrir la
-                página<span class="origen o-s1">Nuevo · S1</span
+                página<span class="origen o-s1">S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -301,7 +313,7 @@
               <label for="a2" class="qué"
                 >El mensaje es 100% para <b>vendedores</b> y el tono es honesto<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -314,7 +326,7 @@
             <input type="checkbox" id="a3" />
             <div>
               <label for="a3" class="qué"
-                >Solo aparecen cifras <b>citables</b><span class="origen o-s1">Nuevo · S1</span
+                >Solo aparecen cifras <b>citables</b><span class="origen o-s1">S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -329,7 +341,7 @@
               <label for="a4" class="qué"
                 >A 360px de ancho todo se lee y no hay desbordes horizontales<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -342,7 +354,7 @@
             <div>
               <label for="a5" class="qué"
                 >El FAQ abre y cierra con teclado (Tab + Enter)<span class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -364,7 +376,7 @@
               <label for="b1" class="qué"
                 >Recorrido completo en un teléfono real en <b>menos de 3 minutos</b><span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -379,7 +391,7 @@
               <label for="b2" class="qué"
                 >El paso 1 pide <b>máximo 3 campos</b> (nombre, WhatsApp, ciudad)<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar"><b>Esperado:</b> nada de fotos ni documentos en ningún paso.</p>
@@ -390,7 +402,7 @@
             <div>
               <label for="b3" class="qué"
                 >Los errores salen <b>por campo</b>, no como aviso genérico<span class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -405,7 +417,7 @@
               <label for="b4" class="qué"
                 >Sin marcar la casilla de consentimiento <b>no</b> se puede enviar<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -420,7 +432,7 @@
               <label for="b5" class="qué"
                 >Si recargas a mitad del formulario, <b>retoma</b> lo que llevabas<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -434,7 +446,7 @@
               <label for="b6" class="qué"
                 >Al enviar bien, llega la pantalla de <b>confirmación</b> honesta<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -456,7 +468,7 @@
             <div>
               <label for="c1" class="qué"
                 >Tras publicar un inmueble de prueba en la preview, el operador lo <b>ve</b> en el
-                panel<span class="origen o-s1">Nuevo · S1</span
+                panel<span class="origen o-s1">S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -470,7 +482,7 @@
             <div>
               <label for="c2" class="qué"
                 >Sin sesión, <code>/operador</code> redirige al login<span class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -483,7 +495,7 @@
             <div>
               <label for="c3" class="qué"
                 >Un correo/clave equivocados muestran error claro<span class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -505,7 +517,7 @@
               <label for="d1" class="qué"
                 >El enlace "política de privacidad" del paso 3 abre la página correcta<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -519,7 +531,7 @@
             <div>
               <label for="d2" class="qué"
                 >La política es correcta y comprensible para un vendedor<span class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -542,7 +554,7 @@
               <label for="e1" class="qué"
                 >Aprobación visual: la app es fiel al <code>design-system.md</code><span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
@@ -556,7 +568,7 @@
             <div>
               <label for="e2" class="qué"
                 >Todo el flujo se puede completar solo con teclado<span class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -571,7 +583,7 @@
               <label for="e3" class="qué"
                 >Con "reducir movimiento" activado, no hay animaciones molestas<span
                   class="origen o-s1"
-                  >Nuevo · S1</span
+                  >S1</span
                 ></label
               >
               <p class="esperar">
@@ -583,11 +595,212 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE F ================= -->
+      <section class="bloque">
+        <h2><span class="letra">F</span> Completar el anuncio (fotos + descripción)</h2>
+        <p class="intro">
+          El vendedor entra por su enlace privado "mi anuncio" (aparece en la confirmación tras
+          publicar; empieza por <code>/mi-anuncio#t=</code>).
+        </p>
+        <ul>
+          <li data-origen="s2 clave">
+            <input type="checkbox" id="f1" />
+            <div>
+              <label for="f1" class="qué"
+                >Abre tu enlace "mi anuncio" en el <b>teléfono</b> y sube una foto <b>real</b> de la
+                cámara: aparece en la galería y el porcentaje sube<span class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> tras un momento ("Procesando tu foto…") la foto se ve y el score
+                sube (la primera lleva a 55%). Menos de 5 minutos para dejar el anuncio completo.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="f2" />
+            <div>
+              <label for="f2" class="qué"
+                >Una imagen muy pequeña (una captura de pantalla) se rechaza con un mensaje
+                claro<span class="origen o-s2">Nuevo · S2</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> aparece "La foto es muy pequeña… tómala con la cámara" y la foto NO
+                se sube.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="f3" />
+            <div>
+              <label for="f3" class="qué"
+                >El porcentaje sube al escribir la descripción y al activar el contacto<span
+                  class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la barra avanza en vivo; "Guardar" se habilita al pasar los 80
+                caracteres.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="f4" />
+            <div>
+              <label for="f4" class="qué"
+                >Puedes elegir la foto de portada y eliminar una foto<span class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la portada queda marcada con su etiqueta; al eliminar, la foto
+                desaparece de la galería.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ================= BLOQUE G ================= -->
+      <section class="bloque">
+        <h2><span class="letra">G</span> La ficha pública (compartir)</h2>
+        <p class="intro">
+          Cada inmueble tiene una ficha con enlace propio (<code>/i/…</code>), pensada para
+          compartir por WhatsApp.
+        </p>
+        <ul>
+          <li data-origen="s2 clave">
+            <input type="checkbox" id="g1" />
+            <div>
+              <label for="g1" class="qué"
+                >Pega el enlace de la ficha en un chat de <b>WhatsApp real</b>: aparece la vista
+                previa con la foto de portada, el barrio y el precio<span class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> WhatsApp muestra una tarjeta con la foto y el título. (Si el
+                inmueble no tiene fotos, sale la imagen de marca de respaldo.)
+              </p>
+              <p class="mal">
+                Señal de que está mal: no aparece ninguna vista previa, o sale rota.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="g2" />
+            <div>
+              <label for="g2" class="qué"
+                >Sin activar el contacto, la ficha NO muestra tu WhatsApp<span class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> dice "Este vendedor aún no habilitó el contacto directo". Tu
+                número no aparece por ningún lado.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="g3" />
+            <div>
+              <label for="g3" class="qué"
+                >Al activar el contacto en "mi anuncio", la ficha muestra "Escribir por
+                WhatsApp"<span class="origen o-s2">Nuevo · S2</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> aparece el botón verde; al tocarlo abre WhatsApp con un mensaje
+                listo.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="g4" />
+            <div>
+              <label for="g4" class="qué"
+                >Un enlace de ficha inventado muestra "No encontramos este inmueble"<span
+                  class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar"><b>Esperado:</b> página clara de no-encontrado, sin error feo.</p>
+            </div>
+          </li>
+          <li data-origen="s2 clave">
+            <input type="checkbox" id="g5" />
+            <div>
+              <label for="g5" class="qué"
+                >Juicio de contenido: la ficha se ve bien y el copy es claro; no hay cifras
+                inventadas<span class="origen o-s2">Nuevo · S2</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> se entiende de qué inmueble se trata; solo cifras citables; el
+                diseño luce cuidado.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ================= BLOQUE H ================= -->
+      <section class="bloque">
+        <h2><span class="letra">H</span> Verificación y re-contacto (operador)</h2>
+        <p class="intro">Desde el panel del operador (con sesión).</p>
+        <ul>
+          <li data-origen="s2 clave">
+            <input type="checkbox" id="h1" />
+            <div>
+              <label for="h1" class="qué"
+                >Marca un inmueble como verificado (número de matrícula + casilla "vi el CTL
+                original"): el sello ⭐ aparece en su ficha<span class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la fila pasa a "Propietario verificado" y la ficha muestra el
+                sello ⭐. El documento del CTL nunca se sube: solo se ve.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="h2" />
+            <div>
+              <label for="h2" class="qué"
+                >El botón "Re-contactar por WhatsApp" abre un chat con el mensaje y el enlace del
+                anuncio ya escritos<span class="origen o-s2">Nuevo · S2</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> se abre WhatsApp hacia el número del vendedor con un mensaje que
+                incluye su enlace privado.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s2">
+            <input type="checkbox" id="h3" />
+            <div>
+              <label for="h3" class="qué"
+                >La cola de verificación filtra por "Por verificar" y "Verificados"<span
+                  class="origen o-s2"
+                  >Nuevo · S2</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cada filtro muestra solo los inmuebles de ese nivel; el número de
+                fotos se ve en la fila.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–E), qué pasó. En especial las pruebas
+        <b>Qué mandarme al terminar:</b> por bloque (A–H), qué pasó. En especial las pruebas
         <b>⭐ del gate mínimo</b> (las que ninguna automatización cubre): el recorrido real en tu
-        teléfono, tu juicio del copy y las cifras, la aprobación visual, y que el operador vea el
-        registro de prueba en la preview. El resto (axe, tests unitarios, e2e, Lighthouse) ya lo
+        teléfono (registro y <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
+        ver su vista previa, tu juicio del copy y las cifras, la aprobación visual, y la
+        verificación del CTL desde el panel. El resto (axe, tests unitarios, e2e, Lighthouse) ya lo
         cubre la CI.
       </div>
 
@@ -601,12 +814,26 @@
           pruebas del N−1 (marcadas con su sprint = regresión). Una prueba solo se elimina cuando la
           feature que probaba deja de existir, y se anota abajo. — 2026-07-15.
         </p>
+        <h3>Kit de prueba</h3>
+        <p>
+          En <code>docs/kit-de-prueba/fotos/</code> hay dos imágenes para el bloque F: una
+          <b>válida</b> (1600×1200) y una de <b>baja resolución</b> (320×240, para ver el rechazo).
+          Para la prueba ⭐ del teléfono usa una foto real de tu cámara.
+        </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 002 (2026-07-18):</b><br />
+          <b>Nuevo:</b> bloques F (fotos + descripción), G (ficha pública), H (verificación y
+          re-contacto). 12 pruebas nuevas, 4 nuevas del gate mínimo ⭐.<br />
+          <b>Mejorado:</b> —<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 31 pruebas, 12 del gate mínimo ⭐ (unos 25–30 minutos en un
+          teléfono real).
+        </p>
         <p>
           <b>Sprint 001 (2026-07-15):</b><br />
           <b>Nuevo:</b> bloques A (landing), B (publicar=registro), C (panel operador), D
-          (privacidad), E (diseño/a11y). 19 pruebas, 7 del gate mínimo ⭐ (unos 15–20 minutos en un
-          teléfono real).<br />
+          (privacidad), E (diseño/a11y). 19 pruebas, 7 del gate mínimo ⭐.<br />
           <b>Mejorado:</b> —<br />
           <b>Eliminado:</b> —
         </p>
@@ -616,7 +843,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v1:";
+        var CLAVE = "guia-inmobiliaria-v2:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

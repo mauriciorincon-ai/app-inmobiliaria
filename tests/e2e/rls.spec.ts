@@ -82,3 +82,65 @@ test("la RPC aplica rate limit por IP (3/hora)", async () => {
   );
   expect(error).not.toBeNull();
 });
+
+// ── S2: superficie de la ficha pública y de las RPC del operador ──────────────
+
+type RegistroResult = { id: string; slug: string; token: string };
+
+async function crearInmueble() {
+  const supabase = createClient(url, anon);
+  const { data } = await supabase.rpc("registrar_fundador", argsValidos());
+  return { supabase, reg: data as unknown as RegistroResult };
+}
+
+test("obtener_ficha NUNCA expone whatsapp/email/matricula sin opt-in", async () => {
+  const { supabase, reg } = await crearInmueble();
+  const { data } = await supabase.rpc("obtener_ficha", { p_slug: reg.slug });
+  const ficha = data as unknown as Record<string, unknown>;
+  expect(ficha).toBeTruthy();
+  expect(ficha.barrio).toBe("Zona RLS");
+  // Sin opt-in: sin contacto. Y nunca hay claves de email/matrícula.
+  expect(ficha.whatsapp).toBeNull();
+  expect(ficha.contacto_publico).toBe(false);
+  expect("email" in ficha).toBe(false);
+  expect("matricula" in ficha).toBe(false);
+});
+
+test("con opt-in aparece el whatsapp, pero la matrícula sigue oculta", async () => {
+  const { supabase, reg } = await crearInmueble();
+  await supabase.rpc("guardar_contacto_publico", {
+    p_token: reg.token,
+    p_activo: true,
+  });
+  const { data } = await supabase.rpc("obtener_ficha", { p_slug: reg.slug });
+  const ficha = data as unknown as Record<string, unknown>;
+  expect(ficha.whatsapp).toBe("+573001234567");
+  expect("matricula" in ficha).toBe(false);
+});
+
+test("un token inválido no devuelve anuncio", async () => {
+  const supabase = createClient(url, anon);
+  const { data } = await supabase.rpc("obtener_mi_anuncio", {
+    p_token: "token_falso_que_no_existe_en_la_base_de_dat",
+  });
+  expect(data).toBeNull();
+});
+
+test("el anónimo NO puede leer la tabla fotos directamente", async () => {
+  const supabase = createClient(url, anon);
+  const { data } = await supabase.from("fotos").select("*");
+  expect(data ?? []).toHaveLength(0);
+});
+
+test("las RPC del operador rechazan al anónimo", async () => {
+  const { supabase, reg } = await crearInmueble();
+  const r1 = await supabase.rpc("marcar_verificado", {
+    p_inmueble_id: reg.id,
+    p_matricula: "50N-1",
+  });
+  expect(r1.error).not.toBeNull();
+  const r2 = await supabase.rpc("generar_link_anuncio", {
+    p_inmueble_id: reg.id,
+  });
+  expect(r2.error).not.toBeNull();
+});

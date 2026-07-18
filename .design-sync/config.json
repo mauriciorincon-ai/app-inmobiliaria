@@ -1,0 +1,25 @@
+{
+  "projectId": "06511338-a500-4747-9051-cbb8093db58c",
+  "shape": "package",
+  "pkg": "app-inmobiliaria",
+  "globalName": "Innmobiliaria",
+  "srcDir": ".design-sync/entries",
+  "tsconfig": "tsconfig.json",
+  "buildCmd": "pnpm dlx @tailwindcss/cli@4 -i .design-sync/tw-input.css -o .design-sync/.cache/tw.css && printf '\\n:root{--font-poppins:\"Poppins\",ui-sans-serif,system-ui,sans-serif;}\\n' >> .design-sync/.cache/tw.css",
+  "cssEntry": ".design-sync/.cache/tw.css",
+  "componentSrcMap": {
+    "Boton": "src/components/ui/Boton.tsx",
+    "Campo": "src/components/ui/Campo.tsx",
+    "Logo": "src/components/ui/Logo.tsx",
+    "EncabezadoInterior": "src/components/ui/EncabezadoInterior.tsx",
+    "Progreso": "src/components/publicar/Progreso.tsx"
+  },
+  "extraEntries": [
+    "./.design-sync/preview-shims.ts",
+    "./.design-sync/preview-provider.tsx"
+  ],
+  "provider": { "component": "DSProvider" },
+  "extraFonts": [".design-sync/fonts/poppins.css"],
+  "guidelinesGlob": ["design-system.md"],
+  "readmeHeader": ".design-sync/conventions.md"
+}

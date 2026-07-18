@@ -47,3 +47,6 @@ export default function Boton(props: ComoLink | ComoBoton) {
     </button>
   );
 }
+
+// Export nombrado además del default: `export *` (barriles, design-sync) no re-exporta defaults.
+export { Boton };

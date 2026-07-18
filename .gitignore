@@ -18,3 +18,10 @@ Thumbs.db
 # OpenNext / Cloudflare build
 .open-next/
 .wrangler/
+
+# design-sync (estado de máquina; lo durable de .design-sync/ SÍ se versiona)
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules

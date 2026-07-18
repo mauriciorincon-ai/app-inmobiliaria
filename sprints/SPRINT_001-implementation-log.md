@@ -189,3 +189,12 @@ RPC** (criterio original de «fase 1 completa»). La migración se escribió con
 y/o (b) contra Supabase cloud en Fase 4. **Acción pendiente del usuario para validar en local
 antes del PR:** instalar Docker Desktop o Colima (permite `supabase start` + `pnpm test:e2e`
 locales). No bloquea Fases 1–2; sí es necesario para reproducir el e2e localmente.
+
+- 2026-07-17 — **Design system publicado en Claude Design** (`/design-sync`, a pedido del
+  usuario): proyecto "Innmobiliaria — Design System", 5 componentes (Boton, Campo, Logo,
+  EncabezadoInterior, Progreso), 15 celdas de preview verificadas en chromium y calificadas
+  `good`, tokens + Poppins embebida + clases de marca, README de convenciones para el agente
+  de diseño. Particularidades del repo (app Next sin dist: barril de entries, shim de process,
+  DSProvider para next/link, safelist Tailwind) documentadas en `.design-sync/NOTES.md`.
+  Cambios en la app: export nombrado adicional en los 5 componentes (aditivo), alias
+  `app-inmobiliaria` en tsconfig (las previews typechequean en CI), ignores de eslint.

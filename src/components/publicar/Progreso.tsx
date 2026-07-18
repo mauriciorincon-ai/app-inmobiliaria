@@ -33,3 +33,6 @@ export default function Progreso({ paso }: { paso: Paso }) {
     </div>
   );
 }
+
+// Export nombrado además del default: `export *` (barriles, design-sync) no re-exporta defaults.
+export { Progreso };

@@ -38,3 +38,6 @@ export default function Logo({
     </Link>
   );
 }
+
+// Export nombrado además del default: `export *` (barriles, design-sync) no re-exporta defaults.
+export { Logo };

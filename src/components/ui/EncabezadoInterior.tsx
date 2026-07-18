@@ -11,3 +11,6 @@ export default function EncabezadoInterior() {
     </header>
   );
 }
+
+// Export nombrado además del default: `export *` (barriles, design-sync) no re-exporta defaults.
+export { EncabezadoInterior };

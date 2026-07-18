@@ -74,8 +74,10 @@ test("un fundador completa su anuncio y el score sube en vivo", async ({
   await expect(score(page)).toHaveAttribute("aria-valuenow", "70");
   await page.getByRole("button", { name: "Guardar" }).click();
 
-  // El opt-in de contacto suma 10.
-  await page.getByRole("checkbox").check();
+  // El opt-in de contacto suma 10. Es un checkbox CONTROLADO cuyo `checked` refleja el estado del
+  // servidor tras el round-trip del RPC → `.check()` (que hace clic y reafirma el estado) haría
+  // flip-flop; un solo `.click()` dispara el onChange una vez y el score (abajo) es la señal real.
+  await page.getByRole("checkbox").click();
   await expect(score(page)).toHaveAttribute("aria-valuenow", "80", {
     timeout: 10000,
   });

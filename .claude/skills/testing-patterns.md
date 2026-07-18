@@ -133,6 +133,16 @@ test("usuario crea un dashboard desde CSV y lo exporta", async ({ page }) => {
 3. **Fixtures deterministas:** datos de prueba versionados en `tests/fixtures/`.
 4. **Aislamiento:** cada test crea su propio estado, no depende de otros tests.
 5. **Semilla de aleatoriedad:** si usas `faker`, fija la seed: `faker.seed(123)`.
+6. **`getByRole("alert")` es ambiguo en el App Router** (inmobiliaria S2, K9). Next monta un
+   `<div id="__next-route-announcer__" role="alert" aria-live="assertive">` vacío en cada página →
+   el strict mode de Playwright falla con "resolved to 2 elements". Apunta al mensaje con
+   `getByText(/…/)` o acota (`.filter({ hasText })`), no al rol pelado. (Igual para `role="status"`.)
+7. **Checkbox CONTROLADO con estado async → `.click()`, no `.check()`** (inmobiliaria S2, K8-bis→K9).
+   Si el `checked` refleja el estado del servidor y solo cambia tras un round-trip (RPC + refetch),
+   `.check()` hace clic, ve que sigue sin marcar, y **reintenta el clic** → flip-flop ("Clicking the
+   checkbox did not change its state"). Usa un solo `.click()` y asegura el **resultado observable**
+   (p. ej. el score sube), no el estado del input. `.check()` solo sirve para checkboxes de estado
+   local síncrono (consentimiento, "vi el documento").
 
 ## Reglas anti-"comportamiento sin experiencia" (G-Metodo 2026-07-12, habla S2)
 

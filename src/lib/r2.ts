@@ -52,18 +52,4 @@ export async function presignPut(
 // Content-type que el navegador debe enviar en el PUT (y que R2 persistirá como metadata).
 export const CONTENT_TYPE_FOTO = "image/webp";
 
-// URL pública (r2.dev) de un objeto ya subido. Pública por diseño: la sirve el bucket, y es la
-// que va como <img src> en la galería y como og:image de la ficha.
-export function urlPublicaFoto(key: string): string {
-  const base = (process.env.NEXT_PUBLIC_R2_PUBLIC_URL ?? "").replace(
-    /\/+$/,
-    "",
-  );
-  return `${base}/${key}`;
-}
-
-// Deriva la key de la miniatura a partir de la del full (convención "-full.webp" → "-thumb.webp").
-// Una sola columna en BD (r2_key = full); la thumb no se persiste, se calcula.
-export function keyThumb(keyFull: string): string {
-  return keyFull.replace(/-full\.webp$/, "-thumb.webp");
-}
+// urlPublicaFoto y keyThumb viven en @/lib/fotos-url (client-safe, sin aws4fetch).

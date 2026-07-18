@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import Boton from "@/components/ui/Boton";
+import MagicLinkGuardar from "@/components/confirmacion/MagicLinkGuardar";
 
 export const metadata: Metadata = {
   title: "Registro confirmado — Innmobiliaria",
@@ -41,6 +42,8 @@ export default function Confirmacion() {
           Gracias por confiar en Innmobiliaria. Ya eres parte del primer grupo
           de vendedores directos de Bogotá. Esto es lo que sigue:
         </p>
+
+        <MagicLinkGuardar />
 
         <ol className="mt-10 space-y-5">
           {siguientes.map((s, i) => (

@@ -16,6 +16,7 @@ import {
   paso3Schema,
 } from "@/engine/registro/schema";
 import { CAMPO_HONEYPOT } from "@/engine/registro/anti-spam";
+import { CLAVE_LINK, construirLinkAnuncio } from "@/engine/token/token";
 import {
   CLAVE_DRAFT,
   ESTADO_INICIAL,
@@ -130,6 +131,21 @@ export default function Wizard() {
           );
         }
         return;
+      }
+      // La respuesta trae el token del magic link (en claro, una sola vez). Guardamos el link en
+      // sessionStorage (efímero, muere con la pestaña) para que /confirmacion lo muestre.
+      const cuerpo = (await res.json().catch(() => null)) as {
+        token?: string;
+      } | null;
+      if (cuerpo?.token) {
+        try {
+          sessionStorage.setItem(
+            CLAVE_LINK,
+            construirLinkAnuncio(window.location.origin, cuerpo.token),
+          );
+        } catch {
+          // sin sessionStorage: la confirmación mostrará el contenido genérico
+        }
       }
       try {
         localStorage.removeItem(CLAVE_DRAFT);

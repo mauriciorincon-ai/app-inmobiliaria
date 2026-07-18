@@ -14,6 +14,8 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
       NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-para-build
+      NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -39,6 +41,14 @@ jobs:
       # Todos los envíos del e2e vienen de localhost (misma IP); sin esto el rate limit por IP
       # (3/hora) frenaría el happy-path corriendo en 2 proyectos + reintentos.
       DISABLE_RATE_LIMIT: "1"
+      # R2 DUMMY: el presign firma con estas credenciales placebo y el PUT se INTERCEPTA en el
+      # e2e (r2-mock), así que nunca se valida contra un bucket real. No son secretos AWS reales.
+      NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      R2_ACCOUNT_ID: dummy-account
+      R2_ACCESS_KEY_ID: dummy-key
+      R2_SECRET_ACCESS_KEY: dummy-secret
+      R2_BUCKET: innmobiliaria-fotos
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -83,6 +93,8 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
       NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-para-build
+      NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

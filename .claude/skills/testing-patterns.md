@@ -9,14 +9,14 @@ Patrones de testing que aplican a las 8 apps del pipeline. Alineado con el non-n
 
 ## Decisión rápida: qué tipo de test escribir
 
-| Tipo de código | Test recomendado | Herramienta |
-|---|---|---|
-| Motor matemático/lógica pura | Unit (cobertura >80%) | Vitest |
-| Hook de React | Unit + integration | Vitest + Testing Library |
-| Componente UI con lógica | Integration | Testing Library + jsdom |
-| Flujo multi-componente | Integration | Testing Library + MSW para APIs |
-| Flujo completo con DB/API real | E2E | Playwright |
-| API route / Server Action | Integration | Vitest + supertest o fetch directo |
+| Tipo de código                 | Test recomendado      | Herramienta                        |
+| ------------------------------ | --------------------- | ---------------------------------- |
+| Motor matemático/lógica pura   | Unit (cobertura >80%) | Vitest                             |
+| Hook de React                  | Unit + integration    | Vitest + Testing Library           |
+| Componente UI con lógica       | Integration           | Testing Library + jsdom            |
+| Flujo multi-componente         | Integration           | Testing Library + MSW para APIs    |
+| Flujo completo con DB/API real | E2E                   | Playwright                         |
+| API route / Server Action      | Integration           | Vitest + supertest o fetch directo |
 
 ## Patrón: motor puro testeable
 
@@ -28,7 +28,7 @@ Los motores de dominio (Gestalt en Power BI, Decision Boundary en DS, Monte Carl
 // src/engine/gestalt.ts
 export type Visual = {
   id: string;
-  type: 'card' | 'chart' | 'table';
+  type: "card" | "chart" | "table";
   priority: number;
   preferredSize?: { w: number; h: number };
 };
@@ -43,7 +43,7 @@ export type Layout = {
 
 export function computeLayout(
   visuals: Visual[],
-  canvas: { width: number; height: number }
+  canvas: { width: number; height: number },
 ): Layout[] {
   // función pura: sin DOM, sin storage, sin fetch
   // ...
@@ -52,22 +52,26 @@ export function computeLayout(
 
 ```typescript
 // tests/unit/gestalt.test.ts
-import { describe, it, expect } from 'vitest';
-import { computeLayout } from '@/engine/gestalt';
+import { describe, it, expect } from "vitest";
+import { computeLayout } from "@/engine/gestalt";
 
-describe('computeLayout', () => {
-  it('distribuye 4 visuals en grid 2x2 dentro del canvas', () => {
+describe("computeLayout", () => {
+  it("distribuye 4 visuals en grid 2x2 dentro del canvas", () => {
     const visuals = [/* ... */];
     const layout = computeLayout(visuals, { width: 1280, height: 720 });
     expect(layout).toHaveLength(4);
     expect(layout[0].x + layout[0].w).toBeLessThanOrEqual(1280);
   });
 
-  it('prioriza visuals con priority mayor en posiciones superiores', () => {/* ... */});
+  it("prioriza visuals con priority mayor en posiciones superiores", () => {
+    /* ... */
+  });
 
-  it('respeta preferredSize cuando hay espacio', () => {/* ... */});
+  it("respeta preferredSize cuando hay espacio", () => {
+    /* ... */
+  });
 
-  it('es determinista: mismo input produce mismo output', () => {
+  it("es determinista: mismo input produce mismo output", () => {
     const visuals = [/* ... */];
     const a = computeLayout(visuals, { width: 1280, height: 720 });
     const b = computeLayout(visuals, { width: 1280, height: 720 });
@@ -106,16 +110,18 @@ it('renderiza visuals y permite reorganizar con drag-and-drop', async () => {
 
 ```typescript
 // tests/e2e/dashboard-creation.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('usuario crea un dashboard desde CSV y lo exporta', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Subir CSV' }).click();
-  await page.setInputFiles('input[type=file]', 'tests/fixtures/sales.csv');
-  await expect(page.getByRole('heading', { name: 'Dashboard generado' })).toBeVisible();
+test("usuario crea un dashboard desde CSV y lo exporta", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Subir CSV" }).click();
+  await page.setInputFiles("input[type=file]", "tests/fixtures/sales.csv");
+  await expect(
+    page.getByRole("heading", { name: "Dashboard generado" }),
+  ).toBeVisible();
 
-  await page.getByRole('button', { name: 'Exportar JSON' }).click();
-  const download = await page.waitForEvent('download');
+  await page.getByRole("button", { name: "Exportar JSON" }).click();
+  const download = await page.waitForEvent("download");
   expect(download.suggestedFilename()).toMatch(/\.json$/);
 });
 ```
@@ -148,6 +154,30 @@ test('usuario crea un dashboard desde CSV y lo exporta', async ({ page }) => {
    era inaudible para ambos. Todo parámetro "de población" se prueba también desde afuera del
    rango, y mejor aún: se ancla al dato medido en vivo en vez de afirmarse de manual.
 
+## e2e con base de datos real (Supabase) en CI (kit v1.6.4, inmobiliaria S1)
+
+> Origen: primer sprint del pipeline con Postgres real en CI (inmobiliaria S1) — 7 iteraciones
+> hasta verde por 4 fricciones no obvias. Patrón completo:
+> `wiki/patterns/supabase-en-ci-y-cloud.md` (planeadora, RO). Reglas:
+
+1. **`supabase status -o env` emite valores ENTRECOMILLADOS** — al volcarlos a `$GITHUB_ENV`,
+   pásalos por `sed` que quite las comillas o `createClient` rechazará la URL con error opaco.
+2. **Playwright descarta el stdout del `webServer` por defecto** — si el server loggea a stdout
+   (Pino), pon `stdout: "pipe"` en `playwright.config.ts` desde el día 1 o debuggearás a ciegas.
+3. **La migración declara TODOS los privilegios explícitos:** el stack Supabase (local y cloud)
+   NO otorga grants de tabla por defecto a `authenticated` ni a `service_role` — `GRANT` explícito
+   a cada rol que lee/escribe + `REVOKE` explícito a `anon`. Doblemente invisible si el flujo
+   público usa RPC `SECURITY DEFINER` (salta los grants: el camino anon funciona y el autenticado
+   muere con `permission denied`).
+4. **Rate limit por IP + e2e no se mezclan:** en CI todo sale de localhost — apágalo SOLO en CI
+   (env var) y cubre el rate limit con un test dedicado a nivel RPC (el gate se reubica, no se
+   pierde).
+5. **Strict mode con datos por-proyecto:** cada proyecto de Playwright inserta su propia fila —
+   ancla las aserciones a un dato único de la corrida, jamás a un nombre repetido entre proyectos.
+6. **Sin Docker/Colima local → la nube se provisiona TEMPRANO** (primera fase del sprint, no el
+   cierre): el primer contacto con Postgres real no debe ocurrir en la CI final. (En S2 se paga
+   la deuda K1 instalando Colima: e2e reproducible en local, no solo en CI.)
+
 ## Qué NO testear
 
 - **Código generado** (types de TS, rutas de Next.js, componentes de shadcn sin customizar).
@@ -167,17 +197,17 @@ Configurar en `vitest.config.ts`:
 export default defineConfig({
   test: {
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      provider: "v8",
+      reporter: ["text", "json", "html"],
       thresholds: {
         lines: 70,
         branches: 70,
         functions: 70,
-        statements: 70
+        statements: 70,
       },
-      exclude: ['**/*.config.*', '**/types/**', '.next/**']
-    }
-  }
+      exclude: ["**/*.config.*", "**/types/**", ".next/**"],
+    },
+  },
 });
 ```
 

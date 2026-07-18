@@ -8,10 +8,10 @@
 
 ## Las dos casas (regla dura)
 
-| Casa | Path | Escritor único | Qué vive ahí |
-|---|---|---|---|
+| Casa           | Path                           | Escritor único   | Qué vive ahí                                                             |
+| -------------- | ------------------------------ | ---------------- | ------------------------------------------------------------------------ |
 | **Planeadora** | `~/Code/hr01-develop-ai-apps/` | su propia sesión | brief, sprints (plan+retro), órdenes de construcción, método, estándares |
-| **Esta app** | este repo | **tú** | código, tests, ADRs de implementación, bitácora y summary del sprint |
+| **Esta app**   | este repo                      | **tú**           | código, tests, ADRs de implementación, bitácora y summary del sprint     |
 
 - ✅ Puedes **leer** la planeadora (agregada como `additionalDirectories`, o por path absoluto).
 - ❌ **Nunca escribes** en la planeadora. Si el plan necesita cambio, lo anotas en tu
@@ -80,37 +80,46 @@ decisions/NNN-titulo.md   (ADRs de implementación)
    gitleaks: hook `pre-commit` de git (`githooks/`, cubre commits manuales) + hook PreToolUse de
    Claude Code (cubre escrituras del agente). El hook nace ejecutable (100755) y `core.hooksPath`
    se re-aplica en cada `pnpm install` (script `prepare` — K12); si un commit con secreto de
-   prueba NO es bloqueado, el gate está muerto — repáralo antes de seguir.
+   prueba NO es bloqueado, el gate está muerto — repáralo antes de seguir. **Carnada canónica
+   verificada (kit v1.6.3): `AWS_ACCESS_KEY_ID=AKIAQ7RTZ4PXKM2WNB3S`** — no improvises el secreto
+   de prueba: las reglas modernas de gitleaks exigen alfabeto real (base32 tras `AKIA`) y entropía,
+   y una carnada floja pasa en silencio dando falsa tranquilidad (lección 2026-07-15: dos falsos
+   "todo bien" seguidos). Si gitleaks sube de versión mayor, re-verificar la carnada en sandbox
+   antes de confiar en ella.
 8. **Presupuesto de esfuerzo:** ~12 pasos por pantalla; si lo excedes, detente y simplifica o consulta.
 9. **Manual de uso vivo (`docs/MANUAL-DE-USO.md`, obligatorio).** Toda feature que llegue a `main`
    queda documentada ahí **en el mismo sprint**: qué hace, cómo se usa (pasos para el usuario
    final), capturas o rutas de pantalla, y limitaciones conocidas. En español llano.
 10. **Diseño vanguardista con gate (`design-system.md` + skill `diseno-ui`).** El sprint 1 crea el
-   `design-system.md` de la app (tokens desde la página base: acento `#7B5DD6`, tinta `#191A1D`,
-   bandas pastel, píldoras, radios amplios); toda pantalla lo obedece. Cada sprint con UI cierra
-   con el **checklist de revisión de diseño** del skill `diseno-ui` + aprobación visual del
-   usuario sobre la preview. **Claude Design es BAJO DEMANDA** (G-Metodo 2026-07-07).
+    `design-system.md` de la app (tokens desde la página base: acento `#7B5DD6`, tinta `#191A1D`,
+    bandas pastel, píldoras, radios amplios); toda pantalla lo obedece. Cada sprint con UI cierra
+    con el **checklist de revisión de diseño** del skill `diseno-ui` + aprobación visual del
+    usuario sobre la preview. **Claude Design es BAJO DEMANDA durante el ciclo** (G-Metodo
+    2026-07-07): el default validado es design-system.md del builder + aprobación sobre la preview.
+    **PERO al CERRAR un ciclo (método v1.8.0): el design system consolidado SE PUBLICA en Claude
+    Design (`/design-sync`)** como activo de diseño estable — actividad de cierre junto al blueprint.
+    (En Innmobiliaria ya se publicó en S1 a pedido del usuario; el cierre de ciclo lo re-consolida.)
 11. **Guía de prueba viva y ACUMULATIVA (`docs/GUIA-DE-PRUEBA.html`, OBLIGATORIA en todo sprint
-   con UI — reglas duras del pipeline, G-Metodo 2026-07-12 ×2).** HTML visual y **AUTOCONTENIDO**
-   (cero CDNs; casillas con `localStorage` bajo **prefijo versionado por sprint**): **qué probar,
-   cómo y qué resultado esperar**, por bloques. **Es bola de nieve:** la última versión contiene
-   **TODAS las pruebas vigentes**; el sprint N hereda ENTERAS las del N−1 — jamás las comprime
-   (comprimir borra la regresión). Cada prueba lleva su **origen visible**: `Nuevo · SN` ·
-   `Mejorado en SN` · `SN` a secas (heredada ⇒ regresión), con **filtros por origen**. Una prueba
-   solo se elimina cuando su feature dejó de existir, declarado en el historial del pie. Marca el
-   **gate mínimo ⭐** (criterio fijo: SOLO lo que ninguna automatización puede verificar —
-   recorrido real en un teléfono, juicio sobre contenido, aprobación visual). La guía dice
-   cuántas pruebas son y cuánto toman. **Kit de prueba** en `docs/kit-de-prueba/` si un paso
-   necesita documento/código/dataset. Implementación de referencia:
-   `app-habla/docs/GUIA-DE-PRUEBA.html` (S2).
+    con UI — reglas duras del pipeline, G-Metodo 2026-07-12 ×2).** HTML visual y **AUTOCONTENIDO**
+    (cero CDNs; casillas con `localStorage` bajo **prefijo versionado por sprint**): **qué probar,
+    cómo y qué resultado esperar**, por bloques. **Es bola de nieve:** la última versión contiene
+    **TODAS las pruebas vigentes**; el sprint N hereda ENTERAS las del N−1 — jamás las comprime
+    (comprimir borra la regresión). Cada prueba lleva su **origen visible**: `Nuevo · SN` ·
+    `Mejorado en SN` · `SN` a secas (heredada ⇒ regresión), con **filtros por origen**. Una prueba
+    solo se elimina cuando su feature dejó de existir, declarado en el historial del pie. Marca el
+    **gate mínimo ⭐** (criterio fijo: SOLO lo que ninguna automatización puede verificar —
+    recorrido real en un teléfono, juicio sobre contenido, aprobación visual). La guía dice
+    cuántas pruebas son y cuánto toman. **Kit de prueba** en `docs/kit-de-prueba/` si un paso
+    necesita documento/código/dataset. Implementación de referencia:
+    `app-habla/docs/GUIA-DE-PRUEBA.html` (S2).
 12. **PROHIBIDO entregar por artifacts de Claude o cualquier plataforma externa** (regla dura del
-   pipeline, G-Metodo 2026-07-12). **Todo entregable** es un **ARCHIVO DEL REPO** (HTML
-   autocontenido o Markdown) que el usuario pueda abrir, versionar y llevarse. Sin excepciones.
+    pipeline, G-Metodo 2026-07-12). **Todo entregable** es un **ARCHIVO DEL REPO** (HTML
+    autocontenido o Markdown) que el usuario pueda abrir, versionar y llevarse. Sin excepciones.
 13. **Código primero, IA generativa después (regla dura del pipeline, G-Metodo 2026-07-12).**
-   Toda funcionalidad nativa interna se resuelve PRIMERO con programación — código, librerías,
-   algoritmos deterministas — antes de cualquier intención de acudir a IA generativa. Activar
-   una feature LLM exige un **ADR "código primero"**. En esta app la fase 1 entera es
-   determinista por regla de F0.
+    Toda funcionalidad nativa interna se resuelve PRIMERO con programación — código, librerías,
+    algoritmos deterministas — antes de cualquier intención de acudir a IA generativa. Activar
+    una feature LLM exige un **ADR "código primero"**. En esta app la fase 1 entera es
+    determinista por regla de F0.
 
 ## Reglas de dominio de Innmobiliaria (F0 #5 + G-Visión + G-Plan 2026-07-13 — van sobre TODO sprint)
 
@@ -172,6 +181,14 @@ decisiones no anticipadas. `/self-review` tras cada bloque; `/run-tests` frecuen
 re-emite el checklist de aprovisionamiento pendiente** de la orden. **Sin summary el sprint NO
 está cerrado** (es lo que la planeadora lee para la retrospectiva).
 
+**Cierre de CICLO (método v1.8.0 — cuando este sprint es el ÚLTIMO de un ciclo H1/fase/MVP; la
+orden lo declara):** además de la DoD, el sprint entrega (1) **`docs/BLUEPRINT.html`** — as-built
+de TODA la infraestructura que soporta la app (plantilla `docs/BLUEPRINT.plantilla.html`: **HTML
+autocontenido con diagrama SVG embebido** — jamás mermaid ni CDNs — + tabla por pieza + costo
+real + punto único de falla), vivo y acumulativo entre ciclos; y (2) el **design system publicado
+en Claude Design** (`/design-sync`). Todo ciclo tiene MÍNIMO 3 sprints (regla dura 2026-07-17).
+**S2 NO es cierre de ciclo** (es el 2 de 3): este bloque queda escrito para S3, que lo ejecuta.
+
 ### Plantilla del summary
 
 ```markdown
@@ -184,16 +201,27 @@ closed: YYYY-MM-DD
 branch: sprint-NNN/<tema>
 pr: <link>
 ---
+
 # Sprint NNN Summary — Innmobiliaria
-## Outcome            [¿Se logró el outcome del SPRINT_NNN.md? Sí/No/Parcial + 1 frase]
-## Qué se construyó   [features/pantallas/componentes]
-## DoD — checklist    [los 6+1 estándares, uno a uno, con evidencia breve]
-## Métricas técnicas  [cumplidas vs. no, del SPRINT_NNN.md]
-## Decisiones no anticipadas  [ADR-NNN: resumen]
+
+## Outcome [¿Se logró el outcome del SPRINT_NNN.md? Sí/No/Parcial + 1 frase]
+
+## Qué se construyó [features/pantallas/componentes]
+
+## DoD — checklist [los 6+1 estándares, uno a uno, con evidencia breve]
+
+## Métricas técnicas [cumplidas vs. no, del SPRINT_NNN.md]
+
+## Decisiones no anticipadas [ADR-NNN: resumen]
+
 ## Bugs + resoluciones
+
 ## Qué salió bien / qué generó fricción
-## Sugerencias de mejora al método  [¿algo de metodo/metodo.md debería cambiar?]
-## Deuda técnica aceptada  [qué, por qué, sprint de pago]
+
+## Sugerencias de mejora al método [¿algo de metodo/metodo.md debería cambiar?]
+
+## Deuda técnica aceptada [qué, por qué, sprint de pago]
+
 ## Archivos clave (máx. 10) · ## Cómo probar
 ```
 

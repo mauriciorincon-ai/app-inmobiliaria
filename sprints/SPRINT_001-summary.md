@@ -3,7 +3,7 @@ sprint: 001
 app: inmobiliaria
 status: closed
 opened: 2026-07-13
-closed: 2026-07-15
+closed: 2026-07-17
 branch: sprint-001/puerta-fundadora
 pr: https://github.com/mauriciorincon-ai/app-inmobiliaria/pull/1
 ---
@@ -16,8 +16,10 @@ pr: https://github.com/mauriciorincon-ai/app-inmobiliaria/pull/1
 registrado como fundador en un flujo de 3 pasos (<3 min, consentimiento Ley 1581); el operador lo
 ve en un panel protegido. El ADR de hosting comercial free-tier quedó decidido. **CI verde
 completo en el PR #1** (`quality`/`e2e`/`lighthouse`): el happy-path por la UI, la RLS negativa,
-el rate limit y axe quedaron validados contra Postgres real (28 tests e2e). Pendientes del
-usuario: aprobación visual (gate ⭐) y aprovisionamiento (Supabase cloud + Cloudflare).
+el rate limit y axe quedaron validados contra Postgres real (28 tests e2e). **Aprovisionamiento
+completo** (Supabase cloud verificado + deploy a Cloudflare Workers:
+<https://app-inmobiliaria.rinconai.workers.dev>) y **gate ⭐ aprobado por el usuario en teléfono
+real (2026-07-17)**. Extra a pedido del usuario: design system publicado en Claude Design.
 
 ## Qué se construyó
 
@@ -53,8 +55,8 @@ usuario: aprobación visual (gate ⭐) y aprovisionamiento (Supabase cloud + Clo
 - **Manual de uso** — ✅ `docs/MANUAL-DE-USO.md` (incluye cómo entra el operador).
 - **Guía de prueba** — ✅ `docs/GUIA-DE-PRUEBA.html` (primera, acumulativa, prefijo `v1`, 19
   pruebas, 7 gate ⭐).
-- **Revisión de diseño** — ⏳ PENDIENTE: checklist `diseno-ui` + aprobación visual del usuario
-  sobre la preview.
+- **Revisión de diseño** — ✅ aprobación visual del usuario (2026-07-17) sobre la preview real
+  de Workers, recorrida en teléfono con la guía de prueba (gate ⭐ completo).
 
 ## Métricas técnicas (acceptance criteria del SPRINT_001.md)
 
@@ -64,7 +66,7 @@ usuario: aprobación visual (gate ⭐) y aprovisionamiento (Supabase cloud + Clo
 - LCP estático por CADA ruta nueva — ✅ verificado.
 - Anónimo no puede leer datos (RLS con test) — ✅ validado en CI contra Postgres real.
 - Registro visible en el panel — ✅ validado en CI (happy-path completo por la UI).
-- Recorrido móvil 360px <3 min — ⏳ gate manual del usuario (⭐ en la guía).
+- Recorrido móvil 360px <3 min — ✅ gate ⭐ recorrido y aprobado por el usuario (2026-07-17).
 
 ## Decisiones no anticipadas
 
@@ -132,7 +134,8 @@ usuario: aprobación visual (gate ⭐) y aprovisionamiento (Supabase cloud + Clo
 - **Anti-spam devuelve 200 silencioso** ante time-trap: un usuario legítimo muy rápido podría no
   quedar registrado. Riesgo bajo (umbral 5 s). Pago: revisar si aparece en datos reales.
 - **PostHog no cableado** (sin eventos de producto en S1). Pago: cuando haya funnel que medir.
-- **Preview deploy pendiente de cuenta Cloudflare** (aprovisionamiento del usuario).
+- ~~Preview deploy pendiente de cuenta Cloudflare~~ — **pagada** (2026-07-17): app desplegada y
+  verificada en Workers.
 
 ## Archivos clave (máx. 10)
 

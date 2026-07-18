@@ -198,3 +198,7 @@ locales). No bloquea Fases 1–2; sí es necesario para reproducir el e2e localm
   DSProvider para next/link, safelist Tailwind) documentadas en `.design-sync/NOTES.md`.
   Cambios en la app: export nombrado adicional en los 5 componentes (aditivo), alias
   `app-inmobiliaria` en tsconfig (las previews typechequean en CI), ignores de eslint.
+
+- 2026-07-17 — **Gate ⭐ COMPLETO: el usuario recorrió la guía en teléfono real contra la
+  preview de Workers y aprobó todo** (registro <3 min, copy, visual). DoD 6+1 completa.
+  Summary actualizado → merge del PR #1 con CI verde 3/3.

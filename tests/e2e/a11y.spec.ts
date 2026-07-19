@@ -57,7 +57,8 @@ test("axe sin violaciones en cada paso de /publicar", async ({ page }) => {
 
   await page.getByRole("radio", { name: "Venta" }).check({ force: true });
   await page.getByLabel("Tipo de inmueble").selectOption("apartamento");
-  await page.getByLabel("Barrio o zona").fill("Cedritos");
+  await page.getByLabel("Localidad").selectOption("Chapinero");
+  await page.getByLabel("Barrio").fill("Cedritos");
   await page.getByLabel("Área (m²)").fill("78");
   await page.getByLabel("Habitaciones").fill("3");
   await page.getByLabel("Precio esperado (COP)").fill("420000000");

@@ -1,5 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
+import BandaCupos from "@/components/landing/BandaCupos";
 import Dolores from "@/components/landing/Dolores";
 import ComoFunciona from "@/components/landing/ComoFunciona";
 import QueViene from "@/components/landing/QueViene";
@@ -14,6 +15,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <BandaCupos />
         <Dolores />
         <ComoFunciona />
         <QueViene />

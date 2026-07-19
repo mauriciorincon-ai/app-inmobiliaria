@@ -1,5 +1,6 @@
 import Campo from "@/components/ui/Campo";
 import { OPERACIONES } from "@/engine/registro/schema";
+import { LOCALIDADES } from "@/engine/zonas/localidades";
 import type { EstadoFormulario } from "@/engine/registro/wizard";
 import type { Errores } from "@/components/publicar/Paso1Contacto";
 
@@ -89,8 +90,20 @@ export default function Paso2Inmueble({ datos, errores, set }: Props) {
         opciones={opcionesTipo}
       />
       <Campo
+        id="localidad"
+        control="select"
+        label="Localidad"
+        requerido
+        value={datos.localidad}
+        onChange={(v) => set("localidad", v)}
+        error={errores.localidad}
+        hint="Tu localidad de Bogotá. Con ella sabemos cuántos cupos de fundador quedan en tu zona."
+        placeholder="Elige tu localidad"
+        opciones={LOCALIDADES.map((l) => ({ value: l, label: l }))}
+      />
+      <Campo
         id="barrio"
-        label="Barrio o zona"
+        label="Barrio"
         requerido
         value={datos.barrio}
         onChange={(v) => set("barrio", v)}

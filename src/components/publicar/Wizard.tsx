@@ -17,6 +17,7 @@ import {
 } from "@/engine/registro/schema";
 import { CAMPO_HONEYPOT } from "@/engine/registro/anti-spam";
 import { CLAVE_LINK, construirLinkAnuncio } from "@/engine/token/token";
+import { extraerRefDeBusqueda } from "@/engine/referidos/referidos";
 import {
   CLAVE_DRAFT,
   ESTADO_INICIAL,
@@ -49,15 +50,19 @@ export default function Wizard() {
   const [errores, setErrores] = useState<Errores>({});
   const [consentimiento, setConsentimiento] = useState(false);
   const [errorConsent, setErrorConsent] = useState<string | undefined>();
+  const [errorEmail, setErrorEmail] = useState<string | undefined>();
   const [enviando, setEnviando] = useState(false);
   const [errorEnvio, setErrorEnvio] = useState<string | null>(null);
 
   const inicioMs = useRef<number>(0);
   const honeypot = useRef<string>("");
+  // Código de referido de la URL (?ref=…). Se captura al montar y viaja en el envío.
+  const refCodigo = useRef<string | null>(null);
 
-  // Restaura el borrador y marca el inicio (para el time-trap anti-spam).
+  // Restaura el borrador, marca el inicio (time-trap) y captura el ?ref= de la URL.
   useEffect(() => {
     inicioMs.current = Date.now();
+    refCodigo.current = extraerRefDeBusqueda(window.location.search);
     try {
       const restaurado = cargarDraft(localStorage.getItem(CLAVE_DRAFT));
       // Restaurar tras montar es lo correcto: leer localStorage en el render inicial rompería la
@@ -101,12 +106,12 @@ export default function Wizard() {
   }
 
   async function enviar() {
-    const eConsent = erroresDe(paso3Schema, { consentimiento });
-    if (eConsent.consentimiento) {
-      setErrorConsent(eConsent.consentimiento);
+    const e = erroresDe(paso3Schema, { consentimiento, email: datos.email });
+    setErrorConsent(e.consentimiento);
+    setErrorEmail(e.email);
+    if (e.consentimiento || e.email) {
       return;
     }
-    setErrorConsent(undefined);
     setEnviando(true);
     setErrorEnvio(null);
     try {
@@ -116,6 +121,7 @@ export default function Wizard() {
         body: JSON.stringify({
           ...datos,
           consentimiento,
+          ref: refCodigo.current,
           _inicio: inicioMs.current,
           [CAMPO_HONEYPOT]: honeypot.current,
         }),
@@ -176,12 +182,14 @@ export default function Wizard() {
         {paso === 3 && (
           <Paso3Revision
             datos={datos}
+            set={set}
             consentimiento={consentimiento}
             onConsentimiento={(v) => {
               setConsentimiento(v);
               if (v) setErrorConsent(undefined);
             }}
             errorConsentimiento={errorConsent}
+            errorEmail={errorEmail}
           />
         )}
       </div>

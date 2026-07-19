@@ -10,6 +10,8 @@ import SubidorFotos from "@/components/mi-anuncio/SubidorFotos";
 import GaleriaEditable from "@/components/mi-anuncio/GaleriaEditable";
 import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
 import OptInContacto from "@/components/mi-anuncio/OptInContacto";
+import RenovarVigencia from "@/components/vigencia/RenovarVigencia";
+import InvitaReferido from "@/components/referido/InvitaReferido";
 
 type Estado = "cargando" | "sin-token" | "no-encontrado" | "listo" | "error";
 
@@ -150,6 +152,13 @@ export default function MiAnuncio() {
           onCambio={recargar}
         />
       </section>
+
+      <RenovarVigencia
+        token={token}
+        vigenteHastaInicial={anuncio.vigente_hasta}
+      />
+
+      <InvitaReferido token={token} />
     </div>
   );
 }

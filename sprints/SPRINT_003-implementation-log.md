@@ -74,7 +74,30 @@ supported`). Fix: `[analytics] enabled = false` en `supabase/config.toml` (no lo
 
 ## Fase 2 — C7 + B3 UI
 
-(pendiente)
+- **Wizard:** paso 2 gana `<select>` Localidad (19 localidades de Bogotá, espejo TS del seed en
+  `engine/zonas/localidades`) — resuelve `zona_id` para los cupos. Paso 3 gana **email opcional**
+  (habilita lotes Brevo). Captura de `?ref=` de la URL → payload (código inválido se ignora).
+  Etiqueta "Barrio o zona" → "Barrio" (ahora que hay Localidad). Schema + `construirPayload`
+  actualizados (+ tests: 27 verdes).
+- **Landing:** `BandaCupos` (client, carga tras montar → landing sigue LCP-estático). Solo aparece
+  si hay cupo fijado; sin cupos, no renderiza nada (escasez REAL o no existe).
+- **Referido:** `InvitaReferido` (compartido) en confirmación (vía `MagicLinkGuardar`) y mi-anuncio.
+  Código on-demand, botón "Invitar por WhatsApp" (`wa.me/?text=`), conteo real. Copy honesto:
+  atribución + red, sin escasez fabricada.
+- **Vigencia (B3):** `RenovarVigencia` (POST `renovar_vigencia`, +60d) en mi-anuncio + página
+  dedicada `/renovar`. Cron `.github/workflows/vigencia.yml` (semanal, service_role) + secret GH
+  `SUPABASE_SERVICE_ROLE_KEY` seteado.
+- e2e nuevo `campana.spec` (referido atribuido + renovación POST).
+
+## Desviación del plan
+
+- **`/renovar` con token en FRAGMENT (`#t=`), no `/renovar/[token]` en el path.** El plan escribía
+  el path `[token]`, pero eso mete el token en la URL del servidor y sus logs — contra el principio
+  del magic link (token solo en el fragment, jamás al servidor; ADR-004). Se implementó `/renovar`
+  leyendo `#t=` en el cliente (igual que `/mi-anuncio`). Mismo comportamiento, sin fuga del token.
+- **e2e de cupo-decrementa DIFERIDO a Fase 3:** fijar un cupo requiere el panel de zonas (Fase 3);
+  en Fase 2 el motor `cupos` va cubierto por unit (100%) y la banda por su render condicional. El
+  e2e "fijar cupo → publicar → contador baja" entra con el panel /operador/zonas.
 
 ## Fase 3 — C8 panel + PostHog
 

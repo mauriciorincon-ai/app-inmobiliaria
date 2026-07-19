@@ -125,7 +125,16 @@ En prod carga async tras montar, sin bloquear el LCP. `quality` + `e2e` de esa c
 
 ## Fase 4 — B2 paquete fundador
 
-(pendiente)
+- **4 guías HTML autocontenidas** en `public/paquete-fundador/` (cero CDNs, tokens del sistema
+  visual): `guia-fotografica` (fotos: 89 vs 123 días, Redfin) · `checklist-legal-notarial` (cadena
+  CTL→promesa→escritura→registro + costos: notaría 0,3–0,7% por mitades, retefuente ~1%, registro
+  0,5–1%, ejemplo $200M) · `saca-tu-ctl-en-10-min` ($23.000, SNR) · `guia-de-precio` (comisión 3%
+  ≈$12M en $400M, 7–7,5 meses, dificultad #1 NAR 17%). **Cero cifras prohibidas** (verificado con
+  grep: sin 3×/+118%/Matterport/staging/K viral/tasas).
+- Componente `PaqueteFundador` (enlaces estáticos) en landing, confirmación y mi-anuncio.
+- **Desviación menor:** las guías viven en `public/paquete-fundador/` (servidas + versionadas en el
+  repo) en vez de `docs/` + copia en prebuild — mismo resultado (archivo del repo, regla 12), sin
+  script de copia ni globalIgnores.
 
 ## Fase 5 — H2a G-Release
 

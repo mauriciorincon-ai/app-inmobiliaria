@@ -12,6 +12,7 @@ import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
 import OptInContacto from "@/components/mi-anuncio/OptInContacto";
 import RenovarVigencia from "@/components/vigencia/RenovarVigencia";
 import InvitaReferido from "@/components/referido/InvitaReferido";
+import PaqueteFundador from "@/components/paquete/PaqueteFundador";
 
 type Estado = "cargando" | "sin-token" | "no-encontrado" | "listo" | "error";
 
@@ -159,6 +160,8 @@ export default function MiAnuncio() {
       />
 
       <InvitaReferido token={token} />
+
+      <PaqueteFundador compacto />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import Boton from "@/components/ui/Boton";
 import MagicLinkGuardar from "@/components/confirmacion/MagicLinkGuardar";
+import PaqueteFundador from "@/components/paquete/PaqueteFundador";
 
 export const metadata: Metadata = {
   title: "Registro confirmado — Innmobiliaria",
@@ -63,6 +64,8 @@ export default function Confirmacion() {
             </li>
           ))}
         </ol>
+
+        <PaqueteFundador compacto />
 
         <div className="mt-10">
           <Boton href="/">Volver al inicio</Boton>

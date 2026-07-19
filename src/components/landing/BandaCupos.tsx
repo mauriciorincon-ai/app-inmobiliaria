@@ -2,21 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { crearClienteNavegador } from "@/lib/supabase/client";
+import { rpcPublico } from "@/lib/supabase/rpc-publico";
 import { textoCupos } from "@/engine/cupos/cupos";
 import type { CupoZona } from "@/lib/supabase/types";
 
 // Banda de cupos de fundador por zona. Carga tras montar (la landing sigue LCP-estático) y SOLO
 // aparece si el operador fijó cupo en alguna zona — sin cupos fijados no hay banda (regla dura:
 // escasez REAL o no existe; cero contadores fabricados). Los números salen SIEMPRE de la BD.
+// Lee vía `rpcPublico` (fetch nativo, sin el cliente supabase) para no cargar ~63 KB gz en la
+// landing LCP-crítica — respeta el perf-budget de scripts.
 export default function BandaCupos() {
   const [cupos, setCupos] = useState<CupoZona[] | null>(null);
 
   useEffect(() => {
     let vivo = true;
-    const supabase = crearClienteNavegador();
-    supabase.rpc("obtener_cupos").then(({ data }) => {
-      if (vivo) setCupos((data as CupoZona[] | null) ?? []);
+    rpcPublico<CupoZona[]>("obtener_cupos").then((data) => {
+      if (vivo) setCupos(data ?? []);
     });
     return () => {
       vivo = false;

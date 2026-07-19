@@ -123,6 +123,26 @@ peso muerto sin key. **Fix:** `import("posthog-js")` DINÁMICO en `lib/posthog.t
 En prod carga async tras montar, sin bloquear el LCP. `quality` + `e2e` de esa corrida ya en verde
 (la migración 3 validó en CI sobre Postgres fresco).
 
+### K12 — la causa REAL del script budget: supabase-js en la landing + prefetch cruzado
+
+El fix de posthog (K11) era correcto pero **insuficiente**: la CI de Fase 3 (`8dc2a03`) siguió roja en
+`resource-summary.script.size` — **exactamente `414032 B` idéntico en `/` y `/publicar`** (budget
+`358400`). Diagnóstico con Chromium+CDP (script `scripts/medir-script-size.mjs`, reproduce la métrica
+de Lighthouse sumando `encodedDataLength` de los recursos JS, prefetch incluido):
+
+- **`/`** cargaba `@supabase/supabase-js` = **63 KB gz** — lo metía `BandaCupos` con
+  `crearClienteNavegador()` (la landing era estática pura antes de S3).
+- **`/publicar`** cargaba su propio chunk con zod (68 KB gz) — **eso ya venía desde S1 y pasaba**.
+- El número **idéntico 414032** en ambas lo explica el **prefetch de rutas de Next**: `/` precarga
+  `/publicar` (trae su zod) y `/publicar` precarga `/` (trae supabase), así ambas terminan cargando
+  `base + supabase(63) + zod(68)`. Lo NUEVO de S3 —supabase en la landing— contaminaba las dos.
+- **Fix:** `src/lib/supabase/rpc-publico.ts` (`rpcPublico`, fetch nativo contra `/rest/v1/rpc/<fn>`
+  con la anon key, cero dependencias) reemplaza al cliente completo en `BandaCupos` — lectura anónima
+  de solo lectura, sin sesión ni cookies. `/` bajó **414032 → 349353** (341 KB) y `/publicar` lo
+  mismo por el prefetch simétrico; `/confirmacion` 344 KB, `/privacidad` 271 KB. Los 4 bajo budget
+  (medición CDP calibrada a CI: `414032 − 63 KB ≈ 349353`, calza). El escritor/edición de datos y el
+  login del operador siguen con `crearClienteNavegador` (necesitan sesión). 161 unit verdes.
+
 ## Fase 4 — B2 paquete fundador
 
 - **4 guías HTML autocontenidas** en `public/paquete-fundador/` (cero CDNs, tokens del sistema

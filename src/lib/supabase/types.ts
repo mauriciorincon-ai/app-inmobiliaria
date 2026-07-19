@@ -16,6 +16,8 @@ export type VendedorRow = {
   zona: string | null;
   consentimiento_at: string;
   created_at: string;
+  // S3 — atribución de referido (código del referente)
+  referido_por_codigo: string | null;
 };
 
 export type InmuebleRow = {
@@ -39,6 +41,33 @@ export type InmuebleRow = {
   verificado_at: string | null;
   contacto_publico: boolean;
   edit_token_hash: string | null;
+  // S3 — zona (cupos) + vigencia (anti-zombie)
+  zona_id: string | null;
+  vigente_hasta: string;
+  vigente: boolean;
+};
+
+export type ZonaRow = {
+  id: string;
+  nombre: string;
+  cupo_total: number | null;
+  created_at: string;
+};
+
+export type ReferidoRow = {
+  codigo: string;
+  vendedor_id: string;
+  created_at: string;
+};
+
+export type EnvioRow = {
+  id: string;
+  plantilla: string;
+  filtro: string | null;
+  destinatarios: number;
+  enviados: number;
+  estado: string;
+  created_at: string;
 };
 
 export type FotoRow = {
@@ -69,6 +98,8 @@ export type RegistrarFundadorArgs = {
   p_precio: number;
   p_consentimiento: boolean;
   p_ip_hash: string | null;
+  // S3 — código de referido (opcional; inválido/ausente se ignora en silencio).
+  p_ref?: string | null;
 };
 
 // registrar_fundador ahora devuelve el id + slug + token (en claro, una sola vez).
@@ -99,8 +130,42 @@ export type MiAnuncioData = {
   descripcion: string | null;
   contacto_publico: boolean;
   nivel_verificacion: NivelVerificacion;
+  // S3 — vigencia (para el aviso de renovación); `vigente` va derivado (vigente_hasta > now()).
+  vigente_hasta: string;
+  vigente: boolean;
   fotos: FotoMiAnuncio[];
 };
+
+// S3 — respuestas de las RPCs de campaña.
+// obtener_cupos: solo zonas con cupo fijado (el motor `cupos` calcula los restantes).
+export type CupoZona = {
+  zona: string;
+  cupo_total: number;
+  publicados: number;
+};
+// obtener_zonas_panel: todas las zonas (para fijar cupos en el panel).
+export type ZonaPanel = {
+  id: string;
+  nombre: string;
+  cupo_total: number | null;
+  publicados: number;
+};
+// obtener_densidad: densidad K por búsqueda típica (zona × tipo × rango).
+export type DensidadFila = {
+  zona: string;
+  tipo: TipoInmueble;
+  rango: "menos-200M" | "200M-400M" | "mas-400M";
+  n: number;
+};
+// obtener_lote: destinatarios de un lote de campaña (operador autenticado).
+export type LoteDestinatario = {
+  inmueble_id: string;
+  email: string;
+  nombre: string;
+  barrio: string;
+};
+// renovar_vigencia: nueva fecha de corte.
+export type RenovacionResult = { vigente_hasta: string };
 
 // Foto en la ficha pública (sin id: solo lo que se pinta).
 export type FotoFicha = {
@@ -198,6 +263,44 @@ export type Database = {
         Update: Partial<{ id: number; ip_hash: string; creado_at: string }>;
         Relationships: [];
       };
+      zonas: {
+        Row: ZonaRow;
+        Insert: Omit<ZonaRow, "id" | "created_at" | "cupo_total"> & {
+          id?: string;
+          created_at?: string;
+          cupo_total?: number | null;
+        };
+        Update: Partial<ZonaRow>;
+        Relationships: [];
+      };
+      referidos: {
+        Row: ReferidoRow;
+        Insert: Omit<ReferidoRow, "created_at"> & { created_at?: string };
+        Update: Partial<ReferidoRow>;
+        Relationships: [
+          {
+            foreignKeyName: "referidos_vendedor_id_fkey";
+            columns: ["vendedor_id"];
+            referencedRelation: "vendedores";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      envios: {
+        Row: EnvioRow;
+        Insert: Omit<
+          EnvioRow,
+          "id" | "created_at" | "destinatarios" | "enviados" | "estado"
+        > & {
+          id?: string;
+          created_at?: string;
+          destinatarios?: number;
+          enviados?: number;
+          estado?: string;
+        };
+        Update: Partial<EnvioRow>;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: {
@@ -245,6 +348,46 @@ export type Database = {
         Returns: string;
       };
       ping: { Args: Record<string, never>; Returns: string };
+      // S3 — campaña. Públicas (anon + authenticated):
+      obtener_cupos: { Args: Record<string, never>; Returns: CupoZona[] };
+      obtener_codigo_referido: {
+        Args: { p_token: string };
+        Returns: string | null;
+      };
+      obtener_mis_referidos: { Args: { p_token: string }; Returns: number };
+      renovar_vigencia: {
+        Args: { p_token: string };
+        Returns: RenovacionResult | null;
+      };
+      // S3 — operador (SOLO authenticated):
+      fijar_cupo: {
+        Args: { p_zona_id: string; p_cupo: number | null };
+        Returns: undefined;
+      };
+      obtener_zonas_panel: {
+        Args: Record<string, never>;
+        Returns: ZonaPanel[];
+      };
+      obtener_densidad: {
+        Args: Record<string, never>;
+        Returns: DensidadFila[];
+      };
+      obtener_lote: {
+        Args: { p_filtro: string };
+        Returns: LoteDestinatario[];
+      };
+      registrar_envio: {
+        Args: {
+          p_plantilla: string;
+          p_filtro: string | null;
+          p_destinatarios: number;
+          p_enviados: number;
+          p_estado: string;
+        };
+        Returns: string;
+      };
+      // S3 — cron (SOLO service_role):
+      marcar_vencidos: { Args: Record<string, never>; Returns: number };
     };
     Enums: {
       operacion: Operacion;

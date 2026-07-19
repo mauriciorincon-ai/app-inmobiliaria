@@ -53,7 +53,24 @@ supported`). Fix: `[analytics] enabled = false` en `supabase/config.toml` (no lo
 
 ## Fase 1 — Migración 3 + motores
 
-(pendiente)
+- **Migración `20260719000001_campana.sql`** (validada LIMPIA en local con `db reset` — el valor de
+  K1: en S2 esto solo se podía en CI):
+  - Tablas: `zonas` (+seed 19 localidades de Bogotá, sin cupo), `referidos` (código base64url 8
+    chars), `envios` (log de lotes). Columnas: `inmuebles.{zona_id, vigente_hasta (60d), vigente}`
+    - `vendedores.referido_por_codigo`.
+  - RPCs públicas (anon+auth): `obtener_cupos` (solo zonas con cupo), `obtener_codigo_referido`
+    (crea el código on-demand, estable), `obtener_mis_referidos` (conteo sin exponer al referido),
+    `renovar_vigencia` (POST, +60d). `registrar_fundador` DROP+CREATE (+p_ref default null +
+    zona_id + vigencia). `obtener_ficha`/`obtener_mi_anuncio` create-or-replace (ficha DERIVA
+    vigencia → vencido desaparece al instante; mi-anuncio expone vigente_hasta).
+  - RPCs operador (SOLO auth): `fijar_cupo`, `obtener_zonas_panel`, `obtener_densidad` (zona×tipo×
+    rango), `obtener_lote` (destinatarios con email), `registrar_envio`. Cron (SOLO service_role):
+    `marcar_vencidos`. Patrón K5/K6 de grants (do $$ foreach + revoke/grant explícitos).
+  - **Smoke funcional local:** todas las públicas 200 (registro→slug+token, código estable, renovación
+    +60d); las auth/cron-only **deniegan a anon** (401/42501). Modelo de seguridad verificado en vivo.
+- **Motores puros** `engine/{cupos,referidos,vigencia}` + 43 unit tests. Suite total **148 verdes,
+  cobertura 98%** (>80).
+- **`lib/supabase/types.ts`** sincronizado (3 tablas, 3 columnas, 10 RPCs, tipos de respuesta).
 
 ## Fase 2 — C7 + B3 UI
 

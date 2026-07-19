@@ -4,10 +4,16 @@ import { expect, type Page } from "@playwright/test";
 // barrio (para anclar aserciones) y el magic link (de la confirmación). Datos 100% sintéticos.
 export async function registrar(
   page: Page,
-  opts: { nombre?: string; barrioBase?: string } = {},
+  opts: {
+    nombre?: string;
+    barrioBase?: string;
+    ref?: string; // llega por link de referido (?ref=)
+    email?: string; // correo opcional (habilita lotes de campaña)
+    localidad?: string; // localidad de Bogotá (cupos); default Chapinero
+  } = {},
 ): Promise<{ barrio: string; link: string }> {
   const barrio = `${opts.barrioBase ?? "Cedritos"} ${Date.now()}`;
-  await page.goto("/publicar");
+  await page.goto(opts.ref ? `/publicar?ref=${opts.ref}` : "/publicar");
   await page.getByLabel("Cómo te llamas").fill(opts.nombre ?? "Ana Fundadora");
   await page.getByLabel("Tu WhatsApp").fill("300 123 4567");
   await page.getByLabel("ciudad está tu inmueble").fill("Bogotá");
@@ -15,12 +21,18 @@ export async function registrar(
 
   await page.getByRole("radio", { name: "Venta" }).check({ force: true });
   await page.getByLabel("Tipo de inmueble").selectOption("apartamento");
-  await page.getByLabel("Barrio o zona").fill(barrio);
+  await page
+    .getByLabel("Localidad")
+    .selectOption(opts.localidad ?? "Chapinero");
+  await page.getByLabel("Barrio").fill(barrio);
   await page.getByLabel("Área (m²)").fill("78");
   await page.getByLabel("Habitaciones").fill("3");
   await page.getByLabel("Precio esperado (COP)").fill("420000000");
   await page.getByRole("button", { name: "Continuar" }).click();
 
+  if (opts.email) {
+    await page.getByLabel("Tu correo (opcional)").fill(opts.email);
+  }
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Publicar mi inmueble" }).click();
   await expect(page).toHaveURL(/\/confirmacion$/);

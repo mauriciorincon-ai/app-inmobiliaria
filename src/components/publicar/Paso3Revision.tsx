@@ -1,13 +1,16 @@
 import Link from "next/link";
+import Campo from "@/components/ui/Campo";
 import { formatearCOP, parsearCOP } from "@/engine/format/cop";
 import { normalizarWhatsapp } from "@/engine/format/whatsapp";
 import type { EstadoFormulario } from "@/engine/registro/wizard";
 
 type Props = {
   datos: EstadoFormulario;
+  set: (campo: keyof EstadoFormulario, valor: string) => void;
   consentimiento: boolean;
   onConsentimiento: (valor: boolean) => void;
   errorConsentimiento?: string;
+  errorEmail?: string;
 };
 
 const etiquetaOperacion: Record<string, string> = {
@@ -24,9 +27,11 @@ const etiquetaTipo: Record<string, string> = {
 // Paso 3 — Revisión + consentimiento Ley 1581. Sin marcar la casilla no se puede enviar.
 export default function Paso3Revision({
   datos,
+  set,
   consentimiento,
   onConsentimiento,
   errorConsentimiento,
+  errorEmail,
 }: Props) {
   const precio = parsearCOP(datos.precio_esperado);
   const whatsapp = normalizarWhatsapp(datos.whatsapp) ?? datos.whatsapp;
@@ -37,6 +42,7 @@ export default function Paso3Revision({
     ["Ciudad", datos.ciudad],
     ["Operación", etiquetaOperacion[datos.operacion] ?? datos.operacion],
     ["Tipo", etiquetaTipo[datos.tipo] ?? datos.tipo],
+    ["Localidad", datos.localidad],
     ["Barrio", datos.barrio],
     ["Área", datos.area_m2 ? `${datos.area_m2} m²` : ""],
     ["Habitaciones", datos.habitaciones],
@@ -65,6 +71,17 @@ export default function Paso3Revision({
           </div>
         ))}
       </dl>
+
+      <Campo
+        id="email"
+        type="email"
+        label="Tu correo (opcional)"
+        value={datos.email}
+        onChange={(v) => set("email", v)}
+        error={errorEmail}
+        hint="Para enviarte el paquete fundador y avisos de la campaña. Si lo dejas vacío, te escribimos por WhatsApp."
+        placeholder="tucorreo@ejemplo.com"
+      />
 
       <div>
         <label className="flex items-start gap-3 text-sm text-gray">

@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { esWhatsappValido, normalizarWhatsapp } from "../format/whatsapp";
 import { parsearCOP } from "../format/cop";
+import { LOCALIDADES } from "../zonas/localidades";
+import { normalizarCodigo } from "../referidos/referidos";
 
 // Contrato único de validación del flujo "publicar = registro". Lo usan tanto el wizard (validación
 // por paso, mensajes por campo) como el endpoint server (re-validación, defensa en profundidad).
@@ -53,6 +55,8 @@ export const paso1Schema = z.object({
 export const paso2Schema = z.object({
   operacion: z.enum(OPERACIONES, { error: "Elige si es venta o arriendo" }),
   tipo: z.enum(TIPOS, { error: "Elige el tipo de inmueble" }),
+  // Localidad de Bogotá (para el contador de cupos por zona). Lista cerrada (fase 1 = Bogotá).
+  localidad: z.enum(LOCALIDADES, { error: "Elige la localidad" }),
   barrio: z
     .string()
     .trim()
@@ -96,6 +100,16 @@ export const paso3Schema = z.object({
   consentimiento: z.literal(true, {
     error: "Debes aceptar el tratamiento de datos para publicar",
   }),
+  // Correo OPCIONAL: habilita los avisos de campaña por email (Brevo). Vacío ⇒ solo WhatsApp.
+  email: z
+    .string()
+    .trim()
+    .max(120, "Máximo 120 caracteres")
+    .optional()
+    .refine(
+      (v) => !v || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v),
+      "Escribe un correo válido o déjalo vacío",
+    ),
 });
 
 // Esquema completo (los tres pasos combinados) — lo re-valida el endpoint.
@@ -113,7 +127,7 @@ export type PayloadRegistro = {
   whatsapp: string; // E.164
   email: string | null;
   ciudad: string;
-  zona: string | null;
+  zona: string | null; // localidad de Bogotá (S3)
   operacion: Operacion;
   tipo: TipoInmueble;
   barrio: string;
@@ -122,14 +136,19 @@ export type PayloadRegistro = {
   habitaciones: number;
   precio: number;
   consentimiento: true;
+  ref: string | null; // código de referido (S3), o null
 };
 
 /**
  * Convierte datos ya validados a los tipos que espera la RPC: normaliza WhatsApp a E.164 y parsea
- * los numéricos. En S1 no se recogen email ni zona (columnas nullable reservadas) → van en `null`.
+ * los numéricos. S3: email opcional del paso 3, zona = localidad del paso 2, y `ref` (código de
+ * referido de la URL) validado — un ref mal formado se descarta (null), el registro nunca se bloquea.
  * Lanza si se llama con datos inválidos (nunca debería: el endpoint valida antes con `registroSchema`).
  */
-export function construirPayload(datos: DatosRegistro): PayloadRegistro {
+export function construirPayload(
+  datos: DatosRegistro,
+  ref?: string | null,
+): PayloadRegistro {
   const whatsapp = normalizarWhatsapp(datos.whatsapp);
   const precio = parsearCOP(datos.precio_esperado);
   if (whatsapp === null || precio === null) {
@@ -138,9 +157,9 @@ export function construirPayload(datos: DatosRegistro): PayloadRegistro {
   return {
     nombre: datos.nombre.trim(),
     whatsapp,
-    email: null,
+    email: datos.email?.trim() || null,
     ciudad: datos.ciudad.trim(),
-    zona: null,
+    zona: datos.localidad,
     operacion: datos.operacion,
     tipo: datos.tipo,
     barrio: datos.barrio.trim(),
@@ -149,5 +168,6 @@ export function construirPayload(datos: DatosRegistro): PayloadRegistro {
     habitaciones: Number(datos.habitaciones),
     precio,
     consentimiento: true,
+    ref: normalizarCodigo(ref),
   };
 }

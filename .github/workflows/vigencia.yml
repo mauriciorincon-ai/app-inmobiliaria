@@ -1,0 +1,29 @@
+# Anti-zombie B3: marca vencidos los anuncios cuya vigencia (60 días) expiró, para que salgan del
+# panel/lotes/métricas. La ficha pública YA los oculta al instante (obtener_ficha deriva la
+# vigencia); este cron es el barrido de fondo. RPC `marcar_vencidos()` = SOLO service_role.
+# No es un check de PR → no toca la ruleset main-protegida.
+# Requiere los secrets del repo: SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY.
+name: Vigencia (anti-zombie)
+on:
+  schedule:
+    - cron: "23 9 * * 1" # lunes 09:23 UTC (separado del keep-alive para no solaparse)
+  workflow_dispatch:
+
+jobs:
+  marcar-vencidos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Llamar RPC marcar_vencidos (service_role)
+        env:
+          URL: ${{ secrets.SUPABASE_URL }}
+          SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$URL" ] || [ -z "$SERVICE_ROLE" ]; then
+            echo "Secrets SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY sin configurar; nada que hacer aún."
+            exit 0
+          fi
+          curl -fsS -X POST "$URL/rest/v1/rpc/marcar_vencidos" \
+            -H "apikey: $SERVICE_ROLE" \
+            -H "Authorization: Bearer $SERVICE_ROLE" \
+            -H "Content-Type: application/json" \
+            -d '{}'

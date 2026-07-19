@@ -4,6 +4,7 @@ import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import CerrarSesion from "@/components/operador/CerrarSesion";
 import MarcarVerificado from "@/components/operador/MarcarVerificado";
 import BotonReContacto from "@/components/operador/BotonReContacto";
+import PanelNav from "@/components/operador/PanelNav";
 import SelloNivel from "@/components/ficha/SelloNivel";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { formatearCOP } from "@/engine/format/cop";
@@ -125,8 +126,10 @@ export default async function Panel({
           <CerrarSesion />
         </div>
 
+        <PanelNav actual="/operador" />
+
         {/* Cola de verificación: filtros por nivel. */}
-        <nav className="mt-6 flex gap-2" aria-label="Filtrar registros">
+        <nav className="mt-4 flex gap-2" aria-label="Filtrar registros">
           {FILTROS.map((f) => (
             <Link
               key={f.clave}

@@ -18,6 +18,7 @@ import {
 import { CAMPO_HONEYPOT } from "@/engine/registro/anti-spam";
 import { CLAVE_LINK, construirLinkAnuncio } from "@/engine/token/token";
 import { extraerRefDeBusqueda } from "@/engine/referidos/referidos";
+import { capturar } from "@/lib/posthog";
 import {
   CLAVE_DRAFT,
   ESTADO_INICIAL,
@@ -97,6 +98,7 @@ export default function Wizard() {
       return;
     }
     setErrores({});
+    if (paso === 1) capturar("publicar_paso1");
     setPaso((p) => siguientePaso(p));
   }
 
@@ -158,6 +160,12 @@ export default function Wizard() {
       } catch {
         // sin persistencia: nada que limpiar
       }
+      // Funnel (sin PII): zona/tipo/operación, jamás datos personales.
+      capturar("registro_publicado", {
+        zona: datos.localidad,
+        tipo: datos.tipo,
+        operacion: datos.operacion,
+      });
       router.push("/confirmacion");
     } catch {
       setErrorEnvio(

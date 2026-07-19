@@ -9,6 +9,7 @@ export async function registrar(
     barrioBase?: string;
     ref?: string; // llega por link de referido (?ref=)
     email?: string; // correo opcional (habilita lotes de campaña)
+    localidad?: string; // localidad de Bogotá (cupos); default Chapinero
   } = {},
 ): Promise<{ barrio: string; link: string }> {
   const barrio = `${opts.barrioBase ?? "Cedritos"} ${Date.now()}`;
@@ -20,7 +21,9 @@ export async function registrar(
 
   await page.getByRole("radio", { name: "Venta" }).check({ force: true });
   await page.getByLabel("Tipo de inmueble").selectOption("apartamento");
-  await page.getByLabel("Localidad").selectOption("Chapinero");
+  await page
+    .getByLabel("Localidad")
+    .selectOption(opts.localidad ?? "Chapinero");
   await page.getByLabel("Barrio").fill(barrio);
   await page.getByLabel("Área (m²)").fill("78");
   await page.getByLabel("Habitaciones").fill("3");

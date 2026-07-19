@@ -101,7 +101,27 @@ supported`). Fix: `[analytics] enabled = false` en `supabase/config.toml` (no lo
 
 ## Fase 3 — C8 panel + PostHog
 
-(pendiente)
+- **Panel multi-página** (mismo allowlist server-side): `/operador` (Registros) + `/operador/campana`
+  (embudo real publicados→con-fotos→verificados · `EnviarLote`: plantilla → preview destinatarios →
+  envío por tandas → log) + `/operador/zonas` (`FijarCupo` por localidad + densidad zona×tipo×rango).
+  `PanelNav` compartido.
+- **Envíos:** `engine/envios/plantillas` (3 plantillas deterministas, cifras SOLO citables) +
+  `lib/brevo.ts` (API v3 por fetch, **mock sin key / con `BREVO_MOCK=1`**) + `POST /api/envios`
+  (sesión de operador + zod + pino/reportError, tandas ≤300/día, "quedan N hoy").
+- **PostHog:** `lib/posthog.ts` inerte sin key + funnel (`landing_vista`, `publicar_paso1`,
+  `registro_publicado`) sin PII (zona/tipo/operación). Sin autocapture ni session recording,
+  persistencia en memoria (Ley 1581).
+- e2e `panel-campana` (cupo→banda en landing · lote mock→log) + unit de plantillas. Suite 161
+  verde, cobertura 98%. e2e completo **60 verde LOCAL**.
+
+### K11 — posthog-js infló el script budget de Lighthouse
+
+La 1ª CI del PR #3 (Fases 0–2) falló `resource-summary.script.size` en `/` y `/publicar`: 413KB >
+budget 350KB. Causa: `posthog-js` (~224KB) entró al bundle de CADA página vía el layout, aunque es
+peso muerto sin key. **Fix:** `import("posthog-js")` DINÁMICO en `lib/posthog.ts` → sin key
+(CI/lighthouse) el chunk pesado no se descarga (verificado: no aparece en ningún manifest estático).
+En prod carga async tras montar, sin bloquear el LCP. `quality` + `e2e` de esa corrida ya en verde
+(la migración 3 validó en CI sobre Postgres fresco).
 
 ## Fase 4 — B2 paquete fundador
 

@@ -29,6 +29,9 @@ test("axe sin violaciones en la ficha pública /i/[slug]", async ({ page }) => {
   const fila = page.getByRole("row").filter({ hasText: barrio });
   await fila.getByRole("link", { name: /Ver ficha/i }).click();
   await expect(page).toHaveURL(/\/i\//);
+  // Se llega por navegación cliente (Link) → en `next dev` el <title> del generateMetadata se aplica
+  // con retraso. Esperarlo antes de axe evita un falso `document-title` (en prod/SSR ya viene servido).
+  await expect(page).toHaveTitle(/Innmobiliaria/i);
   const { violations } = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();

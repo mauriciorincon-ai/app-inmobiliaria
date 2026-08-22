@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import Lenis from "lenis";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Scroll suave con Lenis, sincronizado con ScrollTrigger. Portado fiel de la página base
 // (implementación ya correcta): respeta prefers-reduced-motion (no inicia Lenis) y limpia todo
 // al desmontar. Montado en el root layout.
+//
+// El motor (`./scroll-suave`) entra por IMPORT DINÁMICO dentro del efecto, no por import estático.
+// Al vivir este componente en el layout RAÍZ, un import estático mete ~44 KB de motion en el
+// payload INICIAL de TODAS las rutas — incluida `/publicar`, que es un formulario y no anima nada
+// al hacer scroll (Lighthouse reportaba ese chunk 70% sin usar, y el LCP simulado de la ruta se
+// pasaba del presupuesto). Cargándolo tras hidratar, el scroll suave se comporta igual en todas
+// las páginas pero sale del camino crítico del LCP. Bonus: con prefers-reduced-motion el guard va
+// ANTES del await, así que el motion ni siquiera se descarga.
 export default function SmoothScroll({
   children,
 }: {
@@ -21,30 +24,19 @@ export default function SmoothScroll({
     ).matches;
     if (reduce) return;
 
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
+    let cancelado = false;
+    let limpiar: (() => void) | null = null;
 
-    lenis.on("scroll", ScrollTrigger.update);
-
-    const raf = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
-
-    // Recalcula triggers cuando fuentes/imágenes ya asentaron.
-    const refresh = () => ScrollTrigger.refresh();
-    window.addEventListener("load", refresh);
-    const t = setTimeout(refresh, 600);
+    void (async () => {
+      const { iniciarScrollSuave } = await import("./scroll-suave");
+      // Se desmontó mientras cargaba: no inicies nada que después nadie limpie.
+      if (cancelado) return;
+      limpiar = iniciarScrollSuave();
+    })();
 
     return () => {
-      gsap.ticker.remove(raf);
-      lenis.destroy();
-      window.removeEventListener("load", refresh);
-      clearTimeout(t);
+      cancelado = true;
+      limpiar?.();
     };
   }, []);
 

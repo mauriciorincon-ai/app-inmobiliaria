@@ -128,6 +128,29 @@ del S3.
 | Cero enlaces                   | ✅ grep vacío · `homepageUrl` vacío                                                                 |
 | Datos                          | ✅ solo sintéticos (inmueble inventado; sin nombre, sin WhatsApp, sin matrícula)                    |
 
+## Seguridad — avisos que aparecieron durante la entrega (no los trajo este cambio)
+
+La primera CI del PR falló en `pnpm audit --audit-level high`. **No lo causó esta entrega**: el diff
+de `package.json` solo tocaba scripts, cero dependencias. Son avisos publicados entre la CI del S3
+(2026-07) y hoy (2026-08) — `main` fallaba igual.
+
+**Lo importante:** entre ellos había **4 vulnerabilidades altas de Next.js** (16.2.10), y una era
+**«SSRF in rewrites via attacker-controlled destination hostname»** — justo la primitiva que esta
+entrega estrena para servir `/conoce`. Nuestro rewrite tiene destino **estático** (`/conoce.html`),
+así que no éramos explotables por ese vector, pero corriendo una versión vulnerable.
+
+| Acción                                 | Detalle                                                                                                                                                                                                                                                                        |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Next 16.2.10 → 16.2.12**             | último parche de la MISMA línea menor (menor riesgo). Cierra los 4 avisos altos.                                                                                                                                                                                               |
+| **Overrides en `pnpm-workspace.yaml`** | `brace-expansion`, `js-yaml`, `fast-uri`, `sharp`, `undici`, `nanoid` — todas transitivas de herramientas de desarrollo (wrangler, vitest/jsdom, postcss, eslint), ninguna corre en producción. Cada parche va **dentro de su misma línea mayor**: sin saltos que rompan APIs. |
+
+Resultado: `pnpm audit --audit-level high` limpio (quedan 2 moderadas, bajo el umbral del gate).
+Verificado tras el cambio: typecheck, lint, build, **172 unit y 76 e2e verdes**.
+
+**Nota de pnpm 11:** los overrides van en `pnpm-workspace.yaml`, **no** en `package.json` (pnpm ya
+no lee ese campo y lo ignora en silencio con un warning). Es la misma lección del gate de builds del
+S3.
+
 ## Deudas declaradas
 
 1. **`docs/BLUEPRINT.html` NO existe** (solo la plantilla). Era entregable del cierre de ciclo del

@@ -20,8 +20,11 @@
 
 ## Stack
 
-- **Frontend:** Next.js 16+ (lo que estampe create-next-app) + TypeScript strict + Tailwind +
-  shadcn/ui, PWA-first, **+ GSAP/ScrollTrigger + Lenis portados de la página base**
+- **Frontend:** Next.js 16+ (lo que estampe create-next-app) + TypeScript strict + Tailwind v4 +
+  **componentes propios** (`src/components/ui/`, escritos a mano contra `design-system.md` —
+  **shadcn/ui NO está instalado**, no hay `components.json`: no lo instales "para arreglarlo").
+  **PWA no implementada**; si un sprint la activa, va con su ADR.
+  **+ GSAP/ScrollTrigger + Lenis portados de la página base**
   (`referencias-ui/inmobiliaria/ts01-pagina-real-estate/` de la planeadora — EXCEPCIÓN F0 #5:
   es la BASE declarada del sistema visual, se porta lo visual SIN heredar sus gaps).
 - **Backend/BD/Auth:** Supabase (Postgres + RLS + Auth) — **RLS desde la primera tabla: aquí no
@@ -32,9 +35,11 @@
   primero" obligatorio + adapter multi-proveedor conmutable por env (patrón del kit, skill
   `ia-embebida`).
 - **Tests:** Vitest (unit/integration) + Playwright (e2e) + Testing Library + @axe-core/playwright.
-- **Deploy:** **por ADR de hosting — PRIMERA tarea del S1** (Vercel Hobby prohíbe uso comercial
-  y esta app es comercial desde el día 1; candidato: Cloudflare Pages, ToS por verificar).
-  Preview por PR, prod desde `main`. **Observabilidad:** Pino + Sentry + PostHog.
+- **Deploy:** **Cloudflare Workers vía OpenNext** — decidido en
+  `decisions/001-hosting-free-tier-comercial.md` (Vercel Hobby prohíbe uso comercial y esta app es
+  comercial desde el día 1). **EL DEPLOY ES MANUAL: `pnpm deploy:cf`.** No hay auto-deploy desde
+  `main` ni previews por PR — **mergear NO publica**; si nadie corre el comando, `main` y
+  producción divergen en silencio. **Observabilidad:** Pino + Sentry + PostHog.
   **Sentry viene cableado client-only y metadata-only desde el kit (v1.2.1, validado ×2):**
   `instrumentation-client.ts` (inerte sin `NEXT_PUBLIC_SENTRY_DSN`) + `src/lib/observability.ts`
   (`reportError`: solo tipos + metadatos, jamás mensajes crudos ni contenido del usuario). La DSN
@@ -134,10 +139,14 @@ decisions/NNN-titulo.md   (ADRs de implementación)
     `homepage` de GitHub. La producción **se muestra, jamás se entrega**. Las URLs viven en
     `.env.local`, en las env vars del hosting y en tu gestor de contraseñas. **Gate = EL COMANDO**
     (un inventario "limpio" no basta):
-    `grep -rn "vercel\.app\|workers\.dev" --include="*.md" --include="*.html" --include="*.json" .`
+    `git ls-files -z | xargs -0 grep -lI "vercel\.app\|workers\.dev\|pages\.dev"`
     → vacío, y `gh repo view --json homepageUrl` → `""`. **La limpieza es RECURRENTE:** la GitHub
     App del hosting reescribe `homepage` tras cada deploy de producción — re-verificar después de
     cada deploy y declararlo en el summary.
+16. **Máximo DOS PRs abiertos a la vez (regla dura del usuario, 2026-08-22).** Jamás una lista de
+    merges pendientes. `.github/dependabot.yml` lo garantiza por construcción
+    (`open-pull-requests-limit: 1` por ecosistema × 2 ecosistemas, todo agrupado). Si abres uno
+    tuyo, ciérralo antes de abrir el siguiente.
 
 ## Reglas de dominio de Innmobiliaria (F0 #5 + G-Visión + G-Plan 2026-07-13 — van sobre TODO sprint)
 
@@ -149,7 +158,7 @@ decisions/NNN-titulo.md   (ADRs de implementación)
    **PII jamás en fixtures/tests** (datos 100% sintéticos) · política de privacidad enlazada
    desde el consentimiento.
 3. **CTL (Certificado de Tradición y Libertad): JAMÁS requisito de entrada.** Es el desbloqueo
-   voluntario del nivel 2 ⭐ "Propietario verificado" (llega en S3): documento **VISTO, NUNCA
+   voluntario del nivel 2 ⭐ "Propietario verificado" (existe desde S3): documento **VISTO, NUNCA
    almacenado** — persiste solo `matricula` + `verificado` + fecha. La plataforma no paga CTLs.
 4. **Cifras citables ÚNICAMENTE** en UI/copy: comisión 3% urbano (≈$12M en vivienda de $400M) ·
    7–7,5 meses de venta promedio · CTL $23.000. **PROHIBIDAS** las de evidencia débil
@@ -163,7 +172,7 @@ decisions/NNN-titulo.md   (ADRs de implementación)
    el wordmark es **Innmobiliaria** ("Habita" murió). **LCP nace estático** (patrón
    `wiki/patterns/lcp-nace-estatico.md`): el hero jamás arranca en `opacity: 0`; motion GSAP
    solo bajo el fold. `prefers-reduced-motion` siempre.
-7. **Fotos (cuando lleguen, S2):** compresión client-side (`browser-image-compression`, WebP
+7. **Fotos (desde S2):** compresión client-side (`browser-image-compression`, WebP
    full 1600px + thumb 400px) → **Cloudflare R2** vía presigned URL. **JAMÁS Supabase Storage**
    (1GB/5GB egress insuficientes — decidido con números). El gate de calidad fotográfica es
    código determinista.
@@ -205,7 +214,10 @@ de TODA la infraestructura que soporta la app (plantilla `docs/BLUEPRINT.plantil
 autocontenido con diagrama SVG embebido** — jamás mermaid ni CDNs — + tabla por pieza + costo
 real + punto único de falla), vivo y acumulativo entre ciclos; y (2) el **design system publicado
 en Claude Design** (`/design-sync`). Todo ciclo tiene MÍNIMO 3 sprints (regla dura 2026-07-17).
-**S2 NO es cierre de ciclo** (es el 2 de 3): este bloque queda escrito para S3, que lo ejecuta.
+**Estado del ciclo 1 (2026-08-22):** S1–S3 cerraron construcción y entregaron el brochure inicial,
+pero el cierre quedó A MEDIAS: `docs/BLUEPRINT.html` NO existe (deuda declarada en
+`sprints/ENTREGA-brochure-summary.md`) y el gate ⭐ está aplazado al acto 2. El design system sí se
+publicó en Claude Design (S1).
 
 ### Plantilla del summary
 

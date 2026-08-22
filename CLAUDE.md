@@ -120,6 +120,24 @@ decisions/NNN-titulo.md   (ADRs de implementación)
     algoritmos deterministas — antes de cualquier intención de acudir a IA generativa. Activar
     una feature LLM exige un **ADR "código primero"**. En esta app la fase 1 entera es
     determinista por regla de F0.
+14. **Brochure vivo con estados y export (regla 13 del kit).** Al cerrar la construcción de un ciclo,
+    la app entrega su **`docs/BROCHURE.html`** (autocontenido, canónico) + la ruta pública
+    **`/conoce`** que sirve esa MISMA copia + **`docs/brochure-export.json`** conforme al contrato
+    del portafolio (`_schema` copiado tal cual; toda cifra de `metricas[]` con su `fuente`:
+    `medido`/`calculada`/`declarado`/`estimacion`). **Estados:** `inicial` mientras describe la
+    construcción cerrada; `sellado` cuando el gate de pruebas del usuario terminó (`sellado_en`
+    deja de ser null). **El sello NO congela:** todo sprint que cambie features actualiza brochure
+    - export **en su mismo PR**. El conteo del pie se cuadra contra `docs/MANUAL-DE-USO.md`
+      (agrupar sí, omitir jamás) y el export se genera **de último** para que su total cuadre.
+15. **Cero enlaces de despliegue en el repo (regla 17 del kit — repo PÚBLICO).** Ninguna URL de
+    producción o preview se versiona: ni en markdown, ni en HTML, ni en JSON, ni en el campo
+    `homepage` de GitHub. La producción **se muestra, jamás se entrega**. Las URLs viven en
+    `.env.local`, en las env vars del hosting y en tu gestor de contraseñas. **Gate = EL COMANDO**
+    (un inventario "limpio" no basta):
+    `grep -rn "vercel\.app\|workers\.dev" --include="*.md" --include="*.html" --include="*.json" .`
+    → vacío, y `gh repo view --json homepageUrl` → `""`. **La limpieza es RECURRENTE:** la GitHub
+    App del hosting reescribe `homepage` tras cada deploy de producción — re-verificar después de
+    cada deploy y declararlo en el summary.
 
 ## Reglas de dominio de Innmobiliaria (F0 #5 + G-Visión + G-Plan 2026-07-13 — van sobre TODO sprint)
 

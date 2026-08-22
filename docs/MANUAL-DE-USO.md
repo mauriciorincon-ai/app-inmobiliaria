@@ -28,8 +28,7 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   verificados, avalúo) y preguntas frecuentes.
 - **Cómo se usa:** es la página principal (`/`). Desplázate para conocer la propuesta; los botones
   **"Publica tu inmueble como fundador"** (arriba y al final) llevan al registro.
-- **Limitaciones conocidas:** solo Bogotá en esta etapa; solo español. Sin contadores ni cupos
-  (llegarán reales más adelante).
+- **Limitaciones conocidas:** solo Bogotá en esta etapa; solo español.
 
 ### Publicar = registro (flujo de 3 pasos) · desde Sprint 001
 
@@ -40,7 +39,10 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   2. **Paso 2 (Tu inmueble):** si es venta o arriendo, el tipo, el barrio, el área, las
      habitaciones y el precio esperado. La dirección aproximada es opcional.
   3. **Paso 3 (Revisa y envía):** revisa el resumen, marca la casilla de autorización de datos
-     (Ley 1581) y toca **"Publicar mi inmueble"**.
+     (Ley 1581) y toca **"Publicar mi inmueble"**. Puedes dejar tu **correo (opcional)** si quieres
+     recibir el paquete de fundador y los avisos; sin correo publicas igual.
+  - Si llegaste por el **enlace de invitación** de otro dueño, tu registro queda atribuido a quien te
+    invitó, sin que tengas que hacer nada (desde el Sprint 003).
   - Si cierras la página a mitad, al volver el formulario **retoma donde ibas** (se guarda en tu
     navegador). Al terminar verás una pantalla de confirmación con los próximos pasos.
 - **Limitaciones conocidas:** las fotos llegan en la siguiente etapa. Sin la casilla de
@@ -78,6 +80,45 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
 - **Limitaciones conocidas:** en esta etapa las fichas no aparecen en buscadores (es privado
   hasta el lanzamiento). Tu correo y el número de matrícula nunca son públicos.
 
+### Cupos de fundador por zona · desde Sprint 003
+
+- **Qué hace:** en la página principal muestra cuántos cupos de fundador quedan en tu localidad
+  (por ejemplo, "Quedan 7 cupos de fundador en Chapinero").
+- **Cómo se usa:** aparece sola en el inicio (`/`), debajo de la presentación. Toca **"Asegura tu
+  cupo"** para ir al registro.
+- **Limitaciones conocidas:** **los números son reales o no aparecen.** La banda solo se muestra en
+  las localidades donde el equipo fijó un cupo; si no hay cupos fijados, no se muestra nada. Aquí no
+  se inventan contadores ni urgencias.
+
+### Invita a otro dueño (referido por WhatsApp) · desde Sprint 003
+
+- **Qué hace:** te da un enlace propio para invitar a otros dueños; quien publique con tu enlace
+  queda registrado como invitado tuyo, y tú ves cuántos van.
+- **Cómo se usa:** en la confirmación o en tu anuncio, busca **"Invita y asegura tu cupo"** y toca
+  **"Invitar por WhatsApp"**: se abre WhatsApp con el mensaje y tu enlace listos para enviar.
+- **Limitaciones conocidas:** el conteo es de invitados **reales** que ya publicaron. Nunca se
+  muestra quién es la otra persona ni sus datos; solo el número.
+
+### Tu anuncio siempre vivo (vigencia y renovación) · desde Sprint 003
+
+- **Qué hace:** cada anuncio tiene una fecha de vigencia (60 días). Antes de vencerse te avisa, y lo
+  renuevas con un clic por 60 días más. Aquí no hay anuncios "zombie": lo publicado está vivo.
+- **Cómo se usa:** abre tu enlace privado **"mi anuncio"** y mira el bloque de vigencia ("tu anuncio
+  está vivo hasta el —"). Toca **"Renovar 60 días"**. También puedes hacerlo desde la página
+  `/renovar` con tu enlace.
+- **Limitaciones conocidas:** si se vence, tu anuncio deja de verse públicamente hasta que lo
+  renueves (no se borra). Renovar necesita tu enlace privado.
+
+### Paquete de fundador (4 guías gratis) · desde Sprint 003
+
+- **Qué hace:** cuatro guías gratuitas para vender directo: **guía fotográfica**, **checklist legal y
+  notarial**, **"saca tu CTL en 10 minutos"** y **cómo fijar tu precio**. Es lo que la inmobiliaria
+  cobraba dentro de su comisión.
+- **Cómo se usa:** busca **"Tu paquete de fundador"** en el inicio, en la confirmación o en tu
+  anuncio, y toca la guía que quieras: se abre en una pestaña nueva y puedes guardarla.
+- **Limitaciones conocidas:** son guías informativas con sus fuentes citadas; no reemplazan la
+  asesoría de un abogado ni de un notario.
+
 ### Política de privacidad (Ley 1581) · desde Sprint 001
 
 - **Qué hace:** explica quién trata los datos, para qué, y los derechos del titular.
@@ -105,6 +146,30 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   para su anuncio y abre WhatsApp con un mensaje listo que lo invita a completar sus fotos.
 - **Limitaciones conocidas:** la verificación la hace una persona (no es automática).
 
+### Panel de campaña del operador · desde Sprint 003
+
+- **Qué hace:** muestra el embudo real de la campaña (cuántos publicaron → cuántos tienen fotos →
+  cuántos están verificados) y permite enviar correos por lotes a los fundadores que dejaron su
+  correo.
+- **Cómo se usa:** en el panel, pestaña **"Campaña"** (`/operador/campana`).
+  1. Mira el embudo con las cifras reales del momento.
+  2. Para un envío: elige una de las tres plantillas (**completa tu anuncio**, **gana tu sello**,
+     **renueva tu vigencia**), revisa cuántos destinatarios trae, y toca **"Enviar"**.
+  3. Abajo queda el registro de los envíos hechos.
+- **Limitaciones conocidas:** se envía por tandas de máximo 300 al día (límite del proveedor de
+  correo) y la pantalla indica cuántos quedan. Solo reciben quienes dejaron correo (es opcional).
+
+### Zonas, cupos y densidad · desde Sprint 003
+
+- **Qué hace:** permite fijar cuántos cupos de fundador hay en cada localidad de Bogotá (eso es lo
+  que alimenta la banda de cupos del inicio) y ver la densidad de inmuebles por localidad, tipo y
+  rango de precio.
+- **Cómo se usa:** en el panel, pestaña **"Zonas y cupos"** (`/operador/zonas`): escribe el cupo de
+  la localidad y guarda. Si una localidad no tiene cupo fijado, **no se muestra ningún contador** en
+  la página principal.
+- **Limitaciones conocidas:** el cupo es una decisión del equipo; el número de publicados es real y
+  no se puede editar.
+
 ## Preguntas frecuentes
 
 - **¿Cuánto cuesta publicar?** Nada. Publicar como fundador es gratis y no cobramos comisión.
@@ -115,7 +180,8 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                           |
-| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                       |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel |
+| Sprint | Features añadidas a este manual                                                                                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                            |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                      |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro |

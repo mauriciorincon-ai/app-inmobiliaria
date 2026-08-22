@@ -11,7 +11,7 @@
 | Pieza           | Servicio                                         | Qué es                                                                           |
 | --------------- | ------------------------------------------------ | -------------------------------------------------------------------------------- |
 | Postgres + Auth | **Supabase cloud** (plan free)                   | La base de datos real (vendedores/inmuebles + RLS + RPC) y el login del operador |
-| App (Next.js)   | **Cloudflare Workers** (plan free, vía OpenNext) | La landing + wizard + panel + endpoint, servidos en una URL `*.workers.dev`      |
+| App (Next.js)   | **Cloudflare Workers** (plan free, vía OpenNext) | La landing + wizard + panel + endpoint, servidos en el subdominio de tu cuenta   |
 | Keep-alive      | **GitHub Actions** (ya en el repo)               | Cron semanal que evita que el proyecto free de Supabase se pause                 |
 
 El orden importa: primero la base de datos (sin ella la app no tiene dónde escribir), luego se
@@ -175,12 +175,14 @@ pnpm preview:cf   # build OpenNext + workerd local: valida que la app corre en r
 pnpm deploy:cf    # build + deploy real
 ```
 
-El deploy imprime la URL: `https://app-inmobiliaria.<tu-subdominio>.workers.dev`. Esa es la
-**preview privada de H1**: no está indexada (la app manda `robots: noindex`) y no se difunde.
+El deploy **imprime la URL de la app** al terminar (subdominio de Cloudflare Workers de tu cuenta).
+Esa es la **preview privada de H1**: no está indexada (la app manda `robots: noindex`) y no se
+difunde. **La URL no se escribe en el repo** (regla 17 — cero enlaces): vive en tu gestor de
+contraseñas y en las env vars del hosting.
 
 ### 3.5 [TÚ] Verificación final en tu teléfono
 
-1. Abre la URL `workers.dev` en el teléfono y recorre `docs/GUIA-DE-PRUEBA.html` (el filtro
+1. Abre esa URL en el teléfono y recorre `docs/GUIA-DE-PRUEBA.html` (el filtro
    **⭐ gate mínimo**): registro real <3 min, juicio del copy, aprobación visual.
 2. Entra al panel (`/operador`) desde el navegador y confirma que ves tu registro de prueba.
 
@@ -215,7 +217,8 @@ R2_ACCESS_KEY_ID=tu-access-key-id
 R2_SECRET_ACCESS_KEY=tu-secret-access-key
 R2_BUCKET=innmobiliaria-fotos
 NEXT_PUBLIC_R2_PUBLIC_URL=https://pub-tuhash.r2.dev
-NEXT_PUBLIC_APP_URL=https://app-inmobiliaria.rinconai.workers.dev
+# La URL que imprimió `pnpm deploy:cf` (NO se versiona en el repo — regla 17):
+NEXT_PUBLIC_APP_URL=https://<tu-app>.<tu-subdominio-cloudflare>
 ```
 
 ### 4.3 [CLAUDE] CORS del bucket + vars/secrets del Worker + deploy
@@ -224,8 +227,10 @@ NEXT_PUBLIC_APP_URL=https://app-inmobiliaria.rinconai.workers.dev
 # CORS: permitir PUT directo desde el navegador (localhost + la URL de prod).
 # OJO wrangler 4.x: es `cors set <bucket> --file <json>` (el `cors put --rules` quedó OBSOLETO) y
 # el JSON debe tener forma {"rules":[{"allowed":{"origins":[...],"methods":["PUT"],"headers":["content-type"]}}]}.
-cat > /tmp/r2-cors.json <<'JSON'
-{"rules":[{"allowed":{"origins":["http://localhost:3000","https://app-inmobiliaria.rinconai.workers.dev"],"methods":["PUT"],"headers":["content-type"]}}]}
+# Sustituye $APP_URL por la URL real que imprimió el deploy (no se versiona — regla 17).
+APP_URL="$NEXT_PUBLIC_APP_URL"   # tómala de tu .env.local
+cat > /tmp/r2-cors.json <<JSON
+{"rules":[{"allowed":{"origins":["http://localhost:3000","$APP_URL"],"methods":["PUT"],"headers":["content-type"]}}]}
 JSON
 pnpm exec wrangler r2 bucket cors set innmobiliaria-fotos --file /tmp/r2-cors.json
 pnpm exec wrangler r2 bucket cors list innmobiliaria-fotos   # verificar

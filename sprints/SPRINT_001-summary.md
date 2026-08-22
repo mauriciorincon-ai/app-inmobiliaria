@@ -17,8 +17,8 @@ registrado como fundador en un flujo de 3 pasos (<3 min, consentimiento Ley 1581
 ve en un panel protegido. El ADR de hosting comercial free-tier quedó decidido. **CI verde
 completo en el PR #1** (`quality`/`e2e`/`lighthouse`): el happy-path por la UI, la RLS negativa,
 el rate limit y axe quedaron validados contra Postgres real (28 tests e2e). **Aprovisionamiento
-completo** (Supabase cloud verificado + deploy a Cloudflare Workers:
-<https://app-inmobiliaria.rinconai.workers.dev>) y **gate ⭐ aprobado por el usuario en teléfono
+completo** (Supabase cloud verificado + deploy a Cloudflare Workers, URL privada no versionada
+— regla 17) y **gate ⭐ aprobado por el usuario en teléfono
 real (2026-07-17)**. Extra a pedido del usuario: design system publicado en Claude Design.
 
 ## Qué se construyó

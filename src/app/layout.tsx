@@ -12,7 +12,8 @@ const poppins = Poppins({
 });
 
 // metadataBase hace absolutas las og:image relativas (p. ej. el fallback /og-fallback.png de la
-// ficha). WhatsApp ignora las relativas. En prod se fija NEXT_PUBLIC_APP_URL a la URL workers.dev.
+// ficha). WhatsApp ignora las relativas. En prod, NEXT_PUBLIC_APP_URL se fija a la URL de
+// producción (registro privado en la planeadora — regla 15: cero enlaces).
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {

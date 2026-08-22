@@ -3,7 +3,8 @@ entrega: brochure-conoce
 app: inmobiliaria
 tipo: entrega-puntual
 modo: INICIAL
-status: aprobado-por-el-usuario
+status: closed
+gate_estrella: aplazado al acto 2 — F0 #8, método v1.20.0
 abierta: 2026-08-22
 branch: entrega/brochure-conoce
 ---
@@ -153,6 +154,21 @@ Verificado tras el cambio: typecheck, lint, build, **172 unit y 76 e2e verdes**.
 no lee ese campo y lo ignora en silencio con un warning). Es la misma lección del gate de builds del
 S3.
 
+## Los dos gates de esta entrega (acto 1 — construcción)
+
+El cierre de ciclo ocurre en **DOS ACTOS** (replanteo F0 #8, 2026-08-15 · método v1.20.0), y esta
+entrega es el **acto 1 (construcción)**: S3 mergeado + brochure INICIAL, cuyos únicos gates del
+usuario son el **storyboard** y el **visual sobre la preview**. Ambos aprobados.
+
+**`gate_estrella: aplazado al acto 2 — F0 #8, método v1.20.0`.** El gate ⭐ acumulado S2+S3 de
+este ciclo **NO está perdido ni omitido: está aplazado a propósito**. Lo corre el usuario cuando
+él decida, sin fecha y sin orden entre apps → correcciones por PR → **brochure SELLADO** (acto 2).
+La orden del S3 (julio) es ANTERIOR a este replanteo y por eso lo pedía como indiferible.
+
+**Los filtros ⭐/⭐⭐ de `docs/GUIA-DE-PRUEBA.html` quedan INTACTOS** para ese día: verificado tras
+la entrega — 16 marcas ⭐, 10 `o-clave` y los orígenes `s1`/`s2` con su variante `clave`. Esta
+entrega no tocó la guía (último cambio: `a34bd60`, sprint 002).
+
 ## Gate visual — APROBADO
 
 **Aprobado por Mauricio Rincón el 2026-08-22**, tras la ronda 2: «queda cerrado entonces esta
@@ -177,6 +193,9 @@ scroll (400/900/1800 px) — cero bloques ocultos en las tres.
 
 ## Deudas declaradas
 
+> El **gate ⭐ acumulado NO figura aquí**: no es deuda, es un **aplazamiento deliberado al acto 2**
+> (ver arriba). Lo que sí es deuda es su insumo — la guía v3 (punto 4).
+
 1. **`docs/BLUEPRINT.html` NO existe** (solo la plantilla). Era entregable del cierre de ciclo del
    S3 y no llegó con el merge. **Esta entrega no lo produce** (la orden lo anticipa); queda pendiente.
 2. **El S3 se mergeó sin summary** (`sprints/SPRINT_003-summary.md` no existe): su fase 6 se saltó.
@@ -184,10 +203,9 @@ scroll (400/900/1800 px) — cero bloques ocultos en las tres.
 3. **G-Release pendiente** (fase 5 del S3): sin dominio propio, `noindex` global sigue puesto, sin
    Sentry con DSN, sin `/terminos` ni `/accesibilidad`, sin `sitemap.ts`/`robots.ts`. Se documenta
    **sin URL**. No bloquea el brochure.
-4. **`wrangler.jsonc` versiona la URL de producción** (ver Fase 0). Requiere decisión: moverla a
-   variable de entorno del build (`.env.local` ya la tiene, y `NEXT_PUBLIC_*` se inlinea en build,
-   que corre en la máquina del usuario) o aceptarla como excepción declarada. **No se tocó** para no
-   cambiar comportamiento en una entrega que lo tiene prohibido.
+4. **La guía de prueba sigue en v2** (sprint 002): no cubre nada de S3 —cupos, referido, vigencia,
+   paquete fundador, panel de campaña—. Su v3 acumulativa era entregable de la fase 6 del S3. **Es
+   insumo del acto 2**: el día del gate ⭐ hay que escribirla antes o el recorrido no cubre S3.
 5. **Deploy manual.** No hay auto-deploy al mergear: la última milla exige `pnpm deploy:cf` a mano,
    y el resto de la app en producción necesita el **Supabase Restore**.
 

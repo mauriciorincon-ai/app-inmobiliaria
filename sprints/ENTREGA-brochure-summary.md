@@ -20,7 +20,7 @@ branch: entrega/brochure-conoce
 
 | Pieza                                    | Qué es                                                                       |
 | ---------------------------------------- | ---------------------------------------------------------------------------- |
-| `docs/BROCHURE.html`                     | 8 escenas, autocontenido (**0 scripts externos**, 17,9 KB gzip transferidos) |
+| `docs/BROCHURE.html`                     | 8 escenas, autocontenido (**0 scripts externos**, 151 KB transferidos con las capturas embebidas) |
 | `/conoce`                                | asset estático + rewrite; `build:brochure` encadenado en `dev` y `build`     |
 | `docs/brochure-export.json`              | contrato v1.0.0, generado **de último** para que sus cifras cuadren          |
 | `sprints/ENTREGA-brochure-storyboard.md` | el guion aprobado (regla cero)                                               |
@@ -42,11 +42,13 @@ Archivos scrubbeados conservando el sentido operativo: `sprints/SPRINT_001-imple
 **La limpieza es RECURRENTE** (la GitHub App del hosting reescribe `homepage` tras cada deploy de
 producción): re-verificar tras el deploy del merge.
 
-**Hallazgo abierto (decisión del usuario pendiente):** `wrangler.jsonc:22` versiona la URL de
-producción en `NEXT_PUBLIC_APP_URL`. **No la toqué**: es config funcional que alimenta `metadataBase`
-(las vistas previas de WhatsApp) y los enlaces de los correos; borrarla sin más la haría caer a
-`localhost:3000` en producción — un cambio de comportamiento que esta entrega tiene prohibido. El
-grep de la orden no la cubre (`.jsonc` no está en su lista de extensiones). Ver «Deudas».
+**Hallazgo extra, ya resuelto:** `wrangler.jsonc` versionaba la URL de producción en
+`NEXT_PUBLIC_APP_URL` (el grep de la orden no la cubría: `.jsonc` no está en su lista de
+extensiones). **Se quitó**, y el argumento es que era **redundante**: Next hornea las
+`NEXT_PUBLIC_*` en tiempo de BUILD desde `.env.local`, y el build corre en la máquina de quien
+despliega, así que esa variable de runtime nunca se consultaba. Verificado con un build real: el
+literal sigue apareciendo 3 veces en el bundle después de quitarla → **cero cambio de
+comportamiento**, que era la condición para poder tocarla.
 
 ## Deltas del kit
 

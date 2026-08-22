@@ -17,10 +17,10 @@ jobs:
       NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
       NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
         with: { version: 11 }   # el scaffold estampa pnpm 11 (lockfile + allowBuilds); pnpm 11 exige Node >=22.13
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
@@ -50,10 +50,10 @@ jobs:
       R2_SECRET_ACCESS_KEY: dummy-secret
       R2_BUCKET: innmobiliaria-fotos
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
         with: { version: 11 }   # el scaffold estampa pnpm 11 (lockfile + allowBuilds); pnpm 11 exige Node >=22.13
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
@@ -94,10 +94,10 @@ jobs:
       NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
       NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
         with: { version: 11 }   # el scaffold estampa pnpm 11 (lockfile + allowBuilds); pnpm 11 exige Node >=22.13
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       # La ficha /i/[slug] es dinámica y lee la BD → Lighthouse necesita Supabase real. Y como las

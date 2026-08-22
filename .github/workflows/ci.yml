@@ -18,7 +18,7 @@ jobs:
       NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with: { version: 11 }   # el scaffold estampa pnpm 11 (lockfile + allowBuilds); pnpm 11 exige Node >=22.13
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
@@ -51,7 +51,7 @@ jobs:
       R2_BUCKET: innmobiliaria-fotos
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with: { version: 11 }   # el scaffold estampa pnpm 11 (lockfile + allowBuilds); pnpm 11 exige Node >=22.13
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
@@ -78,7 +78,7 @@ jobs:
       - run: pnpm test:e2e        # happy path por la UI + validaciones + RLS negativa + axe
       - name: Subir artefactos de Playwright si algo falla
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-results
           path: |
@@ -95,7 +95,7 @@ jobs:
       NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with: { version: 11 }   # el scaffold estampa pnpm 11 (lockfile + allowBuilds); pnpm 11 exige Node >=22.13
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }

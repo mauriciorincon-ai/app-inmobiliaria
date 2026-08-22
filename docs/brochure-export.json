@@ -1,0 +1,262 @@
+{
+  "_schema": {
+    "_lee_esto_primero": "Este bloque documenta el formato y no es dato de la app. Se conserva en cada export para que el esquema viaje con el archivo: quien lo consuma no necesita buscar otro documento. Las apps que adopten este formato copian este bloque tal cual y rellenan el resto.",
+    "_origen": "Definido por app-dash-agent-ai en su entrega de brochure (2026-08-19). Es el PRIMER export del portafolio; las demás apps lo adoptan.",
+    "_consumidor": "La vitrina de hoja-de-vida. Renderiza la ficha de cada app sin abrir su repositorio.",
+    "_regla_madre": "Toda cifra de `metricas[]` lleva su etiqueta de `fuente`. Es la regla dura 3 de Dash Agent AI aplicada a su propia ficha: una app que exige procedencia a cada número de su pantalla no puede publicar cifras sueltas sobre sí misma. Se recomienda al resto del portafolio.",
+    "schema_version": "semver del FORMATO, no de la app. Cambio mayor = campo eliminado o con significado distinto; menor = campo nuevo opcional; parche = documentación.",
+    "app.estado": "\"inicial\" mientras el brochure describe la construcción cerrada; \"sellado\" cuando el gate de pruebas del usuario terminó. `sellado_en` es null hasta entonces.",
+    "funcionalidades.total": "El número que el brochure declara en su pie. `fuente_del_conteo` dice contra qué documento se cuadró — sin eso, el total es una afirmación.",
+    "funcionalidades.descartadas": "Las que se construyeron o se planearon y NO existen. Van aquí con su razón y su fecha para que nadie las cuente como pendientes ni como entregadas.",
+    "metricas[].fuente": "Una de cuatro: \"medido\" (salió de un contador o un comando), \"calculada\" (medido operado con una tarifa o una regla, y se dice cuál), \"declarado\" (lo fijó una persona), \"estimacion\" (deducido). Una cifra sin fuente no entra.",
+    "enlaces.produccion": "null cuando la app no tiene URL pública. `razon` explica por qué, y es lo que la vitrina muestra en lugar del enlace. Nunca se rellena con un enlace de repositorio ni con una promesa."
+  },
+  "schema_version": "1.0.0",
+  "actualizado": "2026-08-22",
+  "app": {
+    "slug": "inmobiliaria",
+    "nombre": "Innmobiliaria",
+    "ciclo": "H1",
+    "estado": "inicial",
+    "sellado_en": null,
+    "sprints_cerrados": 3,
+    "version_repo": "0.1.0"
+  },
+  "promesa": {
+    "tagline": "Vende tu casa directo, sin comisión.",
+    "intro": "El marketplace del dueño que vende solo, no de la inmobiliaria: publicas tu inmueble hoy como fundador —sin comisión y sin intermediarios— y queda listo, verificado y esperando el día que la plataforma abra a los compradores.",
+    "para_quien": "Para el propietario en Bogotá que quiere vender o arrendar directo y hoy enfrenta solo una comisión del 3% —unos $12 millones en una vivienda de $400 millones—, entre 7 y 7,5 meses de espera promedio, anuncios clonados y un papeleo que nadie le explica.",
+    "diferencial": "Todos los portales colombianos le venden el vendedor a alguien más. Aquí publicar ES unirse, y nada se declara sin comprobarse: el sello de propietario se gana mostrando el certificado (que se ve y nunca se almacena), los anuncios vencen si nadie los renueva, y los cupos por zona salen de la base de datos o simplemente no se muestran. Cero contadores inventados y cero inteligencia artificial: todo es código determinista."
+  },
+  "funcionalidades": {
+    "total": 13,
+    "fuente_del_conteo": "docs/MANUAL-DE-USO.md",
+    "descartadas": [],
+    "grupos": [
+      {
+        "orden": 1,
+        "estrella": true,
+        "nombre": "La campaña",
+        "linea": "Cupos reales, invitaciones y anuncios que siguen vivos.",
+        "features": [
+          {
+            "id": "C7a",
+            "nombre": "Cupos de fundador por zona",
+            "que_hace": "En el inicio muestra cuántos cupos de fundador quedan en cada localidad de Bogotá. El número sale de la base de datos —cupo fijado por el equipo menos los que ya publicaron— y si no hay cupo fijado no se muestra nada. Escasez real o ninguna.",
+            "seccion_manual": "Cupos de fundador por zona"
+          },
+          {
+            "id": "C7b",
+            "nombre": "Invita a otro dueño",
+            "que_hace": "Un enlace propio para invitar por WhatsApp. Quien publique con ese enlace queda atribuido a quien lo invitó, y el referente ve el conteo real de invitados sin que se exponga la identidad de nadie.",
+            "seccion_manual": "Invita a otro dueño (referido por WhatsApp)"
+          },
+          {
+            "id": "B3",
+            "nombre": "Tu anuncio siempre vivo",
+            "que_hace": "Cada anuncio tiene 60 días de vigencia y se renueva con un clic desde el enlace privado. Si nadie lo renueva deja de verse en público (no se borra): aquí no hay anuncios zombie.",
+            "seccion_manual": "Tu anuncio siempre vivo (vigencia y renovación)"
+          },
+          {
+            "id": "B2",
+            "nombre": "Paquete de fundador",
+            "que_hace": "Cuatro guías gratuitas y autocontenidas: fotográfica, checklist legal y notarial, «saca tu CTL en 10 minutos» y cómo fijar el precio. Todas con sus fuentes citadas.",
+            "seccion_manual": "Paquete de fundador (4 guías gratis)"
+          }
+        ]
+      },
+      {
+        "orden": 2,
+        "estrella": false,
+        "nombre": "Publicar sin fricción",
+        "linea": "Tres pasos cortos. Sin cuenta, sin papeles, sin fotos.",
+        "features": [
+          {
+            "id": "A1",
+            "nombre": "La página de inicio",
+            "que_hace": "Presenta la propuesta al vendedor directo de Bogotá con los dolores reales del mercado, cómo funciona el registro y las preguntas frecuentes. Nace estática para cargar de inmediato.",
+            "seccion_manual": "Landing de expectativa (seller-first)"
+          },
+          {
+            "id": "A2",
+            "nombre": "Publicar = registro, en 3 pasos",
+            "que_hace": "El registro es el inmueble, no un correo: paso 1 con tres campos, paso 2 con los datos del inmueble y paso 3 con la autorización de datos y el correo opcional. El borrador se guarda solo, así que se puede retomar.",
+            "seccion_manual": "Publicar = registro (flujo de 3 pasos)"
+          },
+          {
+            "id": "A3",
+            "nombre": "Confirmación y enlace privado",
+            "que_hace": "Al terminar muestra qué sigue y entrega el enlace privado «mi anuncio», que es la única llave para editarlo después. El token viaja en el fragmento de la URL, nunca al servidor.",
+            "seccion_manual": "Confirmación de fundador"
+          }
+        ]
+      },
+      {
+        "orden": 3,
+        "estrella": false,
+        "nombre": "Tu anuncio, completo",
+        "linea": "Fotos que pesan poco, y una ficha lista para WhatsApp.",
+        "features": [
+          {
+            "id": "B1",
+            "nombre": "Fotos, descripción y medidor",
+            "que_hace": "Hasta 12 fotos comprimidas en el propio celular antes de subirlas, elección de portada, descripción guiada y una barra de completitud que sube en vivo. Las fotos demasiado pequeñas se rechazan con un aviso claro.",
+            "seccion_manual": "Completar tu anuncio: fotos + descripción"
+          },
+          {
+            "id": "B4",
+            "nombre": "Ficha pública compartible",
+            "que_hace": "Cada inmueble tiene su página propia para compartir por WhatsApp, con vista previa de portada, barrio y precio. El WhatsApp del dueño solo aparece si él lo activa; el correo y la matrícula nunca son públicos.",
+            "seccion_manual": "Ficha pública compartible"
+          }
+        ]
+      },
+      {
+        "orden": 4,
+        "estrella": false,
+        "nombre": "Confianza y quién opera",
+        "linea": "Tus datos, la verificación, y el tablero del equipo.",
+        "features": [
+          {
+            "id": "L1",
+            "nombre": "Política de privacidad (Ley 1581)",
+            "que_hace": "Explica quién trata los datos, para qué y los derechos del titular. Está enlazada desde el consentimiento del registro y desde el pie de página.",
+            "seccion_manual": "Política de privacidad (Ley 1581)"
+          },
+          {
+            "id": "C1",
+            "nombre": "Panel del operador",
+            "que_hace": "Tablero privado con todos los registros, su nivel y su fecha, la cola de verificación y el re-contacto por WhatsApp. El sello de propietario verificado se marca tras VER el Certificado de Tradición y Libertad: solo se guardan la matrícula y la fecha, jamás el documento.",
+            "seccion_manual": "Panel del operador"
+          },
+          {
+            "id": "C8a",
+            "nombre": "Panel de campaña",
+            "que_hace": "El embudo real de la campaña —publicados, con fotos, verificados— y el envío de correos por lotes con tres plantillas deterministas, con su registro de lo enviado. Por tandas de máximo 300 al día.",
+            "seccion_manual": "Panel de campaña del operador"
+          },
+          {
+            "id": "C8b",
+            "nombre": "Zonas, cupos y densidad",
+            "que_hace": "Donde el equipo fija el cupo de fundador por localidad —lo que alimenta la banda del inicio— y consulta la densidad de inmuebles por localidad, tipo y rango de precio.",
+            "seccion_manual": "Zonas, cupos y densidad"
+          }
+        ]
+      }
+    ]
+  },
+  "metricas": [
+    {
+      "clave": "funcionalidades",
+      "etiqueta": "Funcionalidades del MVP",
+      "valor": 13,
+      "unidad": "funcionalidades",
+      "fuente": "medido",
+      "detalle": "Una por sección de feature de docs/MANUAL-DE-USO.md (encabezados de tercer nivel). El brochure declara el mismo número en su pie."
+    },
+    {
+      "clave": "pantallas",
+      "etiqueta": "Pantallas de la app",
+      "valor": 11,
+      "unidad": "pantallas",
+      "fuente": "medido",
+      "detalle": "Archivos page.tsx bajo src/app/: 7 del vendedor o públicas y 4 del operador. La ruta /conoce sirve este brochure y no es una pantalla del producto."
+    },
+    {
+      "clave": "pruebas_unitarias",
+      "etiqueta": "Pruebas unitarias y de componente",
+      "valor": 172,
+      "unidad": "pruebas",
+      "fuente": "medido",
+      "detalle": "Salida de `pnpm test` el 2026-08-22: 21 archivos, 172 pruebas (incluye el test del contrato de este export)."
+    },
+    {
+      "clave": "pruebas_e2e",
+      "etiqueta": "Pruebas end-to-end",
+      "valor": 76,
+      "unidad": "pruebas",
+      "fuente": "medido",
+      "detalle": "Salida de `pnpm exec playwright test` el 2026-08-22, con navegador real contra Postgres: 10 archivos en dos navegadores (móvil y escritorio), incluidas las de este brochure."
+    },
+    {
+      "clave": "cobertura_lineas",
+      "etiqueta": "Cobertura de líneas del motor",
+      "valor": 98.31,
+      "unidad": "%",
+      "fuente": "medido",
+      "detalle": "v8 sobre src/engine (la lógica pura), con umbrales por CI en vitest.config.ts."
+    },
+    {
+      "clave": "decisiones_registradas",
+      "etiqueta": "Decisiones de arquitectura registradas",
+      "valor": 6,
+      "unidad": "ADR",
+      "fuente": "medido",
+      "detalle": "Archivos de decisions/."
+    },
+    {
+      "clave": "modelos_de_ia",
+      "etiqueta": "Modelos de IA en la app",
+      "valor": 0,
+      "unidad": "modelos",
+      "fuente": "declarado",
+      "detalle": "Regla de producto de la fase 1: toda la funcionalidad es determinista. Activar cualquier IA exigiría un ADR de «código primero»."
+    },
+    {
+      "clave": "costo_operacion_mensual",
+      "etiqueta": "Costo de operación mensual",
+      "valor": 0,
+      "unidad": "USD",
+      "fuente": "calculada",
+      "detalle": "Suma de los planes contratados: Cloudflare Workers, Cloudflare R2, Supabase, Brevo y PostHog, todos en su capa gratuita a este volumen. No incluye el dominio propio, que aún no se ha comprado."
+    },
+    {
+      "clave": "peso_brochure",
+      "etiqueta": "Peso de este brochure",
+      "valor": 263580,
+      "unidad": "bytes",
+      "fuente": "medido",
+      "detalle": "Archivo autocontenido, sin una sola petición externa: incluye las cuatro capturas reales de la app embebidas como data: URIs en WebP. `wc -c docs/BROCHURE.html`."
+    }
+  ],
+  "stack": [
+    {
+      "nombre": "Next.js",
+      "papel": "la app entera, servida desde el borde en Cloudflare Workers"
+    },
+    {
+      "nombre": "TypeScript",
+      "papel": "modo estricto en todo el repositorio"
+    },
+    {
+      "nombre": "Supabase (Postgres)",
+      "papel": "la base de datos, con permisos por fila desde la primera tabla y toda escritura por función transaccional"
+    },
+    {
+      "nombre": "Cloudflare R2",
+      "papel": "las fotos, subidas desde el navegador con enlace firmado"
+    },
+    {
+      "nombre": "Vitest y Playwright",
+      "papel": "las pruebas: motor puro, componentes y recorridos reales con navegador"
+    },
+    {
+      "nombre": "Brevo y PostHog",
+      "papel": "los correos de campaña por lotes y la analítica del embudo, sin datos personales"
+    }
+  ],
+  "privacidad": {
+    "local_only": false,
+    "usa_ia": false,
+    "consentimiento_explicito": true,
+    "detalle": "Sin autorización expresa no hay registro: la ley colombiana 1581 se cumple por construcción, con la fecha de consentimiento guardada en la misma fila. Se pide el mínimo dato necesario y el WhatsApp del dueño solo es público si él lo activa. El Certificado de Tradición y Libertad se VE una vez y jamás se almacena: solo persisten la matrícula y la fecha. El enlace privado de cada anuncio viaja en el fragmento de la URL, así que el token nunca llega al servidor ni a sus registros. La analítica no captura datos personales, no graba la pantalla y no rastrea la navegación."
+  },
+  "enlaces": {
+    "produccion": null,
+    "razon": "La app está desplegada y funcionando, pero la campaña todavía no se ha encendido: el acceso es por lista de espera hasta que se publique la landing.",
+    "repositorio": null,
+    "razon_repositorio": "El repositorio no se enlaza desde la vitrina (regla de cero enlaces del portafolio).",
+    "brochure_archivo": "docs/BROCHURE.html",
+    "brochure_ruta_local": "/conoce"
+  }
+}

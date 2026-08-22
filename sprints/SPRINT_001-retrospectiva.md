@@ -19,7 +19,7 @@ En un solo sprint: landing completa de 8 secciones · flujo publicar=registro co
 (RLS estricta + RPC transaccional + rate limiting 3 capas) · panel de operador autenticado ·
 política Ley 1581 · 44 unit + 28 e2e verdes en CI (3 jobs) · **aprovisionamiento completo**
 (Supabase cloud verificado + secrets + keep-alive) · **deploy real a Cloudflare Workers**
-(https://app-inmobiliaria.rinconai.workers.dev, noindex, smoke E2E en producción). Es la
+(URL privada no versionada — regla 17; noindex, smoke E2E en producción). Es la
 primera app del pipeline que termina su S1 **desplegada, con base de datos productiva y a una
 aprobación visual de poder recibir usuarios reales**.
 

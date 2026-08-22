@@ -1,0 +1,36 @@
+# Vigilancia de dependencias. El porqué: los avisos altos que rompieron la CI de la entrega del
+# brochure (2026-08-22) llevaban ~un mes publicados y NADIE los vio — los cazó de casualidad una
+# corrida de CI, en mitad de otra tarea. `pnpm audit` en CI avisa tarde y solo cuando algo más te
+# obliga a construir; esto los trae como PR, solos, con su changelog.
+#
+# Agrupado a propósito: un PR semanal por grupo, no veinte sueltos que nadie revisa.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      # Parches de seguridad y correcciones: entran juntos y se mergean rápido.
+      parches:
+        update-types: ["patch"]
+      # Menores del stack de desarrollo: un solo PR para revisar con calma.
+      dev-menores:
+        dependency-type: "development"
+        update-types: ["minor"]
+    # Las MAYORES quedan fuera del agrupado: cada una merece su propio PR y su propia lectura
+    # (Next, React y Supabase mueven APIs).
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "chore(ci)"

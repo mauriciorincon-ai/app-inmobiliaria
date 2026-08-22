@@ -3,7 +3,7 @@ entrega: brochure-conoce
 app: inmobiliaria
 tipo: entrega-puntual
 modo: INICIAL
-status: en-revision
+status: aprobado-por-el-usuario
 abierta: 2026-08-22
 branch: entrega/brochure-conoce
 ---
@@ -152,6 +152,12 @@ Verificado tras el cambio: typecheck, lint, build, **172 unit y 76 e2e verdes**.
 **Nota de pnpm 11:** los overrides van en `pnpm-workspace.yaml`, **no** en `package.json` (pnpm ya
 no lee ese campo y lo ignora en silencio con un warning). Es la misma lección del gate de builds del
 S3.
+
+## Gate visual — APROBADO
+
+**Aprobado por Mauricio Rincón el 2026-08-22**, tras la ronda 2: «queda cerrado entonces esta
+versión inicial». El brochure queda en estado **INICIAL**; el sello (⭐⭐ → SELLADO) se hará cuando
+el usuario termine su cierre de pruebas, sin fecha y sin re-proponerlo.
 
 ## Ronda 2 del gate visual — lo que pediste y qué se hizo
 

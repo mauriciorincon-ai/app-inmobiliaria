@@ -25,3 +25,6 @@ ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/
 .design-sync/node_modules
+
+# Copia del brochure generada por build:brochure (el canónico es docs/BROCHURE.html)
+public/conoce.html

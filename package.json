@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "pnpm build:brochure && next dev",
+    "build": "pnpm build:brochure && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -12,7 +12,8 @@
     "test:e2e": "playwright test --pass-with-no-tests",
     "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "prepare": "git config core.hooksPath githooks"
+    "prepare": "git config core.hooksPath githooks",
+    "build:brochure": "node scripts/copiar-brochure.mjs"
   },
   "dependencies": {
     "@gsap/react": "2.1.2",

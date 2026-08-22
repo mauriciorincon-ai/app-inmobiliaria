@@ -1,0 +1,1834 @@
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Innmobiliaria — conoce la app</title>
+    <meta
+      name="description"
+      content="Vende tu casa directo, sin comisión. Conoce todo lo que hace Innmobiliaria, el marketplace del dueño que vende solo en Bogotá."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!--
+      ══════════════════════════════════════════════════════════════════════════════════════
+      BROCHURE VIVO DE INNMOBILIARIA — archivo CANÓNICO
+      ══════════════════════════════════════════════════════════════════════════════════════
+
+      ESTADO: **INICIAL**. Describe la construcción cerrada del ciclo 1 (S1+S2+S3 mergeados).
+      Se **SELLA** cuando termine el gate de pruebas del usuario (⭐⭐). El sello NO congela:
+      todo sprint que cambie features actualiza este archivo y `docs/brochure-export.json`
+      en su MISMO PR (regla 14 del CLAUDE.md).
+
+      DOBLE VIDA: este archivo se abre con doble clic SIN internet, y la ruta pública
+      `/conoce` sirve esta MISMA copia (`scripts/copiar-brochure.mjs` la copia a `public/`).
+
+      GUION APROBADO: `sprints/ENTREGA-brochure-storyboard.md` — 8 escenas, MOTION_INTENSITY
+      "Media", clímax en E07. Ni una línea de este HTML se escribió antes de esa aprobación
+      (regla cero del molde v2).
+
+      ─────────────────────── REGLAS NO NEGOCIABLES (verificadas por e2e + Lighthouse) ────────
+      1. AUTOCONTENIDO: cero CDNs, cero fetch, cero dependencias. Todo va inline.
+      2. Solo `transform` / `opacity`, con TRES excepciones declaradas y comentadas en su sitio:
+         · `grid-template-rows` — apertura de tarjeta (un disparo por interacción).
+         · `stroke-dashoffset`  — "dibujar" el sello y los iconos de trazo (SVG aria-hidden).
+         · `filter: blur`       — solo el "enfocar" de apertura, jamás ligado a scroll.
+      3. LCP NACE PINTADO: el h1 se enfoca desde blur pero con opacidad 1 — nunca invisible.
+         En `:root` toda variable de motion se escribe en su POSE FINAL: si el JS no corre,
+         la pieza ya está en su estado correcto.
+      4. `prefers-reduced-motion` = experiencia COMPLETA (corte editorial por escena), jamás
+         una versión degradada. Ninguna escena pierde contenido.
+      5. Lo CERRADO sale del árbol de accesibilidad (`visibility`, no solo `grid-rows: 0fr`).
+      6. CERO datos reales: los mockups usan un inmueble sintético, sin nombre, sin WhatsApp,
+         sin matrícula (Ley 1581 · regla de dominio 2).
+      7. CERO enlaces de producción/preview (regla 15 del CLAUDE.md — repo público).
+      8. CIFRAS SOLO CITABLES: comisión 3% (≈$12M en $400M) · 7–7,5 meses · CTL $23.000.
+         PROHIBIDAS las de evidencia débil ("32% más rápido", "3× contactos", "+118% vistas").
+      9. El conteo del pie (13) cuadra 1:1 con las secciones de `docs/MANUAL-DE-USO.md`.
+
+      TIPOGRAFÍA: el molde cae a serif del sistema para autocontenerse, pero Innmobiliaria es
+      Poppins — NO serif. Sin webfont embebida se usa la pila sans del sistema con la misma
+      jerarquía (extrabold + tracking cerrado). Nunca Georgia/serif.
+      ══════════════════════════════════════════════════════════════════════════════════════
+    -->
+
+    <style>
+      /* ═══ TOKENS — copiados del design-system.md de la app (src/app/globals.css) ═══ */
+      :root {
+        --ink: #191a1d;
+        --gray: #424854;
+        --mute: #6b7280;
+        --purple: #7b5dd6;
+        --purple-600: #6b4bd0;
+        --purple-soft: #bda1f2;
+        --purple-200: #cdbaf2;
+        --purple-tint: #ebe9fc;
+        --lilac: #e8dcff;
+        --cream: #fbf9f6;
+        --mint: #e6f4ee;
+        --sky: #e7eefb;
+        --amarillo: #ffd23f; /* blob del hero — uso único, igual que en la app */
+        --blanco: #fff;
+
+        --sombra-card: 0 18px 40px -18px rgba(25, 26, 29, 0.18);
+        --sombra-soft: 0 10px 30px -12px rgba(25, 26, 29, 0.12);
+
+        /* Radios amplios — la personalidad de la app */
+        --radio: 1rem;
+        --radio-xl: 2rem;
+
+        --sans:
+          ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+          Arial, sans-serif;
+
+        /* ═══ MOTION — dial "Media" (cine sereno). Derivado, sin números mágicos ═══ */
+        --ease-asentar: cubic-bezier(0.16, 1, 0.3, 1); /* decelera largo, sin rebote */
+        --ease-suave: cubic-bezier(0.4, 0, 0.2, 1);
+        --dur-media: 220ms;
+        --dur-lenta: 380ms;
+        --dur-escena: 600ms;
+        --dur-apertura: 1100ms;
+
+        /* ═══ POSE FINAL (regla 3): si el JS no corre, esto ya es el estado correcto ═══ */
+        --e02-progreso: 1;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+        overflow-anchor: none; /* §7: el auto-disclosure repone el scroll a mano */
+      }
+
+      body {
+        margin: 0;
+        background: var(--blanco);
+        color: var(--gray);
+        font-family: var(--sans);
+        font-size: 1.0625rem;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: var(--ink);
+        font-weight: 800;
+        letter-spacing: -0.022em;
+        line-height: 1.08;
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      a {
+        color: var(--purple-600);
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.9em;
+        background: var(--purple-tint);
+        color: var(--purple-600);
+        padding: 0.1em 0.4em;
+        border-radius: 0.4em;
+      }
+
+      :focus-visible {
+        outline: 3px solid var(--purple);
+        outline-offset: 3px;
+        border-radius: 0.5rem;
+      }
+
+      .envoltura {
+        width: min(100% - 2.5rem, 61rem);
+        margin-inline: auto;
+      }
+
+      /* Clases de marca — idénticas a la app */
+      .pill {
+        display: inline-block;
+        background: var(--purple);
+        color: #fff;
+        border-radius: 9999px;
+        padding: 0.05em 0.5em;
+        line-height: 1.05;
+        transform: rotate(-1.5deg);
+      }
+
+      .doodle {
+        position: relative;
+        white-space: nowrap;
+      }
+      .doodle::after {
+        content: "";
+        position: absolute;
+        left: -2%;
+        right: -2%;
+        bottom: -0.12em;
+        height: 0.38em;
+        background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M2 9 C40 3 80 13 120 7 C150 3 180 9 198 5' stroke='%237b5dd6' stroke-width='3.5' fill='none' stroke-linecap='round'/></svg>")
+          no-repeat center/100% 100%;
+      }
+
+      .banda-pastel {
+        background: linear-gradient(110deg, var(--mint) 0%, #eef1fb 42%, var(--lilac) 100%);
+      }
+      .seccion-suave {
+        background: linear-gradient(180deg, #fff 0%, var(--cream) 100%);
+      }
+
+      /* ══════════════════ E01 · APERTURA ══════════════════ */
+      .portada {
+        position: relative;
+        min-height: 88svh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem 0 3rem;
+        overflow: hidden;
+      }
+
+      .blob {
+        position: absolute;
+        z-index: 0;
+        width: 26rem;
+        height: 26rem;
+        border-radius: 50%;
+        background: var(--amarillo);
+        opacity: 0.16;
+        top: -8rem;
+        right: -7rem;
+        filter: blur(2px);
+      }
+      .blob-2 {
+        background: var(--purple-soft);
+        opacity: 0.22;
+        width: 18rem;
+        height: 18rem;
+        top: auto;
+        bottom: -6rem;
+        right: auto;
+        left: -6rem;
+      }
+
+      .portada > .envoltura {
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--purple-600);
+      }
+
+      .portada h1 {
+        margin-top: 1.25rem;
+        font-size: clamp(2.6rem, 9vw, 5rem);
+        max-width: 15ch;
+      }
+
+      /* Cascada blur→enfoque. EXCEPCIÓN DECLARADA #3: `filter: blur`, solo apertura, jamás
+         ligado a scroll. La opacidad SIEMPRE es 1 — el LCP nace pintado (regla 3). */
+      .portada h1 .palabra {
+        display: inline-block;
+        opacity: 1;
+      }
+
+      .portada .apoyo {
+        margin-top: 1.5rem;
+        font-size: clamp(1.0625rem, 2.4vw, 1.3rem);
+        max-width: 46ch;
+        color: var(--gray);
+      }
+
+      .baja {
+        margin-top: 3rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--mute);
+      }
+      .baja svg {
+        width: 1.1rem;
+        height: 1.1rem;
+      }
+
+      .estado-sello {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding: 0.4rem 0.9rem;
+        border: 1px solid var(--purple-200);
+        border-radius: 9999px;
+        background: var(--purple-tint);
+        color: var(--purple-600);
+        font-size: 0.8125rem;
+        font-weight: 600;
+      }
+
+      /* ══════════════════ Secciones y cabeceras de escena ══════════════════ */
+      .escena {
+        padding: clamp(3.5rem, 9vw, 6rem) 0;
+      }
+
+      .cabecera-escena {
+        margin-bottom: 2.75rem;
+      }
+      .num {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--purple-600);
+        display: block;
+        margin-bottom: 0.75rem;
+      }
+      .cabecera-escena h2 {
+        font-size: clamp(1.9rem, 5vw, 2.9rem);
+        max-width: 20ch;
+      }
+      .cabecera-escena p {
+        margin-top: 1rem;
+        max-width: 54ch;
+      }
+
+      /* ══════════════════ E02 · DE DUEÑO SOLO A FUNDADOR (único G1) ══════════════════ */
+      .viaje {
+        display: grid;
+        gap: clamp(2rem, 5vw, 4rem);
+        align-items: center;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 56rem) {
+        .viaje {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .viaje-texto h2 {
+        font-size: clamp(1.9rem, 5vw, 2.9rem);
+      }
+      .viaje-texto p {
+        margin-top: 1.25rem;
+        max-width: 42ch;
+      }
+
+      .ficha-demo {
+        background: var(--blanco);
+        border: 1px solid var(--purple-200);
+        border-radius: var(--radio-xl);
+        box-shadow: var(--sombra-card);
+        padding: 1.25rem;
+        max-width: 23rem;
+        margin-inline: auto;
+        width: 100%;
+      }
+
+      .ficha-foto {
+        border-radius: var(--radio);
+        aspect-ratio: 4 / 3;
+        background: linear-gradient(140deg, var(--sky), var(--lilac));
+        display: grid;
+        place-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .ficha-foto svg {
+        width: 46%;
+        height: auto;
+        opacity: 0.55;
+      }
+
+      /* Las capas del viaje se ENSAMBLAN con el progreso (variable escrita por el rAF): la
+         ficha se arma subiendo sus piezas a su sitio. POSE FINAL en :root = 1 → sin JS ya
+         está completa.
+
+         A11y (hallazgo de la pasada de axe): aquí NO se desvanece texto. Un texto a media
+         opacidad es texto por debajo del contraste AA — axe cazó 1.32:1 en los chips cuando
+         la escena aún no había progresado. El relato («se completa al bajar») lo carga el
+         MOVIMIENTO, que no le quita legibilidad a nadie. */
+      .capa {
+        --avance: clamp(0, (var(--e02-progreso) - var(--desde, 0)) * 4, 1);
+        transform: translateY(calc((1 - var(--avance)) * 26px));
+      }
+      /* El sello es el pago de la escena: llega asentándose, nunca lavado. */
+      .capa.ficha-sello {
+        transform: translateY(calc((1 - var(--avance)) * 26px))
+          scale(calc(0.86 + var(--avance) * 0.14));
+        transform-origin: left center;
+      }
+
+      .ficha-datos {
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .chip {
+        background: var(--purple-tint);
+        color: var(--purple-600);
+        border-radius: 9999px;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+      }
+      .ficha-precio {
+        margin-top: 0.9rem;
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .ficha-zona {
+        font-size: 0.9375rem;
+        color: var(--mute);
+      }
+
+      .ficha-sello {
+        margin-top: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--mint);
+        color: #1c6b4a;
+        border-radius: 9999px;
+        padding: 0.4rem 0.85rem;
+        font-size: 0.8125rem;
+        font-weight: 700;
+      }
+      .ficha-sello svg {
+        width: 1.05rem;
+        height: 1.05rem;
+      }
+
+      .pasos-viaje {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        padding: 0;
+        list-style: none;
+      }
+      .pasos-viaje li {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        font-size: 0.9375rem;
+      }
+      .pasos-viaje .marca {
+        flex: none;
+        width: 1.6rem;
+        height: 1.6rem;
+        border-radius: 9999px;
+        background: var(--purple);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 0.8125rem;
+        font-weight: 700;
+      }
+
+      /* ══════════════════ E03/E04 · LAS 4 PUERTAS + disclosure §7 ══════════════════ */
+      .tarjetas {
+        display: grid;
+        gap: 1.1rem;
+      }
+
+      .tarjeta {
+        border: 1px solid var(--purple-200);
+        border-radius: var(--radio-xl);
+        background: var(--blanco);
+        box-shadow: var(--sombra-soft);
+        overflow: hidden;
+        position: relative;
+      }
+      .tarjeta[data-estrella] {
+        border-color: var(--purple);
+      }
+
+      .tarjeta-boton {
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+        /* `flex-start`, no `center`: con títulos de dos líneas el icono centrado quedaba
+           junto al gancho en vez de junto al título (visto en la pasada de capturas). */
+        align-items: flex-start;
+        text-align: left;
+        background: none;
+        border: 0;
+        padding: 1.5rem;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+      }
+
+      .tarjeta-icono {
+        flex: none;
+        width: 2.9rem;
+        height: 2.9rem;
+        border-radius: var(--radio);
+        background: var(--purple-tint);
+        display: grid;
+        place-items: center;
+      }
+      .tarjeta-icono svg {
+        width: 1.55rem;
+        height: 1.55rem;
+      }
+
+      .tarjeta-txt {
+        flex: 1;
+        min-width: 0;
+      }
+      .tarjeta-txt h3 {
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .estrellita {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--purple-600);
+        background: var(--purple-tint);
+        border-radius: 9999px;
+        padding: 0.2rem 0.6rem;
+        letter-spacing: 0.06em;
+      }
+      .tarjeta-txt .gancho {
+        margin-top: 0.35rem;
+        font-size: 0.9375rem;
+        /* El botón vive dentro de un h3 (patrón a11y correcto): hay que devolver el peso
+           normal al texto de apoyo, que si no hereda el 800 del encabezado. */
+        font-weight: 500;
+        line-height: 1.45;
+        color: var(--mute);
+      }
+
+      .chevron {
+        flex: none;
+        width: 1.4rem;
+        height: 1.4rem;
+        margin-top: 0.6rem; /* alinea con la primera línea del título, no con el bloque */
+        color: var(--purple-600);
+        transition: transform var(--dur-media) var(--ease-suave);
+      }
+      .tarjeta[data-abierta="true"] .chevron {
+        transform: rotate(180deg);
+      }
+
+      /* EXCEPCIÓN DECLARADA #1: `grid-template-rows` 0fr→1fr para la apertura. Un disparo por
+         interacción (o por el auto-disclosure §7), JAMÁS ligado al scroll cuadro a cuadro.
+         `visibility` saca lo cerrado del ÁRBOL DE ACCESIBILIDAD (regla 5): sin esto el lector
+         de pantalla recita el detalle mientras aria-expanded dice "cerrado". */
+      .detalle {
+        display: grid;
+        grid-template-rows: 0fr;
+        visibility: hidden;
+        transition:
+          grid-template-rows var(--dur-lenta) var(--ease-asentar),
+          visibility var(--dur-lenta) step-end;
+      }
+      .tarjeta[data-abierta="true"] .detalle {
+        grid-template-rows: 1fr;
+        visibility: visible;
+        transition:
+          grid-template-rows var(--dur-lenta) var(--ease-asentar),
+          visibility 0s;
+      }
+      .detalle-interior {
+        overflow: hidden;
+      }
+      .detalle-cuerpo {
+        padding: 0 1.5rem 1.5rem;
+        border-top: 1px solid var(--purple-200);
+        margin-top: 0.25rem;
+        padding-top: 1.25rem;
+      }
+
+      .feature + .feature {
+        margin-top: 1.4rem;
+      }
+      .feature h4 {
+        font-size: 1rem;
+      }
+      .feature .como {
+        margin-top: 0.4rem;
+        font-size: 0.9375rem;
+      }
+      .feature .tip {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--mute);
+        border-left: 3px solid var(--purple-200);
+        padding-left: 0.75rem;
+      }
+
+      /* ══════════════════ E05 · ASÍ SE VE (respiro) ══════════════════ */
+      .muestras {
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 46rem) {
+        .muestras {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      figure.muestra {
+        margin: 0;
+        background: var(--blanco);
+        border: 1px solid var(--purple-200);
+        border-radius: var(--radio-xl);
+        padding: 1.1rem;
+        box-shadow: var(--sombra-soft);
+      }
+      figure.muestra svg {
+        width: 100%;
+        height: auto;
+        border-radius: var(--radio);
+        display: block;
+      }
+      figure.muestra figcaption {
+        margin-top: 0.85rem;
+        font-size: 0.9375rem;
+        color: var(--gray);
+      }
+      figure.muestra figcaption b {
+        color: var(--ink);
+      }
+
+      /* ══════════════════ E06 · EL GUANTE BLANCO ══════════════════ */
+      .guias {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+      @media (min-width: 46rem) {
+        .guias {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .guia {
+        display: flex;
+        gap: 0.9rem;
+        align-items: flex-start;
+        background: var(--blanco);
+        border: 1px solid var(--purple-200);
+        border-radius: var(--radio-xl);
+        padding: 1.25rem;
+      }
+      .guia svg {
+        flex: none;
+        width: 2rem;
+        height: 2rem;
+        color: var(--purple);
+      }
+      .guia h3 {
+        font-size: 1rem;
+      }
+      .guia p {
+        margin-top: 0.3rem;
+        font-size: 0.9rem;
+        color: var(--mute);
+      }
+
+      /* ══════════════════ E07 · CLÍMAX — paleta propia ══════════════════ */
+      .climax {
+        background: var(--ink);
+        color: #d7dae0;
+        padding: clamp(4rem, 11vw, 7.5rem) 0;
+      }
+      .climax h2,
+      .climax h3 {
+        color: #fff;
+      }
+      .climax .num {
+        color: var(--purple-soft);
+      }
+      .climax .intro {
+        max-width: 50ch;
+        margin-top: 1.25rem;
+        font-size: clamp(1.0625rem, 2.4vw, 1.2rem);
+      }
+
+      .aparato {
+        margin: 2.75rem auto 0;
+        max-width: 22rem;
+      }
+      .aparato svg {
+        width: 100%;
+        height: auto;
+      }
+
+      .verdades {
+        margin-top: 3rem;
+        display: grid;
+        gap: 1.25rem;
+        padding: 0;
+        list-style: none;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 46rem) {
+        .verdades {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .verdad {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: var(--radio-xl);
+        padding: 1.4rem;
+        background: rgba(255, 255, 255, 0.035);
+      }
+      .verdad h3 {
+        font-size: 1.05rem;
+      }
+      .verdad p {
+        margin-top: 0.5rem;
+        font-size: 0.9375rem;
+        color: #b9bec7;
+      }
+
+      /* ══════════════════ E07b · LO FINO ══════════════════ */
+      details.fino {
+        border-top: 1px solid var(--purple-200);
+        padding: 1.1rem 0;
+      }
+      details.fino summary {
+        cursor: pointer;
+        font-weight: 700;
+        color: var(--ink);
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+      }
+      details.fino summary::-webkit-details-marker {
+        display: none;
+      }
+      details.fino summary::after {
+        content: "+";
+        color: var(--purple-600);
+        font-size: 1.3rem;
+        line-height: 1;
+      }
+      details.fino[open] summary::after {
+        content: "–";
+      }
+      details.fino .cuerpo-fino {
+        padding-top: 0.9rem;
+        font-size: 0.9375rem;
+      }
+      .mapa {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.6rem;
+      }
+      .mapa li {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: baseline;
+      }
+      .lista-fina {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      /* ══════════════════ E08 · EL CIERRE ══════════════════ */
+      .cierre {
+        background: var(--cream);
+        padding: clamp(3.5rem, 9vw, 6rem) 0 0;
+      }
+      .sello-conteo {
+        text-align: center;
+        max-width: 40ch;
+        margin-inline: auto;
+      }
+      .conteo {
+        display: block;
+        font-size: clamp(2.6rem, 8vw, 4rem);
+        font-weight: 800;
+        color: var(--ink);
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+      }
+      .sello-conteo p {
+        margin-top: 0.85rem;
+      }
+
+      .historial-doc {
+        margin-top: 3.5rem;
+        border-top: 1px solid var(--purple-200);
+        padding-top: 1.25rem;
+      }
+      .historial-doc table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        margin-top: 0.75rem;
+      }
+      .historial-doc th,
+      .historial-doc td {
+        text-align: left;
+        padding: 0.5rem 0.6rem 0.5rem 0;
+        border-bottom: 1px solid var(--purple-200);
+        vertical-align: top;
+      }
+
+      .marquesina {
+        margin-top: 3.5rem;
+        overflow: hidden;
+        border-top: 1px solid var(--purple-200);
+        padding: 1.1rem 0;
+        white-space: nowrap;
+      }
+      .marquesina span {
+        display: inline-block;
+        font-weight: 700;
+        color: var(--purple-600);
+        font-size: 0.9375rem;
+      }
+
+      .pie-legal {
+        text-align: center;
+        font-size: 0.8125rem;
+        color: var(--mute);
+        padding: 1.5rem 0 2.5rem;
+      }
+
+      /* ══════════════════════════════════════════════════════════════════════════════
+         COREOGRAFÍA — vive ENTERA dentro de `no-preference`. Bajo `reduce` esta capa
+         simplemente no existe y queda la POSE FINAL del HTML (regla 4).
+         ══════════════════════════════════════════════════════════════════════════════ */
+      @media (prefers-reduced-motion: no-preference) {
+        /* E01 · cascada blur→enfoque. Opacidad SIEMPRE 1 (LCP pintado). */
+        .portada h1 .palabra {
+          filter: blur(7px);
+          animation: enfocar var(--dur-apertura) var(--ease-asentar) forwards;
+          animation-delay: calc(var(--i) * 85ms);
+        }
+        @keyframes enfocar {
+          to {
+            filter: blur(0);
+          }
+        }
+
+        .baja svg {
+          animation: latir 2.4s var(--ease-suave) infinite;
+        }
+        @keyframes latir {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(4px);
+          }
+        }
+
+        /* Alzar y asentar — la entrada de bloques. Stagger jerárquico, nunca uniforme. */
+        .alza {
+          opacity: 0;
+          transform: translateY(20px);
+          transition:
+            opacity var(--dur-escena) var(--ease-asentar),
+            transform var(--dur-escena) var(--ease-asentar);
+          transition-delay: var(--retraso, 0ms);
+        }
+        .alza.visto {
+          opacity: 1;
+          transform: none;
+        }
+
+        /* Coreografía interior: las features alzan en fila al abrir la tarjeta. */
+        .tarjeta[data-abierta="true"] .feature {
+          animation: alzar-feature var(--dur-lenta) var(--ease-asentar) backwards;
+          animation-delay: calc(var(--j) * 45ms);
+        }
+        @keyframes alzar-feature {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+        }
+
+        /* Apertura anunciada: pulso de color en el borde. No mueve nada (§7). */
+        .tarjeta[data-abierta="true"] {
+          animation: pulso-borde 0.9s var(--ease-suave);
+        }
+        @keyframes pulso-borde {
+          0% {
+            border-color: var(--purple-200);
+          }
+          35% {
+            border-color: var(--purple);
+          }
+          100% {
+            border-color: var(--purple-200);
+          }
+        }
+
+        .tarjeta-boton:active {
+          transform: scale(0.995);
+        }
+
+        /* EXCEPCIÓN DECLARADA #2: `stroke-dashoffset` para "dibujar" el trazo. Un disparo. */
+        .dibuja path,
+        .dibuja circle,
+        .dibuja polyline {
+          stroke-dasharray: var(--largo, 120);
+          stroke-dashoffset: var(--largo, 120);
+        }
+        .dibuja.visto path,
+        .dibuja.visto circle,
+        .dibuja.visto polyline {
+          animation: dibujar 1.1s var(--ease-asentar) forwards;
+          animation-delay: calc(var(--k, 0) * 120ms);
+        }
+        @keyframes dibujar {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        /* E07 · el ÚNICO loop ambiental de la pieza (se pausa fuera de viewport y con la
+           pestaña oculta — lo gobierna el JS con `data-quieto`). */
+        .zombie {
+          animation: apagarse 3.4s var(--ease-suave) infinite;
+        }
+        .zombie-2 {
+          animation-delay: 0.5s;
+        }
+        @keyframes apagarse {
+          0%,
+          22% {
+            opacity: 0.5;
+          }
+          46%,
+          100% {
+            opacity: 0.13;
+          }
+        }
+        .aparato[data-quieto="true"] .zombie {
+          animation-play-state: paused;
+        }
+
+        .marquesina span {
+          animation: correr 26s linear infinite;
+        }
+        @keyframes correr {
+          to {
+            transform: translateX(-50%);
+          }
+        }
+      }
+
+      /* ══════ Corte editorial bajo reduced-motion: nada se mueve, NADA se pierde ══════ */
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        /* La ficha del viaje ya está completa y asentada (el rAF ni arranca). */
+        .capa,
+        .capa.ficha-sello {
+          transform: none;
+        }
+      }
+
+      @media print {
+        .detalle {
+          grid-template-rows: 1fr;
+          visibility: visible;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ════════════════════ E01 · APERTURA ════════════════════ -->
+    <header class="portada seccion-suave">
+      <div class="blob" aria-hidden="true"></div>
+      <div class="blob blob-2" aria-hidden="true"></div>
+      <div class="envoltura">
+        <p class="eyebrow">Innmobiliaria</p>
+        <h1 aria-label="Vende tu casa directo. Sin comisión.">
+          <span class="palabra" style="--i: 0" aria-hidden="true">Vende</span>
+          <span class="palabra" style="--i: 1" aria-hidden="true">tu</span>
+          <span class="palabra" style="--i: 2" aria-hidden="true">casa</span>
+          <span class="palabra" style="--i: 3" aria-hidden="true">directo.</span>
+          <span class="palabra" style="--i: 4" aria-hidden="true"
+            ><span class="pill">Sin comisión.</span></span
+          >
+        </h1>
+        <p class="apoyo">
+          El marketplace del dueño que vende solo, no de la inmobiliaria. Publica hoy, y que tu
+          inmueble te espere listo el día que abramos las puertas a los compradores.
+        </p>
+        <p class="estado-sello">
+          <span aria-hidden="true">●</span> Brochure inicial — se sella cuando termine el cierre de
+          pruebas
+        </p>
+        <p class="baja">
+          Baja despacio
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+            <path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </p>
+      </div>
+    </header>
+
+    <!-- ════════════════════ E02 · DE DUEÑO SOLO A FUNDADOR (único G1) ════════════════════ -->
+    <section class="escena" id="viaje" aria-labelledby="viaje-t">
+      <div class="envoltura viaje">
+        <div class="viaje-texto">
+          <h2 id="viaje-t">
+            No te pedimos un correo.<br />Te pedimos <span class="doodle">tu casa</span>.
+          </h2>
+          <p>
+            La campaña no arma una lista de espera muerta: <b>publicar es unirte</b>. En menos de
+            tres minutos tu inmueble queda montado, y desde ahí solo crece — le pones fotos, ganas
+            el sello, y queda esperando el día de la apertura.
+          </p>
+          <ol class="pasos-viaje">
+            <li><span class="marca">1</span> Tu nombre, tu WhatsApp y tu ciudad. Nada más.</li>
+            <li><span class="marca">2</span> Los datos del inmueble, sin papeles ni fotos.</li>
+            <li><span class="marca">3</span> Autorizas el tratamiento de datos y ya estás dentro.</li>
+            <li><span class="marca">4</span> Con tu enlace privado sumas fotos, descripción y sello ⭐.</li>
+          </ol>
+        </div>
+
+        <div class="ficha-demo" role="img" aria-label="Ejemplo de una ficha de inmueble ya completa, con foto de portada, datos, precio y el sello de propietario verificado. Datos de demostración.">
+          <div class="ficha-foto capa" style="--desde: 0.15">
+            <svg viewBox="0 0 64 64" fill="none" stroke="#7b5dd6" stroke-width="2.2" aria-hidden="true">
+              <path d="M8 28 32 10l24 18" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M14 26v24h36V26" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M26 50V36h12v14" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="ficha-datos capa" style="--desde: 0.03">
+            <span class="chip">Apartamento</span>
+            <span class="chip">3 hab</span>
+            <span class="chip">78 m²</span>
+          </div>
+          <p class="ficha-precio capa" style="--desde: 0.03">$ 420.000.000</p>
+          <p class="ficha-zona capa" style="--desde: 0.03">Chapinero · Bogotá</p>
+          <p class="ficha-sello capa" style="--desde: 0.40">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="m4 12 5 5L20 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Propietario verificado
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ E03 / E04 · LAS 4 PUERTAS ════════════════════ -->
+    <section class="escena seccion-suave" id="que-hace" aria-labelledby="que-hace-t">
+      <div class="envoltura">
+        <div class="cabecera-escena">
+          <span class="num">01 · Qué hace</span>
+          <h2 id="que-hace-t">Todo lo que hace, en cuatro puertas</h2>
+          <p>
+            Cada puerta se abre sola cuando llegas a ella, y la puedes abrir o cerrar tú cuando
+            quieras. Aquí no se escogieron las bonitas: está todo lo que la app hace hoy.
+          </p>
+        </div>
+
+        <div class="tarjetas">
+          <!-- ── Puerta 1 · LA CAMPAÑA (estrella) ── -->
+          <article class="tarjeta alza" data-abierta="false" data-estrella style="--retraso: 0ms">
+            <h3>
+              <button
+                class="tarjeta-boton"
+                type="button"
+                aria-expanded="false"
+                aria-controls="d1"
+              >
+                <span class="tarjeta-icono" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#7b5dd6" stroke-width="2" >
+                    <path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1Z" stroke-linejoin="round" />
+                    <path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <span class="tarjeta-txt">
+                  <span style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap">
+                    <span style="font-size: 1.2rem; font-weight: 800; color: var(--ink)">La campaña</span>
+                    <span class="estrellita">La estrella</span>
+                  </span>
+                  <span class="gancho" style="display: block">Cupos reales, invitaciones y anuncios que siguen vivos.</span>
+                </span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </h3>
+            <div class="detalle" id="d1" role="region" aria-label="La campaña — detalle">
+              <div class="detalle-interior">
+                <div class="detalle-cuerpo">
+                  <div class="feature" style="--j: 0">
+                    <h4>Cupos de fundador por zona</h4>
+                    <p class="como">
+                      En el inicio ves cuántos cupos quedan en tu localidad — por ejemplo, «quedan 7
+                      cupos de fundador en Chapinero». Tocas <b>Asegura tu cupo</b> y vas al registro.
+                    </p>
+                    <p class="tip">
+                      Los números son reales o no aparecen: la banda solo se muestra donde el equipo
+                      fijó un cupo. Aquí no se inventan contadores ni urgencias.
+                    </p>
+                  </div>
+                  <div class="feature" style="--j: 1">
+                    <h4>Invita a otro dueño</h4>
+                    <p class="como">
+                      Tienes un enlace propio para invitar. En la confirmación o en tu anuncio tocas
+                      <b>Invitar por WhatsApp</b> y se abre el chat con el mensaje listo. Quien
+                      publique con tu enlace queda como invitado tuyo y ves cuántos van.
+                    </p>
+                    <p class="tip">El conteo es de invitados reales. Nunca se muestra quién es la otra persona.</p>
+                  </div>
+                  <div class="feature" style="--j: 2">
+                    <h4>Tu anuncio siempre vivo</h4>
+                    <p class="como">
+                      Cada anuncio tiene vigencia de 60 días. Desde tu anuncio (o desde
+                      <code>/renovar</code>) tocas <b>Renovar 60 días</b> y sigue publicado.
+                    </p>
+                    <p class="tip">Si se vence deja de verse en público hasta que lo renueves — no se borra.</p>
+                  </div>
+                  <div class="feature" style="--j: 3">
+                    <h4>Paquete de fundador</h4>
+                    <p class="como">
+                      Cuatro guías gratis: fotográfica, checklist legal y notarial, «saca tu CTL en
+                      10 minutos» y cómo fijar tu precio. Se abren en una pestaña y las guardas.
+                    </p>
+                    <p class="tip">Son guías informativas con sus fuentes; no reemplazan a un abogado ni a un notario.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ── Puerta 2 · PUBLICAR SIN FRICCIÓN ── -->
+          <article class="tarjeta alza" data-abierta="false" style="--retraso: 90ms">
+            <h3>
+              <button class="tarjeta-boton" type="button" aria-expanded="false" aria-controls="d2">
+                <span class="tarjeta-icono" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#7b5dd6" stroke-width="2">
+                    <path d="M4 7h16M4 12h10M4 17h7" stroke-linecap="round" />
+                    <path d="m17 15 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span class="tarjeta-txt">
+                  <span style="font-size: 1.2rem; font-weight: 800; color: var(--ink); display: block">Publicar sin fricción</span>
+                  <span class="gancho" style="display: block">Tres pasos cortos. Sin cuenta, sin papeles, sin fotos.</span>
+                </span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </h3>
+            <div class="detalle" id="d2" role="region" aria-label="Publicar sin fricción — detalle">
+              <div class="detalle-interior">
+                <div class="detalle-cuerpo">
+                  <div class="feature" style="--j: 0">
+                    <h4>La página de inicio</h4>
+                    <p class="como">
+                      Te cuenta la propuesta: vender sin comisión, los dolores reales del mercado
+                      (la comisión del 3% son unos $12 millones en una vivienda de $400 millones; la
+                      venta toma entre 7 y 7,5 meses en promedio), cómo funciona y las preguntas
+                      frecuentes.
+                    </p>
+                    <p class="tip">Solo Bogotá en esta etapa, y solo en español.</p>
+                  </div>
+                  <div class="feature" style="--j: 1">
+                    <h4>Publicar = registro, en 3 pasos</h4>
+                    <p class="como">
+                      <b>1)</b> Tu nombre, tu WhatsApp y tu ciudad. <b>2)</b> Venta o arriendo, tipo,
+                      localidad, barrio, área, habitaciones y precio. <b>3)</b> Revisas, autorizas el
+                      tratamiento de datos y publicas. El correo es opcional.
+                    </p>
+                    <p class="tip">
+                      Si cierras a mitad, al volver retoma donde ibas. Sin la casilla de autorización
+                      no se puede enviar.
+                    </p>
+                  </div>
+                  <div class="feature" style="--j: 2">
+                    <h4>Confirmación y tu enlace privado</h4>
+                    <p class="como">
+                      Al terminar te muestra qué sigue y te entrega tu enlace privado
+                      <b>«mi anuncio»</b>. Lo copias con un botón y lo guardas: es solo tuyo.
+                    </p>
+                    <p class="tip">Ese enlace es la llave de tu anuncio. Sin él no se puede editar.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ── Puerta 3 · TU ANUNCIO, COMPLETO ── -->
+          <article class="tarjeta alza" data-abierta="false" style="--retraso: 160ms">
+            <h3>
+              <button class="tarjeta-boton" type="button" aria-expanded="false" aria-controls="d3">
+                <span class="tarjeta-icono" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#7b5dd6" stroke-width="2">
+                    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+                    <circle cx="8.5" cy="10" r="1.6" />
+                    <path d="m4 17 5-4 4 3 3-2 4 3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span class="tarjeta-txt">
+                  <span style="font-size: 1.2rem; font-weight: 800; color: var(--ink); display: block">Tu anuncio, completo</span>
+                  <span class="gancho" style="display: block">Fotos que pesan poco, y una ficha lista para WhatsApp.</span>
+                </span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </h3>
+            <div class="detalle" id="d3" role="region" aria-label="Tu anuncio, completo — detalle">
+              <div class="detalle-interior">
+                <div class="detalle-cuerpo">
+                  <div class="feature" style="--j: 0">
+                    <h4>Fotos, descripción y medidor</h4>
+                    <p class="como">
+                      Con tu enlace privado subes hasta 12 fotos desde el celular — cada una se
+                      comprime sola —, eliges la portada, escribes la descripción y activas (o no) que
+                      tu WhatsApp aparezca. Una barra te dice qué tan completo va y sube en vivo.
+                    </p>
+                    <p class="tip">Una foto demasiado pequeña se rechaza con un aviso claro.</p>
+                  </div>
+                  <div class="feature" style="--j: 1">
+                    <h4>Ficha pública compartible</h4>
+                    <p class="como">
+                      Tu inmueble tiene su propia página (<code>/i/…</code>) para mandar por WhatsApp:
+                      al pegar el enlace se ve la vista previa con la foto de portada, el barrio y el
+                      precio.
+                    </p>
+                    <p class="tip">
+                      En esta etapa las fichas no salen en buscadores. Tu correo y tu matrícula nunca
+                      son públicos.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ── Puerta 4 · CONFIANZA Y QUIÉN OPERA ── -->
+          <article class="tarjeta alza" data-abierta="false" style="--retraso: 230ms">
+            <h3>
+              <button class="tarjeta-boton" type="button" aria-expanded="false" aria-controls="d4">
+                <span class="tarjeta-icono" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#7b5dd6" stroke-width="2">
+                    <path d="M12 3 5 6v6c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6l-7-3Z" stroke-linejoin="round" />
+                    <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span class="tarjeta-txt">
+                  <span style="font-size: 1.2rem; font-weight: 800; color: var(--ink); display: block">Confianza y quién opera</span>
+                  <span class="gancho" style="display: block">Tus datos, la verificación, y el tablero del equipo.</span>
+                </span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </h3>
+            <div class="detalle" id="d4" role="region" aria-label="Confianza y quién opera — detalle">
+              <div class="detalle-interior">
+                <div class="detalle-cuerpo">
+                  <div class="feature" style="--j: 0">
+                    <h4>Política de privacidad (Ley 1581)</h4>
+                    <p class="como">
+                      Explica quién trata tus datos, para qué y cuáles son tus derechos como titular.
+                      Está enlazada en el paso 3 del registro y en el pie de página.
+                    </p>
+                  </div>
+                  <div class="feature" style="--j: 1">
+                    <h4>Panel del operador</h4>
+                    <p class="como">
+                      El equipo entra con correo autorizado y contraseña, ve todos los registros con
+                      su nivel y fecha, marca el sello <b>Verificado ⭐</b> tras ver tu Certificado de
+                      Tradición y Libertad, y puede re-contactarte por WhatsApp.
+                    </p>
+                    <p class="tip">
+                      El CTL se <b>ve</b>, nunca se sube ni se guarda: solo quedan la matrícula y la
+                      fecha. La verificación la hace una persona.
+                    </p>
+                  </div>
+                  <div class="feature" style="--j: 2">
+                    <h4>Panel de campaña</h4>
+                    <p class="como">
+                      El embudo real —cuántos publicaron, cuántos tienen fotos, cuántos están
+                      verificados— y el envío de correos por lotes con tres plantillas, con su
+                      registro de lo enviado.
+                    </p>
+                    <p class="tip">Por tandas de máximo 300 al día; solo a quienes dejaron correo.</p>
+                  </div>
+                  <div class="feature" style="--j: 3">
+                    <h4>Zonas, cupos y densidad</h4>
+                    <p class="como">
+                      Ahí el equipo fija cuántos cupos hay por localidad — eso es lo que alimenta la
+                      banda del inicio — y ve la densidad por localidad, tipo y rango de precio.
+                    </p>
+                    <p class="tip">Sin cupo fijado no se muestra ningún contador en la página principal.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ E05 · ASÍ SE VE ════════════════════ -->
+    <section class="escena" id="asi-se-ve" aria-labelledby="asi-t">
+      <div class="envoltura">
+        <div class="cabecera-escena">
+          <span class="num">02 · Así se ve</span>
+          <h2 id="asi-t">Así se publica, de verdad</h2>
+          <p>Las pantallas reales de la app. Los datos son de demostración.</p>
+        </div>
+
+        <div class="muestras">
+          <figure class="muestra alza" style="--retraso: 0ms">
+            <svg viewBox="0 0 320 200" role="img" aria-label="Pantalla del registro en tres pasos con la barra de progreso en el paso dos.">
+              <rect width="320" height="200" rx="12" fill="#fbf9f6" />
+              <rect x="20" y="20" width="80" height="6" rx="3" fill="#7b5dd6" />
+              <rect x="104" y="20" width="80" height="6" rx="3" fill="#7b5dd6" />
+              <rect x="188" y="20" width="80" height="6" rx="3" fill="#cdbaf2" />
+              <rect x="20" y="44" width="130" height="9" rx="4.5" fill="#191a1d" />
+              <rect x="20" y="70" width="276" height="30" rx="8" fill="#fff" stroke="#cdbaf2" />
+              <rect x="30" y="81" width="70" height="8" rx="4" fill="#6b7280" />
+              <rect x="20" y="110" width="276" height="30" rx="8" fill="#fff" stroke="#cdbaf2" />
+              <rect x="30" y="121" width="94" height="8" rx="4" fill="#6b7280" />
+              <rect x="20" y="152" width="110" height="28" rx="14" fill="#7b5dd6" />
+              <rect x="42" y="162" width="66" height="8" rx="4" fill="#fff" />
+            </svg>
+            <figcaption><b>Publicar en 3 pasos.</b> Compromiso mínimo primero: el paso 1 pide tres cosas.</figcaption>
+          </figure>
+
+          <figure class="muestra alza" style="--retraso: 80ms">
+            <svg viewBox="0 0 320 200" role="img" aria-label="Medidor de anuncio completo al ochenta por ciento, con la lista de lo que falta.">
+              <rect width="320" height="200" rx="12" fill="#fbf9f6" />
+              <rect x="20" y="24" width="150" height="9" rx="4.5" fill="#191a1d" />
+              <rect x="20" y="48" width="276" height="14" rx="7" fill="#ebe9fc" />
+              <rect x="20" y="48" width="221" height="14" rx="7" fill="#7b5dd6" />
+              <rect x="20" y="76" width="60" height="8" rx="4" fill="#424854" />
+              <circle cx="26" cy="106" r="6" fill="#e6f4ee" stroke="#1c6b4a" stroke-width="2" />
+              <rect x="40" y="102" width="120" height="7" rx="3.5" fill="#6b7280" />
+              <circle cx="26" cy="128" r="6" fill="#e6f4ee" stroke="#1c6b4a" stroke-width="2" />
+              <rect x="40" y="124" width="150" height="7" rx="3.5" fill="#6b7280" />
+              <circle cx="26" cy="150" r="6" fill="#fff" stroke="#cdbaf2" stroke-width="2" />
+              <rect x="40" y="146" width="100" height="7" rx="3.5" fill="#cdbaf2" />
+            </svg>
+            <figcaption><b>El medidor.</b> Te dice cuánto llevas y exactamente qué falta.</figcaption>
+          </figure>
+
+          <figure class="muestra alza" style="--retraso: 160ms">
+            <svg viewBox="0 0 320 200" role="img" aria-label="Ficha pública del inmueble con foto de portada, precio, barrio y el sello de propietario verificado.">
+              <rect width="320" height="200" rx="12" fill="#fff" />
+              <rect x="16" y="16" width="288" height="96" rx="10" fill="#e7eefb" />
+              <path d="M120 88 160 56l40 32" stroke="#7b5dd6" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              <rect x="16" y="124" width="120" height="11" rx="5.5" fill="#191a1d" />
+              <rect x="16" y="145" width="80" height="8" rx="4" fill="#6b7280" />
+              <rect x="180" y="124" width="124" height="24" rx="12" fill="#e6f4ee" />
+              <path d="m194 136 5 5 9-9" stroke="#1c6b4a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              <rect x="214" y="132" width="76" height="7" rx="3.5" fill="#1c6b4a" />
+              <rect x="16" y="166" width="288" height="20" rx="10" fill="#ebe9fc" />
+            </svg>
+            <figcaption><b>Tu ficha compartible.</b> Lista para pegar en WhatsApp, con su vista previa.</figcaption>
+          </figure>
+
+          <figure class="muestra alza" style="--retraso: 240ms">
+            <svg viewBox="0 0 320 200" role="img" aria-label="Panel del operador con el embudo de la campaña: publicados, con fotos y verificados.">
+              <rect width="320" height="200" rx="12" fill="#fbf9f6" />
+              <rect x="20" y="20" width="110" height="9" rx="4.5" fill="#191a1d" />
+              <rect x="20" y="46" width="276" height="34" rx="8" fill="#7b5dd6" opacity="0.9" />
+              <rect x="34" y="59" width="88" height="8" rx="4" fill="#fff" />
+              <rect x="44" y="88" width="228" height="34" rx="8" fill="#7b5dd6" opacity="0.6" />
+              <rect x="58" y="101" width="76" height="8" rx="4" fill="#fff" />
+              <rect x="70" y="130" width="176" height="34" rx="8" fill="#7b5dd6" opacity="0.35" />
+              <rect x="84" y="143" width="70" height="8" rx="4" fill="#fff" />
+              <rect x="20" y="176" width="120" height="7" rx="3.5" fill="#6b7280" />
+            </svg>
+            <figcaption><b>El embudo del equipo.</b> Publicados, con fotos y verificados — cifras reales.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════ E06 · EL GUANTE BLANCO ════════════════════ -->
+    <section class="escena banda-pastel" id="paquete" aria-labelledby="paquete-t">
+      <div class="envoltura">
+        <div class="cabecera-escena">
+          <span class="num">03 · De regalo</span>
+          <h2 id="paquete-t">Lo que la inmobiliaria cobraba con su comisión</h2>
+          <p>Cuatro guías, gratis por ser fundador. Con sus fuentes citadas, sin cifras infladas.</p>
+        </div>
+
+        <ul class="guias">
+          <li class="guia alza" style="--retraso: 0ms">
+            <svg class="dibuja" style="--largo: 90; --k: 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="6" width="18" height="14" rx="2.5" />
+              <circle cx="12" cy="13" r="3.4" />
+            </svg>
+            <div>
+              <h3>Guía fotográfica</h3>
+              <p>Cómo fotografiar cada espacio con el celular que ya tienes.</p>
+            </div>
+          </li>
+          <li class="guia alza" style="--retraso: 70ms">
+            <svg class="dibuja" style="--largo: 90; --k: 1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M6 3h9l5 5v13H6z" stroke-linejoin="round" />
+              <path d="m9 13 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <div>
+              <h3>Checklist legal y notarial</h3>
+              <p>Del certificado a la escritura, con los costos reales y de dónde salen.</p>
+            </div>
+          </li>
+          <li class="guia alza" style="--retraso: 140ms">
+            <svg class="dibuja" style="--largo: 90; --k: 2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="8.5" />
+              <path d="M12 7.5V12l3 2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <div>
+              <h3>Saca tu CTL en 10 minutos</h3>
+              <p>El certificado cuesta $23.000 en línea. Es la llave del sello ⭐.</p>
+            </div>
+          </li>
+          <li class="guia alza" style="--retraso: 210ms">
+            <svg class="dibuja" style="--largo: 90; --k: 3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 19h16" stroke-linecap="round" />
+              <path d="M7 19v-7M12 19V6M17 19v-4" stroke-linecap="round" />
+            </svg>
+            <div>
+              <h3>Cómo fijar tu precio</h3>
+              <p>Con herramientas gratuitas y datos, no con corazonadas.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ════════════════════ E07 · CLÍMAX ════════════════════ -->
+    <section class="climax" id="verdad" aria-labelledby="verdad-t">
+      <div class="envoltura">
+        <div class="cabecera-escena">
+          <span class="num">04 · La promesa mayor</span>
+          <h2 id="verdad-t">Aquí, todo lo que ves es verdad</h2>
+          <p class="intro">
+            En un mercado donde clonan anuncios y el «gangazo» lleva meses vendido, lo más difícil no
+            es publicar: es que te crean. Por eso en Innmobiliaria nada se declara — todo se
+            comprueba.
+          </p>
+        </div>
+
+        <div class="aparato" data-quieto="false">
+          <svg viewBox="0 0 300 150" role="img" aria-label="Tres anuncios: dos vencidos se apagan y el que sigue vigente permanece encendido con su sello de verificado.">
+            <rect x="10" y="20" width="80" height="110" rx="10" fill="#fff" opacity="0.5" class="zombie" />
+            <rect x="110" y="20" width="80" height="110" rx="10" fill="#7b5dd6" opacity="0.92" />
+            <rect x="210" y="20" width="80" height="110" rx="10" fill="#fff" opacity="0.5" class="zombie zombie-2" />
+            <g class="dibuja" style="--largo: 40">
+              <path d="m132 74 10 10 18-18" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+            <rect x="124" y="100" width="52" height="6" rx="3" fill="#fff" opacity="0.75" />
+          </svg>
+        </div>
+
+        <ul class="verdades">
+          <li class="verdad alza" style="--retraso: 0ms">
+            <h3>El sello se gana, no se declara</h3>
+            <p>
+              Para el sello ⭐ de propietario verificado muestras tu Certificado de Tradición y
+              Libertad. El documento se <b>ve una vez y nunca se almacena</b>: solo quedan la
+              matrícula y la fecha.
+            </p>
+          </li>
+          <li class="verdad alza" style="--retraso: 70ms">
+            <h3>Aquí no hay anuncios zombie</h3>
+            <p>
+              Cada anuncio vive 60 días y se renueva con un clic. Si nadie lo renueva, deja de verse.
+              Lo que está publicado, está vivo.
+            </p>
+          </li>
+          <li class="verdad alza" style="--retraso: 140ms">
+            <h3>La escasez es real o no existe</h3>
+            <p>
+              Los cupos por zona salen de la base de datos: cupo fijado por el equipo menos los que ya
+              publicaron. Si no hay cupo fijado, <b>no se muestra ningún número</b>. Cero contadores
+              inventados.
+            </p>
+          </li>
+          <li class="verdad alza" style="--retraso: 210ms">
+            <h3>Tus datos, en serio protegidos</h3>
+            <p>
+              Sin tu autorización expresa no hay registro (Ley 1581). Se pide el mínimo dato
+              necesario, tu WhatsApp solo es público si tú lo activas, y nada personal vive en el
+              código: la base tiene permisos por fila.
+            </p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ════════════════════ E07b · LO FINO ════════════════════ -->
+    <section class="escena" id="lo-fino" aria-labelledby="fino-t">
+      <div class="envoltura">
+        <div class="cabecera-escena">
+          <span class="num">05 · Lo fino</span>
+          <h2 id="fino-t">La letra pequeña, en grande</h2>
+        </div>
+
+        <details class="fino">
+          <summary>Qué necesitas para usarla</summary>
+          <div class="cuerpo-fino">
+            <ul class="lista-fina">
+              <li>Un teléfono con navegador e internet. No hay que instalar nada.</li>
+              <li>No necesitas cuenta ni contraseña para publicar: tu enlace privado es la llave.</li>
+              <li>Para el sello ⭐, tu Certificado de Tradición y Libertad ($23.000 en línea).</li>
+              <li>Para el panel, el equipo usa un correo autorizado y su contraseña.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="fino">
+          <summary>Qué NO hace todavía (y lo decimos claro)</summary>
+          <div class="cuerpo-fino">
+            <ul class="lista-fina">
+              <li>Solo Bogotá, y solo en español.</li>
+              <li>
+                Todavía no hay lado comprador: no hay búsqueda ni catálogo público. Por eso las fichas
+                no salen en buscadores en esta etapa.
+              </li>
+              <li>La verificación la hace una persona, no es automática.</li>
+              <li>Los correos de campaña salen por tandas de máximo 300 al día.</li>
+              <li>La app no cobra comisión ni paga tu certificado.</li>
+              <li>Cero inteligencia artificial: todo lo que hace es código determinista.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="fino">
+          <summary>Qué se mide (y qué no se mira)</summary>
+          <div class="cuerpo-fino">
+            <p>
+              Se cuentan visitas y pasos del registro para saber si la campaña funciona: la localidad,
+              el tipo de inmueble y la operación. <b>Nunca</b> tu nombre, tu WhatsApp, tu correo ni tu
+              matrícula. No se graba la pantalla ni se rastrea la navegación.
+            </p>
+          </div>
+        </details>
+
+        <details class="fino">
+          <summary>El mapa — a dónde lleva cada ruta</summary>
+          <div class="cuerpo-fino">
+            <ul class="mapa">
+              <li><code>/</code> La página de inicio, con los cupos si los hay.</li>
+              <li><code>/publicar</code> El registro en tres pasos.</li>
+              <li><code>/confirmacion</code> Lo que sigue y tu enlace privado.</li>
+              <li><code>/mi-anuncio</code> Fotos, descripción, vigencia e invitaciones.</li>
+              <li><code>/i/…</code> La ficha pública de un inmueble.</li>
+              <li><code>/renovar</code> Renovar la vigencia con tu enlace.</li>
+              <li><code>/privacidad</code> La política de tratamiento de datos.</li>
+              <li><code>/operador</code> El panel del equipo (registros y verificación).</li>
+              <li><code>/operador/login</code> La entrada del equipo.</li>
+              <li><code>/operador/campana</code> Embudo y envíos por lotes.</li>
+              <li><code>/operador/zonas</code> Cupos por localidad y densidad.</li>
+              <li><code>/conoce</code> Esta página.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ════════════════════ E08 · EL CIERRE ════════════════════ -->
+    <footer class="cierre">
+      <div class="envoltura">
+        <div class="sello-conteo">
+          <strong class="conteo"><span data-contador>13</span></strong>
+          <p style="font-size: 1.15rem; font-weight: 700; color: var(--ink)">funcionalidades</p>
+          <p>
+            Todas están repartidas en las cuatro puertas de arriba. Aquí no se escogieron las
+            bonitas: está todo lo que la app hace hoy.
+          </p>
+        </div>
+
+        <div class="historial-doc">
+          <details>
+            <summary style="cursor: pointer; font-weight: 700; color: var(--ink)">
+              Historial de este documento
+            </summary>
+            <p style="margin-top: 0.75rem; font-size: 0.9375rem">
+              Este documento crece con la app: cada sprint que cambia una funcionalidad lo actualiza
+              en su mismo cambio.
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Cambio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2026-08-22</td>
+                  <td>
+                    Primera versión — <b>brochure inicial</b>, con la construcción del ciclo 1
+                    cerrada (13 funcionalidades).
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </details>
+        </div>
+      </div>
+
+      <div class="marquesina" aria-hidden="true">
+        <span
+          >Vende tu casa directo, sin comisión · Publicar es unirte · La escasez es real o no
+          existe · Aquí no hay anuncios zombie · Vende tu casa directo, sin comisión · Publicar es
+          unirte · La escasez es real o no existe · Aquí no hay anuncios zombie ·
+        </span>
+      </div>
+
+      <p class="pie-legal">
+        Innmobiliaria · Bogotá, Colombia · Los datos de las pantallas de ejemplo son de
+        demostración.
+      </p>
+    </footer>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var quieto = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+        /* ═══ G2 · máquina de estados de las tarjetas ═══ */
+        var tarjetas = Array.prototype.slice.call(document.querySelectorAll(".tarjeta"));
+
+        function fijar(tarjeta, abrir) {
+          tarjeta.setAttribute("data-abierta", String(abrir));
+          var boton = tarjeta.querySelector(".tarjeta-boton");
+          if (boton) boton.setAttribute("aria-expanded", String(abrir));
+        }
+
+        tarjetas.forEach(function (tarjeta) {
+          var boton = tarjeta.querySelector(".tarjeta-boton");
+          if (!boton) return;
+          boton.addEventListener("click", function () {
+            var abierta = tarjeta.getAttribute("data-abierta") === "true";
+            /* El toque saca la tarjeta del automático para el resto de la visita (§7). */
+            tarjeta.setAttribute("data-manual", "true");
+            fijar(tarjeta, !abierta);
+          });
+        });
+
+        /* ═══ §7 · Apertura por lectura ═══
+           Una tarjeta está abierta exactamente mientras está a la vista. Se gobierna por
+           RECTÁNGULOS (dónde está la CABECERA respecto de la pantalla), no por
+           IntersectionObserver: con `translateY` de entrada, un umbral 0 miente sobre la
+           posición real. Abre solo BAJANDO, cuando la cabecera cruza los dos tercios —
+           deja un tercio de pantalla debajo para verla crecer. Cierra cuando la tarjeta
+           salió entera; por arriba, de golpe y reponiendo el scroll perdido. */
+        var ultimoY = window.scrollY;
+        var pendiente = false;
+
+        function recorrer() {
+          pendiente = false;
+          var y = window.scrollY;
+          var bajando = y > ultimoY;
+          var vh = window.innerHeight;
+          ultimoY = y;
+
+          tarjetas.forEach(function (tarjeta) {
+            if (tarjeta.getAttribute("data-manual") === "true") return;
+            var abierta = tarjeta.getAttribute("data-abierta") === "true";
+            var boton = tarjeta.querySelector(".tarjeta-boton");
+            if (!boton) return;
+
+            var cab = boton.getBoundingClientRect();
+            var caja = tarjeta.getBoundingClientRect();
+
+            if (!abierta && bajando && cab.top >= 0 && cab.top <= vh * (2 / 3)) {
+              fijar(tarjeta, true);
+              return;
+            }
+
+            if (abierta && caja.top >= vh) {
+              /* Salió entera por debajo: cierra con transición, nada que reponer. */
+              fijar(tarjeta, false);
+              return;
+            }
+
+            if (abierta && caja.bottom <= 0) {
+              /* Salió entera por arriba: cierra de golpe y repone el alto exacto perdido,
+                 para que el contenido de abajo no salte. `instant` porque un scrollBy normal
+                 se animaría bajo `scroll-behavior: smooth`. */
+              var antes = tarjeta.offsetHeight;
+              var det = tarjeta.querySelector(".detalle");
+              if (det) det.style.transition = "none";
+              fijar(tarjeta, false);
+              var perdido = antes - tarjeta.offsetHeight;
+              if (perdido > 0) {
+                window.scrollBy({ top: -perdido, behavior: "instant" });
+                ultimoY = window.scrollY;
+              }
+              if (det)
+                requestAnimationFrame(function () {
+                  det.style.transition = "";
+                });
+            }
+          });
+        }
+
+        function alScroll() {
+          if (pendiente) return;
+          pendiente = true;
+          requestAnimationFrame(recorrer);
+        }
+
+        window.addEventListener("scroll", alScroll, { passive: true });
+        window.addEventListener("resize", alScroll);
+
+        /* ═══ G3 · coreografía de entrada (alzar y asentar + dibujar el trazo) ═══ */
+        var porVer = document.querySelectorAll(".alza, .dibuja");
+        if ("IntersectionObserver" in window) {
+          var obs = new IntersectionObserver(
+            function (entradas) {
+              entradas.forEach(function (e) {
+                if (e.isIntersecting) {
+                  e.target.classList.add("visto");
+                  obs.unobserve(e.target);
+                }
+              });
+            },
+            { rootMargin: "0px 0px -12% 0px", threshold: 0.1 },
+          );
+          porVer.forEach(function (el) {
+            obs.observe(el);
+          });
+        } else {
+          /* Sin IO: todo visible. Nunca se esconde contenido por falta de API. */
+          porVer.forEach(function (el) {
+            el.classList.add("visto");
+          });
+        }
+
+        /* ═══ E02 · el ÚNICO momento G1: scroll → progreso del viaje ═══
+           Mapeo puro (sin pin, sin secuestro). Un solo rAF que SE APAGA al asentar.
+           Medidas cacheadas y recalculadas solo en resize. */
+        var viaje = document.getElementById("viaje");
+        var corriendo = false;
+        var medida = null;
+
+        function medir() {
+          if (!viaje) return;
+          var r = viaje.getBoundingClientRect();
+          medida = { top: r.top + window.scrollY, alto: r.height };
+        }
+
+        function progreso() {
+          corriendo = false;
+          if (!viaje || !medida) return;
+          var vh = window.innerHeight;
+          var y = window.scrollY;
+          /* 0 cuando la escena entra por abajo; 1 cuando su centro pasa el centro de pantalla. */
+          var bruto = (y + vh - medida.top) / (medida.alto + vh * 0.5);
+          var p = Math.max(0, Math.min(1, bruto));
+          viaje.style.setProperty("--e02-progreso", p.toFixed(3));
+        }
+
+        function pedirProgreso() {
+          if (corriendo) return;
+          corriendo = true;
+          requestAnimationFrame(progreso);
+        }
+
+        function motorViaje(encender) {
+          if (encender && !quieto.matches) {
+            medir();
+            progreso();
+            window.addEventListener("scroll", pedirProgreso, { passive: true });
+            window.addEventListener("resize", medir);
+          } else {
+            window.removeEventListener("scroll", pedirProgreso);
+            window.removeEventListener("resize", medir);
+            /* Quietud = POSE FINAL, jamás el reposo del ciclo. */
+            if (viaje) viaje.style.setProperty("--e02-progreso", "1");
+          }
+        }
+        motorViaje(true);
+
+        /* ═══ E07 · el único loop ambiental: se pausa fuera de viewport y con pestaña oculta ═══ */
+        var aparato = document.querySelector(".aparato");
+        if (aparato && "IntersectionObserver" in window) {
+          var visible = false;
+          function sincronizar() {
+            aparato.setAttribute("data-quieto", String(!visible || document.hidden));
+          }
+          new IntersectionObserver(function (e) {
+            visible = e[0].isIntersecting;
+            sincronizar();
+          }).observe(aparato);
+          document.addEventListener("visibilitychange", sincronizar);
+        }
+
+        /* ═══ E08 · el contador que se cuenta solo ═══
+           El DOM dice "13" desde el primer byte (accesible y a prueba de e2e). El JS solo
+           anima 0→13 si la escena llega a verse, y nunca bajo reduced-motion. */
+        var span = document.querySelector("[data-contador]");
+        if (span && "IntersectionObserver" in window) {
+          var meta = parseInt(span.textContent, 10) || 0;
+          var contado = false;
+          new IntersectionObserver(function (entradas, self) {
+            if (!entradas[0].isIntersecting || contado) return;
+            contado = true;
+            self.disconnect();
+            if (quieto.matches) return;
+            var t0 = null;
+            var DUR = 700;
+            function paso(t) {
+              if (t0 === null) t0 = t;
+              var k = Math.min(1, (t - t0) / DUR);
+              var eased = 1 - Math.pow(1 - k, 3);
+              span.textContent = String(Math.round(meta * eased));
+              if (k < 1) requestAnimationFrame(paso);
+              else span.textContent = String(meta);
+            }
+            requestAnimationFrame(paso);
+          }).observe(span);
+        }
+
+        /* Reacciona en caliente si cambia la preferencia, sin recargar. */
+        quieto.addEventListener("change", function () {
+          motorViaje(!quieto.matches);
+        });
+      })();
+    </script>
+  </body>
+</html>

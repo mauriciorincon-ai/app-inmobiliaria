@@ -16,11 +16,13 @@ export type EstadoFormulario = {
   ciudad: string;
   operacion: string;
   tipo: string;
+  localidad: string; // S3 — localidad de Bogotá (cupos)
   barrio: string;
   direccion_aproximada: string;
   area_m2: string;
   habitaciones: string;
   precio_esperado: string;
+  email: string; // S3 — opcional (avisos de campaña)
 };
 
 export const ESTADO_INICIAL: EstadoFormulario = {
@@ -29,11 +31,13 @@ export const ESTADO_INICIAL: EstadoFormulario = {
   ciudad: "Bogotá",
   operacion: "",
   tipo: "",
+  localidad: "",
   barrio: "",
   direccion_aproximada: "",
   area_m2: "",
   habitaciones: "",
   precio_esperado: "",
+  email: "",
 };
 
 export function esPrimerPaso(paso: Paso): boolean {
@@ -71,11 +75,13 @@ const draftSchema = z
     ciudad: z.string(),
     operacion: z.string(),
     tipo: z.string(),
+    localidad: z.string(),
     barrio: z.string(),
     direccion_aproximada: z.string(),
     area_m2: z.string(),
     habitaciones: z.string(),
     precio_esperado: z.string(),
+    email: z.string(),
   })
   .partial();
 

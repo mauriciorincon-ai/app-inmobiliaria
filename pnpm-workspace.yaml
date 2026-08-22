@@ -8,6 +8,9 @@ allowBuilds:
   # workerd (runtime de Cloudflare): habilitado desde el aprovisionamiento S1 — lo necesitan
   # `pnpm preview:cf` y `pnpm deploy:cf` (ADR 001). CI no lo usa (sus jobs no despliegan).
   workerd: true
+  # core-js (transitivo de posthog-js, S3): su postinstall es solo un mensaje de donación, cero
+  # build funcional → NO se construye.
+  core-js: false
 onlyBuiltDependencies:
   - sharp
   - unrs-resolver
@@ -17,6 +20,7 @@ onlyBuiltDependencies:
   - workerd
 ignoredBuiltDependencies:
   - '@sentry/cli'
+  - core-js
 overrides:
   # postcss <8.5.10: XSS por </style> sin escapar (moderate, transitivo de next/sentry/opennext).
   # Herramienta de build (Tailwind); forzamos la versión parchada.

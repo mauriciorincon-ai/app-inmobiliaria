@@ -22,7 +22,8 @@ async function registrarYObtenerLink(page: Page): Promise<string> {
 
   await page.getByRole("radio", { name: "Venta" }).check({ force: true });
   await page.getByLabel("Tipo de inmueble").selectOption("apartamento");
-  await page.getByLabel("Barrio o zona").fill(barrioUnico);
+  await page.getByLabel("Localidad").selectOption("Chapinero");
+  await page.getByLabel("Barrio").fill(barrioUnico);
   await page.getByLabel("Área (m²)").fill("80");
   await page.getByLabel("Habitaciones").fill("3");
   await page.getByLabel("Precio esperado (COP)").fill("450000000");

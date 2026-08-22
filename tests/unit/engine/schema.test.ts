@@ -16,6 +16,7 @@ const paso1Valido = {
 const paso2Valido = {
   operacion: "venta",
   tipo: "apartamento",
+  localidad: "Chapinero",
   barrio: "Cedritos",
   direccion_aproximada: "Calle 140 aprox.",
   area_m2: "78",
@@ -47,12 +48,22 @@ describe("paso2Schema (inmueble)", () => {
     const sinDireccion = {
       operacion: "venta",
       tipo: "apartamento",
+      localidad: "Chapinero",
       barrio: "Cedritos",
       area_m2: "78",
       habitaciones: "3",
       precio_esperado: "420.000.000",
     };
     expect(paso2Schema.safeParse(sinDireccion).success).toBe(true);
+  });
+
+  it("rechaza sin localidad o con localidad fuera de la lista", () => {
+    const { localidad: _l, ...sinLoc } = paso2Valido;
+    void _l;
+    expect(paso2Schema.safeParse(sinLoc).success).toBe(false);
+    expect(
+      paso2Schema.safeParse({ ...paso2Valido, localidad: "Medellín" }).success,
+    ).toBe(false);
   });
 
   it("rechaza operación o tipo fuera del enum", () => {
@@ -87,13 +98,27 @@ describe("paso2Schema (inmueble)", () => {
   });
 });
 
-describe("paso3Schema (consentimiento)", () => {
+describe("paso3Schema (consentimiento + email opcional)", () => {
   it("exige consentimiento true explícito", () => {
     expect(paso3Schema.safeParse({ consentimiento: true }).success).toBe(true);
     expect(paso3Schema.safeParse({ consentimiento: false }).success).toBe(
       false,
     );
     expect(paso3Schema.safeParse({}).success).toBe(false);
+  });
+
+  it("email opcional: vacío/ausente OK, válido OK, mal formado rechazado", () => {
+    expect(paso3Schema.safeParse({ consentimiento: true }).success).toBe(true);
+    expect(
+      paso3Schema.safeParse({ consentimiento: true, email: "" }).success,
+    ).toBe(true);
+    expect(
+      paso3Schema.safeParse({ consentimiento: true, email: "a@b.co" }).success,
+    ).toBe(true);
+    expect(
+      paso3Schema.safeParse({ consentimiento: true, email: "no-es-correo" })
+        .success,
+    ).toBe(false);
   });
 });
 
@@ -112,7 +137,7 @@ describe("registroSchema (completo) + construirPayload", () => {
       whatsapp: "+573001234567",
       email: null,
       ciudad: "Bogotá",
-      zona: null,
+      zona: "Chapinero", // S3 — la localidad va como zona
       operacion: "venta",
       tipo: "apartamento",
       barrio: "Cedritos",
@@ -121,7 +146,20 @@ describe("registroSchema (completo) + construirPayload", () => {
       habitaciones: 3,
       precio: 420000000,
       consentimiento: true,
+      ref: null,
     });
+  });
+
+  it("recoge email del paso 3 y normaliza el ref (inválido ⇒ null)", () => {
+    const datos = registroSchema.parse({
+      ...completo,
+      email: "ANA@Example.CO ",
+    });
+    expect(construirPayload(datos, "aB3_xY-9").ref).toBe("aB3_xY-9");
+    expect(construirPayload(datos, "no-valido").ref).toBeNull();
+    expect(construirPayload(datos).ref).toBeNull();
+    // el email se recorta pero conserva mayúsculas (Postgres lo guarda tal cual, sin lower forzado)
+    expect(construirPayload(datos).email).toBe("ANA@Example.CO");
   });
 
   it("mete null en dirección cuando viene vacía", () => {

@@ -74,7 +74,12 @@ export async function POST(req: NextRequest) {
       return json(400, { error: "validacion" });
     }
 
-    const payload = construirPayload(parsed.data);
+    // El código de referido viaja aparte del schema del formulario (viene de la URL ?ref=).
+    const refCrudo = (body as Record<string, unknown>).ref;
+    const payload = construirPayload(
+      parsed.data,
+      typeof refCrudo === "string" ? refCrudo : null,
+    );
     // En e2e todos los envíos vienen de localhost (misma IP) → el rate limit por IP los frenaría.
     // Con DISABLE_RATE_LIMIT=1 pasamos ip_hash=null y la RPC salta el rate limit. En prod nunca se activa.
     const ipHash =
@@ -96,6 +101,7 @@ export async function POST(req: NextRequest) {
       p_precio: payload.precio,
       p_consentimiento: payload.consentimiento,
       p_ip_hash: ipHash,
+      p_ref: payload.ref,
     });
 
     if (error) {

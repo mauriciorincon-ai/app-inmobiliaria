@@ -143,6 +143,24 @@ test("usuario crea un dashboard desde CSV y lo exporta", async ({ page }) => {
    checkbox did not change its state"). Usa un solo `.click()` y asegura el **resultado observable**
    (p. ej. el score sube), no el estado del input. `.check()` solo sirve para checkboxes de estado
    local síncrono (consentimiento, "vi el documento").
+8. **Los specs de Playwright se transpilan a CommonJS → nada de `import.meta.url`** (inmobiliaria
+   S2, K7). Un spec o util que use `fileURLToPath(import.meta.url)` para resolver rutas de fixtures
+   rompe con "Failed to load the ES module". Deriva los paths desde `process.cwd()` (Playwright
+   corre desde la raíz del repo): `join(process.cwd(), "docs", "kit-de-prueba", ...)`. (Los scripts
+   `.mjs` que Node ejecuta directo SÍ pueden usar `import.meta.url` — la regla es solo para specs.)
+
+## Auditoría Lighthouse: SOLO páginas públicas (inmobiliaria S2, kit v1.7.2)
+
+> Patrón completo: `wiki/patterns/lighthouse-solo-paginas-publicas.md` (planeadora, RO).
+
+La auditoría Lighthouse de CI cubre **solo páginas públicas** (landing, fichas públicas,
+confirmación, legales). Las rutas **privadas / `noindex` / hidratadas en cliente** (panel,
+`/mi-anuncio`, `/renovar/[token]`) se **excluyen** de `lighthouse-urls.json` documentando la
+exclusión; su LCP real se valida en el **gate ⭐ en teléfono** (≤2.5s). `budgetsFile` de lhci NO
+permite umbral laxo por-path (la raíz `/` se vuelve comodín y las entradas son aditivas). El
+remedio `throttlingMethod: devtools` está **DESCARTADO** en runners compartidos (S2 K8-bis: infla
+más el LCP en VMs lentas) — se usa Lantern (default) con ~10% de margen sobre el Lantern de la
+ruta pública. Si un sprint añade rutas privadas, van FUERA de la auditoría, no suben el budget global.
 
 ## Reglas anti-"comportamiento sin experiencia" (G-Metodo 2026-07-12, habla S2)
 

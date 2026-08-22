@@ -213,10 +213,10 @@
     {
       "clave": "peso_brochure",
       "etiqueta": "Peso de este brochure",
-      "valor": 73562,
+      "valor": 263580,
       "unidad": "bytes",
       "fuente": "medido",
-      "detalle": "Archivo autocontenido, sin una sola petición externa. `wc -c docs/BROCHURE.html`."
+      "detalle": "Archivo autocontenido, sin una sola petición externa: incluye las cuatro capturas reales de la app embebidas como data: URIs en WebP. `wc -c docs/BROCHURE.html`."
     }
   ],
   "stack": [

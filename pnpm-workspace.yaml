@@ -24,7 +24,9 @@ ignoredBuiltDependencies:
 overrides:
   # postcss <8.5.10: XSS por </style> sin escapar (moderate, transitivo de next/sentry/opennext).
   # Herramienta de build (Tailwind); forzamos la versión parchada.
-  postcss@<8.5.10: '>=8.5.10'
+  postcss@<8.5.23: '>=8.5.23'
+  # dompurify (transitivo de posthog-js): hook IN_PLACE deja un nodo suelto. Moderate.
+  dompurify: '>=3.4.13'
   # Avisos altos publicados entre la CI del S3 (2026-07) y esta entrega (2026-08). TODOS son
   # transitivos de herramientas de desarrollo —wrangler/miniflare, vitest/jsdom, postcss, eslint—
   # y ninguno corre en producción, pero el gate `pnpm audit --audit-level high` los bloquea.

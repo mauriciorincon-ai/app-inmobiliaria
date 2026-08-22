@@ -151,6 +151,22 @@ Verificado tras el cambio: typecheck, lint, build, **172 unit y 76 e2e verdes**.
 no lee ese campo y lo ignora en silencio con un warning). Es la misma lección del gate de builds del
 S3.
 
+## Ronda 2 del gate visual — lo que pediste y qué se hizo
+
+| Tu observación | Qué se hizo |
+| --- | --- |
+| Las tarjetas deberían tener elementos visuales, no solo texto | Cada una gana su **tira visual** diagramática con los tokens de la marca (cupos e invitación · los 3 pasos · miniaturas y medidor · escudo y sello). Es esquemática a propósito: no finge ser una captura. |
+| «Así se publica» tiene interfaces que **nada que ver con la app real** — sin imágenes reales es desperdicio de espacio | **Tenías razón, y además contradecía «solo lo real».** Ahora son **4 capturas de la app corriendo** (registro, medidor, ficha, panel), tomadas con Playwright a 390px y embebidas como data: URIs en WebP. Datos 100% sintéticos y fotos que son ilustraciones rotuladas «imagen de demostración». |
+| El paquete de guías es aburrido: más información o mejor animación | Entra el **comparador de plata**, la cifra que de verdad pega: comisión del 3% = **$12.000.000** en una vivienda de $400M **frente a $0**, con barras que crecen (`scaleX`). Y cada guía dice **qué trae por dentro**, con los costos notariales reales. |
+| Los tres cuadros del clímax no dicen nada | Fuera. Ahora cada verdad tiene **su propio micro-visual y el dibujo ES el argumento**: el sello se **dibuja** (se gana), el anuncio vencido se **tacha** mientras el vivo **late**, el contador real se asienta y el fabricado se **tacha**, y el documento pasa por un **ojo** y llega a un archivador **tachado** (se ve, no se guarda). |
+
+**Bug cazado en esta ronda:** una tarjeta podía quedar **invisible para siempre**. El
+`IntersectionObserver` usaba `threshold: 0.1` y un bloque más alto que la pantalla puede no
+alcanzarlo nunca; además la apertura por lectura cambia el alto de la página bajo un scroll rápido.
+Se bajó a `threshold: 0` y se añadió una **red de seguridad determinista**: lo que ya quedó por
+encima del borde inferior de la pantalla se muestra siempre. Verificado a tres velocidades de
+scroll (400/900/1800 px) — cero bloques ocultos en las tres.
+
 ## Deudas declaradas
 
 1. **`docs/BLUEPRINT.html` NO existe** (solo la plantilla). Era entregable del cierre de ciclo del

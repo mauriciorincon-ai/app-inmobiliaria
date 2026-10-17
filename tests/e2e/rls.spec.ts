@@ -132,6 +132,41 @@ test("el anónimo NO puede leer la tabla fotos directamente", async () => {
   expect(data ?? []).toHaveLength(0);
 });
 
+// Lista cerrada: toda RPC del operador, de cron o interna debe ser inalcanzable para el anónimo.
+// Se exige el CÓDIGO de error (42501 = permission denied), no solo «hubo error»: una función que SÍ
+// se ejecuta y falla por dentro («inmueble_no_encontrado») también devuelve error y daría un falso
+// verde. Origen (S4): la imagen más reciente de Postgres le dejó a `anon` EXECUTE sobre estas
+// funciones por los privilegios por defecto; la migración 4 deja la lista blanca explícita.
+const ID_FALSO = "00000000-0000-4000-8000-000000000000";
+const CERRADAS: Array<[string, Record<string, unknown>]> = [
+  ["marcar_verificado", { p_inmueble_id: ID_FALSO, p_matricula: "50N-1" }],
+  ["generar_link_anuncio", { p_inmueble_id: ID_FALSO }],
+  ["generar_slug", { p_tipo: "apartamento", p_barrio: "Zona RLS" }],
+  ["fijar_cupo", { p_zona_id: ID_FALSO, p_cupo: 1 }],
+  ["obtener_zonas_panel", {}],
+  ["obtener_densidad", {}],
+  ["obtener_lote", { p_filtro: "sin-fotos" }],
+  [
+    "registrar_envio",
+    {
+      p_plantilla: "x",
+      p_filtro: "sin-fotos",
+      p_destinatarios: 0,
+      p_enviados: 0,
+      p_estado: "mock",
+    },
+  ],
+  ["marcar_vencidos", {}],
+];
+
+for (const [nombre, args] of CERRADAS) {
+  test(`la RPC ${nombre} está cerrada para el anónimo (42501)`, async () => {
+    const supabase = createClient(url, anon);
+    const { error } = await supabase.rpc(nombre, args);
+    expect(error?.code, error?.message).toBe("42501");
+  });
+}
+
 test("las RPC del operador rechazan al anónimo", async () => {
   const { supabase, reg } = await crearInmueble();
   const r1 = await supabase.rpc("marcar_verificado", {

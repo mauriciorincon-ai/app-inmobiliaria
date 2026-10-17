@@ -1,0 +1,23 @@
+import { render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+// /privacidad publica el correo del responsable desde NEXT_PUBLIC_RESPONSABLE_CORREO (jamás versionado).
+// La constante se lee al importar el módulo, así que se importa DESPUÉS de fijar la variable.
+describe("/privacidad — correo del responsable", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it("muestra el correo de la variable como enlace mailto, en las dos secciones que lo citan", async () => {
+    vi.stubEnv("NEXT_PUBLIC_RESPONSABLE_CORREO", "responsable@ejemplo.test");
+    vi.resetModules();
+    const { default: Privacidad } = await import("@/app/privacidad/page");
+    render(<Privacidad />);
+    const enlaces = screen.getAllByRole("link", { name: "responsable@ejemplo.test" });
+    expect(enlaces.length).toBeGreaterThanOrEqual(2);
+    for (const a of enlaces) {
+      expect(a).toHaveAttribute("href", "mailto:responsable@ejemplo.test");
+    }
+  });
+});

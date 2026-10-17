@@ -15,9 +15,11 @@
 --      revoca (PUBLIC y anon). Las públicas conservan el `grant … to anon, authenticated` que ya
 --      traen sus migraciones.
 --   2. Las funciones de cron e internas tampoco las ejecuta `authenticated`.
---   3. Los privilegios por defecto dejan de dar EXECUTE a PUBLIC/anon/authenticated sobre
---      funciones nuevas de `public`: toda función nueva nace cerrada y la migración que la cree
---      debe abrirla de forma EXPLÍCITA si es pública.
+--   3. Los privilegios por defecto de `public` dejan de dar EXECUTE DIRECTO a `anon` y `authenticated`
+--      sobre funciones nuevas. NO cierran el EXECUTE de PUBLIC (default global de Postgres que un
+--      `IN SCHEMA` no puede quitar): una función nueva sigue naciendo abierta a PUBLIC, y su migración
+--      DEBE llevar `revoke all on function … from public`. Medido en el S4; ver ADR 012. La red real es
+--      el test de catálogo tests/e2e/permisos-funciones.spec.ts.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- 1. Lista blanca de RPC públicas (anon + authenticated): el flujo del vendedor, la ficha, los
@@ -65,6 +67,7 @@ revoke execute on function public.marcar_vencidos() from authenticated;
 revoke execute on function public.generar_slug(text, text) from authenticated;
 revoke execute on function public.tocar_updated_at() from authenticated;
 
--- 3. Funciones futuras: nacen cerradas. Las migraciones corren como `postgres`.
+-- 3. Quita el EXECUTE directo de anon/authenticated a funciones futuras (NO el de PUBLIC: ver arriba).
+--    Las migraciones corren como `postgres`.
 alter default privileges for role postgres in schema public
   revoke execute on functions from public, anon, authenticated;

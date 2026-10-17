@@ -173,9 +173,10 @@ test("las RPC del operador rechazan al anónimo", async () => {
     p_inmueble_id: reg.id,
     p_matricula: "50N-1",
   });
-  expect(r1.error).not.toBeNull();
+  // 42501 = permission denied: con un inmueble REAL, una función abierta no fallaría por dentro.
+  expect(r1.error?.code, r1.error?.message).toBe("42501");
   const r2 = await supabase.rpc("generar_link_anuncio", {
     p_inmueble_id: reg.id,
   });
-  expect(r2.error).not.toBeNull();
+  expect(r2.error?.code, r2.error?.message).toBe("42501");
 });

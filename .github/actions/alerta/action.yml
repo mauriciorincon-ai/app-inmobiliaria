@@ -1,0 +1,36 @@
+# Alerta de un job programado que falló (decisión 3a del usuario, S4): abre un issue con la etiqueta
+# `alerta`, o comenta en el que ya esté abierto con el mismo título (jamás duplica). Lo usan
+# `supabase-ping.yml` y `vigencia.yml` en un paso `if: failure()`.
+#
+# Por qué existe: `vigencia.yml` estuvo en rojo ocho semanas seguidas sin que nadie lo viera — GitHub
+# avisa por correo, pero un correo no es una alerta que se pueda cerrar. El job que lo use necesita
+# `permissions: issues: write` y un `actions/checkout` previo (una acción local se lee del repo).
+name: Alerta de job fallido
+description: Abre o comenta un issue `alerta` cuando un job programado falla.
+inputs:
+  titulo:
+    description: Título del issue (el mismo título = el mismo issue; no se duplica).
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Abrir o comentar el issue `alerta`
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+        TITULO: ${{ inputs.titulo }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        EVENTO: ${{ github.event_name }}
+      run: |
+        set -euo pipefail
+        gh label create alerta --color B60205 --description "Un job programado falló y necesita atención" 2>/dev/null || true
+        EXISTENTE="$(gh issue list --label alerta --state open --json number,title \
+          | jq -r --arg t "$TITULO" 'map(select(.title == $t)) | .[0].number // empty')"
+        if [ -n "$EXISTENTE" ]; then
+          gh issue comment "$EXISTENTE" --body "Volvió a fallar (${EVENTO}): ${RUN_URL}"
+          echo "Comentado en el issue #${EXISTENTE}"
+        else
+          gh issue create --title "$TITULO" --label alerta \
+            --body "Un job programado falló (${EVENTO}). Corrida: ${RUN_URL}"$'\n\n'"Cuando se arregle, cierra este issue; si vuelve a fallar se abrirá otro."
+        fi

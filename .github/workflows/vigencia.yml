@@ -1,6 +1,8 @@
 # Anti-zombie B3: marca vencidos los anuncios cuya vigencia (60 días) expiró, para que salgan del
 # panel/lotes/métricas. La ficha pública YA los oculta al instante (obtener_ficha deriva la
 # vigencia); este cron es el barrido de fondo. RPC `marcar_vencidos()` = SOLO service_role.
+# Si falla, abre un issue con la etiqueta `alerta` (S4): estuvo en rojo ocho semanas seguidas sin que
+# nadie lo viera porque la migración que crea la RPC nunca llegó a la nube.
 # No es un check de PR → no toca la ruleset main-protegida.
 # Requiere los secrets del repo: SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY.
 name: Vigencia (anti-zombie)
@@ -9,21 +11,33 @@ on:
     - cron: "23 9 * * 1" # lunes 09:23 UTC (separado del keep-alive para no solaparse)
   workflow_dispatch:
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   marcar-vencidos:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v7
       - name: Llamar RPC marcar_vencidos (service_role)
         env:
           URL: ${{ secrets.SUPABASE_URL }}
           SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           if [ -z "$URL" ] || [ -z "$SERVICE_ROLE" ]; then
-            echo "Secrets SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY sin configurar; nada que hacer aún."
-            exit 0
+            echo "::error::Secrets SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY sin configurar: el barrido de vigencia NO está corriendo."
+            exit 1
           fi
+          # -f es OBLIGATORIO: sin él, un 4xx/5xx devuelve exit 0 y el workflow queda verde
+          # sin haber tocado la base de datos (falso verde).
           curl -fsS -X POST "$URL/rest/v1/rpc/marcar_vencidos" \
             -H "apikey: $SERVICE_ROLE" \
             -H "Authorization: Bearer $SERVICE_ROLE" \
             -H "Content-Type: application/json" \
             -d '{}'
+      - name: Alerta
+        if: failure()
+        uses: ./.github/actions/alerta
+        with:
+          titulo: "Alerta: el barrido de vigencia falló"

@@ -12,7 +12,7 @@
     "enlaces.produccion": "null cuando la app no tiene URL pública. `razon` explica por qué, y es lo que la vitrina muestra en lugar del enlace. Nunca se rellena con un enlace de repositorio ni con una promesa."
   },
   "schema_version": "1.0.0",
-  "actualizado": "2026-08-22",
+  "actualizado": "2026-10-17",
   "app": {
     "slug": "inmobiliaria",
     "nombre": "Innmobiliaria",
@@ -165,18 +165,18 @@
     {
       "clave": "pruebas_unitarias",
       "etiqueta": "Pruebas unitarias y de componente",
-      "valor": 172,
+      "valor": 197,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm test` el 2026-08-22: 21 archivos, 172 pruebas (incluye el test del contrato de este export)."
+      "detalle": "Salida de `pnpm test` el 2026-10-17: 27 archivos, 197 pruebas (incluye el test del contrato de este export y los del kit v2.3.0)."
     },
     {
       "clave": "pruebas_e2e",
       "etiqueta": "Pruebas end-to-end",
-      "valor": 76,
+      "valor": 100,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm exec playwright test` el 2026-08-22, con navegador real contra Postgres: 10 archivos en dos navegadores (móvil y escritorio), incluidas las de este brochure."
+      "detalle": "Salida de `pnpm exec playwright test --list` el 2026-10-17: 100 pruebas en 11 archivos y dos navegadores (móvil y escritorio) contra Postgres; 97 corren y 3 se omiten a propósito en móvil (el catálogo de permisos de funciones se comprueba una sola vez), incluidas las de este brochure."
     },
     {
       "clave": "cobertura_lineas",
@@ -189,7 +189,7 @@
     {
       "clave": "decisiones_registradas",
       "etiqueta": "Decisiones de arquitectura registradas",
-      "valor": 6,
+      "valor": 12,
       "unidad": "ADR",
       "fuente": "medido",
       "detalle": "Archivos de decisions/."

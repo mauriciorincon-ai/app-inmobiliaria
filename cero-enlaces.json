@@ -1,0 +1,19 @@
+{
+  "$comment": "kit v2.0.0 — regla 17 (cero enlaces). Dominios de hosting cuya aparición en un archivo versionado o en el campo homepage del repo delata una URL de producción o de preview. Cada app AMPLÍA `dominios` con el host real de su stack al adoptar el kit (p. ej. su dominio propio); jamás se quita uno. `excluir` son rutas (pathspec de git) que no se barren. S4 (Innmobiliaria): se AMPLÍA con los hosts reales del stack como PATRONES del identificador concreto —proyecto Supabase (20 letras) y bucket público de R2 (pub- + hex)— y no con supabase.co / r2.dev a secas, que aparecen legítimamente como marcadores en docs, dummies de CI y comentarios.",
+  "dominios": [
+    "vercel.app",
+    "workers.dev",
+    "pages.dev",
+    "netlify.app",
+    "github.io",
+    "onrender.com",
+    "fly.dev",
+    "herokuapp.com",
+    "[a-z]{20}.supabase.co",
+    "pub-[0-9a-f]{20,}.r2.dev"
+  ],
+  "excluir": [
+    "pnpm-lock.yaml",
+    "cero-enlaces.json"
+  ]
+}

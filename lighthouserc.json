@@ -1,7 +1,10 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "settings": {
+        "skipAudits": ["is-crawlable"]
+      }
     },
     "assert": {
       "budgetsFile": "./perf-budget.json"

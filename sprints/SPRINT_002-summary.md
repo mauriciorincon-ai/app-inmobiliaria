@@ -5,7 +5,7 @@ status: closed
 opened: 2026-07-18
 closed: 2026-07-18
 branch: sprint-002/inmueble-completo
-pr: https://github.com/mauriciorincon-ai/app-inmobiliaria/pull/2
+pr: "#2"
 ---
 
 # Sprint 002 Summary — Innmobiliaria «El inmueble completo»

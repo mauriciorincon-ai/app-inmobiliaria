@@ -5,7 +5,7 @@ status: closed
 opened: 2026-07-18
 closed: 2026-08-22
 branch: sprint-003/campana-encendida
-pr: https://github.com/mauriciorincon-ai/app-inmobiliaria/pull/3
+pr: "#3"
 retroactivo: true # escrito el 2026-08-22 desde la bitácora + git log, a pedido de la planeadora
 gate_estrella: aplazado al acto 2 — F0 #8, método v1.20.0
 ---

@@ -3,7 +3,7 @@
 - **Estado:** Aceptado
 - **Fecha:** 2026-07-15
 - **Sprint:** 001 (primera tarea del builder, por regla de la orden)
-- **Decisores:** builder (Claude) + Mauricio (operador). La elección de **plan pago**, si llega a
+- **Decisores:** builder (Claude) + el responsable (operador). La elección de **plan pago**, si llega a
   hacer falta, es decisión exclusiva del usuario.
 
 ## Contexto
@@ -74,7 +74,7 @@ Si `@opennextjs/cloudflare` + Next 16.2 resulta inestable al desplegar (riesgo #
   H2a (publicación al mundo).
 - **Alternativa con costo (decisión del usuario):** **Vercel Pro US$20/mes**, que sí licencia uso
   comercial, si se quiere una ruta sin fricción de adaptador. Es un gasto no contemplado en el F0
-  #5 (solo dominio ~US$12/año aprobado) → **lo decide Mauricio** explícitamente.
+  #5 (solo dominio ~US$12/año aprobado) → **lo decide el responsable** explícitamente.
 
 La decisión definitiva de H2a se re-confirma al desplegar de verdad en Fase 4; este ADR fija el
 objetivo y las barandas.

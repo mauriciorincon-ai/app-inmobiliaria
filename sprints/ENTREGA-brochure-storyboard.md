@@ -3,7 +3,7 @@ entrega: brochure-conoce
 app: inmobiliaria
 tipo: entrega-puntual
 modo: INICIAL
-storyboard_aprobado_por: Mauricio Rincón
+storyboard_aprobado_por: el responsable
 storyboard_aprobado_el: 2026-08-22
 branch: entrega/brochure-conoce
 ---

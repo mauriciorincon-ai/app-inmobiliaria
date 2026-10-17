@@ -5,7 +5,7 @@ status: closed
 opened: 2026-07-13
 closed: 2026-07-17
 branch: sprint-001/puerta-fundadora
-pr: https://github.com/mauriciorincon-ai/app-inmobiliaria/pull/1
+pr: "#1"
 ---
 
 # Sprint 001 Summary — Innmobiliaria

@@ -6,9 +6,10 @@ export const metadata: Metadata = {
 };
 
 // Aviso de privacidad (Ley 1581 de 2012 y Decreto 1377 de 2013). Enlazado desde el consentimiento
-// del registro. Datos del responsable = placeholder marcado; se confirman antes de publicar (H2a).
-// TODO(H2a): reemplazar el correo de contacto por el definitivo del responsable.
-const CONTACTO = "privacidad@innmobiliaria.co";
+// del registro. El correo del responsable entra por variable de build y jamás se versiona (regla de
+// producto 9); `next.config.ts` hace fallar el build de producción si falta, para no publicar una
+// política sin contacto real.
+const CONTACTO = process.env.NEXT_PUBLIC_RESPONSABLE_CORREO ?? "";
 
 export default function Privacidad() {
   return (

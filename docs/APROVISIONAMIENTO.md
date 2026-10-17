@@ -20,12 +20,12 @@ prueba desde local, luego los secrets del cron, y de último el deploy a Cloudfl
 ## Con qué cuenta entrar a cada servicio (recomendación)
 
 El operador tiene dos identidades que terminan en el mismo lugar: el Gmail personal y la cuenta
-de GitHub `mauriciorincon-ai` (que a su vez se autentica con ese Gmail). Recomendación por
+de GitHub dueña del repo (que a su vez se autentica con ese Gmail). Recomendación por
 servicio:
 
 | Servicio               | Entra con                                              | Por qué                                                                                                                                                                                                                                                                               |
 | ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Supabase**           | **"Continue with GitHub"** (`mauriciorincon-ai`)       | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
+| **Supabase**           | **"Continue with GitHub"** (la cuenta dueña del repo)       | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
 | **Cloudflare**         | **El Gmail directo (email + contraseña propia + 2FA)** | Cloudflare será la casa de la infraestructura (Workers hoy, R2 en S2, dominio y DNS en H2a). Para la cuenta que sostendrá el dominio conviene una credencial de primera mano, no una cadena de SSO: si un día GitHub/Google fallan o se bloquean, el acceso a tu DNS no cae con ellos |
 | **GitHub** (ya existe) | —                                                      | Sigue como está                                                                                                                                                                                                                                                                       |
 
@@ -40,7 +40,7 @@ Gmail, ese correo es el punto único de falla — **activa 2FA en el Gmail** si 
 ### 1.1 [TÚ] Crear la cuenta y el proyecto (~3 min)
 
 1. Entra a <https://supabase.com> → **Start your project** → crea la cuenta con
-   **"Continue with GitHub"** (`mauriciorincon-ai`) — ver la tabla de cuentas al inicio.
+   **"Continue with GitHub"** (la cuenta dueña del repo) — ver la tabla de cuentas al inicio.
 2. **New project**, con estos valores:
    - **Name:** `app-inmobiliaria`
    - **Database password:** genera una fuerte y **guárdala en tu gestor de contraseñas** — se

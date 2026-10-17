@@ -47,6 +47,28 @@ test("cada tarjeta cerrada queda FUERA del árbol de accesibilidad", async ({
   expect(visibilidad).toBe("hidden");
 });
 
+// Espera a que `window.scrollY` no cambie durante 8 fotogramas seguidos (el scroll y su recorrido por
+// requestAnimationFrame ya terminaron).
+async function esperarScrollQuieto(page: import("@playwright/test").Page): Promise<void> {
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        let ultimo = window.scrollY;
+        let quietos = 0;
+        const paso = () => {
+          if (window.scrollY === ultimo) {
+            if (++quietos >= 8) return resolve();
+          } else {
+            quietos = 0;
+            ultimo = window.scrollY;
+          }
+          requestAnimationFrame(paso);
+        };
+        requestAnimationFrame(paso);
+      }),
+  );
+}
+
 test("el teclado abre y cierra una tarjeta, y la saca del automático", async ({
   page,
 }) => {
@@ -55,6 +77,10 @@ test("el teclado abre y cierra una tarjeta, y la saca del automático", async ({
   const boton = tarjeta.locator(".tarjeta-boton");
 
   await boton.focus();
+  // `focus()` trae la tarjeta a la vista y ese desplazamiento puede ABRIRLA por lectura (§7) un instante
+  // después. Si se lee `aria-expanded` antes de que el scroll se asiente, el Enter la vuelve a cerrar y la
+  // prueba falla al azar (S4: 5 de 80 corridas con carga). Se espera a que el scroll esté quieto.
+  await esperarScrollQuieto(page);
   const antes = await boton.getAttribute("aria-expanded");
   await page.keyboard.press("Enter");
   await expect(boton).toHaveAttribute(

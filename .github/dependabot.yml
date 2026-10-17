@@ -3,11 +3,14 @@
 # corrida de CI, en mitad de otra tarea. `pnpm audit` en CI avisa tarde y solo cuando algo más te
 # obliga a construir; esto los trae como PR, solos, con su changelog.
 #
-# REGLA DEL USUARIO (2026-08-22, tras la cola de 6 PRs que produjo la primera versión de este
-# archivo): MÁXIMO DOS PRs abiertos. Jamás una lista de merges pendientes.
+# REGLA DURA DEL USUARIO (2026-10-11, kit v2.1.0; antes, 2026-08-22, tras la cola de 6 PRs que produjo
+# la primera versión de este archivo: «máximo dos»): UN SOLO PR VIVO POR APP — Dependabot cuenta. Jamás
+# una lista de merges pendientes. El job `un-pr-vivo` de la CI falla al segundo PR abierto si su cuerpo
+# no empieza con «complementa #N: <razón>».
 #
-# Cómo se cumple: `open-pull-requests-limit: 1` en CADA ecosistema (npm + github-actions = 2 como
-# techo absoluto) y TODO agrupado en un solo PR por ecosistema. La versión anterior ponía el
+# Cómo se cumple: `open-pull-requests-limit: 1` en CADA ecosistema y TODO agrupado en un solo PR por
+# ecosistema; github-actions va MENSUAL para que casi nunca coincida con el lote semanal de npm (si
+# coinciden, se procesa uno antes de abrir el PR del sprint). La versión anterior ponía el
 # límite en 5 y lo hacía POR ECOSISTEMA — permitía 10 abiertos — y además solo agrupaba parches y
 # menores de desarrollo, así que cada menor de producción (Next, Sentry) salía en su propio PR.
 # Ojo con el otro malentendido que costó la cola: `interval` controla cada cuánto REVISA, no

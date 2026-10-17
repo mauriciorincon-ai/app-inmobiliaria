@@ -1,5 +1,8 @@
-# CI del kit-app — corre en cada PR y en push a main.
-# Gates: typecheck, lint, tests+cobertura, build, audit de deps, e2e, Lighthouse vs perf-budget.json
+# CI de Innmobiliaria (kit v2.3.0) — corre en cada PR y en push a main.
+# Gates: typecheck, lint, tests+cobertura, build, audit de deps, cero enlaces (regla 17), ningún paquete
+# por debajo de main (regla 18), e2e, Lighthouse vs perf-budget.json y vs lighthouse-categorias.json (>= 0.9).
+# `un-pr-vivo` vive en su propio workflow (.github/workflows/un-pr-vivo.yml).
+# Regla 15 del núcleo: todo gate nuevo se demuestra fallando (ver el cierre de cada sprint).
 name: CI
 on:
   pull_request:
@@ -16,6 +19,8 @@ jobs:
       NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-para-build
       NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
       NEXT_PUBLIC_APP_URL: http://localhost:3000
+      # Correo del responsable (Ley 1581): lo exige el build de producción (next.config.ts). Reservado `.test`.
+      NEXT_PUBLIC_RESPONSABLE_CORREO: responsable@ejemplo.test
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -23,11 +28,25 @@ jobs:
       - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      - name: Regla 18 — ningún paquete por debajo de main (kit v1.32.0)
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin main --depth=1
+          node scripts/verificar-dependencias.mjs origin/main
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm test            # vitest run --coverage (umbral 80% en src/engine)
       - run: pnpm build
       - run: pnpm audit --audit-level high
+      # kit v2.0.0 — regla 17 (cero enlaces): la producción se MUESTRA, jamás se ENTREGA. Dos superficies: los
+      # archivos versionados (git grep) y el campo `homepage` del repo en GitHub. Dominios en cero-enlaces.json.
+      # Demo en rojo: tests/unit/cero-enlaces.test.ts.
+      - name: Cero enlaces — árbol y homepage del repo (regla 17, kit v2.0.0)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          HOMEPAGE="$(gh api "repos/${GITHUB_REPOSITORY}" --jq '.homepage // ""')"
+          node scripts/cero-enlaces.mjs --homepage "$HOMEPAGE"
 
   e2e:
     runs-on: ubuntu-latest
@@ -49,6 +68,7 @@ jobs:
       R2_ACCESS_KEY_ID: dummy-key
       R2_SECRET_ACCESS_KEY: dummy-secret
       R2_BUCKET: innmobiliaria-fotos
+      NEXT_PUBLIC_RESPONSABLE_CORREO: responsable@ejemplo.test
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -93,6 +113,7 @@ jobs:
     env:
       NEXT_PUBLIC_R2_PUBLIC_URL: https://pub-e2e-dummy.r2.dev
       NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_RESPONSABLE_CORREO: responsable@ejemplo.test
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -131,3 +152,8 @@ jobs:
           npm i -g @lhci/cli
           URLS=$(node -e "console.log(require('./lighthouse-urls.json').map(u=>'--collect.url=http://localhost:3000'+u).join(' '))")
           lhci autorun --collect.startServerCommand="pnpm start" $URLS
+          # kit v1.12.0 — las 4 categorías >= 0.9 (la casilla del /deploy-check que nadie medía). El autorun ya
+          # hizo el assert de budgets; este lo hace sobre las mismas corridas (.lighthouseci). `is-crawlable` se
+          # omite en la colección (lighthouserc.json) porque el `noindex` global es DECISIÓN hasta H-4: sin
+          # omitirlo, SEO nace en ~0,69 en todas las URLs. Se quita junto con el `noindex`.
+          lhci assert --config=./lighthouse-categorias.json

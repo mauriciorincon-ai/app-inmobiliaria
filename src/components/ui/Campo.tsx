@@ -24,7 +24,7 @@ type Props = Base &
         autoComplete?: string;
       }
     | { control: "textarea" }
-    | { control: "select"; opciones: Opcion[] }
+    | { control: "select"; opciones: Opcion[]; placeholder: string }
   );
 
 const claseControl =
@@ -67,7 +67,7 @@ export default function Campo(props: Props) {
     control = (
       <select {...comun} onChange={(e) => onChange(e.target.value)}>
         <option value="" disabled>
-          {placeholder ?? "Elige una opción"}
+          {props.placeholder}
         </option>
         {props.opciones.map((o) => (
           <option key={o.value} value={o.value}>

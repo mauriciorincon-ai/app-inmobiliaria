@@ -1,0 +1,14 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "settings": {
+        "skipAudits": ["is-crawlable"],
+        "extraHeaders": { "Cookie": "idioma=en" }
+      }
+    },
+    "assert": {
+      "budgetsFile": "./perf-budget.json"
+    }
+  }
+}

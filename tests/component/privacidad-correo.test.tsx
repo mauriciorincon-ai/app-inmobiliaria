@@ -12,8 +12,8 @@ describe("/privacidad — correo del responsable", () => {
   it("muestra el correo de la variable como enlace mailto, en las dos secciones que lo citan", async () => {
     vi.stubEnv("NEXT_PUBLIC_RESPONSABLE_CORREO", "responsable@ejemplo.test");
     vi.resetModules();
-    const { default: Privacidad } = await import("@/app/privacidad/page");
-    render(<Privacidad />);
+    const { default: Privacidad } = await import("@/app/[lang]/privacidad/page");
+    render(await Privacidad({ params: Promise.resolve({ lang: "es" }) }));
     const enlaces = screen.getAllByRole("link", {
       name: "responsable@ejemplo.test",
     });
@@ -26,9 +26,9 @@ describe("/privacidad — correo del responsable", () => {
   it("informa del correo opcional y de su uso en los avisos de campaña, dentro de «Qué datos recogemos»", async () => {
     vi.stubEnv("NEXT_PUBLIC_RESPONSABLE_CORREO", "responsable@ejemplo.test");
     vi.resetModules();
-    const { default: Privacidad } = await import("@/app/privacidad/page");
-    const { CORREO_OPCIONAL } = await import("@/app/privacidad/textos");
-    render(<Privacidad />);
+    const { default: Privacidad } = await import("@/app/[lang]/privacidad/page");
+    const { CORREO_OPCIONAL } = await import("@/app/[lang]/privacidad/textos");
+    render(await Privacidad({ params: Promise.resolve({ lang: "es" }) }));
     const parrafo = screen.getByText(CORREO_OPCIONAL.es);
     const seccion = parrafo.closest("section");
     expect(seccion).not.toBeNull();

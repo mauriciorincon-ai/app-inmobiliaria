@@ -1,10 +1,13 @@
 import Link from "next/link";
 
 // Wordmark de Innmobiliaria: chip morado con ícono de casa + palabra. Reemplaza a "Habita".
+// `etiqueta` es el nombre accesible del enlace («Innmobiliaria — inicio»): viene del diccionario.
 export default function Logo({
+  etiqueta,
   className = "",
   tono = "ink",
 }: {
+  etiqueta: string;
   className?: string;
   tono?: "ink" | "blanco";
 }) {
@@ -13,7 +16,7 @@ export default function Logo({
     <Link
       href="/"
       className={`inline-flex items-center gap-2 font-extrabold tracking-tight ${color} ${className}`}
-      aria-label="Innmobiliaria — inicio"
+      aria-label={etiqueta}
     >
       <span
         aria-hidden="true"
@@ -34,10 +37,13 @@ export default function Logo({
           />
         </svg>
       </span>
-      <span className="text-lg">Innmobiliaria</span>
+      <span className="text-lg">{MARCA}</span>
     </Link>
   );
 }
+
+// La marca no se traduce.
+const MARCA = "Innmobiliaria";
 
 // Export nombrado además del default: `export *` (barriles, design-sync) no re-exporta defaults.
 export { Logo };

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Idioma } from "@/i18n/idiomas";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ZodType } from "zod";
@@ -44,7 +45,7 @@ function erroresDe(schema: ZodType, valores: unknown): Errores {
 
 // Wizard "publicar = registro" (3 pasos). Persiste el borrador en localStorage tras cada cambio
 // (retomar si se cae); valida por paso con mensajes por campo; envía una sola vez al endpoint.
-export default function Wizard() {
+export default function Wizard({ lang }: { lang: Idioma }) {
   const router = useRouter();
   const [paso, setPaso] = useState<Paso>(1);
   const [datos, setDatos] = useState<EstadoFormulario>(ESTADO_INICIAL);
@@ -124,6 +125,8 @@ export default function Wizard() {
           ...datos,
           consentimiento,
           ref: refCodigo.current,
+          // Idioma activo: queda guardado en el vendedor y fija el idioma de sus avisos (S5).
+          idioma: lang,
           _inicio: inicioMs.current,
           [CAMPO_HONEYPOT]: honeypot.current,
         }),

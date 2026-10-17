@@ -8,11 +8,11 @@
 
 ## Mapa del despliegue
 
-| Pieza           | Servicio                                         | Qué es                                                                           |
-| --------------- | ------------------------------------------------ | -------------------------------------------------------------------------------- |
-| Postgres + Auth | **Supabase cloud** (plan free)                   | La base de datos real (vendedores/inmuebles + RLS + RPC) y el login del operador |
-| App (Next.js)   | **Cloudflare Workers** (plan free, vía OpenNext) | La landing + wizard + panel + endpoint, servidos en el subdominio de tu cuenta   |
-| Keep-alive      | **GitHub Actions** (ya en el repo)               | Cron semanal que evita que el proyecto free de Supabase se pause                 |
+| Pieza           | Servicio                                         | Qué es                                                                                |
+| --------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Postgres + Auth | **Supabase cloud** (plan free)                   | La base de datos real (vendedores/inmuebles + RLS + RPC) y el login del operador      |
+| App (Next.js)   | **Cloudflare Workers** (plan free, vía OpenNext) | La landing + wizard + panel + endpoint, servidos en el subdominio de tu cuenta        |
+| Keep-alive      | **GitHub Actions** (ya en el repo)               | Cron diario (con alerta si falla) que evita que el proyecto free de Supabase se pause |
 
 El orden importa: primero la base de datos (sin ella la app no tiene dónde escribir), luego se
 prueba desde local, luego los secrets del cron, y de último el deploy a Cloudflare.
@@ -25,7 +25,7 @@ servicio:
 
 | Servicio               | Entra con                                              | Por qué                                                                                                                                                                                                                                                                               |
 | ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Supabase**           | **"Continue with GitHub"** (la cuenta dueña del repo)       | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
+| **Supabase**           | **"Continue with GitHub"** (la cuenta dueña del repo)  | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
 | **Cloudflare**         | **El Gmail directo (email + contraseña propia + 2FA)** | Cloudflare será la casa de la infraestructura (Workers hoy, R2 en S2, dominio y DNS en H2a). Para la cuenta que sostendrá el dominio conviene una credencial de primera mano, no una cadena de SSO: si un día GitHub/Google fallan o se bloquean, el acceso a tu DNS no cae con ellos |
 | **GitHub** (ya existe) | —                                                      | Sigue como está                                                                                                                                                                                                                                                                       |
 
@@ -219,6 +219,9 @@ R2_BUCKET=innmobiliaria-fotos
 NEXT_PUBLIC_R2_PUBLIC_URL=https://pub-tuhash.r2.dev
 # La URL que imprimió `pnpm deploy:cf` (NO se versiona en el repo — regla 17):
 NEXT_PUBLIC_APP_URL=https://<tu-app>.<tu-subdominio-cloudflare>
+# Correo de contacto del responsable (Ley 1581) que publica /privacidad. Variable de BUILD, nunca se
+# versiona: sin ella `pnpm deploy:cf` falla a propósito (next.config.ts) en vez de publicar sin contacto.
+NEXT_PUBLIC_RESPONSABLE_CORREO=correo-del-responsable
 ```
 
 ### 4.3 [CLAUDE] CORS del bucket + vars/secrets del Worker + deploy

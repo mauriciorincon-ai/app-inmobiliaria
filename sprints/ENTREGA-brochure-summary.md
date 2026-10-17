@@ -171,7 +171,7 @@ entrega no tocó la guía (último cambio: `a34bd60`, sprint 002).
 
 ## Gate visual — APROBADO
 
-**Aprobado por Mauricio Rincón el 2026-08-22**, tras la ronda 2: «queda cerrado entonces esta
+**Aprobado por el responsable el 2026-08-22**, tras la ronda 2: «queda cerrado entonces esta
 versión inicial». El brochure queda en estado **INICIAL**; el sello (⭐⭐ → SELLADO) se hará cuando
 el usuario termine su cierre de pruebas, sin fecha y sin re-proponerlo.
 

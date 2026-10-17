@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
+import { CORREO_OPCIONAL } from "./textos";
 
 export const metadata: Metadata = {
   title: "Política de tratamiento de datos — Innmobiliaria",
 };
 
 // Aviso de privacidad (Ley 1581 de 2012 y Decreto 1377 de 2013). Enlazado desde el consentimiento
-// del registro. Datos del responsable = placeholder marcado; se confirman antes de publicar (H2a).
-// TODO(H2a): reemplazar el correo de contacto por el definitivo del responsable.
-const CONTACTO = "privacidad@innmobiliaria.co";
+// del registro. El correo del responsable entra por variable de build y jamás se versiona (regla de
+// producto 9); `next.config.ts` hace fallar el build de producción si falta, para no publicar una
+// política sin contacto real.
+const CONTACTO = process.env.NEXT_PUBLIC_RESPONSABLE_CORREO ?? "";
 
 export default function Privacidad() {
   return (
@@ -55,6 +57,7 @@ export default function Privacidad() {
               lanzamiento. No los vendemos ni los compartimos con terceros con
               fines comerciales.
             </p>
+            <p className="mt-3 text-sm leading-relaxed">{CORREO_OPCIONAL.es}</p>
           </section>
 
           <section>

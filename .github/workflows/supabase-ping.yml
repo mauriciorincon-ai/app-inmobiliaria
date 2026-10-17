@@ -1,28 +1,53 @@
-# Keep-alive del proyecto Supabase free: se pausa tras ~1 semana inactivo. Este cron llama a la
-# RPC `ping()` (otorgada a anon) semanalmente para que cuente como actividad.
+# Keep-alive del proyecto Supabase free: se pausa tras ~7 días sin actividad de API (aviso por correo,
+# luego 90 días para reactivar desde el dashboard). Llama la RPC `ping()` (otorgada a anon) con MARGEN:
+# DIARIO (S4, decisión 3a del usuario; antes semanal) — el umbral es de 7 días y los crons de GitHub se
+# retrasan horas de forma rutinaria (caso real 2026-07-20: programado 08:17 UTC, corrió 15:31 → aviso de
+# pausa igual). Si falla, abre un issue con la etiqueta `alerta` (ver .github/actions/alerta).
 # No es un check de PR → no toca la ruleset main-protegida.
 # Requiere los secrets del repo: SUPABASE_URL y SUPABASE_ANON_KEY (checklist de aprovisionamiento).
 name: Supabase keep-alive
 on:
   schedule:
-    - cron: "17 8 * * 1" # lunes 08:17 UTC
+    - cron: "17 8 * * *" # todos los días 08:17 UTC
   workflow_dispatch:
+    inputs:
+      forzar_fallo:
+        description: "Demo en rojo de la alerta (regla 15): falla a propósito para comprobar que abre el issue `alerta`"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v7
       - name: Llamar RPC ping
         env:
           URL: ${{ secrets.SUPABASE_URL }}
           ANON: ${{ secrets.SUPABASE_ANON_KEY }}
+          FORZAR: ${{ inputs.forzar_fallo }}
         run: |
-          if [ -z "$URL" ] || [ -z "$ANON" ]; then
-            echo "Secrets SUPABASE_URL/SUPABASE_ANON_KEY sin configurar; nada que hacer aún."
-            exit 0
+          if [ "$FORZAR" = "true" ]; then
+            echo "::error::Fallo forzado a propósito (demo en rojo de la alerta)."
+            exit 1
           fi
+          if [ -z "$URL" ] || [ -z "$ANON" ]; then
+            echo "::error::Secrets SUPABASE_URL/SUPABASE_ANON_KEY sin configurar: el keep-alive NO está protegiendo el proyecto."
+            exit 1
+          fi
+          # -f es OBLIGATORIO: sin él, un 4xx/5xx devuelve exit 0 y el workflow queda verde
+          # sin haber tocado la base de datos (falso verde).
           curl -fsS -X POST "$URL/rest/v1/rpc/ping" \
             -H "apikey: $ANON" \
             -H "Authorization: Bearer $ANON" \
             -H "Content-Type: application/json" \
             -d '{}'
+      - name: Alerta
+        if: failure()
+        uses: ./.github/actions/alerta
+        with:
+          titulo: "Alerta: el keep-alive de Supabase falló"

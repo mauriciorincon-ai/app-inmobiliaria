@@ -31,8 +31,8 @@ describe("esTokenValido", () => {
 
 describe("construirLinkAnuncio", () => {
   it("arma el link con el token en el FRAGMENT (no query)", () => {
-    expect(construirLinkAnuncio("https://innmobiliaria.co", TOKEN)).toBe(
-      `https://innmobiliaria.co/mi-anuncio#t=${TOKEN}`,
+    expect(construirLinkAnuncio("https://ejemplo.test", TOKEN)).toBe(
+      `https://ejemplo.test/mi-anuncio#t=${TOKEN}`,
     );
   });
 

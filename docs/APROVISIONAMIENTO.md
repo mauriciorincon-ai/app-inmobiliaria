@@ -8,11 +8,11 @@
 
 ## Mapa del despliegue
 
-| Pieza           | Servicio                                         | Qué es                                                                           |
-| --------------- | ------------------------------------------------ | -------------------------------------------------------------------------------- |
-| Postgres + Auth | **Supabase cloud** (plan free)                   | La base de datos real (vendedores/inmuebles + RLS + RPC) y el login del operador |
-| App (Next.js)   | **Cloudflare Workers** (plan free, vía OpenNext) | La landing + wizard + panel + endpoint, servidos en el subdominio de tu cuenta   |
-| Keep-alive      | **GitHub Actions** (ya en el repo)               | Cron semanal que evita que el proyecto free de Supabase se pause                 |
+| Pieza           | Servicio                                         | Qué es                                                                                |
+| --------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Postgres + Auth | **Supabase cloud** (plan free)                   | La base de datos real (vendedores/inmuebles + RLS + RPC) y el login del operador      |
+| App (Next.js)   | **Cloudflare Workers** (plan free, vía OpenNext) | La landing + wizard + panel + endpoint, servidos en el subdominio de tu cuenta        |
+| Keep-alive      | **GitHub Actions** (ya en el repo)               | Cron diario (con alerta si falla) que evita que el proyecto free de Supabase se pause |
 
 El orden importa: primero la base de datos (sin ella la app no tiene dónde escribir), luego se
 prueba desde local, luego los secrets del cron, y de último el deploy a Cloudflare.
@@ -20,12 +20,12 @@ prueba desde local, luego los secrets del cron, y de último el deploy a Cloudfl
 ## Con qué cuenta entrar a cada servicio (recomendación)
 
 El operador tiene dos identidades que terminan en el mismo lugar: el Gmail personal y la cuenta
-de GitHub `mauriciorincon-ai` (que a su vez se autentica con ese Gmail). Recomendación por
+de GitHub dueña del repo (que a su vez se autentica con ese Gmail). Recomendación por
 servicio:
 
 | Servicio               | Entra con                                              | Por qué                                                                                                                                                                                                                                                                               |
 | ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Supabase**           | **"Continue with GitHub"** (`mauriciorincon-ai`)       | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
+| **Supabase**           | **"Continue with GitHub"** (la cuenta dueña del repo)  | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
 | **Cloudflare**         | **El Gmail directo (email + contraseña propia + 2FA)** | Cloudflare será la casa de la infraestructura (Workers hoy, R2 en S2, dominio y DNS en H2a). Para la cuenta que sostendrá el dominio conviene una credencial de primera mano, no una cadena de SSO: si un día GitHub/Google fallan o se bloquean, el acceso a tu DNS no cae con ellos |
 | **GitHub** (ya existe) | —                                                      | Sigue como está                                                                                                                                                                                                                                                                       |
 
@@ -40,7 +40,7 @@ Gmail, ese correo es el punto único de falla — **activa 2FA en el Gmail** si 
 ### 1.1 [TÚ] Crear la cuenta y el proyecto (~3 min)
 
 1. Entra a <https://supabase.com> → **Start your project** → crea la cuenta con
-   **"Continue with GitHub"** (`mauriciorincon-ai`) — ver la tabla de cuentas al inicio.
+   **"Continue with GitHub"** (la cuenta dueña del repo) — ver la tabla de cuentas al inicio.
 2. **New project**, con estos valores:
    - **Name:** `app-inmobiliaria`
    - **Database password:** genera una fuerte y **guárdala en tu gestor de contraseñas** — se
@@ -87,7 +87,7 @@ pnpm exec supabase link --project-ref <ref>   # pide la Database password de 1.1
 pnpm exec supabase db push
 ```
 
-Esto ejecuta `supabase/migrations/20260715000001_captacion_fundadores.sql` contra la base cloud:
+Esto aplica a la base cloud TODAS las migraciones de `supabase/migrations/` que aún no estén (desde el S4 son 5; la primera es `20260715000001_captacion_fundadores.sql`). Antes, `supabase db push --dry-run` lista lo pendiente, y después `supabase migration list --linked` debe salir sin diferencias. La primera migración crea:
 crea tablas, enums, RLS, grants y las RPC `registrar_fundador`/`ping`. Verificación: en el
 dashboard → **Table Editor** deben aparecer `vendedores`, `inmuebles`, `registro_intentos`.
 
@@ -117,15 +117,17 @@ Verifica también en el dashboard de Supabase (Table Editor → `inmuebles`).
 
 ## Bloque 2 — Secrets del keep-alive en GitHub
 
-El workflow `.github/workflows/supabase-ping.yml` (cron lunes 08:17 UTC) evita la pausa del
-proyecto free. Necesita 2 secrets del repo (ambos valores son los "públicos" del Bloque 1 — no la
-service key):
+El workflow `.github/workflows/supabase-ping.yml` (cron DIARIO 08:17 UTC; si falla abre un issue con la
+etiqueta `alerta`) evita la pausa del proyecto free. Necesita 2 secrets del repo (ambos valores son los
+"públicos" del Bloque 1 — no la service key). El barrido de vigencia (`vigencia.yml`, lunes 09:23 UTC)
+necesita además `SUPABASE_SERVICE_ROLE_KEY`: sin él FALLA a propósito (antes salía en verde sin hacer nada):
 
 **[CLAUDE]** (o tú en Settings → Secrets and variables → Actions):
 
 ```bash
 gh secret set SUPABASE_URL --body "https://<ref>.supabase.co"
 gh secret set SUPABASE_ANON_KEY --body "<anon key>"
+gh secret set SUPABASE_SERVICE_ROLE_KEY --body "<service_role key>"   # solo para vigencia.yml
 gh workflow run supabase-ping.yml   # disparo manual para verificar que queda verde
 ```
 
@@ -219,6 +221,9 @@ R2_BUCKET=innmobiliaria-fotos
 NEXT_PUBLIC_R2_PUBLIC_URL=https://pub-tuhash.r2.dev
 # La URL que imprimió `pnpm deploy:cf` (NO se versiona en el repo — regla 17):
 NEXT_PUBLIC_APP_URL=https://<tu-app>.<tu-subdominio-cloudflare>
+# Correo de contacto del responsable (Ley 1581) que publica /privacidad. Variable de BUILD, nunca se
+# versiona: sin ella `pnpm deploy:cf` falla a propósito (next.config.ts) en vez de publicar sin contacto.
+NEXT_PUBLIC_RESPONSABLE_CORREO=correo-del-responsable
 ```
 
 ### 4.3 [CLAUDE] CORS del bucket + vars/secrets del Worker + deploy
@@ -273,12 +278,11 @@ Alternativa si no quieres runtime local: un proyecto Supabase cloud "dev" (~5 mi
 
 ## Al terminar
 
-- [ ] Registro de prueba visible en el panel de la preview.
-- [ ] Cron del ping verde en Actions.
-- [ ] Gate ⭐ de la guía completado + visto bueno visual → **merge del PR #1** →
-      `/cierre-sprint inmobiliaria` en la planeadora.
-- Pendiente para H2a (publicar de verdad): dominio propio, correo real del responsable Ley 1581
-  en `/privacidad`, y quitar el `noindex`.
+- [ ] Registro de prueba visible en el panel.
+- [ ] Ping y vigencia en verde en Actions (disparo manual con `gh workflow run`).
+- [ ] `supabase migration list --linked` sin diferencias.
+- Pendiente para H-4 (publicar de verdad): dominio propio, quitar el `noindex` y el texto legal definitivo
+  de `/privacidad` (el correo del responsable ya entra por `NEXT_PUBLIC_RESPONSABLE_CORREO`).
 
 ## Problemas conocidos y su solución
 

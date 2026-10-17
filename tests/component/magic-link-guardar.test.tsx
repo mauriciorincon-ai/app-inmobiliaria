@@ -14,7 +14,7 @@ describe("MagicLinkGuardar", () => {
   });
 
   it("muestra el link y el botón de copiar cuando existe en sessionStorage", async () => {
-    const link = "https://innmobiliaria.co/mi-anuncio#t=abc";
+    const link = "https://ejemplo.test/mi-anuncio#t=abc";
     sessionStorage.setItem(CLAVE_LINK, link);
     render(<MagicLinkGuardar />);
     await waitFor(() => {

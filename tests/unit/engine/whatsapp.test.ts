@@ -70,7 +70,7 @@ describe("construirWaMe", () => {
 
 describe("mensajeReContacto", () => {
   it("usa el primer nombre e incluye el link", () => {
-    const link = "https://innmobiliaria.co/mi-anuncio#t=xyz";
+    const link = "https://ejemplo.test/mi-anuncio#t=xyz";
     const msg = mensajeReContacto("Ana María Vélez", link);
     expect(msg).toMatch(/^Hola Ana,/);
     expect(msg).toContain(link);

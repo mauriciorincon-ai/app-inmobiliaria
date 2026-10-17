@@ -54,7 +54,7 @@ export default function Login() {
             value={email}
             onChange={setEmail}
             autoComplete="email"
-            placeholder="operador@innmobiliaria.co"
+            placeholder="operador@ejemplo.test"
           />
           <Campo
             id="password"

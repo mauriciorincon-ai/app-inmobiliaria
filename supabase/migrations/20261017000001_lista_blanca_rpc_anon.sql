@@ -47,6 +47,11 @@ begin
     from pg_proc p
     where p.pronamespace = 'public'::regnamespace
       and p.prokind = 'f'
+      -- Solo funciones PROPIAS: `postgres` no es superusuario y no puede revocar sobre objetos de
+      -- otro dueño, y los event triggers (p. ej. `rls_auto_enable`, de Supabase) los gestiona la
+      -- plataforma: no se tocan. Visto en producción (solo lectura, S4).
+      and p.proowner = (select r.oid from pg_roles r where r.rolname = current_user)
+      and p.prorettype <> 'event_trigger'::regtype
       and not (p.proname = any (publicas))
   loop
     execute format('revoke execute on function %s from public, anon', f.firma);

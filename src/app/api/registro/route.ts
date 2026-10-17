@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { construirPayload, registroSchema } from "@/engine/registro/schema";
+import { esIdioma, IDIOMA_POR_DEFECTO, type Idioma } from "@/i18n/idiomas";
 import {
   CAMPO_HONEYPOT,
   TIEMPO_MINIMO_MS,
@@ -74,6 +75,15 @@ export async function POST(req: NextRequest) {
       return json(400, { error: "validacion" });
     }
 
+    // El idioma activo de la interfaz también viaja aparte del schema del formulario. Un valor que no
+    // sea es/en no rompe el registro: cae al español, que es el default de la columna.
+    const idiomaCrudo = (body as Record<string, unknown>).idioma;
+    const idioma: Idioma = esIdioma(
+      typeof idiomaCrudo === "string" ? idiomaCrudo : null,
+    )
+      ? (idiomaCrudo as Idioma)
+      : IDIOMA_POR_DEFECTO;
+
     // El código de referido viaja aparte del schema del formulario (viene de la URL ?ref=).
     const refCrudo = (body as Record<string, unknown>).ref;
     const payload = construirPayload(
@@ -102,6 +112,7 @@ export async function POST(req: NextRequest) {
       p_consentimiento: payload.consentimiento,
       p_ip_hash: ipHash,
       p_ref: payload.ref,
+      p_idioma: idioma,
     });
 
     if (error) {

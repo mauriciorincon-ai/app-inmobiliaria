@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 // /privacidad publica el correo del responsable desde NEXT_PUBLIC_RESPONSABLE_CORREO (jamás versionado).
@@ -14,10 +14,28 @@ describe("/privacidad — correo del responsable", () => {
     vi.resetModules();
     const { default: Privacidad } = await import("@/app/privacidad/page");
     render(<Privacidad />);
-    const enlaces = screen.getAllByRole("link", { name: "responsable@ejemplo.test" });
+    const enlaces = screen.getAllByRole("link", {
+      name: "responsable@ejemplo.test",
+    });
     expect(enlaces.length).toBeGreaterThanOrEqual(2);
     for (const a of enlaces) {
       expect(a).toHaveAttribute("href", "mailto:responsable@ejemplo.test");
     }
+  });
+
+  it("informa del correo opcional y de su uso en los avisos de campaña, dentro de «Qué datos recogemos»", async () => {
+    vi.stubEnv("NEXT_PUBLIC_RESPONSABLE_CORREO", "responsable@ejemplo.test");
+    vi.resetModules();
+    const { default: Privacidad } = await import("@/app/privacidad/page");
+    const { CORREO_OPCIONAL } = await import("@/app/privacidad/textos");
+    render(<Privacidad />);
+    const parrafo = screen.getByText(CORREO_OPCIONAL.es);
+    const seccion = parrafo.closest("section");
+    expect(seccion).not.toBeNull();
+    expect(
+      within(seccion as HTMLElement).getByRole("heading", {
+        name: /qué datos recogemos/i,
+      }),
+    ).toBeInTheDocument();
   });
 });

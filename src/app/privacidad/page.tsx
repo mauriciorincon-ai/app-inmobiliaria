@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
+import { CORREO_OPCIONAL } from "./textos";
 
 export const metadata: Metadata = {
   title: "Política de tratamiento de datos — Innmobiliaria",
@@ -56,6 +57,7 @@ export default function Privacidad() {
               lanzamiento. No los vendemos ni los compartimos con terceros con
               fines comerciales.
             </p>
+            <p className="mt-3 text-sm leading-relaxed">{CORREO_OPCIONAL.es}</p>
           </section>
 
           <section>

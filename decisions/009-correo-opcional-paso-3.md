@@ -1,6 +1,6 @@
 # ADR 009 — Optional email in step 3 of the registration flow
 
-- **Status:** Accepted, with one open item (see Consequences)
+- **Status:** Accepted
 - **Decided:** Sprint 003 (user decision at the start gate) · **Written down:** 2026-10-17 (Sprint 004)
 - **Sprint:** 003 / 004
 
@@ -26,10 +26,14 @@ expose it).
 - Minimization (Ley 1581): the email is collected only if the seller chooses to give it, and
   `consentimiento_at NOT NULL` still gates every registration.
 - Brevo falls back to a MOCK without `BREVO_API_KEY`; no flow is considered tested with the mock.
-- **Open item, not fixed in Sprint 004:** the `/privacidad` text lists name, WhatsApp, city and
-  property data as what is collected, and says the email is never public, but it does not say that
-  an optional email is collected nor that it is used for campaign notices. The legal text is out of
-  scope for Sprint 004 (milestone H-4); it is recorded as debt for the milestone batch.
+- **Closed at the end of Sprint 004:** `/privacidad` now says the email is optional, that it is used
+  only for campaign notices (photos, seal, validity), that a mail provider acting on our behalf
+  receives email and name to send them, and how to ask to stop or to delete it. The text is a
+  `{ es, en }` map (`src/app/privacidad/textos.ts`) with a parity test.
+- **Found while writing it:** the hint under the field in step 3 says the email is also "to send you
+  the founder package", but nothing sends it: the guides are links on the page (ADR 010) and the
+  only email templates are the three campaign notices. The policy states what the code does; the
+  hint is recorded as debt.
 
 ## Alternatives considered
 

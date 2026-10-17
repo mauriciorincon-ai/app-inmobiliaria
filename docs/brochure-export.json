@@ -165,10 +165,10 @@
     {
       "clave": "pruebas_unitarias",
       "etiqueta": "Pruebas unitarias y de componente",
-      "valor": 192,
+      "valor": 197,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm test` el 2026-10-17: 26 archivos, 192 pruebas (incluye el test del contrato de este export y los del kit v2.3.0)."
+      "detalle": "Salida de `pnpm test` el 2026-10-17: 27 archivos, 197 pruebas (incluye el test del contrato de este export y los del kit v2.3.0)."
     },
     {
       "clave": "pruebas_e2e",

@@ -1,4 +1,4 @@
-// Vigencia del anuncio — anti-zombie B3 (ADR-009). Cada inmueble tiene `vigente_hasta`; el vendedor
+// Vigencia del anuncio — anti-zombie B3 (ADR-007). Cada inmueble tiene `vigente_hasta`; el vendedor
 // la renueva con un clic (POST) desde su magic link y extiende +60 días. La ficha pública DERIVA la
 // vigencia en vivo (`vigente_hasta > now()`, no espera al cron); un cron semanal marca los vencidos
 // para el panel, los lotes y las métricas. Este módulo es lógica pura de fechas (sin side-effects);

@@ -1,4 +1,4 @@
-// Código de referido del fundador — C7 (ADR-007). El código se GENERA en Postgres (base64url de
+// Código de referido del fundador — C7 (S3). El código se GENERA en Postgres (base64url de
 // 6 bytes = 8 chars, `gen_random_bytes`; NO se deriva del nombre → no expone al referente). Este
 // módulo valida la forma, arma el link compartible y el mensaje de WhatsApp. La atribución (quién
 // refirió a quién) vive en BD y el código jamás revela datos del referente: solo cuenta.

@@ -45,6 +45,8 @@ export default function MisAlertas({
   const [aviso, setAviso] = useState<Aviso | null>(null);
   const [ocupado, setOcupado] = useState(false);
   const [borrando, setBorrando] = useState<number | null>(null);
+  // El token de confirmar que trajo el enlace del correo: se usa SOLO cuando la persona toca el botón.
+  const [porConfirmar, setPorConfirmar] = useState<string | null>(null);
 
   // Pide las alertas de los tokens dados y descarta del teléfono los que ya no existen (alertas borradas).
   const leer = useCallback(
@@ -94,20 +96,7 @@ export default function MisAlertas({
         );
       }
       if (confirmar) {
-        const r = await enviarAccion<{ nombre: string }>(
-          RUTA_GESTION,
-          "confirmar",
-          { token: confirmar },
-        );
-        setAviso(
-          r.ok
-            ? {
-                tipo: "ok",
-                titulo: t.confirmada.titulo,
-                texto: rellenar(t.confirmada.texto, { nombre: r.datos.nombre }),
-              }
-            : { tipo: "error", texto: t.confirmarError },
-        );
+        setPorConfirmar(confirmar);
       } else if (gestionar) {
         setAviso({ tipo: "ok", texto: t.agregada });
       }
@@ -115,6 +104,30 @@ export default function MisAlertas({
     }
     void iniciar();
   }, [leer, t]);
+
+  async function confirmarCorreo() {
+    if (!porConfirmar) return;
+    setOcupado(true);
+    const r = await enviarAccion<{ nombre: string }>(
+      RUTA_GESTION,
+      "confirmar",
+      {
+        token: porConfirmar,
+      },
+    );
+    setOcupado(false);
+    setPorConfirmar(null);
+    setAviso(
+      r.ok
+        ? {
+            tipo: "ok",
+            titulo: t.confirmada.titulo,
+            texto: rellenar(t.confirmada.texto, { nombre: r.datos.nombre }),
+          }
+        : { tipo: "error", texto: t.confirmarError },
+    );
+    await leer(tokens);
+  }
 
   async function cambiar(a: AlertaMia, cambio: AccionAlerta) {
     setOcupado(true);
@@ -194,6 +207,26 @@ export default function MisAlertas({
           </div>
         )}
       </div>
+
+      {porConfirmar && (
+        <section
+          aria-labelledby="por-confirmar-titulo"
+          className="mt-6 space-y-3 rounded-2xl border border-purple-200 bg-white p-5 shadow-soft"
+        >
+          <h2 id="por-confirmar-titulo" className="text-lg font-bold text-ink">
+            {t.porConfirmar.titulo}
+          </h2>
+          <p className="text-sm text-gray">{t.porConfirmar.texto}</p>
+          <button
+            type="button"
+            disabled={ocupado}
+            onClick={() => void confirmarCorreo()}
+            className={BOTON}
+          >
+            {ocupado ? t.porConfirmar.confirmando : t.porConfirmar.boton}
+          </button>
+        </section>
+      )}
 
       {carga === "cargando" && (
         <p className="mt-6 text-sm text-mute" role="status">

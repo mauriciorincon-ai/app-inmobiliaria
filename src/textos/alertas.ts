@@ -72,6 +72,17 @@ export const ALERTAS = {
     borrar: { es: "Borrar", en: "Delete" },
     borrarConfirma: { es: "Sí, borrar la alerta", en: "Yes, delete the alert" },
     nueva: { es: "Nueva alerta", en: "New alert" },
+    // Llegar por el enlace del correo NO confirma: hay que tocar el botón. Un escáner de correo que abra el enlace
+    // y ejecute la página no puede suscribir a quien nunca pidió la alerta.
+    porConfirmar: {
+      titulo: { es: "Confirma tu correo", en: "Confirm your email" },
+      texto: {
+        es: "Toca el botón para empezar a recibir el resumen diario de esta alerta. Si no la pediste, no toques nada: sin confirmar no te escribimos.",
+        en: "Tap the button to start getting this alert's daily digest. If you didn't ask for it, don't tap anything: until you confirm, we won't write to you.",
+      },
+      boton: { es: "Confirmar mi correo", en: "Confirm my email" },
+      confirmando: { es: "Confirmando…", en: "Confirming…" },
+    },
     confirmada: {
       titulo: { es: "Correo confirmado", en: "Email confirmed" },
       texto: {
@@ -196,6 +207,10 @@ export const ALERTAS = {
       no_configurado: {
         es: "Las alertas no están disponibles en este momento. Inténtalo más tarde.",
         en: "Alerts aren't available right now. Try again later.",
+      },
+      correo_no_enviado: {
+        es: "Creamos la alerta, pero no pudimos enviarte el correo de confirmación. Inténtalo de nuevo en un momento.",
+        en: "We created the alert, but we couldn't send you the confirmation email. Try again in a moment.",
       },
       servidor: {
         es: "No pudimos crear la alerta. Inténtalo de nuevo en un momento.",

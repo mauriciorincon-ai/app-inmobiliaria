@@ -1,6 +1,7 @@
 // Búsqueda del comprador (/buscar). Redactada en cada idioma, no traducida (S6). El inglés nombra y
 // explica el término local la primera vez (localidad, barrio). Las frases cuentan SOLO lo que la
-// página hace hoy: nada de alertas, favoritos ni contacto, que llegan en sprints posteriores.
+// página hace hoy: guardar en favoritos y crear una alerta por correo (S9); el contacto con el dueño vive en
+// la ficha.
 import type { Arbol } from "@/i18n/textos";
 
 export const BUSCAR = {
@@ -136,6 +137,7 @@ export const BUSCAR = {
       es: "Los confirmados más recientemente, primero",
       en: "Most recently confirmed first",
     },
+    guardarAlerta: { es: "Guardar como alerta", en: "Save as alert" },
     tope: {
       es: "Mostramos los {n} confirmados más recientemente. Afina tus filtros para ver otros.",
       en: "Showing the {n} most recently confirmed. Narrow your filters to see others.",
@@ -165,6 +167,10 @@ export const BUSCAR = {
       },
       quitarFiltros: { es: "Quitar los filtros", en: "Clear the filters" },
       quitarZona: { es: "Quitar la zona", en: "Clear the area" },
+      avisame: {
+        es: "Avísame en esta zona",
+        en: "Tell me about this area",
+      },
     },
     error: {
       titulo: {

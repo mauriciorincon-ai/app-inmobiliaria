@@ -36,6 +36,7 @@ export const MI_ANUNCIO = {
   },
 
   secciones: {
+    precio: { es: "Precio", en: "Price" },
     fotos: { es: "Fotos", en: "Photos" },
     descripcion: { es: "Descripción", en: "Description" },
     contacto: { es: "Contacto", en: "Contact" },
@@ -175,6 +176,33 @@ export const MI_ANUNCIO = {
     guardando: { es: "Guardando…", en: "Saving…" },
     guardado: { es: "Guardado ✓", en: "Saved ✓" },
     guardar: { es: "Guardar", en: "Save" },
+  },
+
+  // Cambiar el precio (S9, ADR 017): el historial sirve para avisar a quien tiene una alerta cuando BAJA; una
+  // subida no avisa a nadie.
+  precio: {
+    etiqueta: { es: "Precio esperado (COP)", en: "Expected price (COP)" },
+    ayuda: {
+      es: "Si lo bajas, quienes tienen una alerta que coincide con tu anuncio lo reciben en su resumen del día. Si lo subes, no avisamos a nadie.",
+      en: "If you lower it, people with an alert that matches your listing get it in their daily digest. If you raise it, we don't tell anyone.",
+    },
+    guardar: { es: "Guardar precio", en: "Save price" },
+    guardando: { es: "Guardando…", en: "Saving…" },
+    guardado: { es: "Precio guardado ✓", en: "Price saved ✓" },
+    errores: {
+      invalido: {
+        es: "Escribe un precio válido en pesos.",
+        en: "Enter a valid price in pesos.",
+      },
+      demasiados: {
+        es: "Cambiaste el precio varias veces hoy. Inténtalo de nuevo mañana.",
+        en: "You changed the price several times today. Try again tomorrow.",
+      },
+      servidor: {
+        es: "No pudimos guardar el precio. Inténtalo de nuevo en un momento.",
+        en: "We couldn't save the price. Try again in a moment.",
+      },
+    },
   },
 
   contacto: {

@@ -7,6 +7,7 @@ import {
   hashSesion,
 } from "@/engine/verificacion/sesion";
 import { identificarComprador } from "@/lib/identidad";
+import { crearClienteAnon } from "@/lib/supabase/server";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
 import { cuerpoJson, json } from "@/lib/visitas-http";
@@ -50,4 +51,29 @@ export async function POST(req: NextRequest) {
     );
     return json(200, { resultado: "no_disponible" });
   }
+}
+
+// Borrar la identificación (Ley 1581: supresión). El comprador la quita cuando quiera; los dueños dejan de
+// ver «identificado» en su tarjeta. Es una RPC pública por la sesión (el hash de la cookie).
+export async function DELETE(req: NextRequest) {
+  const requestId = crypto.randomUUID();
+  const log = logger.child({ requestId, route: "/api/identidad" });
+  const sesion = req.cookies.get(COOKIE_COMPRADOR)?.value;
+  if (!esSesionValida(sesion)) return json(403, { error: "no_verificado" });
+  const { data, error } = await crearClienteAnon().rpc(
+    "borrar_identificacion",
+    {
+      p_sesion_hash: await hashSesion(sesion),
+    },
+  );
+  if (error) {
+    reportError("identidad_borrar_error", {
+      requestId,
+      code: error.code ?? "desconocido",
+    });
+    log.error({ evento: "rpc_error", code: error.code }, "falló el borrado");
+    return json(500, { error: "servidor" });
+  }
+  log.info({ evento: "identificacion_borrada" }, "ok");
+  return json(200, { ok: true, borrada: data === true });
 }

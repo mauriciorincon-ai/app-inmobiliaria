@@ -1,6 +1,6 @@
 # ADR 012 — RPC allowlist for `anon`: default privileges are not a contract
 
-- **Status:** Accepted
+- **Status:** Accepted · completed by migration 6 in Sprint 005 (see the update at the end)
 - **Date:** 2026-10-17
 - **Sprint:** 004
 
@@ -82,3 +82,44 @@ that runs and fails inside (`inmueble_no_encontrado`) also returns an error and 
   grant system); it can be added later as depth.
 - **Pin the CI images to the cloud's versions:** complementary, not chosen: a new developer gets
   the CLI's current images, so the repo must be safe under both.
+
+## Update — Sprint 005
+
+The alternative left open above ("close new functions by default with a global default privilege") is
+now applied. Migration 6 (`20261018000001_funciones_cerradas_por_defecto.sql`) adds
+`alter default privileges for role postgres revoke execute on functions from public` and re-asserts the
+allowlist **by signature** (it pays the Sprint 004 note that the migration listed names, not
+signatures).
+
+Measured on the stack pinned to the cloud's versions (Postgres 17.6) and with the images CI pulls
+(17.11):
+
+- A function created after the migration is born with ACL `{postgres, service_role}`: closed to `anon`,
+  `authenticated` **and** PUBLIC. The Sprint 004 claim that new functions were born closed was false
+  then and is true now.
+- None of the 23 functions that `postgres` owns in `public` depends on PUBLIC. The 13 public RPCs already
+  had explicit grants, so the re-assertion changes no existing permission for `anon` or `authenticated`.
+
+Applied to the linked project on 2026-10-17, with the user's explicit yes and a read-only look at the
+catalog before and after (`supabase migration list --linked`: 7 of 7 aligned). Production, measured:
+
+- Before, `anon` could execute exactly the 13 public RPCs, the 7 operator RPCs were `authenticated` only,
+  and no function depended on PUBLIC. After, the same sets: `anon` 13, `authenticated` 20, PUBLIC 0.
+- The one real difference from the local stack: in production `service_role` had no EXECUTE on the
+  public RPCs, and now has it on the 13 (plus `obtener_lote`, from migration 7). It is the server key,
+  which already reads every table, so nothing opens outward.
+- The default for `postgres` now has the global entry (no `IN SCHEMA`) `{postgres=X}`, so a function
+  created from here on is closed to PUBLIC. Not probed in production (a probe is a write, even rolled
+  back); the probe runs on the local stack and in CI.
+
+**New rule for migrations:** a new function is closed. Open it explicitly with
+`grant execute … to anon, authenticated` (public RPC) or `… to authenticated` (operator RPC).
+`revoke all … from public` is no longer needed, and is harmless.
+
+The catalog test (`tests/e2e/permisos-funciones.spec.ts`) now compares the allowlist **by signature**,
+asserts that no function depends on PUBLIC, creates a probe function inside a transaction that is rolled
+back and requires it to be closed, and proves the probe fails when the default is opened.
+
+The cost stays as declared: the global default also removes PUBLIC from what `postgres` creates in other
+schemas, such as a future extension. The app's functions that use extensions are SECURITY DEFINER and
+run as `postgres`.

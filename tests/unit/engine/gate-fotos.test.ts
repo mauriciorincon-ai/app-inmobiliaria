@@ -68,9 +68,9 @@ describe("evaluarFoto (gate determinista)", () => {
     if (!r.ok) expect(r.razon).toBe("resolucion");
   });
 
-  it("da un mensaje accionable en es-CO por cada rechazo", () => {
+  it("devuelve solo la razón (un código): la frase la pone la UI en cada idioma", () => {
     const r = evaluarFoto({ ...fotoOk, ancho: 100, alto: 100 });
-    if (!r.ok) expect(r.mensaje.length).toBeGreaterThan(10);
+    expect(r).toEqual({ ok: false, razon: "resolucion" });
   });
 
   it("prioriza formato sobre peso sobre resolución", () => {

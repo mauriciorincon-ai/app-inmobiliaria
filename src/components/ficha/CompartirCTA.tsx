@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import type { Proyectado } from "@/i18n/textos";
+import type { FICHA } from "@/textos/ficha";
+
+export type TextosCompartir = Proyectado<typeof FICHA.compartir>;
 
 // Botón para compartir/copiar el enlace de la ficha (útil single-player: el vendedor la comparte
 // por WhatsApp aunque aún no existan compradores).
-export default function CompartirCTA() {
+export default function CompartirCTA({ t }: { t: TextosCompartir }) {
   const [copiado, setCopiado] = useState(false);
 
   async function compartir() {
@@ -31,7 +35,7 @@ export default function CompartirCTA() {
       onClick={() => void compartir()}
       className="inline-flex items-center gap-2 rounded-full border border-purple-200 px-5 py-2.5 text-sm font-semibold text-purple-600 transition-colors hover:bg-purple-tint"
     >
-      {copiado ? "Enlace copiado ✓" : "Compartir este inmueble"}
+      {copiado ? t.copiado : t.boton}
     </button>
   );
 }

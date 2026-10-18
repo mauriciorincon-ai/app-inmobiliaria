@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatearCOP, parsearCOP } from "@/engine/format/cop";
+import { esEnteroEscrito, formatearCOP, parsearCOP } from "@/engine/format/cop";
 
 describe("formatearCOP", () => {
   it("formatea con separador de miles y sin decimales", () => {
@@ -9,6 +9,16 @@ describe("formatearCOP", () => {
 
   it("redondea a entero", () => {
     expect(formatearCOP(1000000.7)).toBe("$1.000.001");
+  });
+
+  it("en inglés escribe el código de la moneda y comas, con un espacio normal", () => {
+    expect(formatearCOP(420000000, "en")).toBe("COP 420,000,000");
+    expect(formatearCOP(1000000, "en")).toBe("COP 1,000,000");
+    expect(formatearCOP(420000000, "en")).not.toMatch(/\u00a0/);
+  });
+
+  it("el idioma por defecto es el español", () => {
+    expect(formatearCOP(420000000)).toBe(formatearCOP(420000000, "es"));
   });
 
   it("devuelve cadena vacía para valores no finitos", () => {
@@ -32,5 +42,33 @@ describe("parsearCOP", () => {
   it("devuelve null para entradas no-string", () => {
     // @ts-expect-error robustez en runtime
     expect(parsearCOP(undefined)).toBeNull();
+  });
+});
+
+describe("esEnteroEscrito (un decimal no se lee como miles)", () => {
+  it.each([
+    "78",
+    "420000000",
+    "420.000.000",
+    "420,000,000",
+    "420 000 000",
+    "$ 420.000.000",
+    "COP 420,000,000",
+    "1.200",
+  ])("acepta «%s»", (texto) => {
+    expect(esEnteroEscrito(texto)).toBe(true);
+  });
+
+  it.each([
+    "85.5",
+    "85,5",
+    "420,000,000.00",
+    "420.000.000,50",
+    "1.5",
+    "",
+    "abc",
+    "1.20",
+  ])("rechaza «%s»", (texto) => {
+    expect(esEnteroEscrito(texto)).toBe(false);
   });
 });

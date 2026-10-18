@@ -2,14 +2,20 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import type { Proyectado } from "@/i18n/textos";
 import { crearClienteNavegador } from "@/lib/supabase/client";
+import type { OPERADOR } from "@/textos/operador";
+
+export type TextosFijarCupo = Proyectado<typeof OPERADOR.zonas.fijarCupo>;
 
 // Fija (o quita) el cupo de fundador de una zona. Vacío ⇒ null ⇒ la zona deja de mostrar contador
 // (escasez real o no existe). El número es decisión operativa del operador.
 export default function FijarCupo({
+  t,
   zonaId,
   cupoActual,
 }: {
+  t: TextosFijarCupo;
   zonaId: string;
   cupoActual: number | null;
 }) {
@@ -33,7 +39,7 @@ export default function FijarCupo({
   return (
     <div className="flex items-center gap-2">
       <label className="sr-only" htmlFor={`cupo-${zonaId}`}>
-        Cupo total de la zona
+        {t.etiqueta}
       </label>
       <input
         id={`cupo-${zonaId}`}
@@ -51,7 +57,7 @@ export default function FijarCupo({
         disabled={guardando}
         className="rounded-full bg-purple px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-purple-600 disabled:opacity-50"
       >
-        {guardando ? "…" : "Fijar"}
+        {guardando ? "…" : t.fijar}
       </button>
     </div>
   );

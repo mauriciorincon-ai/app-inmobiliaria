@@ -157,3 +157,9 @@ jobs:
           # omite en la colección (lighthouserc.json) porque el `noindex` global es DECISIÓN hasta H-4: sin
           # omitirlo, SEO nace en ~0,69 en todas las URLs. Se quita junto con el `noindex`.
           lhci assert --config=./lighthouse-categorias.json
+          # S5 — el idioma sale de la cookie `idioma` (ADR 013) y el Chrome de la CI manda en-US: la
+          # corrida principal fija `idioma=es` en lighthouserc.json para medir siempre la misma página, y
+          # esta segunda mide la portada en inglés (cookie `idioma=en`) con los mismos presupuestos y
+          # las mismas categorías >= 0,9. `collect` borra .lighthouseci, así que cada assert ve su corrida.
+          lhci autorun --config=./lighthouserc-en.json --collect.startServerCommand="pnpm start" --collect.url=http://localhost:3000/
+          lhci assert --config=./lighthouse-categorias.json

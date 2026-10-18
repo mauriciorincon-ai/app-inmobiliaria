@@ -6,6 +6,7 @@ import {
   THUMB_MAX_PX,
   FULL_MAX_BYTES,
   THUMB_MAX_BYTES,
+  type RechazoFoto,
   type ResultadoGate,
 } from "@/engine/fotos/gate";
 import { CONTENT_TYPE_FOTO } from "@/lib/r2";
@@ -16,12 +17,20 @@ import { leerDimensiones, type LeerDimensiones } from "@/lib/leer-dimensiones";
 // DINÁMICA (solo al elegir la primera foto) para no cargar browser-image-compression en el
 // bundle inicial de /mi-anuncio (presupuesto de script). El lector de dimensiones se inyecta.
 
+// Por qué no se subió una foto: un rechazo del gate (formato, peso, resolución) o un fallo de la
+// cadena. La UI pone la frase en el idioma activo (`MI_ANUNCIO.subidor.errores`); aquí solo códigos.
+export type RazonSubida =
+  | RechazoFoto
+  | "lectura"
+  | "limite"
+  | "presign"
+  | "subida"
+  | "confirmacion"
+  | "red";
+
 export type ResultadoSubida =
   | { ok: true; fotoId: string; orden: number }
-  | { ok: false; razon: string; mensaje: string };
-
-const MENSAJE_RED =
-  "No pudimos subir la foto. Revisa tu conexión y vuelve a intentar.";
+  | { ok: false; razon: RazonSubida };
 
 async function comprimir(
   file: File,
@@ -49,11 +58,7 @@ export async function subirFoto(
   try {
     dim = await leer(file);
   } catch {
-    return {
-      ok: false,
-      razon: "lectura",
-      mensaje: "No pudimos leer la foto. Prueba con otra.",
-    };
+    return { ok: false, razon: "lectura" };
   }
   const gate: ResultadoGate = evaluarFoto({
     tipo: file.type,
@@ -61,7 +66,7 @@ export async function subirFoto(
     ancho: dim.ancho,
     alto: dim.alto,
   });
-  if (!gate.ok) return { ok: false, razon: gate.razon, mensaje: gate.mensaje };
+  if (!gate.ok) return { ok: false, razon: gate.razon };
 
   try {
     // 2. Comprime full + thumb en paralelo.
@@ -88,13 +93,9 @@ export async function subirFoto(
         error?: string;
       };
       if (cuerpo.error === "limite_fotos") {
-        return {
-          ok: false,
-          razon: "limite",
-          mensaje: "Ya alcanzaste el máximo de fotos.",
-        };
+        return { ok: false, razon: "limite" };
       }
-      return { ok: false, razon: "presign", mensaje: MENSAJE_RED };
+      return { ok: false, razon: "presign" };
     }
     const { key, urlFull, urlThumb } = (await resp.json()) as {
       key: string;
@@ -116,7 +117,7 @@ export async function subirFoto(
       }),
     ]);
     if (puts.some((p) => !p.ok)) {
-      return { ok: false, razon: "subida", mensaje: MENSAJE_RED };
+      return { ok: false, razon: "subida" };
     }
 
     // 5. Confirma en la BD.
@@ -130,10 +131,10 @@ export async function subirFoto(
       p_bytes: full.size,
     });
     if (error || !data) {
-      return { ok: false, razon: "confirmacion", mensaje: MENSAJE_RED };
+      return { ok: false, razon: "confirmacion" };
     }
     return { ok: true, fotoId: data.id, orden: data.orden };
   } catch {
-    return { ok: false, razon: "red", mensaje: MENSAJE_RED };
+    return { ok: false, razon: "red" };
   }
 }

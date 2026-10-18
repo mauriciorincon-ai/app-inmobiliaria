@@ -10,6 +10,10 @@ export default defineConfig({
   reporter: process.env.CI ? "github" : "list",
   use: {
     baseURL: "http://localhost:3000",
+    // El idioma de la app sale de Accept-Language (ADR 013) y Chromium manda en-US por defecto:
+    // sin esto las specs escritas en español verían la portada en inglés. Las pruebas en inglés
+    // lo cambian con `test.use({ locale: "en-US" })`.
+    locale: "es-CO",
     trace: "on-first-retry",
   },
   projects: [

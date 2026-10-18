@@ -1,15 +1,24 @@
 import Link from "next/link";
+import type { Proyectado } from "@/i18n/textos";
+import type { OPERADOR } from "@/textos/operador";
 
-const items = [
-  { href: "/operador", label: "Registros" },
-  { href: "/operador/campana", label: "Campaña" },
-  { href: "/operador/zonas", label: "Zonas y cupos" },
-] as const;
+export type TextosNav = Proyectado<typeof OPERADOR.nav>;
 
 // Navegación entre las secciones del panel del operador.
-export default function PanelNav({ actual }: { actual: string }) {
+export default function PanelNav({
+  actual,
+  t,
+}: {
+  actual: string;
+  t: TextosNav;
+}) {
+  const items = [
+    { href: "/operador", etiqueta: t.registros },
+    { href: "/operador/campana", etiqueta: t.campana },
+    { href: "/operador/zonas", etiqueta: t.zonas },
+  ] as const;
   return (
-    <nav className="mt-6 flex flex-wrap gap-2" aria-label="Secciones del panel">
+    <nav className="mt-6 flex flex-wrap gap-2" aria-label={t.etiqueta}>
       {items.map((i) => (
         <Link
           key={i.href}
@@ -21,7 +30,7 @@ export default function PanelNav({ actual }: { actual: string }) {
               : "bg-purple-tint text-purple-600 hover:bg-purple-200"
           }`}
         >
-          {i.label}
+          {i.etiqueta}
         </Link>
       ))}
     </nav>

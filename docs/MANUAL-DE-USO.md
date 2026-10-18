@@ -19,6 +19,28 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   **"Publica tu inmueble como fundador"**. No necesitas crear cuenta ni contraseña.
 - **Operador:** entra a `/operador`, inicia sesión con el correo y la contraseña del equipo.
 
+## Español e inglés (toda la app) · desde Sprint 005
+
+- **Qué hace:** toda la app —la página principal, el registro, la confirmación, tu anuncio, la
+  ficha pública, la renovación, la política de privacidad y el panel del equipo— existe en
+  **español y en inglés**. El inglés está pensado para colombianos que viven afuera y para
+  extranjeros que compran o arriendan en Bogotá: los términos de aquí (localidad, barrio, CTL,
+  matrícula, apartaestudio) se nombran en español y se explican en una línea.
+- **Cómo se usa:** al entrar, la página elige el idioma de tu navegador (si tu navegador pide inglés y
+  no tiene el español como primera opción, la verás en inglés; en cualquier otro caso, en español). Para cambiarlo toca **ES** o
+  **EN** arriba a la derecha: la página se recarga en el otro idioma y **recuerda tu elección** (un
+  año). **Los enlaces no cambian:** el mismo enlace de una ficha se ve en el idioma de quien lo abre (la vista previa que WhatsApp arma al pegar un enlace no sabe qué idioma lees: ver la prueba G1 de la guía).
+  Tu enlace privado «mi anuncio» tampoco cambia al cambiar de idioma.
+- **Los avisos te llegan en el idioma en que publicaste:** el correo de campaña y el mensaje de
+  WhatsApp con el que el equipo te escribe salen en ese idioma. La invitación que mandas a otros
+  dueños sale en el idioma en que tienes la página abierta, y el mensaje que un interesado te manda
+  desde tu ficha sale en el idioma de quien lo envía.
+- **Limitaciones conocidas:** el idioma de tus avisos queda fijado al publicar y no se edita
+  después. Las **cuatro guías del paquete de fundador siguen en español**; en inglés cada tarjeta
+  lo avisa. Los precios se muestran siempre en pesos colombianos (`$420.000.000` en español,
+  `COP 420,000,000` en inglés). Un navegador en otro idioma (francés, portugués…) que no acepte
+  inglés ve el español, porque el mercado es Bogotá.
+
 ## Features
 
 ### Landing de expectativa (seller-first) · desde Sprint 001
@@ -28,7 +50,7 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   verificados, avalúo) y preguntas frecuentes.
 - **Cómo se usa:** es la página principal (`/`). Desplázate para conocer la propuesta; los botones
   **"Publica tu inmueble como fundador"** (arriba y al final) llevan al registro.
-- **Limitaciones conocidas:** solo Bogotá en esta etapa; solo español.
+- **Limitaciones conocidas:** solo Bogotá en esta etapa. Está en español y en inglés (ver «Español e inglés (toda la app)»).
 
 ### Publicar = registro (flujo de 3 pasos) · desde Sprint 001
 
@@ -40,7 +62,8 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
      habitaciones y el precio esperado. La dirección aproximada es opcional.
   3. **Paso 3 (Revisa y envía):** revisa el resumen, marca la casilla de autorización de datos
      (Ley 1581) y toca **"Publicar mi inmueble"**. Puedes dejar tu **correo (opcional)** si quieres
-     recibir el paquete de fundador y los avisos; sin correo publicas igual.
+     recibir avisos sobre tu publicación (fotos, sello y vigencia); sin correo publicas igual y te
+     escribimos por WhatsApp.
   - Si llegaste por el **enlace de invitación** de otro dueño, tu registro queda atribuido a quien te
     invitó, sin que tengas que hacer nada (desde el Sprint 003).
   - Si cierras la página a mitad, al volver el formulario **retoma donde ibas** (se guarda en tu
@@ -117,7 +140,7 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
 - **Cómo se usa:** busca **"Tu paquete de fundador"** en el inicio, en la confirmación o en tu
   anuncio, y toca la guía que quieras: se abre en una pestaña nueva y puedes guardarla.
 - **Limitaciones conocidas:** son guías informativas con sus fuentes citadas; no reemplazan la
-  asesoría de un abogado ni de un notario.
+  asesoría de un abogado ni de un notario. Están en español también cuando la página está en inglés.
 
 ### Política de privacidad (Ley 1581) · desde Sprint 001
 
@@ -125,7 +148,8 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
 - **Cómo se usa:** enlace **"política de privacidad"** en el paso 3 y en el pie de página
   (`/privacidad`).
 - **Limitaciones conocidas:** el correo de contacto del responsable es provisional hasta la
-  publicación oficial de la landing.
+  publicación oficial de la landing. Desde el S5 incluye cómo se tratan el número de matrícula y el
+  idioma que eliges, y existe también en inglés.
 
 ### Panel del operador · desde Sprint 001 (ampliado en S2)
 
@@ -137,13 +161,16 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   1. Ve a `/operador` (o `/operador/login`).
   2. Escribe el **correo** autorizado del operador y la **contraseña**.
   3. Toca **"Entrar"**. Usa **"Cerrar sesión"** para salir. Solo el correo autorizado puede entrar.
+  4. El panel también tiene el selector **ES / EN**. Junto al nombre de cada vendedor ves el idioma
+     en que publicó (ES o EN): es el idioma de sus avisos.
 - **Verificar un inmueble (nivel 2 ⭐):** el vendedor te comparte su Certificado de Tradición y
   Libertad (CTL); tú lo **ves** (nunca se sube a la app), confirmas que el titular coincide, y en
   la fila tocas **"Verificar ⭐"**, escribes el **número de matrícula** y marcas "Vi el CTL
   original". El inmueble gana el sello **"Propietario verificado"** en su ficha. Solo se guardan
   la matrícula y la fecha; el documento nunca se almacena.
 - **Re-contactar a un fundador:** el botón **"Re-contactar por WhatsApp"** genera un enlace nuevo
-  para su anuncio y abre WhatsApp con un mensaje listo que lo invita a completar sus fotos.
+  para su anuncio y abre WhatsApp con un mensaje listo que lo invita a completar sus fotos. El
+  mensaje sale en el **idioma del vendedor** (el que guardó al publicar), no en el del panel.
 - **Limitaciones conocidas:** la verificación la hace una persona (no es automática).
 
 ### Panel de campaña del operador · desde Sprint 003
@@ -154,7 +181,9 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
 - **Cómo se usa:** en el panel, pestaña **"Campaña"** (`/operador/campana`).
   1. Mira el embudo con las cifras reales del momento.
   2. Para un envío: elige una de las tres plantillas (**completa tu anuncio**, **gana tu sello**,
-     **renueva tu vigencia**), revisa cuántos destinatarios trae, y toca **"Enviar"**.
+     **renueva tu vigencia**), revisa cuántos destinatarios trae (y cuántos reciben la versión en
+     español y cuántos la inglesa), y toca **"Enviar lote"**. Cada vendedor recibe el correo en el
+     idioma en que publicó; la vista previa se ve en el idioma del panel.
   3. Abajo queda el registro de los envíos hechos.
 - **Limitaciones conocidas:** se envía por tandas de máximo 300 al día (límite del proveedor de
   correo) y la pantalla indica cuántos quedan. Solo reciben quienes dejaron correo (es opcional).
@@ -177,11 +206,14 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   sello "Propietario verificado"; lo muestras una vez y nunca se sube a la app.
 - **¿Sirve para arriendo?** Sí, aunque el mensaje lidera con la venta directa.
 - **¿Quién ve mi WhatsApp?** Nadie en la ficha pública, a menos que tú actives esa opción.
+- **¿La página está en inglés y la quiero en español (o al revés)?** Toca **ES** o **EN** arriba a
+  la derecha; la página recuerda tu elección.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                                                                |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                            |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                      |
-| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro |
+| Sprint | Features añadidas a este manual                                                                                                                                                                   |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                               |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                         |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro    |
+| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas |

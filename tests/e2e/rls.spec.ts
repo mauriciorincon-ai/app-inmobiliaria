@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { consultar } from "./utils/bd";
 
 // Pruebas NEGATIVAS de RLS con el anon key real contra el stack local: el anónimo solo puede
 // ejecutar la RPC; jamás leer ni escribir directo. Datos 100% sintéticos.
@@ -179,4 +180,53 @@ test("las RPC del operador rechazan al anónimo", async () => {
     p_inmueble_id: reg.id,
   });
   expect(r2.error?.code, r2.error?.message).toBe("42501");
+});
+
+// ── S5: idioma del vendedor ───────────────────────────────────────────────────
+// La columna `vendedores.idioma` se llena al publicar con el idioma activo; la leen el lote de correo
+// y el panel. Anon no la puede leer (RLS): se comprueba por el catálogo de la base local.
+
+function nombreUnico(base: string) {
+  return `${base} ${Date.now()}-${Math.floor(performance.now())}`;
+}
+
+function idiomaGuardado(nombre: string): string[] {
+  return consultar(
+    `select idioma from public.vendedores where nombre = '${nombre}'`,
+  );
+}
+
+test("registrar_fundador guarda el idioma 'en'", async () => {
+  const supabase = createClient(url, anon);
+  const nombre = nombreUnico("Idioma EN");
+  const { error } = await supabase.rpc(
+    "registrar_fundador",
+    argsValidos({ p_nombre: nombre, p_idioma: "en" }),
+  );
+  expect(error).toBeNull();
+  expect(idiomaGuardado(nombre)).toEqual(["en"]);
+});
+
+test("registrar_fundador sin idioma lo deja en 'es' (compatible con el Worker anterior)", async () => {
+  const supabase = createClient(url, anon);
+  const nombre = nombreUnico("Idioma ES");
+  const { error } = await supabase.rpc(
+    "registrar_fundador",
+    argsValidos({ p_nombre: nombre }),
+  );
+  expect(error).toBeNull();
+  expect(idiomaGuardado(nombre)).toEqual(["es"]);
+});
+
+test("registrar_fundador rechaza un idioma que no es es/en", async () => {
+  const supabase = createClient(url, anon);
+  const nombre = nombreUnico("Idioma FR");
+  const { error } = await supabase.rpc(
+    "registrar_fundador",
+    argsValidos({ p_nombre: nombre, p_idioma: "fr" }),
+  );
+  // check_violation (23514): el registro NO se crea.
+  expect(error?.code, error?.message).toBe("23514");
+  expect(error?.message).toContain("idioma_invalido");
+  expect(idiomaGuardado(nombre)).toEqual([]);
 });

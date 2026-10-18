@@ -1,6 +1,6 @@
 // Estado sin-fotos de la ficha: SVG del sistema (acento morado + casa), estático (LCP-safe).
 // No decorativo puro: comunica que el anuncio aún no tiene fotos.
-export default function SinFotosSVG() {
+export default function SinFotosSVG({ texto }: { texto: string }) {
   return (
     <div className="flex aspect-[16/9] w-full flex-col items-center justify-center gap-3 rounded-[2rem] bg-cream text-center">
       <svg
@@ -17,9 +17,7 @@ export default function SinFotosSVG() {
           strokeLinejoin="round"
         />
       </svg>
-      <p className="text-sm font-medium text-mute">
-        Este inmueble aún no tiene fotos
-      </p>
+      <p className="text-sm font-medium text-mute">{texto}</p>
     </div>
   );
 }

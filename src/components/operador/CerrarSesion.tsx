@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { crearClienteNavegador } from "@/lib/supabase/client";
 
-export default function CerrarSesion() {
+export default function CerrarSesion({ etiqueta }: { etiqueta: string }) {
   const router = useRouter();
   async function salir() {
     await crearClienteNavegador().auth.signOut();
@@ -16,7 +16,7 @@ export default function CerrarSesion() {
       onClick={salir}
       className="text-sm font-semibold text-gray underline-offset-4 hover:underline"
     >
-      Cerrar sesión
+      {etiqueta}
     </button>
   );
 }

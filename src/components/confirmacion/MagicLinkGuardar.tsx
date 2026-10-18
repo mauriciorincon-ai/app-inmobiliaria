@@ -2,12 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { CLAVE_LINK, extraerTokenDeHash } from "@/engine/token/token";
-import InvitaReferido from "@/components/referido/InvitaReferido";
+import InvitaReferido, {
+  type TextosReferido,
+} from "@/components/referido/InvitaReferido";
+import type { Idioma } from "@/i18n/idiomas";
+import type { Proyectado } from "@/i18n/textos";
+import type { PUBLICAR } from "@/textos/publicar";
+
+export type TextosEnlace = Proyectado<typeof PUBLICAR.confirmacion.enlace>;
 
 // Muestra el magic link recién generado (leído de sessionStorage) para que el fundador lo
 // guarde y complete su anuncio. Si no hay link (visita directa, Lighthouse, e2e de regresión),
-// no renderiza NADA → la confirmación conserva su naturaleza estática/stateless.
-export default function MagicLinkGuardar() {
+// no renderiza NADA → la confirmación conserva su naturaleza estática/stateless. Cliente: recibe
+// SOLO los textos de su idioma por props.
+export default function MagicLinkGuardar({
+  lang,
+  t,
+  referido,
+}: {
+  lang: Idioma;
+  t: TextosEnlace;
+  referido: TextosReferido;
+}) {
   const [link, setLink] = useState<string | null>(null);
   const [copiado, setCopiado] = useState(false);
 
@@ -42,17 +58,14 @@ export default function MagicLinkGuardar() {
         aria-labelledby="link-titulo"
       >
         <h2 id="link-titulo" className="text-lg font-extrabold text-ink">
-          Este es tu enlace privado — guárdalo
+          {t.titulo}
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-gray">
-          Con él vuelves cuando quieras a completar tu anuncio con fotos y
-          descripción. Es solo tuyo: no lo compartas.
-        </p>
+        <p className="mt-2 text-sm leading-relaxed text-gray">{t.texto}</p>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <input
             readOnly
             value={link}
-            aria-label="Tu enlace privado"
+            aria-label={t.etiqueta}
             className="min-w-0 flex-1 rounded-full border border-purple-200 bg-white px-4 py-2.5 text-sm text-ink"
             onFocus={(e) => e.currentTarget.select()}
           />
@@ -61,17 +74,17 @@ export default function MagicLinkGuardar() {
             onClick={() => void copiar()}
             className="rounded-full bg-purple px-5 py-2.5 text-sm font-semibold text-white shadow-card transition-transform hover:bg-purple-600 hover:scale-[1.03]"
           >
-            {copiado ? "Copiado ✓" : "Copiar enlace"}
+            {copiado ? t.copiado : t.copiar}
           </button>
         </div>
         <a
           href={link}
           className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-purple-600 underline-offset-4 hover:underline"
         >
-          Completar mi anuncio ahora →
+          {t.completar}
         </a>
       </section>
-      {token && <InvitaReferido token={token} />}
+      {token && <InvitaReferido token={token} lang={lang} t={referido} />}
     </>
   );
 }

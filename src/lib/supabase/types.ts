@@ -18,6 +18,8 @@ export type VendedorRow = {
   created_at: string;
   // S3 — atribución de referido (código del referente)
   referido_por_codigo: string | null;
+  // S5 — idioma en que publicó (los avisos le llegan en ese idioma)
+  idioma: "es" | "en";
 };
 
 export type InmuebleRow = {
@@ -100,6 +102,8 @@ export type RegistrarFundadorArgs = {
   p_ip_hash: string | null;
   // S3 — código de referido (opcional; inválido/ausente se ignora en silencio).
   p_ref?: string | null;
+  // S5 — idioma activo al publicar ('es' | 'en'; la RPC rechaza otro valor).
+  p_idioma?: "es" | "en";
 };
 
 // registrar_fundador ahora devuelve el id + slug + token (en claro, una sola vez).
@@ -163,6 +167,7 @@ export type LoteDestinatario = {
   email: string;
   nombre: string;
   barrio: string;
+  idioma: "es" | "en";
 };
 // renovar_vigencia: nueva fecha de corte.
 export type RenovacionResult = { vigente_hasta: string };
@@ -197,9 +202,10 @@ export type Database = {
     Tables: {
       vendedores: {
         Row: VendedorRow;
-        Insert: Omit<VendedorRow, "id" | "created_at"> & {
+        Insert: Omit<VendedorRow, "id" | "created_at" | "idioma"> & {
           id?: string;
           created_at?: string;
+          idioma?: "es" | "en";
         };
         Update: Partial<VendedorRow>;
         Relationships: [];

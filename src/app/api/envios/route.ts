@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { crearClienteServidor } from "@/lib/supabase/server";
-import { plantillaPorId } from "@/engine/envios/plantillas";
+import { agruparPorIdioma, plantillaPorId } from "@/engine/envios/plantillas";
+import { esIdioma, IDIOMA_POR_DEFECTO } from "@/i18n/idiomas";
 import { enviarLote, type Destinatario } from "@/lib/brevo";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
@@ -63,11 +64,16 @@ export async function POST(req: NextRequest) {
     const destinatarios: Destinatario[] = (lote ?? []).map((d) => ({
       email: d.email,
       nombre: d.nombre,
+      // Un idioma que no sea es/en (no debería ocurrir: la columna lo impide) cae en el español.
+      idioma: esIdioma(d.idioma) ? d.idioma : IDIOMA_POR_DEFECTO,
     }));
     const tanda = destinatarios.slice(0, TANDA_MAX);
 
     const urlApp = process.env.NEXT_PUBLIC_APP_URL ?? "";
     const { enviados, mock } = await enviarLote(plantilla, tanda, urlApp);
+    // Cuántos recibieron cada versión (solo conteos: jamás datos del vendedor).
+    const grupos = agruparPorIdioma(tanda);
+    const porIdioma = { es: grupos.es.length, en: grupos.en.length };
 
     await supabase.rpc("registrar_envio", {
       p_plantilla: plantilla.id,
@@ -82,6 +88,7 @@ export async function POST(req: NextRequest) {
         evento: "envio_ok",
         tanda: tanda.length,
         enviados,
+        porIdioma,
         mock,
         ms: Date.now() - t0,
       },
@@ -92,6 +99,7 @@ export async function POST(req: NextRequest) {
       total: destinatarios.length,
       tanda: tanda.length,
       enviados,
+      porIdioma,
       mock,
       quedanHoy: Math.max(0, TANDA_MAX - tanda.length),
     });

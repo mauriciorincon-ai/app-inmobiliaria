@@ -3,15 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { rpcPublico } from "@/lib/supabase/rpc-publico";
-import { textoCupos } from "@/engine/cupos/cupos";
+import { estadoCupos } from "@/engine/cupos/cupos";
+import { rellenar, type Proyectado } from "@/i18n/textos";
+import type { LANDING } from "@/textos/landing";
 import type { CupoZona } from "@/lib/supabase/types";
 
-// Banda de cupos de fundador por zona. Carga tras montar (la landing sigue LCP-estático) y SOLO
+export type TextosCupos = Proyectado<typeof LANDING.cupos>;
+
+// Banda de cupos de fundador por zona. Carga tras montar (la landing sigue LCP-estática) y SOLO
 // aparece si el operador fijó cupo en alguna zona — sin cupos fijados no hay banda (regla dura:
 // escasez REAL o no existe; cero contadores fabricados). Los números salen SIEMPRE de la BD.
 // Lee vía `rpcPublico` (fetch nativo, sin el cliente supabase) para no cargar ~63 KB gz en la
-// landing LCP-crítica — respeta el perf-budget de scripts.
-export default function BandaCupos() {
+// landing LCP-crítica — respeta el perf-budget de scripts. Cliente: recibe SOLO los textos de su
+// idioma por props.
+export default function BandaCupos({ t }: { t: TextosCupos }) {
   const [cupos, setCupos] = useState<CupoZona[] | null>(null);
 
   useEffect(() => {
@@ -26,18 +31,30 @@ export default function BandaCupos() {
 
   if (!cupos || cupos.length === 0) return null;
 
-  const lineas = cupos
-    .map((c) => ({
+  const lineas: Array<{ zona: string; texto: string }> = [];
+  for (const c of cupos) {
+    const estado = estadoCupos(c.cupo_total, c.publicados);
+    if (estado === null) continue;
+    const plantilla =
+      estado.tipo === "completos"
+        ? t.completos
+        : estado.tipo === "uno"
+          ? t.uno
+          : t.varios;
+    lineas.push({
       zona: c.zona,
-      texto: textoCupos(c.cupo_total, c.publicados, c.zona),
-    }))
-    .filter((x): x is { zona: string; texto: string } => x.texto !== null);
+      texto: rellenar(plantilla, {
+        zona: c.zona,
+        n: estado.tipo === "varios" ? estado.restantes : 1,
+      }),
+    });
+  }
 
   if (lineas.length === 0) return null;
 
   return (
     <section
-      aria-label="Cupos de fundador por zona"
+      aria-label={t.etiqueta}
       className="border-y border-purple-200 bg-purple-tint"
     >
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-6 py-6 sm:flex-row sm:justify-between">
@@ -55,7 +72,7 @@ export default function BandaCupos() {
           href="/publicar"
           className="shrink-0 rounded-full bg-purple px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-600"
         >
-          Asegura tu cupo
+          {t.asegura}
         </Link>
       </div>
     </section>

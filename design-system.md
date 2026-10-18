@@ -86,10 +86,10 @@ Blob decorativo del hero: `#FFD23F` (amarillo). No tokenizado (uso único).
 
 - Comisión **3% urbano** (≈**$12M** en una vivienda de $400M).
 - **7–7,5 meses** de venta promedio (Bogotá/Medellín).
-- **+35% denuncias** de estafas inmobiliarias (Camacol 2024).
 - **CTL $23.000** (solo como referencia; el CTL NUNCA se pide en el registro de S1).
 
-**PROHIBIDAS (evidencia débil — jamás en la UI):** "32% más rápido", "+118% vistas",
+**PROHIBIDAS (evidencia débil — jamás en la UI):** "+35% denuncias de estafa (Camacol 2024)" (informe
+original no accedido; se retiró en el S5), "32% más rápido", "+118% vistas",
 "3× contactos", tours 3D "31% más rápido/9% más precio", staging "98,5–99%", "Habi 20–25% bajo
 mercado", "suplantada 300 veces". El teaser de fotos (T1) se comunica **cualitativo**, sin números.
 

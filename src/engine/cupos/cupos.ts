@@ -29,16 +29,19 @@ export function agotado(
   return cuposRestantes(cupoTotal, publicados) === 0;
 }
 
-// Copy honesto del contador. Devuelve null si NO se debe mostrar (sin cupo fijado).
-export function textoCupos(
+// Estado honesto del contador de una zona. `null` si NO se debe mostrar (sin cupo fijado). La frase
+// la compone la UI en el idioma de la persona (`src/textos/landing.ts`); el motor solo dice qué pasa.
+export type EstadoCupos =
+  | { tipo: "completos" }
+  | { tipo: "uno" }
+  | { tipo: "varios"; restantes: number };
+
+export function estadoCupos(
   cupoTotal: number | null | undefined,
   publicados: number,
-  zona: string,
-): string | null {
+): EstadoCupos | null {
   const rest = cuposRestantes(cupoTotal, publicados);
   if (rest === null) return null;
-  if (rest === 0) return `Cupos de fundador completos en ${zona}`;
-  return rest === 1
-    ? `Queda 1 cupo de fundador en ${zona}`
-    : `Quedan ${rest} cupos de fundador en ${zona}`;
+  if (rest === 0) return { tipo: "completos" };
+  return rest === 1 ? { tipo: "uno" } : { tipo: "varios", restantes: rest };
 }

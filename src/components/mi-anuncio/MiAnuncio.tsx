@@ -10,13 +10,40 @@ import SubidorFotos from "@/components/mi-anuncio/SubidorFotos";
 import GaleriaEditable from "@/components/mi-anuncio/GaleriaEditable";
 import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
 import OptInContacto from "@/components/mi-anuncio/OptInContacto";
-import RenovarVigencia from "@/components/vigencia/RenovarVigencia";
-import InvitaReferido from "@/components/referido/InvitaReferido";
-import PaqueteFundador from "@/components/paquete/PaqueteFundador";
+import RenovarVigencia, {
+  type TextosTarjeta,
+} from "@/components/vigencia/RenovarVigencia";
+import InvitaReferido, {
+  type TextosReferido,
+} from "@/components/referido/InvitaReferido";
+import PaqueteFundador, {
+  type TextosPaquete,
+} from "@/components/paquete/PaqueteFundador";
+import type { Idioma } from "@/i18n/idiomas";
+import type { Proyectado } from "@/i18n/textos";
+import type { MI_ANUNCIO } from "@/textos/mi-anuncio";
+
+export type TextosMiAnuncio = Proyectado<typeof MI_ANUNCIO>;
+
+// Prefijo del enlace privado que se muestra de ejemplo; es parte de la URL, no se traduce.
+const PREFIJO_ENLACE = "mi-anuncio#t=";
 
 type Estado = "cargando" | "sin-token" | "no-encontrado" | "listo" | "error";
 
-export default function MiAnuncio() {
+// Cliente: recibe SOLO los textos de su idioma por props (y los de los bloques que contiene).
+export default function MiAnuncio({
+  lang,
+  t,
+  vigencia,
+  referido,
+  paquete,
+}: {
+  lang: Idioma;
+  t: TextosMiAnuncio;
+  vigencia: TextosTarjeta;
+  referido: TextosReferido;
+  paquete: TextosPaquete;
+}) {
   const [estado, setEstado] = useState<Estado>("cargando");
   const [anuncio, setAnuncio] = useState<MiAnuncioData | null>(null);
   // Largo de la descripción tal como se está escribiendo (para el score en vivo, sin guardar aún).
@@ -66,7 +93,7 @@ export default function MiAnuncio() {
   if (estado === "cargando") {
     return (
       <p className="mt-10 text-sm text-mute" role="status">
-        Cargando tu anuncio…
+        {t.estados.cargando}
       </p>
     );
   }
@@ -74,11 +101,13 @@ export default function MiAnuncio() {
   if (estado === "sin-token" || estado === "no-encontrado") {
     return (
       <div className="mt-10 rounded-[2rem] bg-cream px-6 py-12 text-center">
-        <p className="text-lg font-bold text-ink">Necesitas tu enlace</p>
+        <p className="text-lg font-bold text-ink">
+          {t.estados.sinEnlace.titulo}
+        </p>
         <p className="mt-2 text-sm text-gray">
-          Este anuncio se abre con el enlace privado que te dimos al publicar
-          (empieza por <span className="font-medium">mi-anuncio#t=</span>).
-          Búscalo en la pantalla de confirmación o pídelo de nuevo.
+          {t.estados.sinEnlace.antes}
+          <span className="font-medium">{PREFIJO_ENLACE}</span>
+          {t.estados.sinEnlace.despues}
         </p>
       </div>
     );
@@ -90,8 +119,7 @@ export default function MiAnuncio() {
         role="alert"
         className="mt-10 rounded-2xl bg-red-50 px-5 py-4 text-sm font-medium text-red-700"
       >
-        No pudimos cargar tu anuncio. Recarga la página o inténtalo en un
-        momento.
+        {t.estados.error}
       </div>
     );
   }
@@ -107,6 +135,7 @@ export default function MiAnuncio() {
   return (
     <div className="mt-8 space-y-10">
       <ScoreCompletitud
+        t={t.score}
         score={score}
         fotos={anuncio.fotos.length}
         tienePortada={tienePortada}
@@ -116,14 +145,16 @@ export default function MiAnuncio() {
 
       <section aria-labelledby="fotos-titulo">
         <h2 id="fotos-titulo" className="text-xl font-bold text-ink">
-          Fotos
+          {t.secciones.fotos}
         </h2>
         <GaleriaEditable
+          t={t.galeria}
           fotos={anuncio.fotos}
           token={token}
           onCambio={recargar}
         />
         <SubidorFotos
+          t={t.subidor}
           token={token}
           cantidadActual={anuncio.fotos.length}
           onSubida={recargar}
@@ -132,9 +163,10 @@ export default function MiAnuncio() {
 
       <section aria-labelledby="desc-titulo">
         <h2 id="desc-titulo" className="text-xl font-bold text-ink">
-          Descripción
+          {t.secciones.descripcion}
         </h2>
         <EditorDescripcion
+          t={t.editor}
           token={token}
           valorInicial={anuncio.descripcion ?? ""}
           minimo={DESCRIPCION_MIN}
@@ -145,9 +177,10 @@ export default function MiAnuncio() {
 
       <section aria-labelledby="contacto-titulo">
         <h2 id="contacto-titulo" className="text-xl font-bold text-ink">
-          Contacto
+          {t.secciones.contacto}
         </h2>
         <OptInContacto
+          t={t.contacto}
           token={token}
           activo={anuncio.contacto_publico}
           onCambio={recargar}
@@ -155,13 +188,15 @@ export default function MiAnuncio() {
       </section>
 
       <RenovarVigencia
+        lang={lang}
+        t={vigencia}
         token={token}
         vigenteHastaInicial={anuncio.vigente_hasta}
       />
 
-      <InvitaReferido token={token} />
+      <InvitaReferido token={token} lang={lang} t={referido} />
 
-      <PaqueteFundador compacto />
+      <PaqueteFundador t={paquete} lang={lang} compacto />
     </div>
   );
 }

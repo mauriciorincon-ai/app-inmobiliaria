@@ -3,13 +3,32 @@
 import { useEffect, useState } from "react";
 import { extraerTokenDeHash } from "@/engine/token/token";
 import { crearClienteNavegador } from "@/lib/supabase/client";
-import RenovarVigencia from "@/components/vigencia/RenovarVigencia";
+import RenovarVigencia, {
+  type TextosTarjeta,
+} from "@/components/vigencia/RenovarVigencia";
+import type { Idioma } from "@/i18n/idiomas";
+import type { Proyectado } from "@/i18n/textos";
 import type { MiAnuncioData } from "@/lib/supabase/types";
+import type { VIGENCIA } from "@/textos/mi-anuncio";
+
+export type TextosRenovar = Proyectado<typeof VIGENCIA.pagina>;
+
+// Prefijo del enlace privado que se muestra de ejemplo; es parte de la URL, no se traduce.
+const PREFIJO_ENLACE = "mi-anuncio#t=";
 
 type Estado = "cargando" | "sin-token" | "listo" | "error";
 
 // Resuelve el token del fragment (#t=…) y carga la vigencia actual para mostrar el botón de renovar.
-export default function RenovarPagina() {
+// Cliente: recibe SOLO los textos de su idioma por props.
+export default function RenovarPagina({
+  lang,
+  t,
+  tarjeta,
+}: {
+  lang: Idioma;
+  t: TextosRenovar;
+  tarjeta: TextosTarjeta;
+}) {
   const [estado, setEstado] = useState<Estado>("cargando");
   const [token, setToken] = useState<string | null>(null);
   const [vigenteHasta, setVigenteHasta] = useState<string | null>(null);
@@ -44,7 +63,7 @@ export default function RenovarPagina() {
   if (estado === "cargando") {
     return (
       <p role="status" className="mt-8 text-sm text-mute">
-        Cargando tu anuncio…
+        {t.cargando}
       </p>
     );
   }
@@ -52,11 +71,11 @@ export default function RenovarPagina() {
   if (estado === "sin-token") {
     return (
       <div className="mt-8 rounded-[2rem] bg-cream px-6 py-12 text-center">
-        <p className="text-lg font-bold text-ink">Necesitas tu enlace</p>
+        <p className="text-lg font-bold text-ink">{t.sinEnlace.titulo}</p>
         <p className="mt-2 text-sm text-gray">
-          Abre esta página desde el enlace privado que te dimos al publicar
-          (empieza por <span className="font-medium">mi-anuncio#t=</span> o
-          llega desde el correo de renovación).
+          {t.sinEnlace.antes}
+          <span className="font-medium">{PREFIJO_ENLACE}</span>
+          {t.sinEnlace.despues}
         </p>
       </div>
     );
@@ -68,11 +87,17 @@ export default function RenovarPagina() {
         role="alert"
         className="mt-8 rounded-2xl bg-red-50 px-5 py-4 text-sm font-medium text-red-700"
       >
-        No pudimos cargar tu anuncio. Recarga la página o inténtalo en un
-        momento.
+        {t.error}
       </div>
     );
   }
 
-  return <RenovarVigencia token={token} vigenteHastaInicial={vigenteHasta} />;
+  return (
+    <RenovarVigencia
+      lang={lang}
+      t={tarjeta}
+      token={token}
+      vigenteHastaInicial={vigenteHasta}
+    />
+  );
 }

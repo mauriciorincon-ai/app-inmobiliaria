@@ -70,6 +70,8 @@ export async function POST(req: NextRequest) {
       p_telefono: telefono,
       p_idioma: idioma,
       p_ip_hash: ipHash,
+      // S8: el consentimiento ya se exigió arriba (`z.literal(true)`); llega también a la base.
+      p_consentimiento: leido.data.consentimiento,
     },
   );
   if (error || !codigo) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { preload } from "react-dom";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
@@ -7,6 +8,7 @@ import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
+import { VISITA } from "@/textos/visita";
 import Galeria from "@/components/ficha/Galeria";
 import SelloNivel from "@/components/ficha/SelloNivel";
 import SelloExplicado from "@/components/ficha/SelloExplicado";
@@ -110,6 +112,7 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
   if (og) preload(og, { as: "image", fetchPriority: "high" });
 
   const t = enIdioma(FICHA, lang);
+  const visita = enIdioma(VISITA, lang);
   const verificado = f.contacto_publico ? await sesionVerificada() : false;
   const dominio = enIdioma(COMUN.dominio, lang);
   const operaciones: Record<string, string> = dominio.operacion;
@@ -178,13 +181,28 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
           <p className="text-sm text-mute">{t.publicadoPor}</p>
           <p className="text-lg font-bold text-ink">{f.nombre_publicador}</p>
           {f.contacto_publico ? (
-            <ContactarDueno
-              slug={f.slug}
-              lang={lang}
-              verificado={verificado}
-              mensaje={mensajeContacto(f.tipo, f.barrio, lang)}
-              t={t.contacto}
-            />
+            <>
+              <ContactarDueno
+                slug={f.slug}
+                lang={lang}
+                verificado={verificado}
+                mensaje={mensajeContacto(f.tipo, f.barrio, lang)}
+                t={t.contacto}
+              />
+              <div className="mt-3">
+                <Link
+                  href={`/pedir-visita?slug=${f.slug}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-purple-200 bg-white px-7 py-3.5 text-base font-semibold text-purple-600 transition-colors hover:bg-purple-tint"
+                >
+                  {visita.boton.pedir}
+                </Link>
+                {f.solo_identificados && (
+                  <p className="mt-2 text-xs text-mute">
+                    {visita.boton.preferencia}
+                  </p>
+                )}
+              </div>
+            </>
           ) : (
             <p className="mt-2 text-sm text-gray">{t.sinContacto}</p>
           )}

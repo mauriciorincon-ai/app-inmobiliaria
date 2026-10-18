@@ -12,9 +12,10 @@ se pide el inmueble.
 
 Hay tres usos: el del **vendedor** (publica su inmueble), el del **comprador** (desde el Sprint 006
 busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verifica su WhatsApp, le
-escribe al dueño con un toque) y el del **operador** (el equipo de Innmobiliaria, que ve los
-registros en un panel privado). El dueño decide si los compradores verificados pueden escribirle;
-agenda de visitas, favoritos y alertas todavía no están.
+escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
+visita) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un panel
+privado). El dueño decide si los compradores verificados pueden escribirle y recibir solicitudes de
+visita; favoritos y alertas todavía no están.
 
 ## Primeros pasos
 
@@ -75,8 +76,8 @@ agenda de visitas, favoritos y alertas todavía no están.
 ## Escribirle a un dueño (el comprador verifica su WhatsApp) · desde Sprint 007
 
 - **Qué hace:** antes de escribirle a un dueño, pruebas que tu WhatsApp es tuyo. Así el dueño sabe
-  que le escribe una persona real con un número real. **No verificamos quién eres** (cédula,
-  documentos): eso es aparte y llega después. **Innmobiliaria nunca te envía mensajes por WhatsApp:
+  que le escribe una persona real con un número real. Verificar el WhatsApp **no prueba quién
+  eres**: para eso, la identificación con tu cédula (más abajo) es aparte y opcional. **Innmobiliaria nunca te envía mensajes por WhatsApp:
   eres tú quien nos escribe un código.**
 - **Cómo se usa:** en la ficha de un anuncio toca **«Escribirle por WhatsApp»** →
   1. Si aún no verificaste, te lo explica y te lleva a **«Verificar mi WhatsApp»**.
@@ -96,6 +97,51 @@ agenda de visitas, favoritos y alertas todavía no están.
 - **Limitaciones conocidas:** por ahora solo celulares de Colombia. Si borras los datos del
   navegador, hay que verificar de nuevo. Si el dueño no activó el contacto, la ficha lo dice y no
   hay botón. Un anuncio vencido ya no recibe contactos.
+
+## Identificarte, pedir una visita y agendarla · desde Sprint 008
+
+- **Qué hace:** el comprador puede **identificarse** con su cédula (opcional), **pedir una visita** a
+  un inmueble contando para qué lo busca, cuánto dice tener y cómo pagaría, y **agendarla** con el
+  dueño. El dueño ve su **tarjeta** antes de decir que sí, le propone hasta 3 horarios, el comprador
+  confirma uno y a los dos les llega un **recordatorio por correo el día antes**. Todas las horas son
+  de Bogotá. **Innmobiliaria no envía mensajes por WhatsApp:** los avisos van por correo y la
+  dirección exacta la da el dueño por su propio WhatsApp.
+- **Cómo se identifica el comprador:** en **`/identificarse`** (después de verificar su WhatsApp)
+  escribe su número de cédula, la fecha de expedición y su nombre completo como en la cédula, acepta
+  y toca **«Validar mi cédula»**. Se contrasta con la Registraduría por un proveedor. Si todo
+  coincide queda **«Identificado»**; si no, se le dice cómo corregir. Tiene **3 intentos**, y si el
+  servicio no responde no se le descuenta ninguno. El número de cédula y la fecha **no se guardan**:
+  solo que salió bien y cuándo. Puede **borrar su identificación** cuando quiera desde la misma
+  pantalla. Por ahora, solo cédula de ciudadanía colombiana.
+- **Cómo pide la visita:** en la ficha, **«Pedir una visita»** (aparece si el dueño activó el
+  contacto) → si no ha verificado su WhatsApp, se le lleva a verificarlo → elige **para vivir** o
+  **para invertir**, su presupuesto en millones (opcional; lo declara él y no se verifica), cómo
+  pagaría (opcional), un mensaje de hasta 300 caracteres y **su correo**, que se usa solo para los
+  avisos de esa visita. Al enviar recibe el enlace a **su solicitud**, que también le llega por correo
+  y funciona desde cualquier navegador.
+- **Qué ve el dueño:** en **Mi anuncio → «Solicitudes de visita»**, una tarjeta por comprador con su
+  nombre, los últimos 4 dígitos de su WhatsApp, si está **identificado**, para qué busca, lo que
+  declaró y **«Asistió a N de M visitas»** en Innmobiliaria. **Nunca ve su correo.** Puede **proponer
+  horarios** (fecha y hora, hasta 3, entre las 6:00 a. m. y las 9:00 p. m.), **«No me interesa»**
+  o, si la solicitud está en espera, **«Aceptar igual»**.
+- **«Solo compradores identificados»:** en esa misma sección el dueño puede activar la opción. Con
+  ella, la solicitud de quien solo verificó su WhatsApp queda **en espera** hasta que el dueño la
+  acepte; quien se identificó entra directo. Quien solo verificó su WhatsApp puede seguir
+  escribiéndole.
+- **Cómo se agenda:** el comprador abre su solicitud, elige uno de los horarios (o **«Ninguno me
+  sirve»**, y el dueño propone otros) y **«Confirmar la visita»**. Desde ahí puede **«Agregar a mi
+  calendario»** (baja un archivo `.ics` en hora de Bogotá) o cancelar. Solo cuando confirma, el dueño
+  ve su **WhatsApp completo** con el botón **«Escribirle por WhatsApp»** para pasarle la dirección
+  exacta. Cualquiera de los dos puede cancelar mientras no llegue la hora.
+- **El recordatorio:** cada día a las **8:00 a. m. (Bogotá)** el sistema avisa por correo, a ambos, de
+  las visitas del día siguiente: **uno por visita y ninguno si se canceló**. Si el dueño no dejó
+  correo al publicar, no recibe avisos: ve todo al abrir **Mi anuncio**.
+- **Después de la visita:** el dueño marca **«Sí, vino»** o **«No vino»**. Lo que marca aparece en la
+  tarjeta del comprador solo como un conteo; nadie ve el detalle.
+- **Limitaciones conocidas:** la validación real de cédula y el recordatorio en producción se prueban
+  en el ensayo general; hasta entonces, en producción, «Identificarse» responde que no pudo consultar la Registraduría (el simulador es solo de desarrollo y pruebas). No hay selector visual de
+  calendario: el dueño escribe la fecha y elige la hora. Si no se identifica con una cédula
+  colombiana, no puede identificarse. Un dueño sin correo no recibe avisos.
 
 ## Features
 
@@ -120,8 +166,8 @@ agenda de visitas, favoritos y alertas todavía no están.
      muestra**: en el mapa tu anuncio aparece como el área de tu barrio, no como un punto.
   3. **Paso 3 (Revisa y envía):** revisa el resumen, marca la casilla de autorización de datos
      (Ley 1581) y toca **"Publicar mi inmueble"**. Puedes dejar tu **correo (opcional)** si quieres
-     recibir avisos sobre tu publicación (fotos, sello y vigencia); sin correo publicas igual y te
-     escribimos por WhatsApp.
+     recibir avisos sobre tu publicación (fotos, sello y vigencia); sin correo publicas igual, pero no
+     recibes avisos automáticos: lo ves todo al abrir tu enlace privado.
   - Si llegaste por el **enlace de invitación** de otro dueño, tu registro queda atribuido a quien te
     invitó, sin que tengas que hacer nada (desde el Sprint 003).
   - Si cierras la página a mitad, al volver el formulario **retoma donde ibas** (se guarda en tu
@@ -297,11 +343,12 @@ agenda de visitas, favoritos y alertas todavía no están.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                       |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                   |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                             |
-| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                        |
-| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                     |
-| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel      |
-| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL |
+| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                                                                      |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                                                                  |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                                                                            |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                                                                       |
+| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                                                                    |
+| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                     |
+| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                |
+| 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió» |

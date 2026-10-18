@@ -292,6 +292,46 @@ webhook rechaza todo; nada más de la app se afecta. Después, `pnpm deploy:cf`.
 2. Suscribe el evento `messages`.
 3. Desde tu teléfono, abre una ficha con contacto activo y verifica tu WhatsApp (bloque K de la guía).
 
+## Bloque 6 — La visita: identidad y recordatorios (Sprint 008)
+
+Dos servicios nuevos, los dos **opcionales hasta el ensayo general**: el proveedor que valida la cédula y el
+Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la app: 40 consultas al mes,
+5 al día, 3 intentos por comprador; Brevo y Cloudflare, dentro de lo gratis).
+
+| Qué                                                            | Cuándo                                                                                                                      | Qué haces tú                                                                   |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Cuenta de Didit (validación de cédula contra la Registraduría) | **ensayo general** (hasta entonces, en producción «Identificarse» dice «no disponible»; el simulador es solo de desarrollo) | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key    |
+| `CRON_SECRET`                                                  | antes del deploy                                                                                                            | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
+| Brevo                                                          | ya existe (S3)                                                                                                              | el mismo remitente verificado sirve para los avisos de la visita               |
+| Migraciones 10 y 11                                            | ya aplicadas en la nube con tu «sí»                                                                                         | nada                                                                           |
+
+### 6.1 [TÚ] Poner los secretos en el Worker
+
+```bash
+pnpm exec wrangler secret put CRON_SECRET     # un texto largo que inventas; lo usa el cron y su respaldo
+pnpm exec wrangler secret put DIDIT_API_KEY   # solo en el ensayo general: la API key de Didit
+```
+
+Sin `DIDIT_API_KEY` (y sin el simulador) «Identificarse» responde «no disponible»: **nunca simula en
+silencio**. Sin `CRON_SECRET` el trabajo diario responde 503 y no manda nada. `BREVO_API_KEY`,
+`BREVO_FROM_EMAIL` y `SUPABASE_SERVICE_ROLE_KEY` ya están de antes. Después, `pnpm deploy:cf`: el Worker
+queda con el Cron Trigger `0 13 * * *` (las 8:00 de Bogotá).
+
+### 6.2 [TÚ] Comprobar el cron en producción
+
+1. En el panel de Cloudflare → Workers → tu Worker → **Triggers**, debe aparecer el Cron `0 13 * * *`.
+2. El primer día con una visita confirmada para el día siguiente, mira **Logs**: una línea
+   `evento: "cron"` con los conteos (sin datos de nadie).
+3. Si el plan gratis no alcanza (10 ms de CPU) o el cron falla, activa el respaldo: en GitHub, el workflow
+   «Recordatorios de visitas (respaldo)» (descomenta su `schedule`) con los secretos del repo `APP_URL` y
+   `CRON_SECRET`. Correr los dos el mismo día no duplica nada.
+
+### 6.3 [TÚ] Probar la cédula con la cuenta real (ensayo general)
+
+Con `DIDIT_API_KEY` puesta: en `/identificarse` valida **tu propia cédula** (la fecha de expedición está
+al respaldo). Debe quedar «Identificado». Prueba también con un nombre mal escrito: debe decir «los datos
+no coinciden» y gastar un intento. Cuenta cada consulta contra los 40 gratis del mes.
+
 ## Deuda K1 — Colima (Supabase local para e2e reproducible)
 
 Para correr los e2e fuera de CI (deuda del S1):

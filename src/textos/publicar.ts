@@ -143,8 +143,8 @@ export const PUBLICAR = {
       etiqueta: { es: "Tu correo (opcional)", en: "Your email (optional)" },
       // El paquete fundador NO se envía por correo (ADR 010): se sirve como enlaces en la página.
       ayuda: {
-        es: "Para avisarte sobre tu publicación: fotos, sello de verificado y vigencia. Si lo dejas vacío, te escribimos solo por WhatsApp.",
-        en: "So we can notify you about your listing: photos, verified seal and renewal. If you leave it empty, we'll write to you on WhatsApp only.",
+        es: "Para avisarte sobre tu publicación: fotos, sello de verificado, vigencia y las solicitudes de visita. Si lo dejas vacío, no recibes avisos automáticos: verás todo al abrir tu enlace privado.",
+        en: "So we can notify you about your listing: photos, verified seal, renewal and viewing requests. If you leave it empty, you won't get automatic notices: you'll see everything when you open your private link.",
       },
     },
     consentimiento: {
@@ -302,8 +302,8 @@ export const PUBLICAR = {
         },
         // Sin fecha: no hay una fecha comprometida (decisión del S5).
         texto: {
-          es: "Te avisamos por WhatsApp cuando llegue el momento.",
-          en: "We'll message you on WhatsApp when the time comes.",
+          es: "Si dejaste tu correo, te avisamos cuando llegue el momento.",
+          en: "If you left your email, we'll let you know when the time comes.",
         },
       },
     ],

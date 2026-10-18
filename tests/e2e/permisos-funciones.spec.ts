@@ -10,23 +10,35 @@ import { consultar, ejecutar } from "./utils/bd";
 // solo consulta el catálogo; la sonda vive dentro de una transacción que se revierte.
 
 const PUBLICAS = [
+  "aceptar_en_espera(text,uuid)",
+  "borrar_identificacion(text)",
   "buscar_inmuebles(operacion,tipo_inmueble,text,bigint,bigint,smallint,text,integer)",
+  "cancelar_visita_comprador(text)",
+  "cancelar_visita_dueno(text,uuid)",
+  "elegir_horario(text,uuid)",
   "eliminar_foto(text,uuid)",
   "estado_verificacion(text)",
   "guardar_contacto_publico(text,boolean)",
   "guardar_descripcion(text,text)",
-  "iniciar_verificacion(text,text,text,text,text)",
+  "guardar_solo_identificados(text,boolean)",
+  // S8: la de 6 argumentos exige el consentimiento; la de 5 del S7 quedó cerrada (ver más abajo).
+  "iniciar_verificacion(text,text,text,text,text,boolean)",
+  "marcar_asistencia(text,uuid,boolean)",
   "marcar_portada(text,uuid)",
   "obtener_codigo_referido(text)",
   "obtener_cupos()",
   "obtener_ficha(text)",
   "obtener_mi_anuncio(text)",
   "obtener_mis_referidos(text)",
+  "obtener_visita(text)",
   "ping()",
+  "proponer_horarios(text,uuid,timestamp with time zone[])",
+  "rechazar_solicitud(text,uuid)",
   "registrar_contacto(text,text)",
   "registrar_foto(text,text,integer,integer,integer)",
   "registrar_fundador(text,text,text,text,text,operacion,tipo_inmueble,text,text,integer,smallint,bigint,boolean,text,text,text)",
   "renovar_vigencia(text)",
+  "solicitar_visita(text,text,text,bigint,bigint,text[],text,text)",
 ];
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
@@ -39,6 +51,17 @@ const SOLO_SERVIDOR = [
   // S7: el canje del código lo hace el webhook con la llave del servidor; el trigger del sello es interno.
   "canjear_codigo_whatsapp",
   "proteger_sello",
+  // S8: el proveedor de identidad, los correos de la visita y el cron usan la llave de servicio; los
+  // ayudantes los llaman solo otras funciones SECURITY DEFINER.
+  "reservar_consulta_identidad",
+  "registrar_identificacion",
+  "datos_correo_visita",
+  "reclamar_recordatorios",
+  "purgar_vencidos",
+  "comprador_de_sesion",
+  "inmueble_de_token",
+  "solicitud_de_token",
+  "nuevo_enlace_visita",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
@@ -102,6 +125,34 @@ test("canjear_codigo_whatsapp solo lo ejecuta service_role", async () => {
         || ',' || has_function_privilege('authenticated', 'public.canjear_codigo_whatsapp(text,text)', 'execute')::text`,
   );
   expect(fila).toBe("true,false,false");
+});
+
+test("la iniciar_verificacion de 5 argumentos (S7) quedó cerrada; la de 6 sigue abierta", async () => {
+  const [fila] = consultar(
+    `select has_function_privilege('anon', 'public.iniciar_verificacion(text,text,text,text,text)', 'execute')::text
+        || ',' || has_function_privilege('authenticated', 'public.iniciar_verificacion(text,text,text,text,text)', 'execute')::text
+        || ',' || has_function_privilege('anon', 'public.iniciar_verificacion(text,text,text,text,text,boolean)', 'execute')::text`,
+  );
+  expect(fila).toBe("false,false,true");
+});
+
+test("las funciones del servidor del S8 las ejecuta service_role", async () => {
+  const firmas = [
+    "reservar_consulta_identidad(text,integer,integer,integer)",
+    "registrar_identificacion(uuid,text,text)",
+    "datos_correo_visita(uuid)",
+    "reclamar_recordatorios()",
+    "purgar_vencidos()",
+    // migración 11: el enlace nuevo de cada correo y de qué solicitud es un token.
+    "nuevo_enlace_visita(uuid)",
+    "solicitud_de_token(text)",
+  ];
+  for (const f of firmas) {
+    const [fila] = consultar(
+      `select has_function_privilege('service_role', 'public.${f}', 'execute')::text`,
+    );
+    expect(fila, f).toBe("true");
+  }
 });
 
 test("ninguna función de public depende de PUBLIC", async () => {

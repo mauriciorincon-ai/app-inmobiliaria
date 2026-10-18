@@ -80,7 +80,9 @@ test.describe("publicar en inglés", () => {
     ).toBeVisible();
     // «Sin fecha»: promete el aviso por WhatsApp, no un mes.
     await expect(
-      page.getByText("We'll message you on WhatsApp when the time comes."),
+      page.getByText(
+        "If you left your email, we'll let you know when the time comes.",
+      ),
     ).toBeVisible();
 
     // El idioma activo quedó guardado con el vendedor (lo usarán los avisos), y el barrio del catálogo

@@ -162,7 +162,10 @@ test("de punta a punta: código → mensaje firmado desde el mismo número → v
   const r = await webhook(c.ctx, cargaMeta(`57${c.celular}`, textoDe(c.href)));
   expect(r.status()).toBe(200);
   expect(await r.json()).toEqual({ ok: true });
-  expect(await estado(c)).toEqual({ estado: "verificado" });
+  expect(await estado(c)).toEqual({
+    estado: "verificado",
+    identificado: false,
+  });
 
   // Contactar: `wa.me` del dueño con el mensaje precargado, y el contacto queda registrado.
   const despues = await contactar(c, anuncio.slug);
@@ -266,7 +269,10 @@ test("contactar sin sesión es 403; verificado pero hacia un anuncio sin opt-in,
   expect(sinSesion.status()).toBe(403);
   const c = await pedirCodigo();
   await webhook(c.ctx, cargaMeta(`57${c.celular}`, c.codigo));
-  expect(await estado(c)).toEqual({ estado: "verificado" });
+  expect(await estado(c)).toEqual({
+    estado: "verificado",
+    identificado: false,
+  });
   const r = await contactar(c, anuncio.slug);
   expect(r.status()).toBe(404);
   expect(await r.text()).not.toContain(DUENO);

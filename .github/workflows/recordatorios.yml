@@ -1,0 +1,38 @@
+# S8 (ADR 016) — RESPALDO del trabajo diario de la visita. El camino principal es el Cron Trigger del Worker
+# (`wrangler.jsonc`, 13:00 UTC = 8:00 de Bogotá), que llama a /api/cron/diario desde dentro. Este workflow
+# hace la misma llamada desde fuera, por si el Cron Trigger no alcanza (plan gratis: 10 ms de CPU) o falla.
+# Correr los dos el mismo día NO duplica nada: la base reclama cada recordatorio a lo sumo una vez.
+# Hoy solo corre a mano (workflow_dispatch). Para activarlo, descomenta `schedule`.
+# Requiere los secrets del repo: APP_URL (la URL de producción; vive solo como secret, jamás en el repo) y
+# CRON_SECRET (el mismo del Worker). No es un check de PR: no toca la ruleset main-protegida.
+name: Recordatorios de visitas (respaldo)
+on:
+  # schedule:
+  #   - cron: "20 13 * * *" # 8:20 de Bogotá, después del Cron Trigger del Worker
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  diario:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Llamar al trabajo diario
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "::error::Secrets APP_URL/CRON_SECRET sin configurar: el respaldo de los recordatorios NO está corriendo."
+            exit 1
+          fi
+          # -f es OBLIGATORIO: sin él, un 4xx/5xx devuelve exit 0 y el workflow queda verde sin haber hecho nada.
+          curl -fsS -X POST "$APP_URL/api/cron/diario" -H "Authorization: Bearer $CRON_SECRET"
+      - name: Alerta
+        if: failure()
+        uses: ./.github/actions/alerta
+        with:
+          titulo: "Alerta: el respaldo de los recordatorios de visitas falló"

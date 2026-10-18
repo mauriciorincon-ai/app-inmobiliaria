@@ -247,6 +247,16 @@
           color: #5eead4;
         }
       }
+      .o-s8 {
+        background: #ffedd5;
+        color: #9a3412;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s8 {
+          background: #431407;
+          color: #fdba74;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -295,21 +305,23 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 007 — Comprador verificado</h1>
+      <h1>Sprint 008 — La visita</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s7">Nuevo · S7</span>. Este sprint hace que el
-        comprador demuestre que es real: verifica su WhatsApp enviando un código
-        y recién entonces puede escribirle a un dueño (bloque K). El WhatsApp
-        del dueño ya no está en la ficha pública.
+        <span class="origen o-s8">Nuevo · S8</span>. Este sprint lleva al
+        comprador de la ficha a la puerta del inmueble: se identifica con su
+        cédula (opcional), pide una visita, el dueño propone horarios, él
+        confirma, los dos reciben un recordatorio por correo el día antes y el
+        dueño marca si asistió (bloque L). Los avisos van por correo:
+        Innmobiliaria sigue sin enviar nada por WhatsApp.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-007/comprador-verificado</code>. En un teléfono real cuando
-        el filtro lo pida.
+        <code>sprint-008/la-visita</code>. En un teléfono real cuando el filtro
+        lo pida.
       </div>
 
       <div class="barra">
@@ -323,9 +335,10 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
-          <button data-filtro="s7" aria-pressed="false">
-            Solo lo nuevo del S7
+          <button data-filtro="s8" aria-pressed="false">
+            Solo lo nuevo del S8
           </button>
+          <button data-filtro="s7" aria-pressed="false">Solo lo del S7</button>
           <button data-filtro="s6" aria-pressed="false">Solo lo del S6</button>
           <button data-filtro="s5" aria-pressed="false">Solo lo del S5</button>
           <button data-filtro="s2" aria-pressed="false">Solo lo del S2</button>
@@ -901,9 +914,9 @@
                 commission»; en el registro, «Locality (localidad)» y
                 «Neighborhood (barrio)» explican el término en español; el
                 resumen muestra el precio como «COP 420,000,000»; la
-                confirmación dice «We'll message you on WhatsApp when the time
-                comes» (sin ningún mes). Nada de español suelto, salvo el nombre
-                de las guías del paquete.
+                confirmación dice «If you left your email, we'll let you know
+                when the time comes» (sin ningún mes). Nada de español suelto,
+                salvo el nombre de las guías del paquete.
               </p>
               <p class="mal">
                 Si ves español mezclado, un «$» suelto en el precio o una fecha
@@ -925,8 +938,8 @@
                 <b>Esperado:</b> «Vende tu casa directo, sin pagar comisión»;
                 precio «$420.000.000»; la tercera tarjeta de «Vender directo
                 tiene sentido» muestra «⭐ Verificado» y no un porcentaje; en la
-                confirmación, «Te avisamos por WhatsApp cuando llegue el
-                momento».
+                confirmación, «Si dejaste tu correo, te avisamos cuando llegue
+                el momento».
               </p>
             </div>
           </li>
@@ -1301,8 +1314,245 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE L ================= -->
+      <section class="bloque">
+        <h2>
+          <span class="letra">L</span> La visita: identificarse, pedir y agendar
+        </h2>
+        <p class="intro">
+          El comprador puede identificarse con su cédula (opcional), pedir una
+          visita y agendarla con el dueño; los avisos van por correo, la
+          dirección exacta la da el dueño por su WhatsApp. Las pruebas ⭐ de
+          este bloque necesitan servicios reales (la cuenta de Didit, el cron en
+          producción, tu teléfono): son del ensayo general. Las demás corren
+          local con el simulador de identidad y Brevo en prueba.
+        </p>
+        <ul>
+          <li data-origen="s8 clave">
+            <input type="checkbox" id="l1" />
+            <div>
+              <label for="l1" class="qué"
+                >Con la llave de Didit puesta en el servidor, abre
+                <b>/identificarse</b> y valida <b>tu propia cédula</b> (la fecha
+                de expedición está al respaldo)<span class="origen o-s8"
+                  >Nuevo · S8</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> queda «Identificado». Con el nombre mal escrito
+                dice «Los datos no coinciden con la Registraduría» y gasta un
+                intento. Cada consulta cuenta contra los 40 gratis del mes. Esta
+                prueba solo se puede hacer con la cuenta real: hasta entonces,
+                en producción, dice «Ahora no pudimos consultar»; el simulador
+                es solo de pruebas locales.
+              </p>
+              <p class="mal">
+                Si dice «Ahora no pudimos consultar la Registraduría» con la
+                llave puesta, avisa: es el adaptador real, que aún no se ha
+                ejercido con una cuenta.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8 clave">
+            <input type="checkbox" id="l2" />
+            <div>
+              <label for="l2" class="qué"
+                >Confirma una visita para <b>mañana</b> con tu correo y el del
+                dueño, y espera a las <b>8:00 a. m.</b> (hora de Bogotá)<span
+                  class="origen o-s8"
+                  >Nuevo · S8</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> a los dos les llega un correo «Mañana es tu
+                visita» / «Mañana recibes a …» con la hora de Bogotá y
+                <b>sin la dirección</b>. Si cancelas la visita antes, no llega
+                ninguno. Si corres el trabajo del día dos veces, no llega un
+                segundo correo. Necesita el servidor desplegado con el secreto
+                del cron y el remitente de Brevo.
+              </p>
+              <p class="mal">
+                Si a las 9:00 no llegó nada, mira en Cloudflare → tu Worker →
+                Triggers que exista el cron y en sus registros la línea «cron»
+                con sus conteos.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8 clave">
+            <input type="checkbox" id="l3" />
+            <div>
+              <label for="l3" class="qué"
+                >Desde tu <b>teléfono real</b>: ficha →
+                <b>Pedir una visita</b> → completa el formulario →
+                <b>Ver mi solicitud</b>; luego, como dueño, propón un horario en
+                Mi anuncio; vuelve como comprador, <b>Confirmar la visita</b> y
+                toca <b>Agregar a mi calendario</b
+                ><span class="origen o-s8">Nuevo · S8</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el formulario te pide para qué buscas y tu
+                correo; el dueño ve tu tarjeta (nombre, últimos 4 dígitos, lo
+                que declaraste, «Primera visita en Innmobiliaria») y
+                <b>nunca tu correo</b>; al confirmar, el calendario de tu
+                teléfono abre el evento a la hora correcta de Bogotá y el dueño
+                ve «Escribirle por WhatsApp».
+              </p>
+              <p class="mal">
+                Si el calendario muestra otra hora o no abre el archivo, avisa
+                con el modelo del teléfono.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l4" />
+            <div>
+              <label for="l4" class="qué"
+                >Local con el simulador: en <b>/identificarse</b> prueba la
+                cédula <code>1000000002</code> y luego
+                <code>1000000001</code> (fecha cualquiera pasada y nombre «Laura
+                Sintetica Prueba»)<span class="origen o-s8"
+                  >Nuevo · S8</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la primera dice «Los datos no coinciden» y deja
+                los campos vacíos; la segunda dice «tu identificación quedó
+                validada». Con <code>1000000003</code> dice «Ahora no pudimos
+                consultar» y no gasta intentos. Tras tres «no coincide», la
+                siguiente muestra «Ya usaste tus tres intentos» sin llamar al
+                servicio.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l5" />
+            <div>
+              <label for="l5" class="qué"
+                >Identificado, toca <b>Borrar mi identificación</b> y
+                recarga<span class="origen o-s8">Nuevo · S8</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> dice «Borramos tu identificación»; al recargar
+                el formulario vuelve vacío y, en la tarjeta que ve el dueño,
+                deja de decir «Identificado con cédula».
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l6" />
+            <div>
+              <label for="l6" class="qué"
+                >En <b>Mi anuncio</b> del dueño activa
+                <b>«Visitas solo de compradores identificados»</b> y pide una
+                visita con un comprador sin identificar<span class="origen o-s8"
+                  >Nuevo · S8</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la ficha avisa «Este dueño prefiere compradores
+                identificados»; la solicitud llega con la etiqueta «En espera» y
+                el aviso «Pediste visitas solo de compradores identificados»;
+                <b>Aceptar igual</b> la pasa a «Nueva» y aparece «Proponer
+                horarios». Quien se identificó entra directo.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l7" />
+            <div>
+              <label for="l7" class="qué"
+                >Como dueño, <b>Proponer horarios</b>: prueba una hora de las
+                5:00 a. m., una fecha de ayer, dos horarios iguales y luego tres
+                válidos<span class="origen o-s8">Nuevo · S8</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cada caso malo dice por qué (entre 6:00 a. m. y
+                9:00 p. m., al menos una hora después de ahora, no repetidos);
+                con tres válidos se envían y el comprador recibe un correo con
+                su enlace. No deja más de 3. «Cambiar los horarios» reemplaza
+                los anteriores.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l8" />
+            <div>
+              <label for="l8" class="qué"
+                >El comprador elige <b>«Ninguno me sirve»</b>; luego el dueño
+                propone otros y el comprador cancela la visita confirmada<span
+                  class="origen o-s8"
+                  >Nuevo · S8</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la tarjeta del dueño dice «No le sirvió ninguno
+                de los horarios que propusiste»; al proponer otros vuelve a
+                «Esperando su respuesta». Al cancelar el comprador, el dueño la
+                ve «Cancelada» y deja de ver el botón de WhatsApp; el dueño
+                recibe un correo.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l9" />
+            <div>
+              <label for="l9" class="qué"
+                >Pasada la hora de la visita, el dueño marca
+                <b>«Sí, vino»</b> (o «No vino»)<span class="origen o-s8"
+                  >Nuevo · S8</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> antes de la hora no hay botones de asistencia;
+                después sí. Lo marcado queda como «Marcaste que vino.» con
+                «Cambiar», y en la tarjeta del comprador (para cualquier dueño)
+                dice «Asistió a 1 de 1 visita en Innmobiliaria». Nadie ve el
+                detalle.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l10" />
+            <div>
+              <label for="l10" class="qué"
+                >Abre <b>/privacidad</b> y busca «Si te identificas con tu
+                cédula» y «Si pides una visita»<span class="origen o-s8"
+                  >Nuevo · S8</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> dicen que la cédula, la fecha y el nombre van a
+                un proveedor fuera de Colombia y no se guardan; que el correo
+                del comprador sirve solo para los avisos de la visita y el dueño
+                no lo ve; que el dueño ve el número completo solo al confirmar;
+                el conteo de asistencia; y la retención de 30 y 7 días. Revisa
+                que el tono y las promesas te cuadren (TEXTO del hito).
+              </p>
+            </div>
+          </li>
+          <li data-origen="s8">
+            <input type="checkbox" id="l11" />
+            <div>
+              <label for="l11" class="qué"
+                >Cambia la app a <b>EN</b> y repite pedir una visita y la
+                solicitud del comprador<span class="origen o-s8"
+                  >Nuevo · S8</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> todo sale en inglés (formulario, estados,
+                tarjeta del dueño); las fechas dicen «Bogotá time»; el correo
+                llega en el idioma guardado de quien lo recibe. Nada de español
+                suelto.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–K), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–L), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -1330,6 +1580,19 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 008 (2026-10-18):</b><br />
+          <b>Nuevo:</b> bloque L (la visita: identificarse, pedir, proponer,
+          confirmar, calendario, recordatorio y asistencia): 11 pruebas nuevas,
+          3 del gate mínimo ⭐ (la cuenta real de Didit, el recordatorio por
+          correo en producción y el recorrido en tu teléfono).<br />
+          <b>Mejorado:</b> I1 e I2 (la confirmación ya no promete avisar por
+          WhatsApp: «si dejaste tu correo, te avisamos»).<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 63 pruebas, 22 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          6).
+        </p>
         <p>
           <b>Sprint 007 (2026-10-18):</b><br />
           <b>Nuevo:</b> bloque K (comprador verificado y contacto): 7 pruebas
@@ -1387,7 +1650,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v5:";
+        var CLAVE = "guia-inmobiliaria-v6:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

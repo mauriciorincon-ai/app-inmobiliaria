@@ -67,3 +67,40 @@ export async function enviarLote(
   }
   return { enviados, fallidos, mock: false };
 }
+
+// ── S8: un correo transaccional (los avisos de la visita, ADR 016) ─────────────
+// Mismo patrón conmutable: en MOCK no envía nada y lo cuenta como enviado. Devuelve si salió; nunca lanza
+// (un correo que falla no revierte la acción que lo provocó).
+export type CorreoTransaccional = {
+  para: { email: string; nombre: string };
+  asunto: string;
+  html: string;
+};
+
+export async function enviarCorreo(
+  correo: CorreoTransaccional,
+): Promise<{ ok: boolean; mock: boolean }> {
+  if (brevoEnMock()) return { ok: true, mock: true };
+  try {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": process.env.BREVO_API_KEY ?? "",
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({
+        sender: {
+          email: process.env.BREVO_FROM_EMAIL ?? "",
+          name: process.env.BREVO_FROM_NOMBRE ?? "Innmobiliaria",
+        },
+        to: [{ email: correo.para.email, name: correo.para.nombre }],
+        subject: correo.asunto,
+        htmlContent: correo.html,
+      }),
+    });
+    return { ok: res.ok, mock: false };
+  } catch {
+    return { ok: false, mock: false };
+  }
+}

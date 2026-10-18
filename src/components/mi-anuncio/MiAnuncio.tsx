@@ -10,6 +10,9 @@ import SubidorFotos from "@/components/mi-anuncio/SubidorFotos";
 import GaleriaEditable from "@/components/mi-anuncio/GaleriaEditable";
 import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
 import OptInContacto from "@/components/mi-anuncio/OptInContacto";
+import SolicitudesVisita, {
+  type ContextoSolicitudes,
+} from "@/components/mi-anuncio/SolicitudesVisita";
 import RenovarVigencia, {
   type TextosTarjeta,
 } from "@/components/vigencia/RenovarVigencia";
@@ -42,6 +45,7 @@ export default function MiAnuncio({
   vigencia,
   referido,
   paquete,
+  solicitudes,
 }: {
   lang: Idioma;
   t: TextosMiAnuncio;
@@ -49,6 +53,7 @@ export default function MiAnuncio({
   vigencia: TextosTarjeta;
   referido: TextosReferido;
   paquete: TextosPaquete;
+  solicitudes: ContextoSolicitudes;
 }) {
   const [estado, setEstado] = useState<Estado>("cargando");
   const [anuncio, setAnuncio] = useState<MiAnuncioData | null>(null);
@@ -189,6 +194,23 @@ export default function MiAnuncio({
           t={t.contacto}
           token={token}
           activo={anuncio.contacto_publico}
+          onCambio={recargar}
+        />
+      </section>
+
+      <section aria-labelledby="solicitudes-titulo">
+        <h2 id="solicitudes-titulo" className="text-xl font-bold text-ink">
+          {solicitudes.t.titulo}
+        </h2>
+        <SolicitudesVisita
+          lang={lang}
+          ctx={solicitudes}
+          token={token}
+          tipo={anuncio.tipo}
+          barrio={anuncio.barrio}
+          contactoAbierto={anuncio.contacto_publico}
+          soloIdentificados={anuncio.solo_identificados}
+          solicitudes={anuncio.solicitudes ?? []}
           onCambio={recargar}
         />
       </section>

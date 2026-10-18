@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import { consultar, ejecutar } from "./utils/bd";
+import { canjear, hashDe, pedirCodigo, sesionNueva } from "./utils/comprador";
 
 // Pruebas NEGATIVAS de RLS con el anon key real contra el stack local: el anónimo solo puede
 // ejecutar la RPC; jamás leer ni escribir directo. Datos 100% sintéticos.
@@ -475,41 +476,6 @@ const ALFABETO_CODIGO = /^INN-[ABCDEFGHJKLMNPQRSTUVWXYZ2-9]{6}$/;
 const TEL_COMPRADOR = "+573115550101";
 const TEL_OTRO = "+573115550202";
 
-function sesionNueva(): string {
-  // 64 hex aleatorios: el hash de una sesión que nadie más conoce.
-  return Array.from({ length: 64 }, () =>
-    Math.floor(Math.random() * 16).toString(16),
-  ).join("");
-}
-
-function hashDe(codigo: string): string {
-  return consultar(
-    `select encode(sha256(convert_to('${codigo}', 'UTF8')), 'hex')`,
-  )[0];
-}
-
-async function pedirCodigo(
-  sesion: string,
-  extra: Record<string, unknown> = {},
-) {
-  const supabase = createClient(url, anon);
-  const { data, error } = await supabase.rpc("iniciar_verificacion", {
-    p_sesion_hash: sesion,
-    p_nombre: "Laura Sintetica",
-    p_telefono: TEL_COMPRADOR,
-    p_idioma: "es",
-    p_ip_hash: `s7-${sesion.slice(0, 12)}`,
-    ...extra,
-  });
-  return { supabase, codigo: data as unknown as string, error };
-}
-
-function canjear(codigo: string, telefono: string): string {
-  return consultar(
-    `select public.canjear_codigo_whatsapp('${hashDe(codigo)}', '${telefono}')`,
-  )[0];
-}
-
 test("el anónimo NO lee ni escribe compradores, verificaciones ni contactos", async () => {
   const supabase = createClient(url, anon);
   for (const tabla of ["compradores", "verificaciones", "contactos"] as const) {
@@ -572,7 +538,7 @@ test("estado_verificacion: sin_codigo → esperando → verificado, sin datos pe
   expect(Number(esperando.segundos)).toBeLessThanOrEqual(600);
   expect(Object.keys(esperando).sort()).toEqual(["estado", "segundos"]);
   expect(canjear(codigo, TEL_COMPRADOR)).toBe("ok");
-  expect(await estado()).toEqual({ estado: "verificado" });
+  expect(await estado()).toEqual({ estado: "verificado", identificado: false });
 });
 
 test("el código es de UN solo uso", async () => {

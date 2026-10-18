@@ -41,6 +41,8 @@ export async function crearAnuncio(
     tipo?: "apartamento" | "casa" | "apartaestudio" | "otro";
     operacion?: "venta" | "arriendo";
     habitaciones?: number;
+    // S8: el correo del dueño (para los avisos de la visita). Por omisión no deja ninguno.
+    email?: string | null;
   } = {},
 ): Promise<AnuncioCreado> {
   const precio = opts.precio ?? precioUnico();
@@ -49,7 +51,7 @@ export async function crearAnuncio(
     {
       p_nombre: opts.nombre ?? "Vendedor Sintetico",
       p_whatsapp: "+573001234567",
-      p_email: null,
+      p_email: opts.email ?? null,
       p_ciudad: "Bogotá",
       p_zona: opts.localidad ?? "Chapinero",
       p_operacion: opts.operacion ?? "venta",

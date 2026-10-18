@@ -3,11 +3,17 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-// La llave del servidor se salta la RLS (ADR 015): SOLO el webhook de WhatsApp puede importar el módulo
-// que la usa. Este test recorre `src/` y falla si aparece cualquier otro importador.
+// La llave del servidor se salta la RLS (ADR 015): solo una lista CERRADA de módulos puede importar el
+// módulo que la usa. Este test recorre `src/` y falla si aparece cualquier otro importador. El S8 (ADR 016)
+// la amplió a propósito: el adaptador de identidad, los avisos por correo de la visita y el trabajo diario.
 
 const RAIZ = path.resolve(__dirname, "../../src");
-const PERMITIDOS = ["app/api/whatsapp/webhook/route.ts"];
+const PERMITIDOS = [
+  "app/api/cron/diario/route.ts",
+  "app/api/whatsapp/webhook/route.ts",
+  "lib/identidad.ts",
+  "lib/visitas-correo.ts",
+];
 const IMPORTA =
   /from\s+["'](?:@\/lib\/supabase\/servicio|[./]+(?:lib\/)?supabase\/servicio|\.\/servicio)["']/;
 
@@ -27,7 +33,7 @@ function importadores(raiz: string): string[] {
 }
 
 describe("la llave del servidor (servicio.ts)", () => {
-  it("solo la importa el webhook de WhatsApp", () => {
+  it("solo la importan el webhook, la identidad, los avisos de la visita y el cron", () => {
     expect(importadores(RAIZ)).toEqual(PERMITIDOS);
   });
 

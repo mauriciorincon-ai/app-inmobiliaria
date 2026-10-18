@@ -9,6 +9,8 @@ import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
 import Galeria from "@/components/ficha/Galeria";
 import SelloNivel from "@/components/ficha/SelloNivel";
+import SelloExplicado from "@/components/ficha/SelloExplicado";
+import VivoHace from "@/components/ficha/VivoHace";
 import ContactoVendedor from "@/components/ficha/ContactoVendedor";
 import CompartirCTA from "@/components/ficha/CompartirCTA";
 import { crearClienteAnon } from "@/lib/supabase/server";
@@ -102,7 +104,12 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
         <Galeria fotos={f.fotos} t={t.galeria} />
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <SelloNivel nivel={f.nivel_verificacion} t={t.sello} />
+          <SelloNivel
+            nivel={f.nivel_verificacion}
+            ctlExpedidoEl={f.ctl_expedido_el}
+            lang={lang}
+            t={t.sello}
+          />
           <span className="text-sm text-mute">
             {operaciones[f.operacion] ?? f.operacion} · {tipo}
           </span>
@@ -115,7 +122,7 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
           {formatearCOP(f.precio_esperado, lang)}
         </p>
         <p className="mt-2 text-sm text-gray">
-          {f.ciudad} · {f.area_m2} {UNIDAD_AREA} ·{" "}
+          {f.localidad ?? f.ciudad} · {f.area_m2} {UNIDAD_AREA} ·{" "}
           {f.habitaciones === 1
             ? t.encabezado.habitacionesUna
             : rellenar(t.encabezado.habitacionesVarias, {
@@ -123,11 +130,31 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
               })}
         </p>
 
+        <VivoHace vigenteHasta={f.vigente_hasta} t={t.vivo} />
+        <SelloExplicado
+          nivel={f.nivel_verificacion}
+          ctlExpedidoEl={f.ctl_expedido_el}
+          lang={lang}
+          t={t.selloExplicado}
+        />
+
         {f.descripcion && (
           <p className="mt-6 whitespace-pre-line leading-relaxed text-gray">
             {f.descripcion}
           </p>
         )}
+
+        <section className="mt-6">
+          <h2 className="text-lg font-bold text-ink">{t.ubicacion.titulo}</h2>
+          <p className="mt-1 text-sm text-gray">
+            {f.localidad
+              ? rellenar(t.ubicacion.detalle, {
+                  barrio: f.barrio,
+                  localidad: f.localidad,
+                })
+              : rellenar(t.ubicacion.detalleSinLocalidad, { barrio: f.barrio })}
+          </p>
+        </section>
 
         <div className="mt-8 rounded-[2rem] bg-cream p-6">
           <p className="text-sm text-mute">{t.publicadoPor}</p>

@@ -32,6 +32,17 @@
 | `--color-mint`        | `#e6f4ee` | Bandas pastel                                           |
 | `--color-sky`         | `#e7eefb` | Fondos fríos                                            |
 
+Estados (S6, nacidos en la maqueta del comprador): el color **nunca va solo** — siempre con símbolo y texto.
+
+| Token                 | Valor     | Uso                                                                   |
+| --------------------- | --------- | --------------------------------------------------------------------- |
+| `--color-ok`          | `#1f6f4a` | Verificado / vivo (texto e ícono sobre `mint`); contraste AA          |
+| `--color-aviso`       | `#8a5300` | Pendiente / atención (texto e ícono sobre `aviso-tint`); contraste AA |
+| `--color-aviso-tint`  | `#fff3d6` | Fondo de un aviso (sello «re-verificación pendiente», banners)        |
+| `--color-aviso-borde` | `#f0c36d` | Borde de un aviso                                                     |
+
+El error sigue usando el rojo de Tailwind (`red-50` / `red-600` / `red-700`) como en los formularios.
+
 Blob decorativo del hero: `#FFD23F` (amarillo). No tokenizado (uso único).
 
 ## Tipografía

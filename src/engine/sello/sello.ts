@@ -57,6 +57,14 @@ export function ctlVigenteParaRegistrar(
   return { ok: true, dias };
 }
 
+// La fecha más antigua que sirve hoy (hoy − 30 días), para el `min` del campo de fecha. '' si `hoy` no es válida.
+export function ctlFechaMinima(hoy: string = hoyEnBogota()): string {
+  const h = aUtc(hoy);
+  return h === null
+    ? ""
+    : new Date(h - CTL_MAX_DIAS * MS_DIA).toISOString().slice(0, 10);
+}
+
 // Días desde la expedición del CTL (0 si es de hoy); null si la fecha no es válida.
 export function diasDesdeCtl(
   fecha: string,

@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   CTL_MAX_DIAS,
+  ctlFechaMinima,
   ctlVigenteParaRegistrar,
   diasDesdeCtl,
   estadoSello,
@@ -56,6 +57,14 @@ describe("ctlVigenteParaRegistrar — hoy−30 ≤ fecha ≤ hoy", () => {
       ok: false,
       motivo: "invalida",
     });
+  });
+});
+
+describe("ctlFechaMinima", () => {
+  it("es hoy menos 30 días (cruza el mes) y vacía si hoy no es válida", () => {
+    expect(ctlFechaMinima("2026-10-17")).toBe("2026-09-17");
+    expect(ctlFechaMinima("2026-03-05")).toBe("2026-02-03");
+    expect(ctlFechaMinima("ayer")).toBe("");
   });
 });
 

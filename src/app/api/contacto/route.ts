@@ -48,6 +48,10 @@ export async function POST(req: NextRequest) {
     p_slug: slug,
   });
   if (error) {
+    if (error.message?.includes("demasiados_contactos")) {
+      log.warn({ evento: "tope" }, "demasiados contactos");
+      return json(429, { error: "demasiados_contactos" });
+    }
     reportError("contacto_error", {
       requestId,
       code: error.code ?? "desconocido",

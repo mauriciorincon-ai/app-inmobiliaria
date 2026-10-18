@@ -157,6 +157,9 @@ export type MiAnuncioData = {
   fotos: FotoMiAnuncio[];
   // S7 — compradores verificados que contactaron: nombre, últimos 4 dígitos del teléfono y fecha.
   contactos: ContactoRecibido[];
+  // S8 — «solo compradores identificados» y las solicitudes de visita con la tarjeta del comprador.
+  solo_identificados: boolean;
+  solicitudes: SolicitudRecibida[];
 };
 
 export type ContactoRecibido = {
@@ -165,10 +168,110 @@ export type ContactoRecibido = {
   fecha: string;
 };
 
-// S7 — estado de la verificación de una sesión de comprador (sin datos personales).
+// S7 — estado de la verificación de una sesión de comprador (sin datos personales). S8: una sesión
+// verificada dice además si el comprador ya se identificó con su cédula.
 export type EstadoVerificacion =
-  | { estado: "sin_codigo" | "verificado" | "vencido" | "otro_numero" }
+  | { estado: "sin_codigo" | "vencido" | "otro_numero" }
+  | { estado: "verificado"; identificado: boolean }
   | { estado: "esperando"; segundos: number };
+
+// S8 — la solicitud de visita y su ciclo (ver la migración 10).
+export type EstadoSolicitud =
+  | "en_espera"
+  | "pendiente"
+  | "propuesta"
+  | "confirmada"
+  | "rechazada"
+  | "cancelada";
+export type IntencionVisita = "vivir" | "invertir";
+export type FormaPago = "hipotecario" | "ahorros" | "venta_inmueble" | "otro";
+
+export type HorarioPropuesto = { id: string; inicio: string };
+
+// La tarjeta que ve el dueño en «Mi anuncio». Del comprador: nombre, últimos 4 del teléfono, si está
+// identificado y su historial de asistencia. El correo JAMÁS viaja. El WhatsApp completo solo en una visita
+// confirmada y no cancelada.
+export type SolicitudRecibida = {
+  id: string;
+  estado: EstadoSolicitud;
+  fecha: string;
+  comprador: {
+    nombre: string;
+    telefono_fin: string;
+    identificado: boolean;
+    asistio: number;
+    marcadas: number;
+  };
+  intencion: IntencionVisita;
+  presupuesto_min: number | null;
+  presupuesto_max: number | null;
+  forma_pago: FormaPago[];
+  mensaje: string | null;
+  ninguno: boolean;
+  horarios: HorarioPropuesto[];
+  visita: {
+    inicio: string;
+    cancelada_por: "comprador" | "dueno" | null;
+    asistio: boolean | null;
+  } | null;
+  whatsapp: string | null;
+};
+
+// Lo que el comprador ve de SU solicitud (por su token): sin dirección y sin el correo de nadie.
+export type VisitaDelComprador = {
+  estado: EstadoSolicitud;
+  fecha: string;
+  inmueble: {
+    slug: string;
+    operacion: Operacion;
+    tipo: TipoInmueble;
+    barrio: string;
+    nombre_publicador: string;
+  };
+  horarios: HorarioPropuesto[];
+  visita: {
+    inicio: string;
+    cancelada_por: "comprador" | "dueno" | null;
+  } | null;
+};
+
+export type ResultadoSolicitud = {
+  solicitud_id: string;
+  token: string;
+  estado: "en_espera" | "pendiente";
+};
+
+// Reserva de una consulta al proveedor de identidad (solo service_role).
+export type ReservaIdentidad =
+  | { ok: true; consulta_id: string }
+  | {
+      ok: false;
+      motivo:
+        | "no_verificado"
+        | "ya_identificado"
+        | "tope_comprador"
+        | "tope_dia"
+        | "tope_mes";
+    };
+
+// Lo que el servidor necesita para armar los correos de una solicitud (solo service_role).
+export type DatosCorreoVisita = {
+  estado: EstadoSolicitud;
+  intencion: IntencionVisita;
+  comprador: { nombre: string; email: string | null; idioma: "es" | "en" };
+  dueno: { nombre: string; email: string | null; idioma: "es" | "en" };
+  inmueble: {
+    slug: string;
+    operacion: Operacion;
+    tipo: TipoInmueble;
+    barrio: string;
+  };
+  horarios: string[];
+  visita: {
+    inicio: string;
+    cancelada_por: "comprador" | "dueno" | null;
+  } | null;
+};
 
 // Resultado del canje del código que hace el webhook (solo service_role).
 export type ResultadoCanje = "ok" | "otro_numero" | "nada";
@@ -235,6 +338,8 @@ export type FichaData = {
   // S7 — el WhatsApp del dueño YA NO viaja aquí: solo lo entrega `registrar_contacto` a una sesión de
   // comprador verificada. Email y matrícula JAMÁS salen de la BD.
   contacto_publico: boolean;
+  // S8 — el dueño pidió «solo compradores identificados»: la solicitud de un comprador sin identificar queda en espera.
+  solo_identificados: boolean;
 };
 
 // Una fila de buscar_inmuebles: LISTA BLANCA. Jamás dirección ni datos del vendedor.
@@ -438,6 +543,8 @@ export type Database = {
           p_telefono: string;
           p_idioma: string;
           p_ip_hash: string;
+          // S8 — el consentimiento Ley 1581 llega a la base (la de 5 argumentos quedó cerrada).
+          p_consentimiento: boolean;
         };
         Returns: string;
       };
@@ -453,6 +560,90 @@ export type Database = {
       canjear_codigo_whatsapp: {
         Args: { p_codigo_hash: string; p_telefono: string };
         Returns: ResultadoCanje;
+      };
+      // S8 — identidad, visitas y agenda. Públicas (anon + authenticated):
+      borrar_identificacion: {
+        Args: { p_sesion_hash: string };
+        Returns: boolean;
+      };
+      solicitar_visita: {
+        Args: {
+          p_sesion_hash: string;
+          p_slug: string;
+          p_intencion: IntencionVisita;
+          p_presupuesto_min: number | null;
+          p_presupuesto_max: number | null;
+          p_forma_pago: FormaPago[];
+          p_mensaje: string | null;
+          p_email: string;
+        };
+        Returns: ResultadoSolicitud;
+      };
+      obtener_visita: {
+        Args: { p_token: string };
+        Returns: VisitaDelComprador | null;
+      };
+      elegir_horario: {
+        Args: { p_token: string; p_horario_id: string | null };
+        Returns: undefined;
+      };
+      cancelar_visita_comprador: {
+        Args: { p_token: string };
+        Returns: undefined;
+      };
+      proponer_horarios: {
+        Args: { p_token: string; p_solicitud_id: string; p_horarios: string[] };
+        Returns: undefined;
+      };
+      rechazar_solicitud: {
+        Args: { p_token: string; p_solicitud_id: string };
+        Returns: undefined;
+      };
+      aceptar_en_espera: {
+        Args: { p_token: string; p_solicitud_id: string };
+        Returns: undefined;
+      };
+      cancelar_visita_dueno: {
+        Args: { p_token: string; p_solicitud_id: string };
+        Returns: undefined;
+      };
+      marcar_asistencia: {
+        Args: { p_token: string; p_solicitud_id: string; p_asistio: boolean };
+        Returns: undefined;
+      };
+      guardar_solo_identificados: {
+        Args: { p_token: string; p_activo: boolean };
+        Returns: undefined;
+      };
+      // S8 — SOLO service_role: el proveedor de identidad, los correos de la visita y el cron.
+      reservar_consulta_identidad: {
+        Args: {
+          p_sesion_hash: string;
+          p_tope_mes?: number;
+          p_tope_dia?: number;
+          p_tope_comprador?: number;
+        };
+        Returns: ReservaIdentidad;
+      };
+      registrar_identificacion: {
+        Args: {
+          p_consulta_id: string;
+          p_resultado: "identificado" | "no_coincide" | "no_disponible";
+          p_proveedor: "didit" | "simulador";
+        };
+        Returns: undefined;
+      };
+      datos_correo_visita: {
+        Args: { p_solicitud_id: string };
+        Returns: DatosCorreoVisita | null;
+      };
+      reclamar_recordatorios: {
+        Args: Record<string, never>;
+        Returns: string[];
+      };
+      purgar_vencidos: {
+        Args: Record<string, never>;
+        Returns: { compradores: number; verificaciones: number };
       };
       generar_link_anuncio: {
         Args: { p_inmueble_id: string };

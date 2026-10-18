@@ -1,17 +1,32 @@
 // Formato y parseo de pesos colombianos (COP). Sin decimales: los precios de vivienda se escriben
-// en pesos enteros. El formato de miles usa punto (es-CO): $420.000.000.
+// en pesos enteros.
 
-const formateador = new Intl.NumberFormat("es-CO", {
-  style: "currency",
-  currency: "COP",
-  maximumFractionDigits: 0,
-});
+import { localeIntl, type Idioma } from "@/i18n/idiomas";
 
-/** Formatea un entero de pesos a `$420.000.000`. Valores no finitos → cadena vacía. */
-export function formatearCOP(valor: number): string {
+// La moneda es SIEMPRE pesos colombianos; lo que cambia con el idioma es la forma de escribirlos.
+// En español: $420.000.000. En inglés: «COP 420,000,000», porque «$» es ambiguo para quien viene de
+// afuera y el código de la moneda no lo es.
+const formateadores: Record<Idioma, Intl.NumberFormat> = {
+  es: new Intl.NumberFormat(localeIntl("es"), {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0,
+  }),
+  en: new Intl.NumberFormat(localeIntl("en"), {
+    style: "currency",
+    currency: "COP",
+    currencyDisplay: "code",
+    maximumFractionDigits: 0,
+  }),
+};
+
+/** Formatea un entero de pesos: `$420.000.000` (es) o `COP 420,000,000` (en). No finitos → vacío. */
+export function formatearCOP(valor: number, idioma: Idioma = "es"): string {
   if (!Number.isFinite(valor)) return "";
-  // Intl mete un espacio no separable tras el $; lo normalizamos a "$420.000.000".
-  return formateador.format(Math.round(valor)).replace(/\s/g, "");
+  const texto = formateadores[idioma].format(Math.round(valor));
+  // Intl mete un espacio no separable: en español se quita ("$420.000.000"); en inglés se deja uno
+  // normal entre el código y la cifra.
+  return idioma === "es" ? texto.replace(/\s/g, "") : texto.replace(/\s/g, " ");
 }
 
 /**

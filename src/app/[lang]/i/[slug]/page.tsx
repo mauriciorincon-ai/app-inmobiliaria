@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import { preload } from "react-dom";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerIdioma } from "@/i18n/ruta";
+import { localeIntl, type Idioma } from "@/i18n/idiomas";
+import { enIdioma, rellenar } from "@/i18n/textos";
+import { COMUN } from "@/textos/comun";
+import { FICHA } from "@/textos/ficha";
 import Galeria from "@/components/ficha/Galeria";
 import SelloNivel from "@/components/ficha/SelloNivel";
 import ContactoVendedor from "@/components/ficha/ContactoVendedor";
@@ -16,12 +20,7 @@ import type { FichaData } from "@/lib/supabase/types";
 // en H1; la difusión abierta llega en S3 con G-Release.
 export const dynamic = "force-dynamic";
 
-const TIPOS_LABEL: Record<string, string> = {
-  apartamento: "Apartamento",
-  casa: "Casa",
-  apartaestudio: "Apartaestudio",
-  otro: "Inmueble",
-};
+type ParamsFicha = Promise<{ lang: string; slug: string }>;
 
 async function cargarFicha(slug: string): Promise<FichaData | null> {
   const supabase = crearClienteAnon();
@@ -29,8 +28,10 @@ async function cargarFicha(slug: string): Promise<FichaData | null> {
   return data;
 }
 
-function tituloDe(f: FichaData): string {
-  return `${TIPOS_LABEL[f.tipo] ?? "Inmueble"} en ${f.barrio} — ${formatearCOP(f.precio_esperado)}`;
+// Nombre del tipo de inmueble en el idioma de quien mira; un tipo desconocido cae en «inmueble».
+function tipoDe(f: FichaData, lang: Idioma): string {
+  const tipos: Record<string, string> = enIdioma(COMUN.dominio.tipo, lang);
+  return tipos[f.tipo] ?? tipos.inmueble;
 }
 
 function portadaUrl(f: FichaData): string | null {
@@ -41,24 +42,30 @@ function portadaUrl(f: FichaData): string | null {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: ParamsFicha;
 }): Promise<Metadata> {
+  const lang = await leerIdioma(params);
   const { slug } = await params;
+  const t = enIdioma(FICHA.meta, lang);
   const f = await cargarFicha(slug);
   if (!f) {
     return {
-      title: "Inmueble no encontrado — Innmobiliaria",
+      title: t.noEncontrada,
       robots: { index: false, follow: false },
     };
   }
-  const titulo = tituloDe(f);
-  const descripcion =
-    f.descripcion ??
-    `${TIPOS_LABEL[f.tipo] ?? "Inmueble"} en ${f.barrio}, ${f.ciudad}.`;
+  const valores = {
+    tipo: tipoDe(f, lang),
+    barrio: f.barrio,
+    ciudad: f.ciudad,
+    precio: formatearCOP(f.precio_esperado, lang),
+  };
+  const titulo = rellenar(t.tituloCompartido, valores);
+  const descripcion = f.descripcion ?? rellenar(t.descripcion, valores);
   // og:image = portada real desde R2 (sin generar imágenes) o fallback estático del repo.
   const og = portadaUrl(f) ?? "/og-fallback.png";
   return {
-    title: `${titulo} | Innmobiliaria`,
+    title: rellenar(t.titulo, valores),
     description: descripcion,
     robots: { index: false, follow: false },
     openGraph: {
@@ -70,11 +77,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function FichaPage({
-  params,
-}: {
-  params: Promise<{ lang: string; slug: string }>;
-}) {
+export default async function FichaPage({ params }: { params: ParamsFicha }) {
   const lang = await leerIdioma(params);
   const { slug } = await params;
   const f = await cargarFicha(slug);
@@ -84,29 +87,36 @@ export default async function FichaPage({
   const og = portadaUrl(f);
   if (og) preload(og, { as: "image", fetchPriority: "high" });
 
-  const tipoLabel = TIPOS_LABEL[f.tipo] ?? "Inmueble";
+  const t = enIdioma(FICHA, lang);
+  const dominio = enIdioma(COMUN.dominio, lang);
+  const operaciones: Record<string, string> = dominio.operacion;
+  const tipo = tipoDe(f, lang);
 
   return (
     <>
       <EncabezadoInterior lang={lang} />
       <main className="mx-auto max-w-3xl px-6 py-8">
-        <Galeria fotos={f.fotos} />
+        <Galeria fotos={f.fotos} t={t.galeria} />
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <SelloNivel nivel={f.nivel_verificacion} />
-          <span className="text-sm capitalize text-mute">
-            {f.operacion} · {tipoLabel}
+          <SelloNivel nivel={f.nivel_verificacion} t={t.sello} />
+          <span className="text-sm text-mute">
+            {operaciones[f.operacion] ?? f.operacion} · {tipo}
           </span>
         </div>
 
         <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink">
-          {tipoLabel} en {f.barrio}
+          {rellenar(t.encabezado.titulo, { tipo, barrio: f.barrio })}
         </h1>
         <p className="mt-1 text-2xl font-extrabold text-purple">
-          {formatearCOP(f.precio_esperado)}
+          {formatearCOP(f.precio_esperado, lang)}
         </p>
         <p className="mt-2 text-sm text-gray">
-          {f.ciudad} · {f.area_m2} m² · {f.habitaciones} habitaciones
+          {rellenar(t.encabezado.medidas, {
+            ciudad: f.ciudad,
+            area: f.area_m2,
+            habitaciones: f.habitaciones,
+          })}
         </p>
 
         {f.descripcion && (
@@ -116,22 +126,24 @@ export default async function FichaPage({
         )}
 
         <div className="mt-8 rounded-[2rem] bg-cream p-6">
-          <p className="text-sm text-mute">Publicado por</p>
+          <p className="text-sm text-mute">{t.publicadoPor}</p>
           <p className="text-lg font-bold text-ink">{f.nombre_publicador}</p>
           {f.contacto_publico ? (
             <ContactoVendedor
               whatsapp={f.whatsapp}
-              tipoBarrio={`${tipoLabel.toLowerCase()} en ${f.barrio}`}
+              inmueble={rellenar(t.encabezado.titulo, {
+                tipo: tipo.toLocaleLowerCase(localeIntl(lang)),
+                barrio: f.barrio,
+              })}
+              t={t.contacto}
             />
           ) : (
-            <p className="mt-2 text-sm text-gray">
-              Este vendedor aún no habilitó el contacto directo.
-            </p>
+            <p className="mt-2 text-sm text-gray">{t.sinContacto}</p>
           )}
         </div>
 
         <div className="mt-8">
-          <CompartirCTA />
+          <CompartirCTA t={t.compartir} />
         </div>
       </main>
     </>

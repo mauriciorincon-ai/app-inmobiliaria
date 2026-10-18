@@ -32,37 +32,24 @@ export type EntradaFoto = {
   alto: number;
 };
 
-export type ResultadoGate =
-  { ok: true } | { ok: false; razon: RechazoFoto; mensaje: string };
+export type ResultadoGate = { ok: true } | { ok: false; razon: RechazoFoto };
 
 // Evalúa una foto a partir de sus metadatos (tipo, bytes, dimensiones ya leídas client-side).
-// Función pura: mismos datos → mismo veredicto. Los mensajes son es-CO llano y accionable.
+// Función pura: mismos datos → mismo veredicto. Devuelve la RAZÓN (un código); la frase llana y
+// accionable la pone la UI en el idioma de la persona (`src/textos/mi-anuncio.ts`).
 export function evaluarFoto(m: EntradaFoto): ResultadoGate {
   if (
     !FORMATOS_ACEPTADOS.includes(m.tipo as (typeof FORMATOS_ACEPTADOS)[number])
   ) {
-    return {
-      ok: false,
-      razon: "formato",
-      mensaje: "Usa una foto en formato JPG, PNG o WebP.",
-    };
+    return { ok: false, razon: "formato" };
   }
   if (m.bytes > MAX_BYTES_ENTRADA) {
-    return {
-      ok: false,
-      razon: "peso",
-      mensaje: "La foto pesa demasiado (máximo 20 MB). Prueba con otra.",
-    };
+    return { ok: false, razon: "peso" };
   }
   const mayor = Math.max(m.ancho, m.alto);
   const menor = Math.min(m.ancho, m.alto);
   if (mayor < MIN_LADO_MAYOR || menor < MIN_LADO_MENOR) {
-    return {
-      ok: false,
-      razon: "resolucion",
-      mensaje:
-        "La foto es muy pequeña. Tómala con la cámara del teléfono (no una captura de pantalla) y vuelve a intentar.",
-    };
+    return { ok: false, razon: "resolucion" };
   }
   return { ok: true };
 }

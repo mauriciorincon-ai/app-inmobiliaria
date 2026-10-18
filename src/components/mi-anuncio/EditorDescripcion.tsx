@@ -1,20 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { rellenar, type Proyectado } from "@/i18n/textos";
 import { crearClienteNavegador } from "@/lib/supabase/client";
+import type { MI_ANUNCIO } from "@/textos/mi-anuncio";
 
-const PLANTILLA =
-  "Cuéntale al comprador lo mejor de tu inmueble: ¿por qué te gustó?, ¿cómo es el barrio?, ¿qué tiene cerca (transporte, colegios, parques)?, ¿está listo para entrar a vivir?";
+export type TextosEditor = Proyectado<typeof MI_ANUNCIO.editor>;
 
 // Editor de la descripción con plantilla guía + contador. Guarda al presionar "Guardar" (evita
 // escribir en BD en cada tecla). El largo en vivo alimenta el score vía onEscribir.
 export default function EditorDescripcion({
+  t,
   token,
   valorInicial,
   minimo,
   onEscribir,
   onGuardado,
 }: {
+  t: TextosEditor;
   token: string;
   valorInicial: string;
   minimo: number;
@@ -49,7 +52,7 @@ export default function EditorDescripcion({
   return (
     <div className="mt-3">
       <label htmlFor="descripcion" className="sr-only">
-        Descripción del inmueble
+        {t.etiqueta}
       </label>
       <textarea
         id="descripcion"
@@ -57,15 +60,15 @@ export default function EditorDescripcion({
         onChange={(e) => cambiar(e.target.value)}
         rows={5}
         maxLength={2000}
-        placeholder={PLANTILLA}
+        placeholder={t.guia}
         className="w-full rounded-2xl border border-purple-200 bg-white px-4 py-3 text-base text-ink placeholder:text-mute focus:border-purple focus:outline-none focus-visible:outline-none"
       />
       <div className="mt-2 flex items-center justify-between gap-3">
         <p className="text-xs text-mute">
           {suficiente ? (
-            <span className="font-medium text-ink">¡Buena descripción!</span>
+            <span className="font-medium text-ink">{t.buena}</span>
           ) : (
-            `Escribe al menos ${minimo} caracteres (llevas ${texto.trim().length}).`
+            rellenar(t.faltan, { minimo, largo: texto.trim().length })
           )}
         </p>
         <button
@@ -74,7 +77,7 @@ export default function EditorDescripcion({
           disabled={guardando || !suficiente}
           className="rounded-full bg-purple px-5 py-2 text-sm font-semibold text-white shadow-card transition-transform hover:bg-purple-600 hover:scale-[1.03] disabled:opacity-50 disabled:hover:scale-100"
         >
-          {guardando ? "Guardando…" : guardado ? "Guardado ✓" : "Guardar"}
+          {guardando ? t.guardando : guardado ? t.guardado : t.guardar}
         </button>
       </div>
     </div>

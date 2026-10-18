@@ -2,6 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
+import { textosDe } from "./utils/textos";
+
+const es = textosDe("es").miAnuncio.editor;
+const en = textosDe("en").miAnuncio.editor;
 
 const rpcMock = vi.fn().mockResolvedValue({ data: null, error: null });
 vi.mock("@/lib/supabase/client", () => ({
@@ -14,6 +18,7 @@ describe("EditorDescripcion", () => {
   it("deshabilita Guardar hasta alcanzar el mínimo de caracteres", async () => {
     render(
       <EditorDescripcion
+        t={es}
         token="t"
         valorInicial=""
         minimo={80}
@@ -33,6 +38,7 @@ describe("EditorDescripcion", () => {
     const onEscribir = vi.fn();
     render(
       <EditorDescripcion
+        t={es}
         token="t"
         valorInicial=""
         minimo={80}
@@ -49,6 +55,7 @@ describe("EditorDescripcion", () => {
     const texto = "a".repeat(85);
     render(
       <EditorDescripcion
+        t={es}
         token="tok"
         valorInicial={texto}
         minimo={80}
@@ -62,5 +69,23 @@ describe("EditorDescripcion", () => {
       p_token: "tok",
       p_descripcion: texto,
     });
+  });
+
+  it("en inglés pinta los textos en inglés", async () => {
+    render(
+      <EditorDescripcion
+        t={en}
+        token="t"
+        valorInicial=""
+        minimo={80}
+        onEscribir={vi.fn()}
+        onGuardado={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+    expect(screen.getByLabelText("Property description")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Write at least 80 characters/),
+    ).toBeInTheDocument();
   });
 });

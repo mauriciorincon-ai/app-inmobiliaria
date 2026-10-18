@@ -73,32 +73,30 @@ describe("calcularScore (goal-gradient)", () => {
 describe("siguientePaso", () => {
   it("sin fotos sugiere subir la primera (+15)", () => {
     expect(siguientePaso(vacio)).toEqual({
-      accion: "Sube tu primera foto",
+      codigo: "primeraFoto",
       puntos: 15,
     });
   });
 
   it("con foto pero sin descripción sugiere la descripción", () => {
     expect(siguientePaso({ ...vacio, fotos: 1 })?.puntos).toBe(15);
-    expect(siguientePaso({ ...vacio, fotos: 1 })?.accion).toMatch(
-      /descripción/i,
-    );
+    expect(siguientePaso({ ...vacio, fotos: 1 })?.codigo).toBe("descripcion");
   });
 
   it("encadena portada → contacto → más fotos", () => {
     const base = { fotos: 1, descripcionLen: 100 };
     expect(
       siguientePaso({ ...base, tienePortada: false, contactoPublico: false })
-        ?.accion,
-    ).toMatch(/portada/i);
+        ?.codigo,
+    ).toBe("portada");
     expect(
       siguientePaso({ ...base, tienePortada: true, contactoPublico: false })
-        ?.accion,
-    ).toMatch(/contacto/i);
+        ?.codigo,
+    ).toBe("contacto");
     expect(
       siguientePaso({ ...base, tienePortada: true, contactoPublico: true })
-        ?.accion,
-    ).toMatch(/foto/i);
+        ?.codigo,
+    ).toBe("otraFoto");
   });
 
   it("devuelve null cuando el anuncio está al 100%", () => {

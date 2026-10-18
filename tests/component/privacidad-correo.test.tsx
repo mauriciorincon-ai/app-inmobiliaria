@@ -12,7 +12,8 @@ describe("/privacidad — correo del responsable", () => {
   it("muestra el correo de la variable como enlace mailto, en las dos secciones que lo citan", async () => {
     vi.stubEnv("NEXT_PUBLIC_RESPONSABLE_CORREO", "responsable@ejemplo.test");
     vi.resetModules();
-    const { default: Privacidad } = await import("@/app/[lang]/privacidad/page");
+    const { default: Privacidad } =
+      await import("@/app/[lang]/privacidad/page");
     render(await Privacidad({ params: Promise.resolve({ lang: "es" }) }));
     const enlaces = screen.getAllByRole("link", {
       name: "responsable@ejemplo.test",
@@ -26,10 +27,11 @@ describe("/privacidad — correo del responsable", () => {
   it("informa del correo opcional y de su uso en los avisos de campaña, dentro de «Qué datos recogemos»", async () => {
     vi.stubEnv("NEXT_PUBLIC_RESPONSABLE_CORREO", "responsable@ejemplo.test");
     vi.resetModules();
-    const { default: Privacidad } = await import("@/app/[lang]/privacidad/page");
-    const { CORREO_OPCIONAL } = await import("@/app/[lang]/privacidad/textos");
+    const { default: Privacidad } =
+      await import("@/app/[lang]/privacidad/page");
+    const { PRIVACIDAD } = await import("@/textos/privacidad");
     render(await Privacidad({ params: Promise.resolve({ lang: "es" }) }));
-    const parrafo = screen.getByText(CORREO_OPCIONAL.es);
+    const parrafo = screen.getByText(PRIVACIDAD.datos.correoOpcional.es);
     const seccion = parrafo.closest("section");
     expect(seccion).not.toBeNull();
     expect(
@@ -37,5 +39,22 @@ describe("/privacidad — correo del responsable", () => {
         name: /qué datos recogemos/i,
       }),
     ).toBeInTheDocument();
+  });
+
+  it("en inglés publica la política redactada en inglés, con el mismo correo en las dos secciones", async () => {
+    vi.stubEnv("NEXT_PUBLIC_RESPONSABLE_CORREO", "responsable@ejemplo.test");
+    vi.resetModules();
+    const { default: Privacidad } =
+      await import("@/app/[lang]/privacidad/page");
+    render(await Privacidad({ params: Promise.resolve({ lang: "en" }) }));
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Personal data policy" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Optional owner verification" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("link", { name: "responsable@ejemplo.test" }).length,
+    ).toBeGreaterThanOrEqual(2);
   });
 });

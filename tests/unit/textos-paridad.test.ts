@@ -8,7 +8,10 @@ import { enIdioma, esHoja, rellenar } from "@/i18n/textos";
 
 // Textos que son IGUALES en los dos idiomas a propósito (nombres propios, siglas). Cada uno con su
 // ruta; una copia del español en otro lugar sigue fallando.
-const IGUALES = new Set<string>([]);
+const IGUALES = new Set<string>([
+  // Etiqueta de fila del resumen: «WhatsApp» es el nombre del servicio en cualquier idioma.
+  "paso3.filas.whatsapp",
+]);
 
 describe("revisarParidad — lo que DEBE marcar", () => {
   it.each([

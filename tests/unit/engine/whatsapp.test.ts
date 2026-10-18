@@ -81,4 +81,13 @@ describe("mensajeReContacto", () => {
     expect(msg).toContain("Hola hola");
     expect(msg).not.toMatch(/\d+%/);
   });
+
+  it("sale en el idioma guardado del vendedor", () => {
+    const link = "https://ejemplo.test/mi-anuncio#t=xyz";
+    const en = mensajeReContacto("Ana María Vélez", link, "en");
+    expect(en).toMatch(/^Hi Ana,/);
+    expect(en).toContain(link);
+    expect(en).not.toMatch(/Hola/);
+    expect(mensajeReContacto("   ", link, "en")).toContain("Hi there,");
+  });
 });

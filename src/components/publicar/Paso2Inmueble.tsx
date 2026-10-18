@@ -1,43 +1,48 @@
 import Campo from "@/components/ui/Campo";
-import { OPERACIONES } from "@/engine/registro/schema";
+import { OPERACIONES, TIPOS } from "@/engine/registro/schema";
 import { LOCALIDADES } from "@/engine/zonas/localidades";
 import type { EstadoFormulario } from "@/engine/registro/wizard";
 import type { Errores } from "@/components/publicar/Paso1Contacto";
+import type { Proyectado } from "@/i18n/textos";
+import type { COMUN } from "@/textos/comun";
+import type { PUBLICAR } from "@/textos/publicar";
+
+export type TextosPaso2 = Proyectado<typeof PUBLICAR.paso2>;
+export type Dominio = Proyectado<typeof COMUN.dominio>;
 
 type Props = {
+  t: TextosPaso2;
+  dominio: Dominio;
   datos: EstadoFormulario;
   errores: Errores;
   set: (campo: keyof EstadoFormulario, valor: string) => void;
 };
 
-const opcionOperacion: Record<(typeof OPERACIONES)[number], string> = {
-  venta: "Venta",
-  arriendo: "Arriendo",
-};
-
-const opcionesTipo = [
-  { value: "apartamento", label: "Apartamento" },
-  { value: "casa", label: "Casa" },
-  { value: "apartaestudio", label: "Apartaestudio" },
-  { value: "otro", label: "Otro" },
-];
+// Ejemplos de formato, no son texto de la interfaz: no se traducen.
+const EJEMPLO_AREA = "78";
+const EJEMPLO_HABITACIONES = "3";
 
 // Paso 2 — Datos del inmueble. Lo mínimo indispensable; sin fotos ni documentos.
-export default function Paso2Inmueble({ datos, errores, set }: Props) {
+export default function Paso2Inmueble({
+  t,
+  dominio,
+  datos,
+  errores,
+  set,
+}: Props) {
   return (
     <div className="space-y-5">
       <div>
         <h2 className="text-2xl font-extrabold tracking-tight text-ink">
-          Sobre tu inmueble
+          {t.titulo}
         </h2>
-        <p className="mt-1 text-sm text-gray">
-          Solo lo básico. Las fotos llegan en la próxima etapa.
-        </p>
+        <p className="mt-1 text-sm text-gray">{t.subtitulo}</p>
       </div>
 
       <fieldset>
         <legend className="text-sm font-semibold text-ink">
-          ¿Vendes o arriendas?<span className="text-purple-600"> *</span>
+          {t.operacion.etiqueta}
+          <span className="text-purple-600"> *</span>
         </legend>
         <div className="mt-2 flex gap-3">
           {OPERACIONES.map((op) => {
@@ -62,7 +67,7 @@ export default function Paso2Inmueble({ datos, errores, set }: Props) {
                     errores.operacion ? "operacion-error" : undefined
                   }
                 />
-                {opcionOperacion[op]}
+                {dominio.operacion[op]}
               </label>
             );
           })}
@@ -81,76 +86,76 @@ export default function Paso2Inmueble({ datos, errores, set }: Props) {
       <Campo
         id="tipo"
         control="select"
-        label="Tipo de inmueble"
+        label={t.tipo.etiqueta}
         requerido
         value={datos.tipo}
         onChange={(v) => set("tipo", v)}
         error={errores.tipo}
-        placeholder="Elige el tipo"
-        opciones={opcionesTipo}
+        placeholder={t.tipo.ejemplo}
+        opciones={TIPOS.map((v) => ({ value: v, label: dominio.tipo[v] }))}
       />
       <Campo
         id="localidad"
         control="select"
-        label="Localidad"
+        label={t.localidad.etiqueta}
         requerido
         value={datos.localidad}
         onChange={(v) => set("localidad", v)}
         error={errores.localidad}
-        hint="Tu localidad de Bogotá. Con ella sabemos cuántos cupos de fundador quedan en tu zona."
-        placeholder="Elige tu localidad"
+        hint={t.localidad.ayuda}
+        placeholder={t.localidad.ejemplo}
         opciones={LOCALIDADES.map((l) => ({ value: l, label: l }))}
       />
       <Campo
         id="barrio"
-        label="Barrio"
+        label={t.barrio.etiqueta}
         requerido
         value={datos.barrio}
         onChange={(v) => set("barrio", v)}
         error={errores.barrio}
-        placeholder="Ej: Cedritos"
+        placeholder={t.barrio.ejemplo}
       />
       <Campo
         id="direccion_aproximada"
-        label="Dirección aproximada (opcional)"
+        label={t.direccion.etiqueta}
         value={datos.direccion_aproximada}
         onChange={(v) => set("direccion_aproximada", v)}
         error={errores.direccion_aproximada}
-        hint="No la mostramos públicamente. Nos ayuda a ubicar la zona."
-        placeholder="Ej: Calle 140 con carrera 15"
+        hint={t.direccion.ayuda}
+        placeholder={t.direccion.ejemplo}
       />
       <div className="grid grid-cols-2 gap-4">
         <Campo
           id="area_m2"
-          label="Área (m²)"
+          label={t.area.etiqueta}
           requerido
           inputMode="numeric"
           value={datos.area_m2}
           onChange={(v) => set("area_m2", v)}
           error={errores.area_m2}
-          placeholder="78"
+          placeholder={EJEMPLO_AREA}
         />
         <Campo
           id="habitaciones"
-          label="Habitaciones"
+          label={t.habitaciones.etiqueta}
           requerido
           inputMode="numeric"
           value={datos.habitaciones}
           onChange={(v) => set("habitaciones", v)}
           error={errores.habitaciones}
-          placeholder="3"
+          placeholder={EJEMPLO_HABITACIONES}
         />
       </div>
       <Campo
         id="precio_esperado"
-        label="Precio esperado (COP)"
+        label={t.precio.etiqueta}
         requerido
         inputMode="numeric"
         value={datos.precio_esperado}
         onChange={(v) => set("precio_esperado", v)}
         error={errores.precio_esperado}
-        hint="Un estimado está bien. Lo puedes ajustar después."
-        placeholder="420.000.000"
+        hint={t.precio.ayuda}
+        placeholder={t.precio.ejemplo}
       />
     </div>
   );

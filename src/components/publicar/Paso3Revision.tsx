@@ -3,8 +3,17 @@ import Campo from "@/components/ui/Campo";
 import { formatearCOP, parsearCOP } from "@/engine/format/cop";
 import { normalizarWhatsapp } from "@/engine/format/whatsapp";
 import type { EstadoFormulario } from "@/engine/registro/wizard";
+import type { Idioma } from "@/i18n/idiomas";
+import type { Proyectado } from "@/i18n/textos";
+import type { PUBLICAR } from "@/textos/publicar";
+import type { Dominio } from "@/components/publicar/Paso2Inmueble";
+
+export type TextosPaso3 = Proyectado<typeof PUBLICAR.paso3>;
 
 type Props = {
+  t: TextosPaso3;
+  dominio: Dominio;
+  lang: Idioma;
   datos: EstadoFormulario;
   set: (campo: keyof EstadoFormulario, valor: string) => void;
   consentimiento: boolean;
@@ -13,19 +22,18 @@ type Props = {
   errorEmail?: string;
 };
 
-const etiquetaOperacion: Record<string, string> = {
-  venta: "Venta",
-  arriendo: "Arriendo",
-};
-const etiquetaTipo: Record<string, string> = {
-  apartamento: "Apartamento",
-  casa: "Casa",
-  apartaestudio: "Apartaestudio",
-  otro: "Otro",
-};
+// Ejemplo de formato, no es texto de la interfaz: no se traduce.
+const EJEMPLO_CORREO = "tucorreo@ejemplo.com";
+
+// Etiqueta del dominio para un valor de la columna; si no la conoce, muestra el valor tal cual.
+const etiquetaDe = (mapa: Record<string, string>, valor: string) =>
+  mapa[valor] ?? valor;
 
 // Paso 3 — Revisión + consentimiento Ley 1581. Sin marcar la casilla no se puede enviar.
 export default function Paso3Revision({
+  t,
+  dominio,
+  lang,
   datos,
   set,
   consentimiento,
@@ -37,18 +45,18 @@ export default function Paso3Revision({
   const whatsapp = normalizarWhatsapp(datos.whatsapp) ?? datos.whatsapp;
 
   const filas: Array<[string, string]> = [
-    ["Nombre", datos.nombre],
-    ["WhatsApp", whatsapp],
-    ["Ciudad", datos.ciudad],
-    ["Operación", etiquetaOperacion[datos.operacion] ?? datos.operacion],
-    ["Tipo", etiquetaTipo[datos.tipo] ?? datos.tipo],
-    ["Localidad", datos.localidad],
-    ["Barrio", datos.barrio],
-    ["Área", datos.area_m2 ? `${datos.area_m2} m²` : ""],
-    ["Habitaciones", datos.habitaciones],
+    [t.filas.nombre, datos.nombre],
+    [t.filas.whatsapp, whatsapp],
+    [t.filas.ciudad, datos.ciudad],
+    [t.filas.operacion, etiquetaDe(dominio.operacion, datos.operacion)],
+    [t.filas.tipo, etiquetaDe(dominio.tipo, datos.tipo)],
+    [t.filas.localidad, datos.localidad],
+    [t.filas.barrio, datos.barrio],
+    [t.filas.area, datos.area_m2 ? `${datos.area_m2} m²` : ""],
+    [t.filas.habitaciones, datos.habitaciones],
     [
-      "Precio esperado",
-      precio !== null ? formatearCOP(precio) : datos.precio_esperado,
+      t.filas.precio,
+      precio !== null ? formatearCOP(precio, lang) : datos.precio_esperado,
     ],
   ];
 
@@ -56,11 +64,9 @@ export default function Paso3Revision({
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-extrabold tracking-tight text-ink">
-          Revisa y publica
+          {t.titulo}
         </h2>
-        <p className="mt-1 text-sm text-gray">
-          Confirma que todo esté bien antes de enviar.
-        </p>
+        <p className="mt-1 text-sm text-gray">{t.subtitulo}</p>
       </div>
 
       <dl className="divide-y divide-purple-200 rounded-[2rem] bg-cream px-6 py-2">
@@ -75,12 +81,12 @@ export default function Paso3Revision({
       <Campo
         id="email"
         type="email"
-        label="Tu correo (opcional)"
+        label={t.correo.etiqueta}
         value={datos.email}
         onChange={(v) => set("email", v)}
         error={errorEmail}
-        hint="Para enviarte el paquete fundador y avisos de la campaña. Si lo dejas vacío, te escribimos por WhatsApp."
-        placeholder="tucorreo@ejemplo.com"
+        hint={t.correo.ayuda}
+        placeholder={EJEMPLO_CORREO}
       />
 
       <div>
@@ -96,14 +102,14 @@ export default function Paso3Revision({
             className="mt-0.5 h-5 w-5 shrink-0 rounded border-purple-200 accent-purple"
           />
           <span>
-            Autorizo el tratamiento de mis datos según la{" "}
+            {t.consentimiento.antes}
             <Link
               href="/privacidad"
               className="font-semibold text-purple-600 underline"
             >
-              política de privacidad
-            </Link>{" "}
-            (Ley 1581 de 2012).
+              {t.consentimiento.enlace}
+            </Link>
+            {t.consentimiento.despues}
           </span>
         </label>
         {errorConsentimiento && (

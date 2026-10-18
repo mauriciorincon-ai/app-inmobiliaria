@@ -4,18 +4,33 @@ import { useRef, useState } from "react";
 import { MAX_FOTOS, puedeAgregar } from "@/engine/fotos/gate";
 import { subirFoto } from "@/lib/fotos-cliente";
 import { leerDimensiones, type LeerDimensiones } from "@/lib/leer-dimensiones";
-import ChecklistEspacios from "@/components/mi-anuncio/ChecklistEspacios";
+import ChecklistEspacios, {
+  type TextosSubidor,
+} from "@/components/mi-anuncio/ChecklistEspacios";
+import { rellenar } from "@/i18n/textos";
+import type { RazonSubida } from "@/lib/fotos-cliente";
+
+// Las razones con frase propia; las demás fallos de la cadena (presign, subida, confirmación, red)
+// comparten la de conexión.
+type ErroresSubidor = TextosSubidor["errores"];
+function fraseDeRazon(errores: ErroresSubidor, razon: RazonSubida): string {
+  return razon in errores
+    ? errores[razon as keyof ErroresSubidor]
+    : errores.red;
+}
 
 type Fase = "reposo" | "procesando" | "rechazada" | "error";
 
 // Subidor de fotos: input de archivo → gate determinista → compresión → R2 → confirmación.
 // `leer` se inyecta (default el real) para poder testear el gate sin decodificar imágenes.
 export default function SubidorFotos({
+  t,
   token,
   cantidadActual,
   onSubida,
   leer = leerDimensiones,
 }: {
+  t: TextosSubidor;
   token: string;
   cantidadActual: number;
   onSubida: () => void | Promise<void>;
@@ -38,8 +53,8 @@ export default function SubidorFotos({
       setFase("procesando");
       setProgreso(
         archivos.length > 1
-          ? `Procesando foto ${i + 1} de ${archivos.length}…`
-          : "Procesando tu foto…",
+          ? rellenar(t.procesandoVarias, { i: i + 1, total: archivos.length })
+          : t.procesandoUna,
       );
       const r = await subirFoto(archivos[i], token, leer);
       if (!r.ok) {
@@ -50,7 +65,7 @@ export default function SubidorFotos({
             ? "rechazada"
             : "error",
         );
-        setMensaje(r.mensaje);
+        setMensaje(fraseDeRazon(t.errores, r.razon));
         if (inputRef.current) inputRef.current.value = "";
         return;
       }
@@ -70,10 +85,10 @@ export default function SubidorFotos({
         }`}
       >
         <span className="text-sm font-semibold text-ink">
-          {lleno ? "Alcanzaste el máximo de fotos" : "Toca para agregar fotos"}
+          {lleno ? t.lleno : t.agregar}
         </span>
         <span className="mt-1 text-xs text-mute">
-          {cantidadActual} de {MAX_FOTOS} · JPG, PNG o WebP
+          {rellenar(t.contador, { n: cantidadActual, max: MAX_FOTOS })}
         </span>
         <input
           ref={inputRef}
@@ -100,7 +115,7 @@ export default function SubidorFotos({
         </p>
       )}
 
-      {!lleno && <ChecklistEspacios />}
+      {!lleno && <ChecklistEspacios t={t} />}
     </div>
   );
 }

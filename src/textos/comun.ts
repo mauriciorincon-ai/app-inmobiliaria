@@ -39,6 +39,26 @@ export const COMUN = {
   // Selector de idioma: solo la etiqueta del grupo; cada idioma se nombra en sí mismo.
   selector: { etiqueta: { es: "Idioma", en: "Language" } },
 
+  // Vocabulario del dominio que se pinta en varias pantallas: la operación y el tipo de inmueble
+  // (los valores de las columnas `operacion` y `tipo`). «Apartaestudio» se nombra y se explica para
+  // quien lee en inglés.
+  dominio: {
+    operacion: {
+      venta: { es: "Venta", en: "For sale" },
+      arriendo: { es: "Arriendo", en: "For rent" },
+    },
+    tipo: {
+      apartamento: { es: "Apartamento", en: "Apartment" },
+      casa: { es: "Casa", en: "House" },
+      apartaestudio: {
+        es: "Apartaestudio",
+        en: "Studio apartment (apartaestudio)",
+      },
+      otro: { es: "Otro", en: "Other" },
+      inmueble: { es: "Inmueble", en: "Property" },
+    },
+  },
+
   // 404 de toda URL que no existe. Next la sirve fuera del layout de [lang] (su layout raíz vive en
   // un segmento dinámico), así que no sabe el idioma: muestra los dos a la vez.
   noEncontrada: {

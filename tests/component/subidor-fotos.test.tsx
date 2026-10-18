@@ -3,6 +3,10 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SubidorFotos from "@/components/mi-anuncio/SubidorFotos";
 import { MAX_FOTOS } from "@/engine/fotos/gate";
+import { textosDe } from "./utils/textos";
+
+const es = textosDe("es").miAnuncio.subidor;
+const en = textosDe("en").miAnuncio.subidor;
 
 // Mock del orquestador de subida: el gate real ya está unit-testeado (gate-fotos.test.ts); aquí
 // verificamos el CABLEADO de la UI (rechazo → mensaje sin avanzar; éxito → recarga).
@@ -19,7 +23,9 @@ describe("SubidorFotos", () => {
   beforeEach(() => subirFotoMock.mockReset());
 
   it("muestra la cuenta y el máximo de fotos", () => {
-    render(<SubidorFotos token="t" cantidadActual={2} onSubida={vi.fn()} />);
+    render(
+      <SubidorFotos t={es} token="t" cantidadActual={2} onSubida={vi.fn()} />,
+    );
     expect(
       screen.getByText(new RegExp(`2 de ${MAX_FOTOS}`)),
     ).toBeInTheDocument();
@@ -27,12 +33,10 @@ describe("SubidorFotos", () => {
 
   it("una foto rechazada por resolución muestra el mensaje y NO recarga", async () => {
     const onSubida = vi.fn();
-    subirFotoMock.mockResolvedValue({
-      ok: false,
-      razon: "resolucion",
-      mensaje: "La foto es muy pequeña.",
-    });
-    render(<SubidorFotos token="t" cantidadActual={0} onSubida={onSubida} />);
+    subirFotoMock.mockResolvedValue({ ok: false, razon: "resolucion" });
+    render(
+      <SubidorFotos t={es} token="t" cantidadActual={0} onSubida={onSubida} />,
+    );
 
     const input = screen.getByLabelText(/agregar fotos/i, {
       selector: "input",
@@ -48,7 +52,14 @@ describe("SubidorFotos", () => {
   it("una foto válida invoca el pipeline y recarga", async () => {
     const onSubida = vi.fn();
     subirFotoMock.mockResolvedValue({ ok: true, fotoId: "f1", orden: 0 });
-    render(<SubidorFotos token="tok" cantidadActual={0} onSubida={onSubida} />);
+    render(
+      <SubidorFotos
+        t={es}
+        token="tok"
+        cantidadActual={0}
+        onSubida={onSubida}
+      />,
+    );
 
     const input = screen.getByLabelText(/agregar fotos/i, {
       selector: "input",
@@ -65,11 +76,30 @@ describe("SubidorFotos", () => {
 
   it("bloquea la subida cuando se alcanzó el máximo", () => {
     render(
-      <SubidorFotos token="t" cantidadActual={MAX_FOTOS} onSubida={vi.fn()} />,
+      <SubidorFotos
+        t={es}
+        token="t"
+        cantidadActual={MAX_FOTOS}
+        onSubida={vi.fn()}
+      />,
     );
     expect(screen.getByText(/máximo de fotos/i)).toBeInTheDocument();
     expect(
       screen.getByLabelText(/máximo de fotos/i, { selector: "input" }),
     ).toBeDisabled();
+  });
+
+  it("cada razón sale con la frase del idioma recibido; un fallo de red cae en la de conexión", async () => {
+    subirFotoMock.mockResolvedValue({ ok: false, razon: "confirmacion" });
+    render(
+      <SubidorFotos t={en} token="t" cantidadActual={0} onSubida={vi.fn()} />,
+    );
+    const input = screen.getByLabelText(/add photos/i, { selector: "input" });
+    await userEvent.upload(input, archivo());
+    await waitFor(() =>
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "We couldn't upload the photo. Check your connection and try again.",
+      ),
+    );
   });
 });

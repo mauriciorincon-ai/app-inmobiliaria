@@ -1,42 +1,44 @@
 import Boton from "@/components/ui/Boton";
+import type { Idioma } from "@/i18n/idiomas";
+import { enIdioma } from "@/i18n/textos";
+import { LANDING } from "@/textos/landing";
 
 // Hero ESTÁTICO (patrón lcp-nace-estatico): h1, subtítulo, CTA y arte nacen visibles — sin
 // wrapper en opacity:0, sin máscara, sin GSAP. Solo el blob decorativo tiene float por CSS
 // (transform, no toca el LCP y se apaga con prefers-reduced-motion). Server Component.
-export default function Hero() {
+export default function Hero({ lang }: { lang: Idioma }) {
+  const t = enIdioma(LANDING.hero, lang);
   return (
     <section className="relative overflow-hidden pt-28 lg:pt-36">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-16 lg:grid-cols-2 lg:px-10 lg:pb-24">
         <div>
           <p className="inline-block rounded-full bg-purple-tint px-4 py-1.5 text-sm font-semibold text-purple-600">
-            Para vendedores directos en Bogotá
+            {t.etiqueta}
           </p>
 
           <h1 className="mt-5 text-5xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-6xl lg:text-[4.2rem]">
-            Vende tu casa <span className="pill">directo</span>, sin pagar
-            comisión
+            {t.titulo.antes}
+            <span className="pill">{t.titulo.resaltado}</span>
+            {t.titulo.despues}
           </h1>
 
           <p className="mt-7 max-w-md text-lg leading-relaxed text-gray">
-            Publícala hoy como fundador —verificada y bien presentada— y que te
-            espere lista el día que abramos las puertas a los compradores.
-            Publicar tu inmueble <strong>es</strong> tu registro.
+            {t.subtitulo.antes}
+            <strong>{t.subtitulo.resaltado}</strong>
+            {t.subtitulo.despues}
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-5">
-            <Boton href="/publicar">Publica tu inmueble como fundador</Boton>
+            <Boton href="/publicar">{t.cta}</Boton>
             <a
               href="#como-funciona"
               className="text-sm font-semibold text-gray underline-offset-4 hover:underline"
             >
-              ¿Cómo funciona? →
+              {t.comoFunciona}
             </a>
           </div>
 
-          <p className="mt-6 text-sm text-mute">
-            Gratis para fundadores · Sin intermediarios · Tus datos protegidos
-            (Ley 1581)
-          </p>
+          <p className="mt-6 text-sm text-mute">{t.garantias}</p>
         </div>
 
         {/* Arte: ilustración SVG (sin foto → sin licencia de terceros, LCP liviano). */}
@@ -58,7 +60,7 @@ export default function Hero() {
               viewBox="0 0 400 500"
               className="h-full w-full"
               role="img"
-              aria-label="Ilustración de una casa"
+              aria-label={t.ilustracion}
             >
               <rect width="400" height="500" fill="#fbf9f6" />
               <rect
@@ -118,10 +120,12 @@ export default function Hero() {
 
           {/* Badge honesto (no es un número fabricado: la plataforma no cobra comisión). */}
           <div className="flota absolute -bottom-3 -left-2 rotate-[-2.5deg] rounded-2xl bg-white px-5 py-3 shadow-card">
-            <p className="text-xs font-medium text-mute">Comisión</p>
+            <p className="text-xs font-medium text-mute">{t.comision}</p>
             <p className="text-xl font-bold text-ink">
               $0{" "}
-              <span className="text-sm font-medium text-purple-600">para ti</span>
+              <span className="text-sm font-medium text-purple-600">
+                {t.paraTi}
+              </span>
             </p>
           </div>
         </div>

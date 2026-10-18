@@ -3,7 +3,7 @@ import {
   mostrarContador,
   cuposRestantes,
   agotado,
-  textoCupos,
+  estadoCupos,
 } from "@/engine/cupos/cupos";
 
 describe("cupos", () => {
@@ -49,24 +49,21 @@ describe("cupos", () => {
     });
   });
 
-  describe("textoCupos", () => {
-    it("plural cuando quedan varios", () => {
-      expect(textoCupos(10, 3, "Chapinero")).toBe(
-        "Quedan 7 cupos de fundador en Chapinero",
-      );
+  // El motor dice QUÉ pasa; la frase en cada idioma la compone la UI (tests/component/banda-cupos).
+  describe("estadoCupos", () => {
+    it("varios cuando quedan varios, con la cuenta", () => {
+      expect(estadoCupos(10, 3)).toEqual({ tipo: "varios", restantes: 7 });
     });
-    it("singular cuando queda 1", () => {
-      expect(textoCupos(10, 9, "Suba")).toBe(
-        "Queda 1 cupo de fundador en Suba",
-      );
+    it("uno cuando queda 1", () => {
+      expect(estadoCupos(10, 9)).toEqual({ tipo: "uno" });
     });
-    it("mensaje de completos cuando se agota", () => {
-      expect(textoCupos(10, 10, "Kennedy")).toBe(
-        "Cupos de fundador completos en Kennedy",
-      );
+    it("completos cuando se agota", () => {
+      expect(estadoCupos(10, 10)).toEqual({ tipo: "completos" });
+      expect(estadoCupos(10, 12)).toEqual({ tipo: "completos" });
     });
     it("null si no hay cupo fijado (no se muestra nada)", () => {
-      expect(textoCupos(null, 3, "Bosa")).toBeNull();
+      expect(estadoCupos(null, 3)).toBeNull();
+      expect(estadoCupos(0, 3)).toBeNull();
     });
   });
 });

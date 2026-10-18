@@ -74,11 +74,20 @@ describe("referidos", () => {
   describe("mensajeInvitacion", () => {
     it("incluye el link y no fabrica cifras", () => {
       const link = `https://innmob.co/publicar?ref=${CODIGO}`;
-      const m = mensajeInvitacion(link);
+      const m = mensajeInvitacion(link, "es");
       expect(m).toContain(link);
       expect(m).toContain("sin comisión");
       // ninguna cifra de evidencia débil ni porcentajes inventados
       expect(m).not.toMatch(/\d+\s*%|3×|118|40%/);
+    });
+
+    it("sale en el idioma de quien invita, con el mismo link", () => {
+      const link = `https://innmob.co/publicar?ref=${CODIGO}`;
+      const m = mensajeInvitacion(link, "en");
+      expect(m).toContain(link);
+      expect(m).toContain("no commission");
+      expect(m).not.toContain("sin comisión");
+      expect(m).not.toMatch(/\d+\s*%/);
     });
   });
 });

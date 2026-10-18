@@ -1,15 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import type { Proyectado } from "@/i18n/textos";
 import { crearClienteNavegador } from "@/lib/supabase/client";
+import type { MI_ANUNCIO } from "@/textos/mi-anuncio";
+
+export type TextosContactoOptIn = Proyectado<typeof MI_ANUNCIO.contacto>;
 
 // Opt-in Ley 1581: activa/desactiva mostrar el WhatsApp en la ficha pública. Libre y reversible;
 // por defecto NO se expone contacto. El cambio va por RPC (token) y recarga el anuncio.
 export default function OptInContacto({
+  t,
   token,
   activo,
   onCambio,
 }: {
+  t: TextosContactoOptIn;
   token: string;
   activo: boolean;
   onCambio: () => void | Promise<void>;
@@ -38,12 +44,9 @@ export default function OptInContacto({
         className="mt-1 h-5 w-5 accent-purple"
       />
       <span className="text-sm text-gray">
-        <span className="font-semibold text-ink">
-          Mostrar mi WhatsApp en la ficha pública
-        </span>
+        <span className="font-semibold text-ink">{t.titulo}</span>
         <br />
-        Los interesados podrán escribirte directo. Puedes desactivarlo cuando
-        quieras. Sin esto, tu contacto no aparece.
+        {t.texto}
       </span>
     </label>
   );

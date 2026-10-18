@@ -30,28 +30,28 @@ export function calcularScore(e: EstadoAnuncio): number {
   return s;
 }
 
-export type PasoSugerido = { accion: string; puntos: number };
+// El paso es un código; la frase («Sube tu primera foto») sale del diccionario en cada idioma.
+export type AccionScore =
+  "primeraFoto" | "descripcion" | "portada" | "contacto" | "otraFoto";
+export type PasoSugerido = { codigo: AccionScore; puntos: number };
 
 // El siguiente paso alcanzable (goal-gradient: siempre hay un paso pequeño y visible), o null
 // cuando el anuncio llegó al 100%.
 export function siguientePaso(e: EstadoAnuncio): PasoSugerido | null {
   if (e.fotos === 0) {
-    return { accion: "Sube tu primera foto", puntos: PUNTOS_POR_FOTO[0] };
+    return { codigo: "primeraFoto", puntos: PUNTOS_POR_FOTO[0] };
   }
   if (e.descripcionLen < DESCRIPCION_MIN) {
-    return { accion: "Escribe la descripción", puntos: PUNTOS_DESCRIPCION };
+    return { codigo: "descripcion", puntos: PUNTOS_DESCRIPCION };
   }
   if (!e.tienePortada) {
-    return { accion: "Elige tu foto de portada", puntos: PUNTOS_PORTADA };
+    return { codigo: "portada", puntos: PUNTOS_PORTADA };
   }
   if (!e.contactoPublico) {
-    return {
-      accion: "Activa el contacto para interesados",
-      puntos: PUNTOS_CONTACTO,
-    };
+    return { codigo: "contacto", puntos: PUNTOS_CONTACTO };
   }
   if (e.fotos < MAX_FOTOS_PUNTUABLES) {
-    return { accion: "Agrega otra foto", puntos: PUNTOS_POR_FOTO[e.fotos] };
+    return { codigo: "otraFoto", puntos: PUNTOS_POR_FOTO[e.fotos] };
   }
   return null;
 }

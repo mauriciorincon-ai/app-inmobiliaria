@@ -1,6 +1,5 @@
 "use client";
 
-import type { Idioma } from "@/i18n/idiomas";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ZodType } from "zod";
@@ -9,14 +8,20 @@ import Progreso from "@/components/publicar/Progreso";
 import Paso1Contacto, {
   type Errores,
 } from "@/components/publicar/Paso1Contacto";
-import Paso2Inmueble from "@/components/publicar/Paso2Inmueble";
+import Paso2Inmueble, {
+  type Dominio,
+} from "@/components/publicar/Paso2Inmueble";
 import Paso3Revision from "@/components/publicar/Paso3Revision";
+import type { Idioma } from "@/i18n/idiomas";
+import type { Proyectado } from "@/i18n/textos";
+import type { PUBLICAR } from "@/textos/publicar";
 import {
   paso1Schema,
   paso2Schema,
   paso3Schema,
 } from "@/engine/registro/schema";
 import { CAMPO_HONEYPOT } from "@/engine/registro/anti-spam";
+import { textoDeError } from "@/engine/registro/errores";
 import { CLAVE_LINK, construirLinkAnuncio } from "@/engine/token/token";
 import { extraerRefDeBusqueda } from "@/engine/referidos/referidos";
 import { capturar } from "@/lib/posthog";
@@ -32,20 +37,49 @@ import {
   type Paso,
 } from "@/engine/registro/wizard";
 
-function erroresDe(schema: ZodType, valores: unknown): Errores {
+// Solo lo que el wizard pinta: el resto del diccionario (metadatos, confirmación) no viaja al cliente.
+export type TextosWizard = Pick<
+  Proyectado<typeof PUBLICAR>,
+  | "progreso"
+  | "paso1"
+  | "paso2"
+  | "paso3"
+  | "botones"
+  | "honeypot"
+  | "envio"
+  | "errores"
+>;
+
+// Valida y devuelve, por campo, la frase del idioma activo (el esquema solo da códigos).
+function erroresDe(
+  schema: ZodType,
+  valores: unknown,
+  t: TextosWizard,
+): Errores {
   const r = schema.safeParse(valores);
   if (r.success) return {};
   const e: Errores = {};
   for (const issue of r.error.issues) {
     const key = String(issue.path[0]);
-    if (!(key in e)) e[key] = issue.message;
+    if (!(key in e)) {
+      e[key] = textoDeError(issue.message, t.errores, t.envio.generico);
+    }
   }
   return e;
 }
 
 // Wizard "publicar = registro" (3 pasos). Persiste el borrador en localStorage tras cada cambio
 // (retomar si se cae); valida por paso con mensajes por campo; envía una sola vez al endpoint.
-export default function Wizard({ lang }: { lang: Idioma }) {
+// Cliente: recibe SOLO los textos de su idioma por props.
+export default function Wizard({
+  lang,
+  t,
+  dominio,
+}: {
+  lang: Idioma;
+  t: TextosWizard;
+  dominio: Dominio;
+}) {
   const router = useRouter();
   const [paso, setPaso] = useState<Paso>(1);
   const [datos, setDatos] = useState<EstadoFormulario>(ESTADO_INICIAL);
@@ -93,7 +127,7 @@ export default function Wizard({ lang }: { lang: Idioma }) {
 
   function avanzar() {
     const schema = paso === 1 ? paso1Schema : paso2Schema;
-    const e = erroresDe(schema, datos);
+    const e = erroresDe(schema, datos, t);
     if (Object.keys(e).length > 0) {
       setErrores(e);
       return;
@@ -109,7 +143,7 @@ export default function Wizard({ lang }: { lang: Idioma }) {
   }
 
   async function enviar() {
-    const e = erroresDe(paso3Schema, { consentimiento, email: datos.email });
+    const e = erroresDe(paso3Schema, { consentimiento, email: datos.email }, t);
     setErrorConsent(e.consentimiento);
     setErrorEmail(e.email);
     if (e.consentimiento || e.email) {
@@ -133,13 +167,9 @@ export default function Wizard({ lang }: { lang: Idioma }) {
       });
       if (!res.ok) {
         if (res.status === 429) {
-          setErrorEnvio(
-            "Recibimos demasiados intentos desde tu conexión. Intenta de nuevo más tarde.",
-          );
+          setErrorEnvio(t.envio.demasiados);
         } else {
-          setErrorEnvio(
-            "No pudimos registrar tu inmueble. Revisa los datos e intenta de nuevo.",
-          );
+          setErrorEnvio(t.envio.generico);
         }
         return;
       }
@@ -171,9 +201,7 @@ export default function Wizard({ lang }: { lang: Idioma }) {
       });
       router.push("/confirmacion");
     } catch {
-      setErrorEnvio(
-        "Hubo un problema de conexión. Revisa tu internet e inténtalo otra vez.",
-      );
+      setErrorEnvio(t.envio.conexion);
     } finally {
       setEnviando(false);
     }
@@ -181,17 +209,31 @@ export default function Wizard({ lang }: { lang: Idioma }) {
 
   return (
     <div className="mx-auto max-w-xl px-6 py-10 lg:py-14">
-      <Progreso paso={paso} />
+      <Progreso paso={paso} t={t.progreso} />
 
       <div className="mt-8">
         {paso === 1 && (
-          <Paso1Contacto datos={datos} errores={errores} set={set} />
+          <Paso1Contacto
+            t={t.paso1}
+            datos={datos}
+            errores={errores}
+            set={set}
+          />
         )}
         {paso === 2 && (
-          <Paso2Inmueble datos={datos} errores={errores} set={set} />
+          <Paso2Inmueble
+            t={t.paso2}
+            dominio={dominio}
+            datos={datos}
+            errores={errores}
+            set={set}
+          />
         )}
         {paso === 3 && (
           <Paso3Revision
+            t={t.paso3}
+            dominio={dominio}
+            lang={lang}
             datos={datos}
             set={set}
             consentimiento={consentimiento}
@@ -210,7 +252,7 @@ export default function Wizard({ lang }: { lang: Idioma }) {
         aria-hidden="true"
         className="absolute left-[-9999px] h-0 w-0 overflow-hidden"
       >
-        <label htmlFor={CAMPO_HONEYPOT}>No llenar</label>
+        <label htmlFor={CAMPO_HONEYPOT}>{t.honeypot}</label>
         <input
           id={CAMPO_HONEYPOT}
           name={CAMPO_HONEYPOT}
@@ -235,7 +277,7 @@ export default function Wizard({ lang }: { lang: Idioma }) {
       <div className="mt-8 flex items-center justify-between gap-4">
         {paso > 1 ? (
           <Boton variante="texto" onClick={retroceder} type="button">
-            ← Atrás
+            {t.botones.atras}
           </Boton>
         ) : (
           <span />
@@ -243,11 +285,11 @@ export default function Wizard({ lang }: { lang: Idioma }) {
 
         {esUltimoPaso(paso) ? (
           <Boton onClick={enviar} type="button" disabled={enviando}>
-            {enviando ? "Publicando…" : "Publicar mi inmueble"}
+            {enviando ? t.botones.publicando : t.botones.publicar}
           </Boton>
         ) : (
           <Boton onClick={avanzar} type="button">
-            Continuar
+            {t.botones.continuar}
           </Boton>
         )}
       </div>

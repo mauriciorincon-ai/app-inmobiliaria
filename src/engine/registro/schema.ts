@@ -16,12 +16,49 @@ export const TIPOS = ["apartamento", "casa", "apartaestudio", "otro"] as const;
 export type Operacion = (typeof OPERACIONES)[number];
 export type TipoInmueble = (typeof TIPOS)[number];
 
-// Límites (deben coincidir con los CHECK de la migración 0001).
-const AREA_MIN = 10;
-const AREA_MAX = 100000;
-const HAB_MAX = 40;
+// Límites (deben coincidir con los CHECK de la migración 0001). Los que aparecen en un mensaje
+// («entre {areaMin} y {areaMax} m²») se exportan para que la UI los rellene en su idioma.
+export const LIMITES = {
+  areaMin: 10,
+  areaMax: 100000,
+  habMax: 40,
+} as const;
 const PRECIO_MIN = 1_000_000;
 const PRECIO_MAX = 900_000_000_000;
+
+// Los mensajes de validación son CÓDIGOS, no frases: el esquema es el mismo en el navegador y en el
+// servidor, y la persona los lee en su idioma desde `src/textos/publicar.ts` (regla de producto 10).
+// Cada clave tiene su texto `{ es, en }` en `PUBLICAR.errores`; un test exige que no falte ninguna.
+export const ERR = {
+  nombreCorto: "nombreCorto",
+  nombreLargo: "nombreLargo",
+  whatsappVacio: "whatsappVacio",
+  whatsappInvalido: "whatsappInvalido",
+  ciudadCorta: "ciudadCorta",
+  ciudadLarga: "ciudadLarga",
+  operacion: "operacion",
+  tipo: "tipo",
+  localidad: "localidad",
+  barrioCorto: "barrioCorto",
+  barrioLargo: "barrioLargo",
+  direccionLarga: "direccionLarga",
+  areaVacia: "areaVacia",
+  soloEnteros: "soloEnteros",
+  areaRango: "areaRango",
+  habitacionesVacio: "habitacionesVacio",
+  habitacionesMax: "habitacionesMax",
+  precioVacio: "precioVacio",
+  precioNumero: "precioNumero",
+  precioRango: "precioRango",
+  consentimiento: "consentimiento",
+  correoLargo: "correoLargo",
+  correoInvalido: "correoInvalido",
+} as const;
+export type CodigoError = (typeof ERR)[keyof typeof ERR];
+
+export function esCodigoError(valor: string): valor is CodigoError {
+  return (Object.values(ERR) as string[]).includes(valor);
+}
 
 const numeroEntero = (s: string) => /^\d+$/.test(s.replace(/[.\s]/g, ""));
 
@@ -29,86 +66,69 @@ const numeroEntero = (s: string) => /^\d+$/.test(s.replace(/[.\s]/g, ""));
 // Paso 1 — Contacto (MÁXIMO 3 campos — acceptance criterion del sprint)
 // ---------------------------------------------------------------------------
 export const paso1Schema = z.object({
-  nombre: z
-    .string()
-    .trim()
-    .min(2, "Escribe tu nombre")
-    .max(80, "Máximo 80 caracteres"),
+  nombre: z.string().trim().min(2, ERR.nombreCorto).max(80, ERR.nombreLargo),
   whatsapp: z
     .string()
     .trim()
-    .min(1, "Escribe tu WhatsApp")
-    .refine(
-      esWhatsappValido,
-      "Escribe un celular colombiano válido (ej: 300 123 4567)",
-    ),
-  ciudad: z
-    .string()
-    .trim()
-    .min(2, "Escribe tu ciudad")
-    .max(60, "Máximo 60 caracteres"),
+    .min(1, ERR.whatsappVacio)
+    .refine(esWhatsappValido, ERR.whatsappInvalido),
+  ciudad: z.string().trim().min(2, ERR.ciudadCorta).max(60, ERR.ciudadLarga),
 });
 
 // ---------------------------------------------------------------------------
 // Paso 2 — Datos del inmueble (mínimo indispensable — sin fotos ni documentos)
 // ---------------------------------------------------------------------------
 export const paso2Schema = z.object({
-  operacion: z.enum(OPERACIONES, { error: "Elige si es venta o arriendo" }),
-  tipo: z.enum(TIPOS, { error: "Elige el tipo de inmueble" }),
+  operacion: z.enum(OPERACIONES, { error: ERR.operacion }),
+  tipo: z.enum(TIPOS, { error: ERR.tipo }),
   // Localidad de Bogotá (para el contador de cupos por zona). Lista cerrada (fase 1 = Bogotá).
-  localidad: z.enum(LOCALIDADES, { error: "Elige la localidad" }),
-  barrio: z
-    .string()
-    .trim()
-    .min(2, "Escribe el barrio o zona")
-    .max(80, "Máximo 80 caracteres"),
+  localidad: z.enum(LOCALIDADES, { error: ERR.localidad }),
+  barrio: z.string().trim().min(2, ERR.barrioCorto).max(80, ERR.barrioLargo),
   direccion_aproximada: z
     .string()
     .trim()
-    .max(120, "Máximo 120 caracteres")
+    .max(120, ERR.direccionLarga)
     .optional(),
   area_m2: z
     .string()
     .trim()
-    .min(1, "Escribe el área en m²")
-    .refine(numeroEntero, "Solo números enteros")
+    .min(1, ERR.areaVacia)
+    .refine(numeroEntero, ERR.soloEnteros)
     .refine((s) => {
       const n = Number(s.replace(/[.\s]/g, ""));
-      return n >= AREA_MIN && n <= AREA_MAX;
-    }, `El área debe estar entre ${AREA_MIN} y ${AREA_MAX} m²`),
+      return n >= LIMITES.areaMin && n <= LIMITES.areaMax;
+    }, ERR.areaRango),
   habitaciones: z
     .string()
     .trim()
-    .min(1, "Escribe cuántas habitaciones")
-    .refine(numeroEntero, "Solo números enteros")
-    .refine((s) => Number(s) <= HAB_MAX, `Máximo ${HAB_MAX} habitaciones`),
+    .min(1, ERR.habitacionesVacio)
+    .refine(numeroEntero, ERR.soloEnteros)
+    .refine((s) => Number(s) <= LIMITES.habMax, ERR.habitacionesMax),
   precio_esperado: z
     .string()
     .trim()
-    .min(1, "Escribe el precio esperado")
-    .refine((s) => parsearCOP(s) !== null, "Escribe un número")
+    .min(1, ERR.precioVacio)
+    .refine((s) => parsearCOP(s) !== null, ERR.precioNumero)
     .refine((s) => {
       const n = parsearCOP(s);
       return n !== null && n >= PRECIO_MIN && n <= PRECIO_MAX;
-    }, "El precio está fuera de rango"),
+    }, ERR.precioRango),
 });
 
 // ---------------------------------------------------------------------------
 // Paso 3 — Consentimiento (Ley 1581): sin `true` explícito no hay envío
 // ---------------------------------------------------------------------------
 export const paso3Schema = z.object({
-  consentimiento: z.literal(true, {
-    error: "Debes aceptar el tratamiento de datos para publicar",
-  }),
+  consentimiento: z.literal(true, { error: ERR.consentimiento }),
   // Correo OPCIONAL: habilita los avisos de campaña por email (Brevo). Vacío ⇒ solo WhatsApp.
   email: z
     .string()
     .trim()
-    .max(120, "Máximo 120 caracteres")
+    .max(120, ERR.correoLargo)
     .optional()
     .refine(
       (v) => !v || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v),
-      "Escribe un correo válido o déjalo vacío",
+      ERR.correoInvalido,
     ),
 });
 

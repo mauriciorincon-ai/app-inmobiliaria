@@ -1,16 +1,22 @@
 "use client";
 
 import { siguientePaso, type EstadoAnuncio } from "@/engine/score/score";
+import { rellenar, type Proyectado } from "@/i18n/textos";
+import type { MI_ANUNCIO } from "@/textos/mi-anuncio";
+
+export type TextosScore = Proyectado<typeof MI_ANUNCIO.score>;
 
 // Barra de completitud goal-gradient: muestra el % y el siguiente paso alcanzable. El estado lo
 // calcula MiAnuncio (fuente única del score); aquí solo se pinta.
 export default function ScoreCompletitud({
+  t,
   score,
   fotos,
   tienePortada,
   descripcionLen,
   contactoPublico,
 }: {
+  t: TextosScore;
   score: number;
 } & EstadoAnuncio) {
   const paso = siguientePaso({
@@ -28,7 +34,7 @@ export default function ScoreCompletitud({
     >
       <div className="flex items-baseline justify-between">
         <h2 id="score-titulo" className="text-sm font-semibold text-ink">
-          Tu anuncio está {score}% completo
+          {rellenar(t.titulo, { score })}
         </h2>
         <span className="text-2xl font-extrabold text-purple">{score}%</span>
       </div>
@@ -38,7 +44,7 @@ export default function ScoreCompletitud({
         aria-valuenow={score}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={`Anuncio ${score}% completo`}
+        aria-label={rellenar(t.aria, { score })}
       >
         <div
           className="h-full rounded-full bg-purple transition-all duration-500"
@@ -46,13 +52,13 @@ export default function ScoreCompletitud({
         />
       </div>
       {completo ? (
-        <p className="mt-3 text-sm font-medium text-ink">
-          ¡Listo! Tu anuncio está completo. 🎉
-        </p>
+        <p className="mt-3 text-sm font-medium text-ink">{t.completo}</p>
       ) : (
         <p className="mt-3 text-sm text-gray">
-          Siguiente:{" "}
-          <span className="font-semibold text-ink">{paso.accion}</span>{" "}
+          {t.siguiente}{" "}
+          <span className="font-semibold text-ink">
+            {t.acciones[paso.codigo]}
+          </span>{" "}
           <span className="text-mute">(+{paso.puntos}%)</span>
         </p>
       )}

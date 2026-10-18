@@ -3,6 +3,10 @@
 // módulo valida la forma, arma el link compartible y el mensaje de WhatsApp. La atribución (quién
 // refirió a quién) vive en BD y el código jamás revela datos del referente: solo cuenta.
 
+import type { Idioma } from "@/i18n/idiomas";
+import { enIdioma, rellenar } from "@/i18n/textos";
+import { MENSAJES } from "@/textos/mensajes";
+
 // base64url de 6 bytes sin padding = 8 chars del alfabeto [A-Za-z0-9_-].
 export const CODIGO_REGEX = /^[A-Za-z0-9_-]{8}$/;
 
@@ -38,11 +42,9 @@ export function construirLinkReferido(origin: string, codigo: string): string {
   return `${origin.replace(/\/+$/, "")}/publicar?ref=${codigo}`;
 }
 
-// Texto prellenado de WhatsApp para invitar (es-CO). El wa.me lo arma el llamador con `construirWaMe`.
-// Copy honesto: sin comisión (la plataforma no cobra en fase 1) y el cupo fundador es real.
-export function mensajeInvitacion(link: string): string {
-  return (
-    "Estoy publicando mi inmueble como fundador en Innmobiliaria — sin comisión. " +
-    `Publica el tuyo con mi enlace y aseguras tu cupo de fundador: ${link}`
-  );
+// Texto prellenado de WhatsApp para invitar, en el idioma de quien invita. El wa.me lo arma el llamador
+// con `construirWaMe`. Copy honesto: sin comisión (la plataforma no cobra en fase 1) y el cupo
+// fundador es real. La redacción vive en `src/textos/mensajes.ts`.
+export function mensajeInvitacion(link: string, idioma: Idioma): string {
+  return rellenar(enIdioma(MENSAJES.invitacion, idioma), { link });
 }

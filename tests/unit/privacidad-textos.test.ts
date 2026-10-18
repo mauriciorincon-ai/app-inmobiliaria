@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { CORREO_OPCIONAL } from "@/app/[lang]/privacidad/textos";
+import { PRIVACIDAD } from "@/textos/privacidad";
+
+const CORREO_OPCIONAL = PRIVACIDAD.datos.correoOpcional;
 
 // Regla de producto 10: el texto nuevo nace como mapa { es, en } con paridad. Un solo mapa tiene
 // pocas claves que comparar, así que la paridad exige las dos, con contenido, y distintas entre sí

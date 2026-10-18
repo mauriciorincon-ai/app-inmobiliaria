@@ -3,6 +3,10 @@
 // vendedor los escribe (con espacios, guiones, prefijo país o indicativo internacional) y las
 // llevamos a un único formato canónico. La BD blinda con un CHECK sobre el mismo patrón.
 
+import type { Idioma } from "@/i18n/idiomas";
+import { enIdioma, rellenar } from "@/i18n/textos";
+import { MENSAJES } from "@/textos/mensajes";
+
 /** Devuelve el número en E.164 (`+573001234567`) o `null` si no es un celular colombiano válido. */
 export function normalizarWhatsapp(entrada: string): string | null {
   if (typeof entrada !== "string") return null;
@@ -47,13 +51,18 @@ export function construirWaMe(numero: string, texto: string): string {
 
 /**
  * Mensaje de re-contacto para un fundador del S1: lo invita a completar su anuncio con su magic
- * link. Copy es-CO, sin cifras no citables. `nombre` se recorta al primer nombre.
+ * link. Sale en el idioma guardado del vendedor. `nombre` se recorta al primer nombre. La redacción
+ * vive en `src/textos/mensajes.ts`.
  */
-export function mensajeReContacto(nombre: string, link: string): string {
-  const primerNombre = nombre.trim().split(/\s+/)[0] || "hola";
-  return (
-    `Hola ${primerNombre}, te saludamos de Innmobiliaria. Tu inmueble ya está publicado como ` +
-    `fundador. Ahora puedes completarlo con fotos y descripción para que luzca mejor — entra ` +
-    `desde este enlace (es solo tuyo, guárdalo): ${link}`
-  );
+export function mensajeReContacto(
+  nombre: string,
+  link: string,
+  idioma: Idioma = "es",
+): string {
+  const primerNombre =
+    nombre.trim().split(/\s+/)[0] || enIdioma(MENSAJES.sinNombre, idioma);
+  return rellenar(enIdioma(MENSAJES.recontacto, idioma), {
+    nombre: primerNombre,
+    link,
+  });
 }

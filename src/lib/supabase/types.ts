@@ -641,6 +641,15 @@ export type Database = {
         Args: Record<string, never>;
         Returns: string[];
       };
+      // S8 (migración 11) — un enlace nuevo por correo al comprador, y de qué solicitud es un token.
+      nuevo_enlace_visita: {
+        Args: { p_solicitud_id: string };
+        Returns: string | null;
+      };
+      solicitud_de_token: {
+        Args: { p_token: string };
+        Returns: string | null;
+      };
       purgar_vencidos: {
         Args: Record<string, never>;
         Returns: { compradores: number; verificaciones: number };

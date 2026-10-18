@@ -49,11 +49,48 @@ export const FICHA = {
   },
 
   contacto: {
-    boton: { es: "Escribir por WhatsApp", en: "Message on WhatsApp" },
+    boton: { es: "Escribirle por WhatsApp", en: "Message on WhatsApp" },
     // Mensaje que se precarga en WhatsApp; `{inmueble}` es «apartamento en Cedritos» en minúscula.
     mensaje: {
       es: "Hola, vi tu {inmueble} en Innmobiliaria y me interesa. ¿Sigue disponible?",
       en: "Hi, I saw your {inmueble} on Innmobiliaria and I'm interested. Is it still available?",
+    },
+    pedir: {
+      titulo: {
+        es: "Primero, verifica tu WhatsApp",
+        en: "First, verify your WhatsApp",
+      },
+      texto: {
+        es: "Así el dueño sabe que le escribe una persona real con un número real. Toma unos 30 segundos y lo haces una sola vez.",
+        en: "That way the owner knows a real person with a real number is writing. It takes about 30 seconds and you only do it once.",
+      },
+      verificar: { es: "Verificar mi WhatsApp", en: "Verify my WhatsApp" },
+      ahoraNo: { es: "Ahora no", en: "Not now" },
+    },
+    listo: {
+      titulo: {
+        es: "Se abrirá WhatsApp con este mensaje",
+        en: "WhatsApp will open with this message",
+      },
+      registro: {
+        es: "El contacto queda registrado: el dueño verá tu nombre y los últimos 4 dígitos de tu número en su anuncio.",
+        en: "The contact is logged: the owner will see your name and the last 4 digits of your number on their listing.",
+      },
+      abrir: { es: "Abrir WhatsApp", en: "Open WhatsApp" },
+      abriendo: { es: "Abriendo…", en: "Opening…" },
+      cerrar: { es: "Ahora no", en: "Not now" },
+      sinPopup: {
+        es: "Si WhatsApp no se abrió, toca aquí.",
+        en: "If WhatsApp didn't open, tap here.",
+      },
+      error: {
+        es: "No pudimos abrir el contacto. Inténtalo de nuevo.",
+        en: "We couldn't open the contact. Please try again.",
+      },
+      noDisponible: {
+        es: "Este anuncio ya no recibe contactos.",
+        en: "This listing no longer takes contacts.",
+      },
     },
   },
 

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { preload } from "react-dom";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerIdioma } from "@/i18n/ruta";
-import { localeIntl, type Idioma } from "@/i18n/idiomas";
+import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
@@ -11,8 +11,15 @@ import Galeria from "@/components/ficha/Galeria";
 import SelloNivel from "@/components/ficha/SelloNivel";
 import SelloExplicado from "@/components/ficha/SelloExplicado";
 import VivoHace from "@/components/ficha/VivoHace";
-import ContactoVendedor from "@/components/ficha/ContactoVendedor";
+import ContactarDueno from "@/components/ficha/ContactarDueno";
 import CompartirCTA from "@/components/ficha/CompartirCTA";
+import { cookies } from "next/headers";
+import { mensajeContacto } from "@/engine/verificacion/mensajes";
+import {
+  COOKIE_COMPRADOR,
+  esSesionValida,
+  hashSesion,
+} from "@/engine/verificacion/sesion";
 import { crearClienteAnon } from "@/lib/supabase/server";
 import { formatearCOP } from "@/engine/format/cop";
 import { urlPublicaFoto } from "@/lib/fotos-url";
@@ -31,6 +38,16 @@ async function cargarFicha(slug: string): Promise<FichaData | null> {
   const supabase = crearClienteAnon();
   const { data } = await supabase.rpc("obtener_ficha", { p_slug: slug });
   return data;
+}
+
+// ¿Este navegador ya verificó su WhatsApp? Solo se pregunta a la base si trae la cookie de comprador.
+async function sesionVerificada(): Promise<boolean> {
+  const sesion = (await cookies()).get(COOKIE_COMPRADOR)?.value;
+  if (!esSesionValida(sesion)) return false;
+  const { data } = await crearClienteAnon().rpc("estado_verificacion", {
+    p_sesion_hash: await hashSesion(sesion),
+  });
+  return data?.estado === "verificado";
 }
 
 // Nombre del tipo de inmueble en el idioma de quien mira; un tipo desconocido cae en «inmueble».
@@ -93,6 +110,7 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
   if (og) preload(og, { as: "image", fetchPriority: "high" });
 
   const t = enIdioma(FICHA, lang);
+  const verificado = f.contacto_publico ? await sesionVerificada() : false;
   const dominio = enIdioma(COMUN.dominio, lang);
   const operaciones: Record<string, string> = dominio.operacion;
   const tipo = tipoDe(f, lang);
@@ -160,12 +178,11 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
           <p className="text-sm text-mute">{t.publicadoPor}</p>
           <p className="text-lg font-bold text-ink">{f.nombre_publicador}</p>
           {f.contacto_publico ? (
-            <ContactoVendedor
-              whatsapp={f.whatsapp}
-              inmueble={rellenar(t.encabezado.titulo, {
-                tipo: tipo.toLocaleLowerCase(localeIntl(lang)),
-                barrio: f.barrio,
-              })}
+            <ContactarDueno
+              slug={f.slug}
+              lang={lang}
+              verificado={verificado}
+              mensaje={mensajeContacto(f.tipo, f.barrio, lang)}
               t={t.contacto}
             />
           ) : (

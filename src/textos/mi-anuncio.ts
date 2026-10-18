@@ -179,13 +179,28 @@ export const MI_ANUNCIO = {
 
   contacto: {
     titulo: {
-      es: "Mostrar mi WhatsApp en la ficha pública",
-      en: "Show my WhatsApp number on the public listing",
+      es: "Mostrar mi WhatsApp a compradores verificados",
+      en: "Show my WhatsApp number to verified buyers",
     },
     texto: {
-      es: "Los interesados podrán escribirte directo. Puedes desactivarlo cuando quieras. Sin esto, tu contacto no aparece.",
-      en: "Interested people will be able to message you directly. You can turn it off whenever you like. Without this, your contact details don't appear.",
+      es: "Solo un comprador que verificó su WhatsApp puede escribirte desde tu anuncio, y tu número nunca se ve en la página pública. Puedes desactivarlo cuando quieras. Sin esto, nadie te contacta desde aquí.",
+      en: "Only a buyer who verified their WhatsApp can message you from your listing, and your number is never shown on the public page. You can turn it off whenever you like. Without this, nobody can contact you from here.",
     },
+  },
+
+  // Los compradores verificados que abrieron el chat contigo desde el anuncio (S7); el contacto se registra
+  // al abrir WhatsApp, no al enviar el mensaje. Del teléfono solo se ven los
+  // últimos 4 dígitos: el número completo ya te llegó en tu WhatsApp.
+  contactos: {
+    titulo: {
+      es: "Compradores que abrieron tu chat",
+      en: "Buyers who opened your chat",
+    },
+    vacio: {
+      es: "Cuando un comprador verificado abra el chat contigo desde tu anuncio, aparecerá aquí.",
+      en: "When a verified buyer opens a chat with you from your listing, they'll show up here.",
+    },
+    verificado: { es: "WhatsApp verificado", en: "Verified WhatsApp" },
   },
 } as const satisfies Arbol;
 

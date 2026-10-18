@@ -13,6 +13,8 @@
   // Solo valores GENUINAMENTE públicos (la anon key viaja al navegador; la RLS protege).
   // OPERADOR_EMAIL y RATE_LIMIT_PEPPER van como SECRETS del Worker (`wrangler secret put`):
   // el repo es público y el correo del operador no se versiona (anti-harvesting/phishing).
+  // WhatsApp (S7, ADR 015): WHATSAPP_APP_SECRET, WHATSAPP_VERIFY_TOKEN, WHATSAPP_NUMERO y
+  // SUPABASE_SERVICE_ROLE_KEY van como SECRETS del Worker; el webhook los lee en tiempo de ejecución.
   // R2 (S2): el Account ID y las dos claves S3 (R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY) van como
   // SECRETS del Worker (repo público); aquí solo vive el nombre del bucket, que no es un enlace.
   // NINGUNA `NEXT_PUBLIC_*` va aquí (regla 15 — cero enlaces en repo público): ni la URL de la app, ni

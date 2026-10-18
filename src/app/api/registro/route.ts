@@ -8,6 +8,7 @@ import {
   esBot,
 } from "@/engine/registro/anti-spam";
 import { crearClienteAnon } from "@/lib/supabase/server";
+import { hashIp } from "@/lib/ip-hash";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
 
@@ -17,21 +18,6 @@ export const runtime = "nodejs";
 
 function json(status: number, body: Record<string, unknown>) {
   return NextResponse.json(body, { status });
-}
-
-// IP del cliente (Cloudflare o proxy) hasheada con pepper → minimización Ley 1581 (no guardamos IP cruda).
-async function hashIp(req: NextRequest): Promise<string> {
-  const ip =
-    req.headers.get("cf-connecting-ip") ??
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    "desconocida";
-  const data = new TextEncoder().encode(
-    (process.env.RATE_LIMIT_PEPPER ?? "") + ip,
-  );
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
 }
 
 export async function POST(req: NextRequest) {

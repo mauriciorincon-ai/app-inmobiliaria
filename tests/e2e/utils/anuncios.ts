@@ -9,7 +9,13 @@ import { fechaBogota } from "./fechas";
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export type AnuncioCreado = { id: string; slug: string; precio: number };
+export type AnuncioCreado = {
+  id: string;
+  slug: string;
+  precio: number;
+  // El token del enlace privado de «Mi anuncio» (solo en pruebas sintéticas).
+  token: string;
+};
 
 let secuencia = 0;
 
@@ -58,8 +64,8 @@ export async function crearAnuncio(
     },
   );
   expect(error).toBeNull();
-  const reg = data as unknown as { id: string; slug: string };
-  return { id: reg.id, slug: reg.slug, precio };
+  const reg = data as unknown as { id: string; slug: string; token: string };
+  return { id: reg.id, slug: reg.slug, precio, token: reg.token };
 }
 
 // Verificación CON fecha de CTL (hace `dias` días).
@@ -95,3 +101,10 @@ export function confirmadoHace(a: AnuncioCreado, dias: number): void {
 // Zonas de prueba, en el formato de la URL (lat,lng;…): ≈ 2,2 × 2,2 km.
 export const ZONA_ROSALES = "4.65,-74.06;4.65,-74.04;4.67,-74.04;4.67,-74.06"; // contiene Los Rosales
 export const ZONA_SUBA = "4.72,-74.12;4.72,-74.10;4.74,-74.10;4.74,-74.12"; // no contiene Los Rosales
+
+// Activa el contacto por WhatsApp del anuncio (el opt-in del dueño), como lo hace «Mi anuncio».
+export function conContactoPublico(a: AnuncioCreado): void {
+  consultar(
+    `update public.inmuebles set contacto_publico = true where id = '${a.id}'`,
+  );
+}

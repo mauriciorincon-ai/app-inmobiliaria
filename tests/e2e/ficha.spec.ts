@@ -38,7 +38,7 @@ test("la ficha muestra el inmueble y NO expone contacto sin opt-in", async ({
   await expect(page.getByText(/aún no tiene fotos/i)).toBeVisible();
   // Ley 1581: sin opt-in NO aparece el WhatsApp.
   await expect(
-    page.getByRole("link", { name: /Escribir por WhatsApp/i }),
+    page.getByRole("link", { name: /Escribirle por WhatsApp/i }),
   ).toHaveCount(0);
   await expect(page.getByText(/no habilitó el contacto/i)).toBeVisible();
 

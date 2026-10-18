@@ -12,8 +12,10 @@ import { consultar, ejecutar } from "./utils/bd";
 const PUBLICAS = [
   "buscar_inmuebles(operacion,tipo_inmueble,text,bigint,bigint,smallint,text,integer)",
   "eliminar_foto(text,uuid)",
+  "estado_verificacion(text)",
   "guardar_contacto_publico(text,boolean)",
   "guardar_descripcion(text,text)",
+  "iniciar_verificacion(text,text,text,text,text)",
   "marcar_portada(text,uuid)",
   "obtener_codigo_referido(text)",
   "obtener_cupos()",
@@ -21,6 +23,7 @@ const PUBLICAS = [
   "obtener_mi_anuncio(text)",
   "obtener_mis_referidos(text)",
   "ping()",
+  "registrar_contacto(text,text)",
   "registrar_foto(text,text,integer,integer,integer)",
   "registrar_fundador(text,text,text,text,text,operacion,tipo_inmueble,text,text,integer,smallint,bigint,boolean,text,text,text)",
   "renovar_vigencia(text)",
@@ -33,6 +36,9 @@ const SOLO_SERVIDOR = [
   "tocar_updated_at",
   "fijar_sector",
   "clave_barrio",
+  // S7: el canje del código lo hace el webhook con la llave del servidor; el trigger del sello es interno.
+  "canjear_codigo_whatsapp",
+  "proteger_sello",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
@@ -79,6 +85,23 @@ test("marcar_verificado_ctl la ejecuta el operador (authenticated), jamás anon"
         || ',' || has_function_privilege('authenticated', 'public.marcar_verificado_ctl(uuid,text,date)', 'execute')::text`,
   );
   expect(fila).toBe("false,true");
+});
+
+test("el legado marcar_verificado (sin fecha de CTL) ya no lo ejecuta el operador ni anon", async () => {
+  const [fila] = consultar(
+    `select has_function_privilege('anon', 'public.marcar_verificado(uuid,text)', 'execute')::text
+        || ',' || has_function_privilege('authenticated', 'public.marcar_verificado(uuid,text)', 'execute')::text`,
+  );
+  expect(fila).toBe("false,false");
+});
+
+test("canjear_codigo_whatsapp solo lo ejecuta service_role", async () => {
+  const [fila] = consultar(
+    `select has_function_privilege('service_role', 'public.canjear_codigo_whatsapp(text,text)', 'execute')::text
+        || ',' || has_function_privilege('anon', 'public.canjear_codigo_whatsapp(text,text)', 'execute')::text
+        || ',' || has_function_privilege('authenticated', 'public.canjear_codigo_whatsapp(text,text)', 'execute')::text`,
+  );
+  expect(fila).toBe("true,false,false");
 });
 
 test("ninguna función de public depende de PUBLIC", async () => {

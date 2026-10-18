@@ -260,6 +260,38 @@ error"` transitorio de la API de Cloudflare — reintenta el mismo `secret put` 
 Con el deploy listo, abre tu enlace **"mi anuncio"** en el teléfono → sube una foto real → debe
 aparecer en la galería y en la ficha `/i/…`; pega la ficha en WhatsApp y verifica la vista previa.
 
+## Bloque 5 — WhatsApp: verificar al comprador (Sprint 007)
+
+Innmobiliaria **solo recibe** mensajes de WhatsApp: el comprador nos manda un código y así prueba que su
+número es suyo. Recibir no se cobra y nada se envía desde la plataforma (ADR 015). Costo: **US$0**.
+
+| Qué                                                                           | Cuándo                                                                                                | Qué haces tú                                                                                                                                                                |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cuenta de Meta Business + app en Meta for Developers con el producto WhatsApp | antes del deploy real                                                                                 | creas la app; de ella salen el **App Secret** y tú eliges un **token de verificación** (cualquier texto largo)                                                              |
+| Número                                                                        | construcción: el de prueba que da Meta · ensayo general: uno propio que no esté en la app de WhatsApp | lo registras en la app de Meta; ese es el número al que el comprador escribe                                                                                                |
+| Webhook                                                                       | tras el deploy                                                                                        | en la app de Meta, WhatsApp → Configuración: pegas la dirección de tu sitio terminada en `/api/whatsapp/webhook` y el token de verificación; suscribes el evento `messages` |
+
+### 5.1 [TÚ] Poner los cuatro secretos en el Worker
+
+Los valores reales entran a `wrangler secret`, **jamás al chat, al repo ni a `wrangler.jsonc`**:
+
+```bash
+pnpm exec wrangler secret put WHATSAPP_APP_SECRET      # el «App Secret» de la app de Meta
+pnpm exec wrangler secret put WHATSAPP_VERIFY_TOKEN    # el texto que elegiste para la suscripción
+pnpm exec wrangler secret put WHATSAPP_NUMERO          # el número de Innmobiliaria, con +57 y sin espacios
+pnpm exec wrangler secret put SUPABASE_SERVICE_ROLE_KEY  # la «service_role» del proyecto (solo la usa el webhook)
+```
+
+Cada comando pide el valor por la terminal. Sin ellos la verificación responde «no disponible» y el
+webhook rechaza todo; nada más de la app se afecta. Después, `pnpm deploy:cf`.
+
+### 5.2 [TÚ] Suscribir el webhook en Meta y probar
+
+1. En Meta, pega la dirección del webhook y el token de verificación: Meta debe aceptarla («verificado y
+   guardado»). Si la rechaza, el token o el despliegue no coinciden.
+2. Suscribe el evento `messages`.
+3. Desde tu teléfono, abre una ficha con contacto activo y verifica tu WhatsApp (bloque K de la guía).
+
 ## Deuda K1 — Colima (Supabase local para e2e reproducible)
 
 Para correr los e2e fuera de CI (deuda del S1):

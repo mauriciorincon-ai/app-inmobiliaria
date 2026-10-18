@@ -100,14 +100,14 @@ test("obtener_ficha NUNCA expone whatsapp/email/matricula sin opt-in", async () 
   const ficha = data as unknown as Record<string, unknown>;
   expect(ficha).toBeTruthy();
   expect(ficha.barrio).toBe("Zona RLS");
-  // Sin opt-in: sin contacto. Y nunca hay claves de email/matrícula.
-  expect(ficha.whatsapp).toBeNull();
+  // Sin opt-in: sin contacto. Y nunca hay claves de whatsapp/email/matrícula (S7: ni siquiera con opt-in).
+  expect("whatsapp" in ficha).toBe(false);
   expect(ficha.contacto_publico).toBe(false);
   expect("email" in ficha).toBe(false);
   expect("matricula" in ficha).toBe(false);
 });
 
-test("con opt-in aparece el whatsapp, pero la matrícula sigue oculta", async () => {
+test("con opt-in la ficha marca contacto_publico, pero JAMÁS trae el whatsapp; la matrícula sigue oculta", async () => {
   const { supabase, reg } = await crearInmueble();
   await supabase.rpc("guardar_contacto_publico", {
     p_token: reg.token,
@@ -115,7 +115,10 @@ test("con opt-in aparece el whatsapp, pero la matrícula sigue oculta", async ()
   });
   const { data } = await supabase.rpc("obtener_ficha", { p_slug: reg.slug });
   const ficha = data as unknown as Record<string, unknown>;
-  expect(ficha.whatsapp).toBe("+573001234567");
+  expect(ficha.contacto_publico).toBe(true);
+  // S7: el número solo sale por `registrar_contacto`, hacia una sesión de comprador verificada.
+  expect("whatsapp" in ficha).toBe(false);
+  expect(JSON.stringify(ficha)).not.toContain("+573001234567");
   expect("matricula" in ficha).toBe(false);
 });
 
@@ -165,6 +168,11 @@ const CERRADAS: Array<[string, Record<string, unknown>]> = [
       p_matricula: "50N-1",
       p_ctl_expedido_el: "2026-10-01",
     },
+  ],
+  // S7: solo el webhook (service_role) canjea un código.
+  [
+    "canjear_codigo_whatsapp",
+    { p_codigo_hash: "0".repeat(64), p_telefono: "+573001234567" },
   ],
 ];
 
@@ -457,4 +465,295 @@ test("public.clave_barrio de la BD quita tildes y eñes como lo hace el motor", 
 test("el anónimo NO puede leer la tabla sectores (solo el operador)", async () => {
   const { data } = await createClient(url, anon).from("sectores").select("*");
   expect(data ?? []).toHaveLength(0);
+});
+
+// ── S7: comprador verificado por mensaje entrante y sello cerrado ─────────────
+// Datos 100 % sintéticos. El canje lo hace el webhook con la llave del servidor; aquí se llama como
+// `postgres` (el rol que el webhook usaría vía service_role) para probar la RPC sin servidor web.
+
+const ALFABETO_CODIGO = /^INN-[ABCDEFGHJKLMNPQRSTUVWXYZ2-9]{6}$/;
+const TEL_COMPRADOR = "+573115550101";
+const TEL_OTRO = "+573115550202";
+
+function sesionNueva(): string {
+  // 64 hex aleatorios: el hash de una sesión que nadie más conoce.
+  return Array.from({ length: 64 }, () =>
+    Math.floor(Math.random() * 16).toString(16),
+  ).join("");
+}
+
+function hashDe(codigo: string): string {
+  return consultar(
+    `select encode(sha256(convert_to('${codigo}', 'UTF8')), 'hex')`,
+  )[0];
+}
+
+async function pedirCodigo(
+  sesion: string,
+  extra: Record<string, unknown> = {},
+) {
+  const supabase = createClient(url, anon);
+  const { data, error } = await supabase.rpc("iniciar_verificacion", {
+    p_sesion_hash: sesion,
+    p_nombre: "Laura Sintetica",
+    p_telefono: TEL_COMPRADOR,
+    p_idioma: "es",
+    p_ip_hash: `s7-${sesion.slice(0, 12)}`,
+    ...extra,
+  });
+  return { supabase, codigo: data as unknown as string, error };
+}
+
+function canjear(codigo: string, telefono: string): string {
+  return consultar(
+    `select public.canjear_codigo_whatsapp('${hashDe(codigo)}', '${telefono}')`,
+  )[0];
+}
+
+test("el anónimo NO lee ni escribe compradores, verificaciones ni contactos", async () => {
+  const supabase = createClient(url, anon);
+  for (const tabla of ["compradores", "verificaciones", "contactos"] as const) {
+    const { data } = await supabase.from(tabla).select("*");
+    expect(data ?? [], tabla).toHaveLength(0);
+  }
+  const { error } = await supabase.from("compradores").insert({
+    telefono: TEL_COMPRADOR,
+    nombre: "Intruso",
+    consentimiento_at: new Date().toISOString(),
+  });
+  expect(error).not.toBeNull();
+});
+
+test("iniciar_verificacion devuelve un código INN-XXXXXX y la base guarda SOLO su hash", async () => {
+  const sesion = sesionNueva();
+  const { codigo, error } = await pedirCodigo(sesion);
+  expect(error).toBeNull();
+  expect(codigo).toMatch(ALFABETO_CODIGO);
+  expect(
+    consultar(
+      `select count(*) from public.verificaciones where codigo_hash = '${hashDe(codigo)}'`,
+    ),
+  ).toEqual(["1"]);
+  // El código en claro no está en ninguna fila de ninguna de las tablas nuevas.
+  for (const tabla of ["verificaciones", "compradores", "contactos"]) {
+    expect(
+      consultar(
+        `select count(*) from public.${tabla} t where t::text like '%${codigo}%'`,
+      ),
+      tabla,
+    ).toEqual(["0"]);
+  }
+});
+
+test("entradas inválidas no crean nada: teléfono, nombre, idioma, sesión y consentimiento por RPC", async () => {
+  for (const malo of [
+    { p_telefono: "+14155550123" }, // no colombiano
+    { p_telefono: "3001234567" }, // sin E.164
+    { p_nombre: "A" },
+    { p_idioma: "fr" },
+    { p_sesion_hash: "no-es-un-hash" },
+    { p_ip_hash: "x" },
+  ]) {
+    const { error } = await pedirCodigo(sesionNueva(), malo);
+    expect(error?.code, JSON.stringify(malo)).toBe("23514");
+  }
+});
+
+test("estado_verificacion: sin_codigo → esperando → verificado, sin datos personales", async () => {
+  const sesion = sesionNueva();
+  const supabase = createClient(url, anon);
+  const estado = async () =>
+    (await supabase.rpc("estado_verificacion", { p_sesion_hash: sesion }))
+      .data as unknown as Record<string, unknown>;
+  expect(await estado()).toEqual({ estado: "sin_codigo" });
+  const { codigo } = await pedirCodigo(sesion);
+  const esperando = await estado();
+  expect(esperando.estado).toBe("esperando");
+  expect(Number(esperando.segundos)).toBeLessThanOrEqual(600);
+  expect(Object.keys(esperando).sort()).toEqual(["estado", "segundos"]);
+  expect(canjear(codigo, TEL_COMPRADOR)).toBe("ok");
+  expect(await estado()).toEqual({ estado: "verificado" });
+});
+
+test("el código es de UN solo uso", async () => {
+  const { codigo } = await pedirCodigo(sesionNueva());
+  expect(canjear(codigo, TEL_COMPRADOR)).toBe("ok");
+  expect(canjear(codigo, TEL_COMPRADOR)).toBe("nada");
+});
+
+test("un código que llega de OTRO número no verifica y se quema", async () => {
+  const sesion = sesionNueva();
+  const supabase = createClient(url, anon);
+  const { codigo } = await pedirCodigo(sesion);
+  expect(canjear(codigo, TEL_OTRO)).toBe("otro_numero");
+  // Ni siquiera el dueño legítimo del número puede usarlo ya.
+  expect(canjear(codigo, TEL_COMPRADOR)).toBe("nada");
+  const { data } = await supabase.rpc("estado_verificacion", {
+    p_sesion_hash: sesion,
+  });
+  expect(data).toEqual({ estado: "otro_numero" });
+});
+
+test("un código vencido no canjea y el estado lo dice", async () => {
+  const sesion = sesionNueva();
+  const supabase = createClient(url, anon);
+  const { codigo } = await pedirCodigo(sesion);
+  ejecutar(
+    `update public.verificaciones set vence_at = now() - interval '1 minute' where codigo_hash = '${hashDe(codigo)}'`,
+  );
+  expect(canjear(codigo, TEL_COMPRADOR)).toBe("nada");
+  const { data } = await supabase.rpc("estado_verificacion", {
+    p_sesion_hash: sesion,
+  });
+  expect(data).toEqual({ estado: "vencido" });
+});
+
+test("pedir un código nuevo vence el anterior de la sesión", async () => {
+  const sesion = sesionNueva();
+  const { codigo: primero } = await pedirCodigo(sesion);
+  const { codigo: segundo } = await pedirCodigo(sesion);
+  expect(segundo).not.toBe(primero);
+  expect(canjear(primero, TEL_COMPRADOR)).toBe("nada");
+  expect(canjear(segundo, TEL_COMPRADOR)).toBe("ok");
+});
+
+test("tope de códigos: el sexto en una hora para la misma sesión se rechaza", async () => {
+  const sesion = sesionNueva();
+  for (let i = 0; i < 5; i++) {
+    const { error } = await pedirCodigo(sesion, {
+      p_ip_hash: `tope-${sesion.slice(0, 8)}-${i}`,
+    });
+    expect(error).toBeNull();
+  }
+  const { error } = await pedirCodigo(sesion, {
+    p_ip_hash: `tope-${sesion.slice(0, 8)}-x`,
+  });
+  expect(error?.code).toBe("23514");
+  expect(error?.message).toContain("demasiados_intentos");
+});
+
+test("registrar_contacto: sin sesión verificada no entrega el número ni registra nada", async () => {
+  const { reg } = await crearInmueble();
+  const supabase = createClient(url, anon);
+  await supabase.rpc("guardar_contacto_publico", {
+    p_token: reg.token,
+    p_activo: true,
+  });
+  const sesion = sesionNueva();
+  // Sin código, y con código sin canjear: null en los dos casos.
+  const sinCodigo = await supabase.rpc("registrar_contacto", {
+    p_sesion_hash: sesion,
+    p_slug: reg.slug,
+  });
+  expect(sinCodigo.data).toBeNull();
+  await pedirCodigo(sesion);
+  const pendiente = await supabase.rpc("registrar_contacto", {
+    p_sesion_hash: sesion,
+    p_slug: reg.slug,
+  });
+  expect(pendiente.data).toBeNull();
+  expect(
+    consultar(
+      `select count(*) from public.contactos where inmueble_id = (select id from public.inmuebles where slug = '${reg.slug}')`,
+    ),
+  ).toEqual(["0"]);
+});
+
+test("registrar_contacto con sesión verificada entrega el WhatsApp del dueño y el dueño ve al comprador enmascarado", async () => {
+  const { reg } = await crearInmueble();
+  const supabase = createClient(url, anon);
+  await supabase.rpc("guardar_contacto_publico", {
+    p_token: reg.token,
+    p_activo: true,
+  });
+  const sesion = sesionNueva();
+  const { codigo } = await pedirCodigo(sesion);
+  expect(canjear(codigo, TEL_COMPRADOR)).toBe("ok");
+  const { data } = await supabase.rpc("registrar_contacto", {
+    p_sesion_hash: sesion,
+    p_slug: reg.slug,
+  });
+  expect(data).toEqual({ whatsapp: "+573001234567" });
+  // Idempotente: contactar dos veces deja una sola fila.
+  await supabase.rpc("registrar_contacto", {
+    p_sesion_hash: sesion,
+    p_slug: reg.slug,
+  });
+  expect(
+    consultar(
+      `select count(*) from public.contactos where inmueble_id = (select id from public.inmuebles where slug = '${reg.slug}')`,
+    ),
+  ).toEqual(["1"]);
+  // El dueño (por su token) ve nombre, fin del teléfono y fecha: nunca el número completo.
+  const { data: mi } = await supabase.rpc("obtener_mi_anuncio", {
+    p_token: reg.token,
+  });
+  const anuncio = mi as unknown as {
+    contactos: Array<Record<string, unknown>>;
+  };
+  expect(anuncio.contactos).toHaveLength(1);
+  expect(anuncio.contactos[0].nombre).toBe("Laura Sintetica");
+  expect(anuncio.contactos[0].telefono_fin).toBe("0101");
+  expect(JSON.stringify(anuncio)).not.toContain(TEL_COMPRADOR);
+});
+
+test("registrar_contacto: un anuncio sin opt-in no entrega el número aunque la sesión esté verificada", async () => {
+  const { supabase, reg } = await crearInmueble(); // contacto_publico = false
+  const sesion = sesionNueva();
+  const { codigo } = await pedirCodigo(sesion);
+  expect(canjear(codigo, TEL_COMPRADOR)).toBe("ok");
+  const { data } = await supabase.rpc("registrar_contacto", {
+    p_sesion_hash: sesion,
+    p_slug: reg.slug,
+  });
+  expect(data).toBeNull();
+});
+
+// Como `authenticated` (el operador por la API): se simula con SET LOCAL ROLE dentro de una transacción
+// que se revierte. El CHECK de la fila lo pone el trigger, no la política.
+function comoOperador(sql: string): string[] {
+  return ejecutar(`begin; set local role authenticated; ${sql} rollback;`);
+}
+
+test("el sello no se escribe por UPDATE directo, ni siquiera siendo el operador", async () => {
+  const { reg } = await registrarEn("Los Rosales");
+  for (const cambio of [
+    "nivel_verificacion = 'verificado'",
+    "ctl_expedido_el = current_date", // la columna de la deuda del S6
+    "matricula = '50N-1234567'",
+    "verificado_at = now()",
+  ]) {
+    expect(
+      () =>
+        comoOperador(
+          `update public.inmuebles set ${cambio} where id = '${reg.id}';`,
+        ),
+      cambio,
+    ).toThrow(/sello_protegido/);
+  }
+  // Lo demás de la fila sigue siendo del operador.
+  expect(() =>
+    comoOperador(
+      `update public.inmuebles set contacto_publico = true where id = '${reg.id}';`,
+    ),
+  ).not.toThrow();
+});
+
+test("marcar_verificado_ctl sigue verificando como operador; el legado marcar_verificado ya no", async () => {
+  const { reg } = await registrarEn("Los Rosales");
+  const salida = comoOperador(
+    `select public.marcar_verificado_ctl('${reg.id}', '50N-1234567', (now() at time zone 'America/Bogota')::date - 3);
+     reset role;
+     select nivel_verificacion from public.inmuebles where id = '${reg.id}';`,
+  );
+  expect(salida).toContain("verificado");
+  expect(() =>
+    comoOperador(
+      `select public.marcar_verificado('${reg.id}', '50N-7654321');`,
+    ),
+  ).toThrow(/permission denied/);
+  // El legado se conserva para quien corre como `postgres` (semillas, datos de antes).
+  expect(() =>
+    ejecutar(`select public.marcar_verificado('${reg.id}', '50N-7654321')`),
+  ).not.toThrow();
 });

@@ -237,6 +237,16 @@
           color: #f0abfc;
         }
       }
+      .o-s7 {
+        background: #ccfbf1;
+        color: #115e59;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s7 {
+          background: #042f2e;
+          color: #5eead4;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -285,20 +295,21 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 006 — Encontrar</h1>
+      <h1>Sprint 007 — Comprador verificado</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s6">Nuevo · S6</span>. Este sprint abre la puerta
-        del comprador: buscar con filtros o dibujando una zona en el mapa
-        (bloque J), el sello con la fecha del CTL y «vivo hace N días».
+        <span class="origen o-s7">Nuevo · S7</span>. Este sprint hace que el
+        comprador demuestre que es real: verifica su WhatsApp enviando un código
+        y recién entonces puede escribirle a un dueño (bloque K). El WhatsApp
+        del dueño ya no está en la ficha pública.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-006/encontrar</code>. En un teléfono real cuando el filtro
-        lo pida.
+        <code>sprint-007/comprador-verificado</code>. En un teléfono real cuando
+        el filtro lo pida.
       </div>
 
       <div class="barra">
@@ -312,9 +323,10 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
-          <button data-filtro="s6" aria-pressed="false">
-            Solo lo nuevo del S6
+          <button data-filtro="s7" aria-pressed="false">
+            Solo lo nuevo del S7
           </button>
+          <button data-filtro="s6" aria-pressed="false">Solo lo del S6</button>
           <button data-filtro="s5" aria-pressed="false">Solo lo del S5</button>
           <button data-filtro="s2" aria-pressed="false">Solo lo del S2</button>
           <button data-filtro="s1" aria-pressed="false">Solo lo del S1</button>
@@ -661,9 +673,8 @@
               <label for="f1" class="qué"
                 >Abre tu enlace "mi anuncio" en el <b>teléfono</b> y sube una
                 foto <b>real</b> de la cámara: aparece en la galería y el
-                porcentaje sube<span class="origen o-s2"
-                  >Nuevo · S2</span
-                ></label
+                porcentaje sube<span class="origen o-s2">Nuevo · S2</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> tras un momento ("Procesando tu foto…") la foto
@@ -732,7 +743,8 @@
               <label for="g1" class="qué"
                 >Pega el enlace de la ficha en un chat de <b>WhatsApp real</b>:
                 aparece la vista previa con la foto de portada, el barrio y el
-                precio<span class="origen o-s2">Nuevo · S2</span></label
+                precio<span class="origen o-s2">Nuevo · S2</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> WhatsApp muestra una tarjeta con la foto y el
@@ -763,18 +775,21 @@
               </p>
             </div>
           </li>
-          <li data-origen="s2">
+          <li data-origen="s2 s7">
             <input type="checkbox" id="g3" />
             <div>
               <label for="g3" class="qué"
                 >Al activar el contacto en "mi anuncio", la ficha muestra
-                "Escribir por WhatsApp"<span class="origen o-s2"
-                  >Nuevo · S2</span
-                ></label
+                «Escribirle por WhatsApp» y, aun así, tu número NO está en la
+                página<span class="origen o-s2">Nuevo · S2</span
+                ><span class="origen o-s7">Mejorado · S7</span></label
               >
               <p class="esperar">
-                <b>Esperado:</b> aparece el botón verde; al tocarlo abre
-                WhatsApp con un mensaje listo.
+                <b>Esperado:</b> aparece el botón morado; al tocarlo, quien no
+                verificó su WhatsApp ve «Primero, verifica tu WhatsApp». Si
+                abres el código fuente de la página (ver código fuente) y buscas
+                tu número, no está. El flujo completo del comprador es el bloque
+                K.
               </p>
             </div>
           </li>
@@ -795,9 +810,8 @@
             <div>
               <label for="g5" class="qué"
                 >Juicio de contenido: la ficha se ve bien y el copy es claro; no
-                hay cifras inventadas<span class="origen o-s2"
-                  >Nuevo · S2</span
-                ></label
+                hay cifras inventadas<span class="origen o-s2">Nuevo · S2</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> se entiende de qué inmueble se trata; solo
@@ -821,7 +835,8 @@
               <label for="h1" class="qué"
                 >Marca un inmueble como verificado (número de matrícula +
                 casilla "vi el CTL original"): el sello ⭐ aparece en su
-                ficha<span class="origen o-s2">Nuevo · S2</span></label
+                ficha<span class="origen o-s2">Nuevo · S2</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la fila pasa a "Propietario verificado" y la
@@ -1146,8 +1161,148 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE K ================= -->
+      <section class="bloque">
+        <h2><span class="letra">K</span> Comprador verificado y contacto</h2>
+        <p class="intro">
+          Para escribirle a un dueño, el comprador prueba que su WhatsApp es
+          suyo <b>enviando un código a Innmobiliaria</b>: la app nunca envía un
+          mensaje. Las pruebas con el número real de Innmobiliaria necesitan que
+          el servidor tenga los tres datos de WhatsApp puestos y el webhook
+          suscrito en Meta; lo demás se comprobó con mensajes firmados de
+          prueba.
+        </p>
+        <ul>
+          <li data-origen="s7 clave">
+            <input type="checkbox" id="k1" />
+            <div>
+              <label for="k1" class="qué"
+                >Con el servidor desplegado, en Meta pega la dirección del
+                webhook (<code>/api/whatsapp/webhook</code> de tu sitio) y el
+                token de verificación que elegiste<span class="origen o-s7"
+                  >Nuevo · S7</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> Meta acepta la dirección («verificado y
+                guardado») y deja suscribir el evento <code>messages</code>.
+              </p>
+              <p class="mal">
+                Si Meta rechaza la dirección, revisa que el token y el secreto
+                de la app estén puestos en el servidor y que el despliegue sea
+                el de esta rama.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s7 clave">
+            <input type="checkbox" id="k2" />
+            <div>
+              <label for="k2" class="qué"
+                >Desde tu <b>teléfono real</b>, abre la ficha de un anuncio con
+                contacto activo → <b>Escribirle por WhatsApp</b> →
+                <b>Verificar mi WhatsApp</b>, escribe tu nombre y tu celular y
+                envía el código que WhatsApp te deja escrito<span
+                  class="origen o-s7"
+                  >Nuevo · S7</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> WhatsApp se abre hacia el número de
+                Innmobiliaria con <code>INN-XXXXXX</code> ya escrito; al
+                enviarlo y volver a la página, en pocos segundos dice «Tu
+                WhatsApp quedó verificado». Innmobiliaria no te responde nada
+                por WhatsApp.
+              </p>
+              <p class="mal">
+                Si tarda más de un minuto, toca «Ya lo envié»; si sigue igual,
+                avisa (y di si el mensaje salió con una palomita).
+              </p>
+            </div>
+          </li>
+          <li data-origen="s7 clave">
+            <input type="checkbox" id="k3" />
+            <div>
+              <label for="k3" class="qué"
+                >Ya verificado, vuelve a la ficha →
+                <b>Escribirle por WhatsApp</b> → <b>Abrir WhatsApp</b
+                ><span class="origen o-s7">Nuevo · S7</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> primero ves el mensaje que se abrirá; al tocar
+                «Abrir WhatsApp» se abre el chat con el dueño con ese mensaje.
+                Luego, en <b>Mi anuncio</b> del dueño, aparece «Compradores que
+                abrieron tu chat» con tu nombre, los últimos 4 dígitos de tu
+                número y la fecha.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s7">
+            <input type="checkbox" id="k4" />
+            <div>
+              <label for="k4" class="qué"
+                >Pide un código con tu número y envíalo desde <b>otro número</b
+                ><span class="origen o-s7">Nuevo · S7</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la página dice «El código llegó desde otro
+                número» y ofrece pedir uno nuevo; ese código ya no sirve ni
+                desde tu número.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s7">
+            <input type="checkbox" id="k5" />
+            <div>
+              <label for="k5" class="qué"
+                >Pide un código y no lo envíes: espera 10 minutos<span
+                  class="origen o-s7"
+                  >Nuevo · S7</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la página dice «El código venció» y te da uno
+                nuevo con un toque. Enviar el código vencido no verifica nada.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s7">
+            <input type="checkbox" id="k6" />
+            <div>
+              <label for="k6" class="qué"
+                >Abre la verificación con el navegador en inglés y con
+                <code>?volver=</code> apuntando a otro sitio<span
+                  class="origen o-s7"
+                  >Nuevo · S7</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> todo sale en inglés («Verify that your WhatsApp
+                is yours»); al terminar, el botón no te lleva a un sitio de
+                fuera: solo a una página de Innmobiliaria.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s7">
+            <input type="checkbox" id="k7" />
+            <div>
+              <label for="k7" class="qué"
+                >En el panel, registra un CTL con fecha de hace 31 días<span
+                  class="origen o-s7"
+                  >Nuevo · S7</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el panel lo rechaza; el sello del anuncio no
+                cambia. Un CTL de hasta 30 días sí queda con su fecha.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–J), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–K), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -1175,6 +1330,17 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 007 (2026-10-18):</b><br />
+          <b>Nuevo:</b> bloque K (comprador verificado y contacto): 7 pruebas
+          nuevas, 3 del gate mínimo ⭐.<br />
+          <b>Mejorado:</b> G3 (la ficha muestra «Escribirle por WhatsApp» y tu
+          número ya no está en la página).<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 52 pruebas, 19 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          5).
+        </p>
         <p>
           <b>Sprint 006 (2026-10-17):</b><br />
           <b>Nuevo:</b> bloque J (buscar y encontrar): 10 pruebas nuevas, 3 del
@@ -1221,7 +1387,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v4:";
+        var CLAVE = "guia-inmobiliaria-v5:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

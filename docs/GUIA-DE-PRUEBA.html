@@ -227,6 +227,16 @@
           color: #7dd3fc;
         }
       }
+      .o-s6 {
+        background: #fae8ff;
+        color: #86198f;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s6 {
+          background: #4a044e;
+          color: #f0abfc;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -275,19 +285,20 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 005 — Dos idiomas</h1>
+      <h1>Sprint 006 — Encontrar</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s5">Nuevo · S5</span>. Este sprint pone toda la
-        app en español e inglés (bloque I).
+        <span class="origen o-s6">Nuevo · S6</span>. Este sprint abre la puerta
+        del comprador: buscar con filtros o dibujando una zona en el mapa
+        (bloque J), el sello con la fecha del CTL y «vivo hace N días».
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-005/dos-idiomas</code>. En un teléfono real cuando el
-        filtro lo pida.
+        <code>sprint-006/encontrar</code>. En un teléfono real cuando el filtro
+        lo pida.
       </div>
 
       <div class="barra">
@@ -301,9 +312,10 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
-          <button data-filtro="s5" aria-pressed="false">
-            Solo lo nuevo del S5
+          <button data-filtro="s6" aria-pressed="false">
+            Solo lo nuevo del S6
           </button>
+          <button data-filtro="s5" aria-pressed="false">Solo lo del S5</button>
           <button data-filtro="s2" aria-pressed="false">Solo lo del S2</button>
           <button data-filtro="s1" aria-pressed="false">Solo lo del S1</button>
         </div>
@@ -941,8 +953,199 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE J ================= -->
+      <section class="bloque">
+        <h2><span class="letra">J</span> Buscar y encontrar (el comprador)</h2>
+        <p class="intro">
+          Cualquier persona puede buscar sin cuenta: toca <b>Buscar</b> arriba
+          (o abre <code>/buscar</code>). Cada anuncio aparece como el
+          <b>área de su barrio</b>, nunca como un punto. Para las pruebas con
+          mapa usa internet real: así ves las calles de verdad.
+        </p>
+        <ul>
+          <li data-origen="s6 clave">
+            <input type="checkbox" id="j1" />
+            <div>
+              <label for="j1" class="qué"
+                >En tu <b>teléfono real</b>, abre <b>Buscar</b> → <b>Mapa</b> →
+                <b>Dibujar zona</b>, toca 3 o más esquinas sobre Chapinero y
+                toca <b>Listo</b><span class="origen o-s6">Nuevo · S6</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el mapa muestra las calles y los barrios (los
+                que tienen anuncios, pintados en morado); cada toque deja una
+                esquina; al terminar la lista se queda solo con los anuncios
+                cuyo barrio queda dentro de tu zona y arriba dice «N anuncios
+                vivos en tu zona». <b>Borrar zona</b> la quita.
+              </p>
+              <p class="mal">
+                Si el mapa no pinta las calles, los toques no marcan esquinas o
+                la lista no cambia, avisa (y di qué teléfono y navegador).
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6">
+            <input type="checkbox" id="j2" />
+            <div>
+              <label for="j2" class="qué"
+                >Filtra por <b>tipo</b>, <b>precio máximo</b> (escríbelo con
+                puntos: 400.000.000) y <b>habitaciones</b>; luego copia la
+                dirección de la página y ábrela en otra pestaña<span
+                  class="origen o-s6"
+                  >Nuevo · S6</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la lista se recorta; cada filtro activo aparece
+                como una pastilla con una ✕ que lo quita; la otra pestaña
+                muestra exactamente la misma búsqueda. Funciona igual aunque el
+                mapa no cargue.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6 clave">
+            <input type="checkbox" id="j3" />
+            <div>
+              <label for="j3" class="qué"
+                >Abre la <b>ficha</b> de un anuncio al que le pusiste dirección
+                al publicar y mira también su tarjeta en la búsqueda<span
+                  class="origen o-s6"
+                  >Nuevo · S6</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> solo se ven el <b>barrio</b> y la
+                <b>localidad</b>; la dirección no aparece en ningún lado (ni en
+                la tarjeta, ni en la ficha, ni en el mapa).
+              </p>
+              <p class="mal">
+                Si ves la dirección, o el anuncio como un punto exacto en el
+                mapa, avisa de inmediato.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6 clave">
+            <input type="checkbox" id="j4" />
+            <div>
+              <label for="j4" class="qué"
+                >En el panel, verifica un inmueble con la
+                <b>fecha en que se expidió el CTL</b>; prueba también una fecha
+                de hace más de 30 días<span class="origen o-s6">Nuevo · S6</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> con una fecha de hoy o de hace unos días,
+                <b>Confirmar</b> se habilita y el sello «⭐ Propietario
+                verificado» aparece en el panel, en la tarjeta de la búsqueda
+                («⭐ CTL del 14 oct 2026») y en la ficha («expedido el 14 oct
+                2026»). Con 31 días o más, el formulario dice «Ese CTL tiene más
+                de 30 días» y no deja confirmar.
+              </p>
+              <p class="mal">
+                Si el sello no muestra la fecha o deja confirmar un CTL viejo,
+                avisa.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6">
+            <input type="checkbox" id="j5" />
+            <div>
+              <label for="j5" class="qué"
+                >Mira un inmueble que ya estaba verificado antes de este
+                sprint<span class="origen o-s6">Nuevo · S6</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> su sello dice «Re-verificación pendiente» (con
+                reloj, en ámbar) y su ficha explica por qué; en el panel su
+                botón es «Registrar CTL nuevo». Al registrarlo con una fecha
+                vigente, el sello vuelve a ⭐ con fecha.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6">
+            <input type="checkbox" id="j6" />
+            <div>
+              <label for="j6" class="qué"
+                >Publica un inmueble y mira su ficha y la tarjeta en la
+                búsqueda<span class="origen o-s6">Nuevo · S6</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> dice «Vivo hoy» (la ficha: «el dueño lo
+                confirmó hoy»). Un anuncio confirmado hace 12 días dice «Vivo
+                hace 12 días»; uno que no se confirma en 60 días desaparece solo
+                de la búsqueda.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6">
+            <input type="checkbox" id="j7" />
+            <div>
+              <label for="j7" class="qué"
+                >En <b>Publicar</b>, paso 2, elige la localidad y luego el
+                barrio<span class="origen o-s6">Nuevo · S6</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el barrio es una lista (los barrios oficiales
+                de Catastro Bogotá de esa localidad); mientras no elijas la
+                localidad está apagado; si cambias de localidad, el barrio se
+                borra y vuelves a elegir. El resumen del paso 3 muestra el
+                barrio elegido.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6">
+            <input type="checkbox" id="j8" />
+            <div>
+              <label for="j8" class="qué"
+                >En el panel, busca un anuncio de antes del catálogo (dice «Sin
+                barrio del catálogo») y toca <b>Asignar barrio</b
+                ><span class="origen o-s6">Nuevo · S6</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> eliges la localidad y el barrio; al confirmar,
+                la marca desaparece y el anuncio entra en la búsqueda por zona
+                del barrio asignado.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6">
+            <input type="checkbox" id="j9" />
+            <div>
+              <label for="j9" class="qué"
+                >Con el mapa abierto, <b>apaga el internet</b> (modo avión) y
+                recarga la búsqueda<span class="origen o-s6"
+                  >Nuevo · S6</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> aparece «El mapa no cargó» con el botón
+                <b>Reintentar</b>, y la lista y los filtros siguen funcionando
+                (si la página no carga del todo por falta de red, es normal:
+                esta prueba es del servicio de mapas, no de la app).
+              </p>
+            </div>
+          </li>
+          <li data-origen="s6">
+            <input type="checkbox" id="j10" />
+            <div>
+              <label for="j10" class="qué"
+                >Abre la búsqueda con el navegador en <b>inglés</b
+                ><span class="origen o-s6">Nuevo · S6</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> los títulos, filtros, tarjetas y el sello salen
+                en inglés («Filters», «live listings in Bogotá», «Confirmed 2
+                days ago», «CTL, Oct 14, 2026»); el precio sale como «COP
+                420,000,000» y «localidad» y «barrio» se explican en una línea.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–I), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–J), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -970,6 +1173,18 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 006 (2026-10-17):</b><br />
+          <b>Nuevo:</b> bloque J (buscar y encontrar): 10 pruebas nuevas, 3 del
+          gate mínimo ⭐.<br />
+          <b>Mejorado:</b> B (el barrio ahora se elige de una lista), C y H (la
+          verificación pide la fecha del CTL), G (la ficha muestra «vivo hace N
+          días», el sello con fecha y dónde queda).<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 45 pruebas, 16 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          4).
+        </p>
         <p>
           <b>Sprint 005 (2026-10-17):</b><br />
           <b>Nuevo:</b> bloque I (español e inglés): 4 pruebas nuevas, 1 del
@@ -1004,7 +1219,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v3:";
+        var CLAVE = "guia-inmobiliaria-v4:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

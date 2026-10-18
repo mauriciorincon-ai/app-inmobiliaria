@@ -10,13 +10,16 @@ inmueble como "fundador" —sin comisión y sin intermediarios— antes de que l
 compradores. **Publicar el inmueble ES el registro**: no se pide un correo para una lista de espera,
 se pide el inmueble.
 
-En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y el del **operador**
-(el equipo de Innmobiliaria, que ve los registros en un panel privado).
+Hay tres usos: el del **vendedor** (publica su inmueble), el del **comprador** (desde el Sprint 006
+busca y mira los anuncios vivos, sin crear cuenta) y el del **operador** (el equipo de Innmobiliaria,
+que ve los registros en un panel privado). El contacto entre comprador y dueño por la plataforma
+todavía no está: hoy el comprador mira, y el dueño decide si muestra su WhatsApp en la ficha.
 
 ## Primeros pasos
 
 - **Vendedor:** entra a la página principal desde el teléfono, lee la propuesta y toca
   **"Publica tu inmueble como fundador"**. No necesitas crear cuenta ni contraseña.
+- **Comprador:** toca **"Buscar"** arriba (o ve a `/buscar`). No necesitas cuenta.
 - **Operador:** entra a `/operador`, inicia sesión con el correo y la contraseña del equipo.
 
 ## Español e inglés (toda la app) · desde Sprint 005
@@ -58,8 +61,10 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   documentos.
 - **Cómo se usa:** Inicio → **"Publica tu inmueble como fundador"** →
   1. **Paso 1 (Tú):** tu nombre, tu WhatsApp y tu ciudad.
-  2. **Paso 2 (Tu inmueble):** si es venta o arriendo, el tipo, el barrio, el área, las
-     habitaciones y el precio esperado. La dirección aproximada es opcional.
+  2. **Paso 2 (Tu inmueble):** si es venta o arriendo, el tipo, la **localidad** y el **barrio** (se
+     elige de la lista oficial de Catastro Bogotá: primero la localidad, luego el barrio), el área,
+     las habitaciones y el precio esperado. La dirección aproximada es opcional y **nunca se
+     muestra**: en el mapa tu anuncio aparece como el área de tu barrio, no como un punto.
   3. **Paso 3 (Revisa y envía):** revisa el resumen, marca la casilla de autorización de datos
      (Ley 1581) y toca **"Publicar mi inmueble"**. Puedes dejar tu **correo (opcional)** si quieres
      recibir avisos sobre tu publicación (fotos, sello y vigencia); sin correo publicas igual y te
@@ -68,8 +73,8 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
     invitó, sin que tengas que hacer nada (desde el Sprint 003).
   - Si cierras la página a mitad, al volver el formulario **retoma donde ibas** (se guarda en tu
     navegador). Al terminar verás una pantalla de confirmación con los próximos pasos.
-- **Limitaciones conocidas:** las fotos llegan en la siguiente etapa. Sin la casilla de
-  autorización no se puede enviar. Si intentas publicar muchas veces seguidas desde la misma
+- **Limitaciones conocidas:** el barrio tiene que ser uno de la lista (si el tuyo no aparece, elige el
+  más cercano; el operador puede ajustarlo). Sin la casilla de autorización no se puede enviar. Si intentas publicar muchas veces seguidas desde la misma
   conexión, el sistema te pedirá esperar (anti-abuso).
 
 ### Confirmación de fundador · desde Sprint 001 (mejorado en S2)
@@ -97,11 +102,47 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
 ### Ficha pública compartible · desde Sprint 002
 
 - **Qué hace:** cada inmueble tiene una página propia (`/i/…`) que puedes compartir por WhatsApp;
-  al pegar el enlace se ve una vista previa con la foto de portada, el barrio y el precio.
+  al pegar el enlace se ve una vista previa con la foto de portada, el barrio y el precio. **Desde el
+  Sprint 006** muestra además **cuánto hace que el dueño lo confirmó** («Vivo: el dueño confirmó
+  hace 2 días»), el **sello** con su explicación y **dónde queda** (barrio y localidad).
+- **El sello (un solo sello, tres estados):**
+  - **⭐ Propietario verificado:** el equipo vio el Certificado de Tradición y Libertad (CTL) y la
+    ficha dice **la fecha en que se expidió** (máximo 30 días cuando se vio).
+  - **Re-verificación pendiente:** el dueño fue verificado antes de que el sello llevara fecha; la
+    ficha lo dice en vez de inventar una fecha, hasta que llegue un CTL nuevo.
+  - **Fundador:** todavía sin CTL verificado.
 - **Cómo se usa:** comparte el enlace de tu ficha con quien quieras. Muestra las fotos, los datos
-  y —solo si tú lo activaste— un botón para escribirte por WhatsApp.
-- **Limitaciones conocidas:** en esta etapa las fichas no aparecen en buscadores (es privado
-  hasta el lanzamiento). Tu correo y el número de matrícula nunca son públicos.
+  y —solo si tú lo activaste— un botón para escribirte por WhatsApp. En **Mi anuncio** ves tu propio
+  sello y, si tienes CTL, su fecha.
+- **Limitaciones conocidas:** las fichas no aparecen en buscadores externos (es privado hasta el
+  lanzamiento). Tu correo, tu dirección y el número de matrícula nunca son públicos.
+
+### Buscar inmuebles (comprador) · desde Sprint 006
+
+- **Qué hace:** deja buscar los anuncios **vivos** de dueños directos en Bogotá, por filtros o
+  dibujando tu zona en un mapa. No pide cuenta ni datos.
+- **Cómo se usa:** toca **"Buscar"** (arriba) →
+  1. **Venta / Arriendo:** los dos botones de arriba; volver a tocar el activo lo suelta.
+  2. **Filtros:** ábrelos con **"Filtros"** y elige tipo, localidad, precio mínimo y máximo (puedes
+     escribirlo con puntos: 300.000.000) y habitaciones. **"Ver resultados"** aplica; cada filtro
+     activo aparece como una pastilla con una ✕ que lo quita.
+  3. **Dibujar tu zona:** en el mapa toca **"Dibujar zona"**, marca al menos 3 esquinas tocando el
+     mapa y toca **"Listo"**: la lista se queda solo con lo que está dentro. **"Borrar zona"** la
+     quita. En el teléfono la lista va primero; el mapa se abre con el botón **"Mapa"**.
+  4. **Cada tarjeta** muestra el precio, el tipo y el barrio, el área, las habitaciones, el sello
+     (⭐ con la fecha del CTL, "re-verificación pendiente" o "fundador") y **"Vivo hace N días"**.
+     Tócala para abrir la ficha.
+- **Cómo se ubica un anuncio:** por el **área de su barrio** (los barrios son los de Catastro
+  Bogotá), **nunca por un punto ni por una dirección**. Un anuncio entra en tu zona si el centro de
+  su barrio queda dentro. La dirección exacta no se muestra.
+- **La búsqueda se guarda en el enlace:** puedes copiar la dirección de la página y compartirla; al
+  abrirla se ve la misma búsqueda. Funciona aun sin el mapa.
+- **Limitaciones conocidas:** se muestran los 60 anuncios confirmados más recientemente; afina los
+  filtros para ver otros. Un anuncio publicado antes del catálogo de barrios aparece por filtros,
+  pero no en una zona dibujada hasta que el operador le asigne su barrio. Si el mapa no carga, la
+  lista y los filtros siguen funcionando y puedes reintentar. Por ahora no hay alertas, favoritos ni
+  contacto por la plataforma: llegan en sprints posteriores. Los mapas usan datos de OpenStreetMap
+  (calles) y de Catastro Bogotá (barrios, licencia CC BY 4.0).
 
 ### Cupos de fundador por zona · desde Sprint 003
 
@@ -165,9 +206,18 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
      en que publicó (ES o EN): es el idioma de sus avisos.
 - **Verificar un inmueble (nivel 2 ⭐):** el vendedor te comparte su Certificado de Tradición y
   Libertad (CTL); tú lo **ves** (nunca se sube a la app), confirmas que el titular coincide, y en
-  la fila tocas **"Verificar ⭐"**, escribes el **número de matrícula** y marcas "Vi el CTL
-  original". El inmueble gana el sello **"Propietario verificado"** en su ficha. Solo se guardan
-  la matrícula y la fecha; el documento nunca se almacena.
+  la fila tocas **"Verificar ⭐"**, escribes el **número de matrícula** y **la fecha en que se
+  expidió el CTL** (máximo 30 días: si es más viejo, el formulario lo avisa y no deja confirmar) y
+  marcas "Vi el CTL original". El inmueble gana el sello **"Propietario verificado"** y la ficha
+  muestra esa fecha. Solo se guardan la matrícula y las fechas; el documento nunca se almacena.
+- **Re-verificación pendiente (desde el S6):** los inmuebles verificados antes de que el sello
+  llevara fecha aparecen como **"Re-verificación pendiente"**. En su fila tocas **"Registrar CTL
+  nuevo"** con el CTL que te lleve el dueño. En **Campaña** hay una plantilla de correo para
+  pedirlo («Re-verifica tu sello ⭐») con su filtro «verificados sin fecha de CTL».
+- **Anuncios sin barrio del catálogo (desde el S6):** si un anuncio es de antes del catálogo y su
+  barrio escrito a mano no coincide con ninguno, la fila dice **"Sin barrio del catálogo"** y
+  tiene el botón **"Asignar barrio"**: eliges la localidad y el barrio y desde ese momento el
+  anuncio aparece en el área de ese barrio en el mapa de búsqueda.
 - **Re-contactar a un fundador:** el botón **"Re-contactar por WhatsApp"** genera un enlace nuevo
   para su anuncio y abre WhatsApp con un mensaje listo que lo invita a completar sus fotos. El
   mensaje sale en el **idioma del vendedor** (el que guardó al publicar), no en el del panel.
@@ -206,14 +256,19 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   sello "Propietario verificado"; lo muestras una vez y nunca se sube a la app.
 - **¿Sirve para arriendo?** Sí, aunque el mensaje lidera con la venta directa.
 - **¿Quién ve mi WhatsApp?** Nadie en la ficha pública, a menos que tú actives esa opción.
+- **¿Se ve mi dirección en el mapa?** No. Tu anuncio aparece como el área de su barrio, nunca como un
+  punto, y la dirección no se publica.
+- **¿Por qué mi sello dice «re-verificación pendiente»?** Fuiste verificado antes de que el sello
+  mostrara la fecha del CTL. Con un CTL nuevo (de máximo 30 días) el sello vuelve a mostrarse completo.
 - **¿La página está en inglés y la quiero en español (o al revés)?** Toca **ES** o **EN** arriba a
   la derecha; la página recuerda tu elección.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                                                                   |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                               |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                         |
-| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro    |
-| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas |
+| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                  |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                              |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                        |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                   |
+| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                |
+| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel |

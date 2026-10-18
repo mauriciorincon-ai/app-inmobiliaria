@@ -95,3 +95,10 @@ export function confirmadoHace(a: AnuncioCreado, dias: number): void {
 // Zonas de prueba, en el formato de la URL (lat,lng;…): ≈ 2,2 × 2,2 km.
 export const ZONA_ROSALES = "4.65,-74.06;4.65,-74.04;4.67,-74.04;4.67,-74.06"; // contiene Los Rosales
 export const ZONA_SUBA = "4.72,-74.12;4.72,-74.10;4.74,-74.10;4.74,-74.12"; // no contiene Los Rosales
+
+// Activa el contacto por WhatsApp del anuncio (el opt-in del dueño), como lo hace «Mi anuncio».
+export function conContactoPublico(a: AnuncioCreado): void {
+  consultar(
+    `update public.inmuebles set contacto_publico = true where id = '${a.id}'`,
+  );
+}

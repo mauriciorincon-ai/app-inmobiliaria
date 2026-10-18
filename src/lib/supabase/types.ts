@@ -155,7 +155,23 @@ export type MiAnuncioData = {
   vigente_hasta: string;
   vigente: boolean;
   fotos: FotoMiAnuncio[];
+  // S7 — compradores verificados que contactaron: nombre, últimos 4 dígitos del teléfono y fecha.
+  contactos: ContactoRecibido[];
 };
+
+export type ContactoRecibido = {
+  nombre: string;
+  telefono_fin: string;
+  fecha: string;
+};
+
+// S7 — estado de la verificación de una sesión de comprador (sin datos personales).
+export type EstadoVerificacion =
+  | { estado: "sin_codigo" | "verificado" | "vencido" | "otro_numero" }
+  | { estado: "esperando"; segundos: number };
+
+// Resultado del canje del código que hace el webhook (solo service_role).
+export type ResultadoCanje = "ok" | "otro_numero" | "nada";
 
 // S3 — respuestas de las RPCs de campaña.
 // obtener_cupos: solo zonas con cupo fijado (el motor `cupos` calcula los restantes).
@@ -216,8 +232,9 @@ export type FichaData = {
   vigente_hasta: string;
   nombre_publicador: string;
   fotos: FotoFicha[];
+  // S7 — el WhatsApp del dueño YA NO viaja aquí: solo lo entrega `registrar_contacto` a una sesión de
+  // comprador verificada. Email y matrícula JAMÁS salen de la BD.
   contacto_publico: boolean;
-  whatsapp: string | null; // solo con opt-in; email y matrícula JAMÁS salen de la BD.
 };
 
 // Una fila de buscar_inmuebles: LISTA BLANCA. Jamás dirección ni datos del vendedor.
@@ -412,6 +429,30 @@ export type Database = {
       buscar_inmuebles: {
         Args: ArgsBuscar;
         Returns: ResultadoBusqueda[];
+      };
+      // S7 — comprador verificado por mensaje entrante (anon + authenticated, salvo el canje).
+      iniciar_verificacion: {
+        Args: {
+          p_sesion_hash: string;
+          p_nombre: string;
+          p_telefono: string;
+          p_idioma: string;
+          p_ip_hash: string;
+        };
+        Returns: string;
+      };
+      estado_verificacion: {
+        Args: { p_sesion_hash: string };
+        Returns: EstadoVerificacion;
+      };
+      registrar_contacto: {
+        Args: { p_sesion_hash: string; p_slug: string };
+        Returns: { whatsapp: string } | null;
+      };
+      // SOLO service_role: lo llama el webhook tras validar la firma de Meta.
+      canjear_codigo_whatsapp: {
+        Args: { p_codigo_hash: string; p_telefono: string };
+        Returns: ResultadoCanje;
       };
       generar_link_anuncio: {
         Args: { p_inmueble_id: string };

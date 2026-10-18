@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { preload } from "react-dom";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerIdioma } from "@/i18n/ruta";
-import { localeIntl, type Idioma } from "@/i18n/idiomas";
+import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
@@ -160,14 +160,7 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
           <p className="text-sm text-mute">{t.publicadoPor}</p>
           <p className="text-lg font-bold text-ink">{f.nombre_publicador}</p>
           {f.contacto_publico ? (
-            <ContactoVendedor
-              whatsapp={f.whatsapp}
-              inmueble={rellenar(t.encabezado.titulo, {
-                tipo: tipo.toLocaleLowerCase(localeIntl(lang)),
-                barrio: f.barrio,
-              })}
-              t={t.contacto}
-            />
+            <ContactoVendedor slug={f.slug} t={t.contacto} />
           ) : (
             <p className="mt-2 text-sm text-gray">{t.sinContacto}</p>
           )}

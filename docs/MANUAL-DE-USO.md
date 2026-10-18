@@ -44,6 +44,33 @@ todavía no está: hoy el comprador mira, y el dueño decide si muestra su Whats
   `COP 420,000,000` en inglés). Un navegador en otro idioma (francés, portugués…) que no acepte
   inglés ve el español, porque el mercado es Bogotá.
 
+## Buscar inmuebles (el comprador) · desde Sprint 006
+
+- **Qué hace:** deja buscar los anuncios **vivos** de dueños directos en Bogotá, por filtros o
+  dibujando tu zona en un mapa. No pide cuenta ni datos.
+- **Cómo se usa:** toca **"Buscar"** (arriba) →
+  1. **Venta / Arriendo:** los dos botones de arriba; volver a tocar el activo lo suelta.
+  2. **Filtros:** ábrelos con **"Filtros"** y elige tipo, localidad, precio mínimo y máximo (puedes
+     escribirlo con puntos: 300.000.000) y habitaciones. **"Ver resultados"** aplica; cada filtro
+     activo aparece como una pastilla con una ✕ que lo quita.
+  3. **Dibujar tu zona:** en el mapa toca **"Dibujar zona"**, marca al menos 3 esquinas tocando el
+     mapa y toca **"Listo"**: la lista se queda solo con lo que está dentro. **"Borrar zona"** la
+     quita. En el teléfono la lista va primero; el mapa se abre con el botón **"Mapa"**.
+  4. **Cada tarjeta** muestra el precio, el tipo y el barrio, el área, las habitaciones, el sello
+     (⭐ con la fecha del CTL, "re-verificación pendiente" o "fundador") y **"Vivo hace N días"**.
+     Tócala para abrir la ficha.
+- **Cómo se ubica un anuncio:** por el **área de su barrio** (los barrios son los de Catastro
+  Bogotá), **nunca por un punto ni por una dirección**. Un anuncio entra en tu zona si el centro de
+  su barrio queda dentro. La dirección exacta no se muestra.
+- **La búsqueda se guarda en el enlace:** puedes copiar la dirección de la página y compartirla; al
+  abrirla se ve la misma búsqueda. Funciona aun sin el mapa.
+- **Limitaciones conocidas:** se muestran los 60 anuncios confirmados más recientemente; afina los
+  filtros para ver otros. Un anuncio publicado antes del catálogo de barrios aparece por filtros,
+  pero no en una zona dibujada hasta que el operador le asigne su barrio. Si el mapa no carga, la
+  lista y los filtros siguen funcionando y puedes reintentar. Por ahora no hay alertas, favoritos ni
+  contacto por la plataforma: llegan en sprints posteriores. Los mapas usan datos de OpenStreetMap
+  (calles) y de Catastro Bogotá (barrios, licencia CC BY 4.0).
+
 ## Features
 
 ### Landing de expectativa (seller-first) · desde Sprint 001
@@ -116,33 +143,6 @@ todavía no está: hoy el comprador mira, y el dueño decide si muestra su Whats
   sello y, si tienes CTL, su fecha.
 - **Limitaciones conocidas:** las fichas no aparecen en buscadores externos (es privado hasta el
   lanzamiento). Tu correo, tu dirección y el número de matrícula nunca son públicos.
-
-### Buscar inmuebles (comprador) · desde Sprint 006
-
-- **Qué hace:** deja buscar los anuncios **vivos** de dueños directos en Bogotá, por filtros o
-  dibujando tu zona en un mapa. No pide cuenta ni datos.
-- **Cómo se usa:** toca **"Buscar"** (arriba) →
-  1. **Venta / Arriendo:** los dos botones de arriba; volver a tocar el activo lo suelta.
-  2. **Filtros:** ábrelos con **"Filtros"** y elige tipo, localidad, precio mínimo y máximo (puedes
-     escribirlo con puntos: 300.000.000) y habitaciones. **"Ver resultados"** aplica; cada filtro
-     activo aparece como una pastilla con una ✕ que lo quita.
-  3. **Dibujar tu zona:** en el mapa toca **"Dibujar zona"**, marca al menos 3 esquinas tocando el
-     mapa y toca **"Listo"**: la lista se queda solo con lo que está dentro. **"Borrar zona"** la
-     quita. En el teléfono la lista va primero; el mapa se abre con el botón **"Mapa"**.
-  4. **Cada tarjeta** muestra el precio, el tipo y el barrio, el área, las habitaciones, el sello
-     (⭐ con la fecha del CTL, "re-verificación pendiente" o "fundador") y **"Vivo hace N días"**.
-     Tócala para abrir la ficha.
-- **Cómo se ubica un anuncio:** por el **área de su barrio** (los barrios son los de Catastro
-  Bogotá), **nunca por un punto ni por una dirección**. Un anuncio entra en tu zona si el centro de
-  su barrio queda dentro. La dirección exacta no se muestra.
-- **La búsqueda se guarda en el enlace:** puedes copiar la dirección de la página y compartirla; al
-  abrirla se ve la misma búsqueda. Funciona aun sin el mapa.
-- **Limitaciones conocidas:** se muestran los 60 anuncios confirmados más recientemente; afina los
-  filtros para ver otros. Un anuncio publicado antes del catálogo de barrios aparece por filtros,
-  pero no en una zona dibujada hasta que el operador le asigne su barrio. Si el mapa no carga, la
-  lista y los filtros siguen funcionando y puedes reintentar. Por ahora no hay alertas, favoritos ni
-  contacto por la plataforma: llegan en sprints posteriores. Los mapas usan datos de OpenStreetMap
-  (calles) y de Catastro Bogotá (barrios, licencia CC BY 4.0).
 
 ### Cupos de fundador por zona · desde Sprint 003
 

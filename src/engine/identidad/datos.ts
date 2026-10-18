@@ -48,9 +48,55 @@ export type DatosIdentidad = {
 
 export type CampoInvalido = "cedula" | "fechaExpedicion" | "nombre";
 
+function esTexto(valor: unknown, largo: number): valor is string {
+  return typeof valor === "string" && valor.length <= largo;
+}
+
 /**
- * Valida lo que escribió el comprador. `hoy` es la fecha de Bogotá (YYYY-MM-DD) en que se valida: la fecha
- * de expedición no puede ser futura. Sin el consentimiento no hay datos: responde el campo `consentimiento`.
+ * Todos los campos mal escritos, para marcarlos a la vez en el formulario (no de uno en uno). `hoy` es la
+ * fecha de Bogotá (YYYY-MM-DD) en que se valida: la fecha de expedición no puede ser futura.
+ */
+export function camposInvalidos(
+  entrada: unknown,
+  hoy: string,
+): CampoInvalido[] {
+  const e = (
+    typeof entrada === "object" && entrada !== null ? entrada : {}
+  ) as {
+    cedula?: unknown;
+    fechaExpedicion?: unknown;
+    nombre?: unknown;
+  };
+  const malos: CampoInvalido[] = [];
+  if (
+    !esTexto(e.cedula, 20) ||
+    !REGEX_CEDULA.test(normalizarCedula(e.cedula))
+  ) {
+    malos.push("cedula");
+  }
+  const fecha = e.fechaExpedicion;
+  if (
+    !esTexto(fecha, 10) ||
+    !esFechaReal(fecha) ||
+    fecha < FECHA_MINIMA ||
+    fecha > hoy
+  ) {
+    malos.push("fechaExpedicion");
+  }
+  const nombre = esTexto(e.nombre, 120) ? palabrasDe(e.nombre).join(" ") : "";
+  if (
+    nombre.length < 5 ||
+    !REGEX_NOMBRE.test(nombre) ||
+    palabrasDe(nombre).length < 2
+  ) {
+    malos.push("nombre");
+  }
+  return malos;
+}
+
+/**
+ * Valida lo que escribió el comprador y, si todo está bien, devuelve los datos normalizados. Sin el
+ * consentimiento no hay datos: responde el campo `consentimiento`. Con varios errores devuelve el primero.
  */
 export function validarDatosIdentidad(
   entrada: unknown,
@@ -65,27 +111,18 @@ export function validarDatosIdentidad(
       entrada === null ||
       (entrada as { consentimiento?: unknown }).consentimiento !== true;
     if (consentimientoMal) return { ok: false, campo: "consentimiento" };
-    const ruta = leido.error.issues[0]?.path[0];
-    return {
-      ok: false,
-      campo: ruta === "fechaExpedicion" || ruta === "nombre" ? ruta : "cedula",
-    };
+    return { ok: false, campo: camposInvalidos(entrada, hoy)[0] ?? "cedula" };
   }
-  const cedula = normalizarCedula(leido.data.cedula);
-  if (!REGEX_CEDULA.test(cedula)) return { ok: false, campo: "cedula" };
-  const fecha = leido.data.fechaExpedicion;
-  if (!esFechaReal(fecha) || fecha < FECHA_MINIMA || fecha > hoy) {
-    return { ok: false, campo: "fechaExpedicion" };
-  }
-  const nombre = palabrasDe(leido.data.nombre).join(" ");
-  if (
-    nombre.length < 5 ||
-    !REGEX_NOMBRE.test(nombre) ||
-    palabrasDe(nombre).length < 2
-  ) {
-    return { ok: false, campo: "nombre" };
-  }
-  return { ok: true, datos: { cedula, fechaExpedicion: fecha, nombre } };
+  const malo = camposInvalidos(leido.data, hoy)[0];
+  if (malo) return { ok: false, campo: malo };
+  return {
+    ok: true,
+    datos: {
+      cedula: normalizarCedula(leido.data.cedula),
+      fechaExpedicion: leido.data.fechaExpedicion,
+      nombre: palabrasDe(leido.data.nombre).join(" "),
+    },
+  };
 }
 
 /** «José Ñúñez-Ruiz» → «jose nunez ruiz»: sin tildes, sin mayúsculas, sin guiones ni puntos. */

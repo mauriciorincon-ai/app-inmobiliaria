@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from "vitest";
 import {
+  camposInvalidos,
   esFechaReal,
   nombresCoinciden,
   normalizarCedula,
@@ -317,5 +318,37 @@ describe("topes", () => {
       TOPES_IDENTIDAD,
     );
     expect(topesEfectivos(true)).toEqual(TOPES_IDENTIDAD);
+  });
+});
+
+describe("camposInvalidos (el formulario marca todos a la vez)", () => {
+  it("un formulario vacío marca los tres campos", () => {
+    expect(
+      camposInvalidos({ cedula: "", fechaExpedicion: "", nombre: "" }, HOY),
+    ).toEqual(["cedula", "fechaExpedicion", "nombre"]);
+  });
+
+  it("solo marca los que están mal; lo bien escrito queda libre", () => {
+    expect(
+      camposInvalidos(
+        {
+          cedula: "1.000.000.001",
+          fechaExpedicion: "2099-01-01",
+          nombre: "Laura Sintetica",
+        },
+        HOY,
+      ),
+    ).toEqual(["fechaExpedicion"]);
+    expect(camposInvalidos(BIEN, HOY)).toEqual([]);
+  });
+
+  it("no se rompe con entradas que no son texto o son enormes", () => {
+    expect(camposInvalidos(null, HOY)).toHaveLength(3);
+    expect(
+      camposInvalidos(
+        { cedula: 7, fechaExpedicion: {}, nombre: "x".repeat(500) },
+        HOY,
+      ),
+    ).toEqual(["cedula", "fechaExpedicion", "nombre"]);
   });
 });

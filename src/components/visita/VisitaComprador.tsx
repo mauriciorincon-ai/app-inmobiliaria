@@ -113,7 +113,7 @@ export default function VisitaComprador({
   if (carga.fase === "sin-token" || carga.fase === "no-encontrada") {
     return (
       <div className="rounded-[2rem] bg-cream px-6 py-12 text-center">
-        <p className="text-lg font-bold text-ink">{t.sinEnlace.titulo}</p>
+        <h1 className="text-lg font-bold text-ink">{t.sinEnlace.titulo}</h1>
         <p className="mt-2 text-sm text-gray">{t.sinEnlace.texto}</p>
       </div>
     );

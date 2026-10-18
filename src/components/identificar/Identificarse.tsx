@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import Campo from "@/components/ui/Campo";
 import { hoyBogota } from "@/engine/agenda/bogota";
-import { validarDatosIdentidad } from "@/engine/identidad/datos";
+import { camposInvalidos } from "@/engine/identidad/datos";
 import { rellenar, type Proyectado } from "@/i18n/textos";
 import type { IDENTIDAD } from "@/textos/identidad";
 
@@ -88,26 +88,17 @@ export default function Identificarse({
   async function enviar(ev: React.FormEvent) {
     ev.preventDefault();
     setErrorGeneral(null);
-    const validado = validarDatosIdentidad(
-      {
-        cedula,
-        fechaExpedicion: fecha,
-        nombre,
-        consentimiento: acepto,
-      },
+    const malos = camposInvalidos(
+      { cedula, fechaExpedicion: fecha, nombre },
       hoyBogota(new Date()),
     );
-    if (!validado.ok) {
-      setErrores({
-        cedula: validado.campo === "cedula" ? t.errores.cedula : undefined,
-        fecha:
-          validado.campo === "fechaExpedicion" ? t.errores.fecha : undefined,
-        nombre: validado.campo === "nombre" ? t.errores.nombre : undefined,
-        consentimiento:
-          validado.campo === "consentimiento"
-            ? t.errores.consentimiento
-            : undefined,
-      });
+    const e: Errores = {};
+    if (malos.includes("cedula")) e.cedula = t.errores.cedula;
+    if (malos.includes("fechaExpedicion")) e.fecha = t.errores.fecha;
+    if (malos.includes("nombre")) e.nombre = t.errores.nombre;
+    if (!acepto) e.consentimiento = t.errores.consentimiento;
+    if (Object.keys(e).length > 0) {
+      setErrores(e);
       return;
     }
     setErrores({});

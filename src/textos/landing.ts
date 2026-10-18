@@ -148,8 +148,8 @@ export const LANDING = {
           en: "Done: you're registered",
         },
         texto: {
-          es: "Tu inmueble queda publicado como fundador. Te avisamos por WhatsApp en cada paso hacia el lanzamiento.",
-          en: "Your property is listed as a founding listing. We'll message you on WhatsApp at each step toward launch.",
+          es: "Tu inmueble queda publicado como fundador. Si dejaste tu correo, te avisamos en cada paso hacia el lanzamiento.",
+          en: "Your property is listed as a founding listing. If you left your email, we'll let you know at each step toward launch.",
         },
       },
     ],
@@ -237,8 +237,8 @@ export const LANDING = {
           en: "When can I start receiving buyers?",
         },
         a: {
-          es: "Estamos preparando la apertura a compradores y te avisamos por WhatsApp cuando llegue. Publicar hoy te deja listo y de primero.",
-          en: "We're preparing to open to buyers, and we'll message you on WhatsApp when it happens. Listing today gets you ready and first in line.",
+          es: "Estamos preparando la apertura a compradores y, si dejaste tu correo, te avisamos cuando llegue. Publicar hoy te deja listo y de primero.",
+          en: "We're preparing to open to buyers, and if you left your email we'll let you know when it happens. Listing today gets you ready and first in line.",
         },
       },
       {

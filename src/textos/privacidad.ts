@@ -91,6 +91,36 @@ export const PRIVACIDAD = {
     },
   },
 
+  // Identificación con la cédula (S8, ADR 016). El número NO se guarda; viaja a un proveedor de validación,
+  // que actúa por encargo nuestro y está fuera de Colombia (transferencia internacional, con la autorización
+  // del titular al marcar la casilla de esa pantalla).
+  identificacion: {
+    titulo: {
+      es: "Si te identificas con tu cédula",
+      en: "If you check your ID with your cédula",
+    },
+    texto: {
+      es: "Identificarte es opcional. Tu número de cédula, la fecha de expedición y tu nombre se envían a un proveedor de validación de identidad, que actúa por encargo nuestro y los contrasta con la Registraduría Nacional del Estado Civil. Ese proveedor está fuera de Colombia, así que el envío es una transferencia internacional de datos que haces con tu autorización al marcar la casilla de esa pantalla. Innmobiliaria NO guarda tu número de cédula, ni la fecha de expedición, ni una foto, ni el documento: guardamos solo que la validación salió bien, el proveedor que la hizo y la fecha, y un registro de cada consulta (sin tus datos) para respetar el tope de uso del servicio. Los dueños ven «Comprador identificado» y tu nombre, nunca tu número de cédula. Puedes borrar tu identificación cuando quieras desde la misma pantalla.",
+      en: "Checking your ID is optional. Your cédula number, date of issue and name are sent to an identity-validation provider, which acts on our behalf and compares them with the Registraduría Nacional del Estado Civil (Colombia's civil registry). That provider is outside Colombia, so the transfer is an international data transfer that you authorize by ticking the box on that screen. Innmobiliaria does NOT keep your cédula number, your date of issue, a photo or the document: we keep only that the check succeeded, which provider ran it and the date, plus a record of each query (without your details) so we can respect the service's usage limit. Owners see «ID-checked buyer» and your name, never your cédula number. You can delete your ID check at any time from the same screen.",
+    },
+  },
+
+  // Visitas (S8, ADR 016): el correo del comprador, lo que declara y el conteo de asistencia.
+  visitas: {
+    titulo: {
+      es: "Si pides una visita",
+      en: "If you request a viewing",
+    },
+    texto: {
+      es: "Para pedir una visita nos das un correo, que usamos solo para los avisos de esa visita: horarios propuestos, confirmación, cancelación y un recordatorio el día antes. Guardamos también lo que declaras en la solicitud (para qué buscas, tu presupuesto, cómo pagarías y tu mensaje) y los horarios. El dueño ve tu nombre, los últimos 4 dígitos de tu número, tu nivel de verificación y lo que declaraste; el correo nunca se lo mostramos. Cuando confirmas un horario, el dueño ve tu número completo para enviarte la dirección exacta por su propio WhatsApp. Después de la visita, el dueño marca si asististe y los dueños ven solo un conteo («asistió a 2 de 3 visitas»), sin detalle. Innmobiliaria no te envía mensajes por WhatsApp; los avisos van por correo. Los avisos salen a través de un proveedor de correo que actúa por encargo nuestro.",
+      en: "To request a viewing you give us an email, which we use only for the notices of that viewing: suggested times, confirmation, cancellation and a reminder the day before. We also keep what you state in the request (what you're looking for, your budget, how you'd pay and your message) and the times. The owner sees your name, the last 4 digits of your number, your verification level and what you stated; we never show them your email. When you confirm a time, the owner sees your full number so they can send you the exact address on their own WhatsApp. After the viewing, the owner marks whether you attended, and owners see only a count («attended 2 of 3 viewings»), without detail. Innmobiliaria does not message you on WhatsApp; notices go by email. Notices are sent through an email provider that acts on our behalf.",
+    },
+    conservacion: {
+      es: "Si nunca verificas tu número, borramos tu nombre y tu número a los 30 días; los códigos vencidos sin usar, a los 7.",
+      en: "If you never verify your number, we delete your name and number after 30 days; expired unused codes after 7.",
+    },
+  },
+
   // Verificación nivel 2 (regla de producto 3): el CTL se VE y nunca se almacena; persisten la
   // matrícula, el resultado y la fecha (`marcar_verificado`).
   verificacion: {

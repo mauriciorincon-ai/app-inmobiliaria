@@ -3,6 +3,11 @@
 // jamás el cuerpo ni los datos de la persona.
 import { NextResponse, type NextRequest } from "next/server";
 import { respuestaDeError, type ErrorRpc } from "@/engine/visita/errores";
+import {
+  COOKIE_COMPRADOR,
+  esSesionValida,
+  hashSesion,
+} from "@/engine/verificacion/sesion";
 import type { Logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
 
@@ -32,8 +37,13 @@ export function responderError(
   error: ErrorRpc,
   log: Logger,
   contexto: { requestId: string; evento: string },
+  // S9: guardar y avisar traduce sus propios códigos (`engine/alertas/errores`).
+  traducir: (e: ErrorRpc) => {
+    status: number;
+    codigo: string;
+  } = respuestaDeError,
 ) {
-  const { status, codigo } = respuestaDeError(error);
+  const { status, codigo } = traducir(error);
   if (status >= 500) {
     reportError(contexto.evento, {
       requestId: contexto.requestId,
@@ -44,4 +54,10 @@ export function responderError(
     log.warn({ evento: "rechazado", codigo }, "rechazado");
   }
   return json(status, { error: codigo });
+}
+
+/** El hash de la sesión del comprador (cookie httpOnly), o null sin cookie válida: la base dirá «no verificado». */
+export async function sesionDe(req: NextRequest): Promise<string | null> {
+  const sesion = req.cookies.get(COOKIE_COMPRADOR)?.value;
+  return esSesionValida(sesion) ? hashSesion(sesion) : null;
 }

@@ -107,6 +107,7 @@ export default async function ListaResultados({
             {hayFiltros(filtros) && (
               <Link
                 href={`/alertas/nueva?${aParams(filtros).toString()}`}
+                prefetch={false}
                 className="rounded-full bg-purple-tint px-5 py-2 text-sm font-semibold text-purple-600 hover:bg-purple-200"
               >
                 {t.lista.sinResultados.avisame}

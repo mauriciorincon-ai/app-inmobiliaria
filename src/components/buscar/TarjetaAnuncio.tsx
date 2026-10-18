@@ -47,10 +47,10 @@ export default function TarjetaAnuncio({
   const vivo = textoVivo(diasVivo(r.vigente_hasta, ahora), tVivo);
   return (
     <li>
-      <article className="relative h-full rounded-2xl border border-purple-200 bg-white p-3 shadow-soft transition-shadow hover:shadow-card">
+      <article className="relative flex h-full flex-col rounded-2xl border border-purple-200 bg-white p-3 shadow-soft transition-shadow hover:shadow-card">
         <Link
           href={`/i/${r.slug}`}
-          className="flex h-full flex-col gap-3 rounded-xl after:absolute after:inset-0 after:rounded-2xl"
+          className="flex flex-1 flex-col gap-3 rounded-xl after:absolute after:inset-0 after:rounded-2xl"
         >
           {r.portada ? (
             // eslint-disable-next-line @next/next/no-img-element -- WebP ya optimizado en R2; next/image no aporta

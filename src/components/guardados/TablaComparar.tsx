@@ -57,15 +57,17 @@ export default function TablaComparar({
     );
   }
 
-  const celda = "px-4 py-3 align-top text-sm text-ink";
+  const celda = "min-w-36 px-4 py-3 align-top text-sm text-ink";
   const fila = "border-t border-purple-100";
-  const etiquetaFila = "px-4 py-3 text-left text-sm font-semibold text-gray";
+  // La columna de datos se queda fija al deslizar de lado (con 3 o 4 anuncios la tabla no cabe en el teléfono).
+  const etiquetaFila =
+    "sticky left-0 bg-white px-4 py-3 text-left text-sm font-semibold text-gray";
 
   return (
     <div>
       <p className="mb-3 text-sm text-mute">{t.ayuda}</p>
       <div className="overflow-x-auto rounded-2xl border border-purple-200 bg-white shadow-soft">
-        <table className="w-full min-w-[34rem] border-collapse">
+        <table className="w-full border-collapse">
           <caption className="sr-only">{t.tabla}</caption>
           <thead>
             <tr>

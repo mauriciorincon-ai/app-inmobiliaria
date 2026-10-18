@@ -49,6 +49,8 @@ export async function avisarFavorito(
       headers: CABECERAS,
       body: JSON.stringify(guardado ? { slugs: [slug] } : { slug }),
     });
+    // Se lee siempre el cuerpo: una respuesta sin leer deja la petición «en curso» en el navegador.
+    await res.text();
     if (res.status === 403) sinCuenta = true;
   } catch {
     // sin red: el teléfono ya lo tiene
@@ -74,6 +76,7 @@ export async function fusionarConCuenta(
         : { method: "GET", cache: "no-store" },
     );
     if (!res.ok) {
+      await res.text();
       if (res.status === 403) sinCuenta = true;
       return null;
     }

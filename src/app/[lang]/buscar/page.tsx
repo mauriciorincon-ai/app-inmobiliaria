@@ -114,6 +114,7 @@ export default async function BuscarPage({
             <p className="mt-2">
               <Link
                 href={`/alertas/nueva?${aParams(filtros).toString()}`}
+                prefetch={false}
                 className="inline-flex items-center gap-1.5 rounded-full bg-purple-tint px-4 py-1.5 text-sm font-semibold text-purple-600 hover:bg-purple-200"
               >
                 <span aria-hidden="true">🔔</span>

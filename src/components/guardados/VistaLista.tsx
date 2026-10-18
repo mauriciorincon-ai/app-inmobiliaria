@@ -272,12 +272,14 @@ export default function VistaLista({
               ev.preventDefault();
               const texto = (notas[item.slug] ?? "").trim();
               if (!texto) return;
+              // Se vacía al enviar (no al terminar, que pisaría lo que se escriba entretanto) y vuelve si falla.
+              setNotas((p) => ({ ...p, [item.slug]: "" }));
               void actuar("nota", {
                 ...destino,
                 slug: item.slug,
                 texto,
               }).then((bien) => {
-                if (bien) setNotas((p) => ({ ...p, [item.slug]: "" }));
+                if (!bien) setNotas((p) => ({ ...p, [item.slug]: texto }));
               });
             }}
           >
@@ -400,12 +402,10 @@ export default function VistaLista({
               onSubmit={(ev) => {
                 ev.preventDefault();
                 if (!paraAgregar) return;
-                void actuar("agregar", {
-                  lista: lista.id,
-                  slug: paraAgregar,
-                }).then((bien) => {
-                  if (bien) setParaAgregar("");
-                });
+                // Se limpia al enviar: el favorito elegido sale de las opciones apenas se agrega.
+                const slug = paraAgregar;
+                setParaAgregar("");
+                void actuar("agregar", { lista: lista.id, slug });
               }}
             >
               {faltan.length > 0 ? (

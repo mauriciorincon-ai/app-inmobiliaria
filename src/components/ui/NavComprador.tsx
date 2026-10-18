@@ -14,7 +14,8 @@ const SECCIONES: { clave: SeccionComprador; ruta: string }[] = [
 // La navegación del comprador (S9, maqueta 07/08): Buscar · Guardados · Alertas. Sin JavaScript. En
 // escritorio vive en la cabecera; en el teléfono es una barra inferior fija. Las páginas que la llevan dejan
 // espacio abajo (`pb-28`) para que la barra no tape el final. «Herramientas», la cuarta sección de la
-// maqueta, llega con su sprint.
+// maqueta, llega con su sprint. Los enlaces NO se precargan (`prefetch={false}`): precargar Guardados y Alertas
+// desde la búsqueda y la ficha les sumaba ~15 KB de script a cada una (S9: el presupuesto no sube).
 export default function NavComprador({
   lang,
   seccion,
@@ -42,6 +43,7 @@ export default function NavComprador({
             <li key={clave}>
               <Link
                 href={ruta}
+                prefetch={false}
                 aria-current={activa ? "page" : undefined}
                 className={
                   enBarra

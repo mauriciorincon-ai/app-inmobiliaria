@@ -113,6 +113,11 @@ export default function Guardados({
     return a ? [a] : [];
   });
   const noDisponibles = carga === "listo" ? slugs.length - visibles.length : 0;
+  // Sin favoritos en este teléfono el estado vacío sale YA, en el HTML inicial, sin esperar a la red: es lo
+  // más grande de la página y, si llegara después de la consulta a la cuenta, retrasaría el LCP (Lighthouse).
+  // Si resulta que la cuenta sí tiene favoritos, aparecen al volver la consulta.
+  const listo =
+    carga === "listo" || (carga === "cargando" && slugs.length === 0);
   const elegidos = seleccion.filter((s) => visibles.some((a) => a.slug === s));
   const ahora = new Date();
 
@@ -160,7 +165,7 @@ export default function Guardados({
         {pestana("listas", t.vista.listas)}
       </div>
 
-      {carga === "listo" && vista !== "comparar" && (
+      {listo && vista !== "comparar" && (
         <p className="mt-4 rounded-2xl bg-purple-tint px-4 py-3 text-sm text-gray">
           {cuenta ? (
             t.aviso.cuenta
@@ -179,7 +184,7 @@ export default function Guardados({
       )}
 
       <div className="mt-5">
-        {carga === "cargando" && (
+        {carga === "cargando" && !listo && (
           <p className="text-sm text-mute" role="status">
             {t.cargando}
           </p>
@@ -193,7 +198,7 @@ export default function Guardados({
           </div>
         )}
 
-        {carga === "listo" && vista === "favoritos" && (
+        {listo && vista === "favoritos" && (
           <>
             {visibles.length === 0 ? (
               <div className="rounded-[2rem] bg-cream px-6 py-12 text-center">
@@ -286,7 +291,7 @@ export default function Guardados({
           </>
         )}
 
-        {carga === "listo" && vista === "comparar" && (
+        {listo && vista === "comparar" && (
           <TablaComparar
             anuncios={visibles}
             seleccion={elegidos}
@@ -298,7 +303,7 @@ export default function Guardados({
           />
         )}
 
-        {carga === "listo" && vista === "listas" && (
+        {listo && vista === "listas" && (
           <>
             {cuenta ? (
               <PanelListas

@@ -9,7 +9,13 @@ import { fechaBogota } from "./fechas";
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export type AnuncioCreado = { id: string; slug: string; precio: number };
+export type AnuncioCreado = {
+  id: string;
+  slug: string;
+  precio: number;
+  // El token del enlace privado de «Mi anuncio» (solo en pruebas sintéticas).
+  token: string;
+};
 
 let secuencia = 0;
 
@@ -58,8 +64,8 @@ export async function crearAnuncio(
     },
   );
   expect(error).toBeNull();
-  const reg = data as unknown as { id: string; slug: string };
-  return { id: reg.id, slug: reg.slug, precio };
+  const reg = data as unknown as { id: string; slug: string; token: string };
+  return { id: reg.id, slug: reg.slug, precio, token: reg.token };
 }
 
 // Verificación CON fecha de CTL (hace `dias` días).

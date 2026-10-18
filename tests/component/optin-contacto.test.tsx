@@ -19,8 +19,16 @@ describe("OptInContacto", () => {
       <OptInContacto t={es} token="t" activo={false} onCambio={vi.fn()} />,
     );
     expect(screen.getByRole("checkbox")).not.toBeChecked();
-    expect(screen.getByText(/Mostrar mi WhatsApp/i)).toBeInTheDocument();
-    expect(screen.getByText(/tu contacto no aparece/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Mostrar mi WhatsApp a compradores verificados/i),
+    ).toBeInTheDocument();
+    // S7: el número nunca queda en la página pública; sin esto, nadie contacta desde el anuncio.
+    expect(
+      screen.getByText(/tu número nunca se ve en la página pública/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/nadie te contacta desde aquí/i),
+    ).toBeInTheDocument();
   });
 
   it("al activar llama la RPC con el nuevo valor y recarga", async () => {

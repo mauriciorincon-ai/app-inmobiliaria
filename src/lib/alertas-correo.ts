@@ -11,7 +11,7 @@ import {
   filtrosDeAlerta,
   resumenCriterios,
 } from "@/engine/alertas/criterios";
-import { topeCorreosAlerta } from "@/engine/alertas/topes";
+import { correoDisponible, topeCorreosAlerta } from "@/engine/alertas/topes";
 import type { Filtros } from "@/engine/busqueda/filtros";
 import type { ErrorRpc } from "@/engine/visita/errores";
 import type { Idioma } from "@/i18n/idiomas";
@@ -44,6 +44,18 @@ export function topeHoy(forzado?: string | null): number {
   );
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+/**
+ * Limitar UNA corrida del cron a una sola alerta. Solo con el simulacro explícito (`BREVO_MOCK=1`: CI y pruebas):
+ * así una prueba del cron no se lleva los resúmenes de las alertas de otras pruebas que corren a la vez. Con el
+ * servicio real jamás se respeta.
+ */
+export function alertaDeSimulacro(valor?: string | null): string | undefined {
+  if (process.env.BREVO_MOCK !== "1" || !valor) return undefined;
+  return UUID.test(valor) ? valor : undefined;
+}
+
 export type EntradaAlerta = {
   email: string;
   idioma: Idioma;
@@ -59,11 +71,17 @@ export type ResultadoCrear =
   | { ok: true; gestionar: string; enviado: boolean }
   | { ok: false; error: ErrorRpc | null };
 
+// Sin correo de verdad (sin llave de Brevo y sin el simulacro explícito) las alertas no operan: ni se crean ni
+// se reclaman, porque `enviarCorreo` daría por enviado lo que nadie va a recibir.
+function hayCorreo(): boolean {
+  return correoDisponible(process.env.BREVO_MOCK, process.env.BREVO_API_KEY);
+}
+
 export async function crearAlertaYConfirmar(
   e: EntradaAlerta,
 ): Promise<ResultadoCrear> {
   const supabase = crearClienteServicio();
-  if (!supabase) return { ok: false, error: null };
+  if (!supabase || !hayCorreo()) return { ok: false, error: null };
   const { data, error } = await supabase.rpc("crear_alerta", {
     p_email: e.email,
     p_idioma: e.idioma,
@@ -107,11 +125,17 @@ export type ResultadoResumenes = {
 /** El paso «resúmenes» del trabajo diario. null si la base falló (el cron lo reporta). */
 export async function enviarResumenes(
   tope: number,
+  soloAlerta?: string,
 ): Promise<ResultadoResumenes | null> {
   const supabase = crearClienteServicio();
   if (!supabase) return null;
+  if (!hayCorreo()) {
+    reportError("cron_resumenes_sin_correo", {});
+    return null;
+  }
   const { data, error } = await supabase.rpc("reclamar_resumenes", {
     p_tope: tope,
+    ...(soloAlerta ? { p_alerta: soloAlerta } : {}),
   });
   if (error || !data) {
     reportError("cron_resumenes_error", { code: error?.code ?? "sin_datos" });

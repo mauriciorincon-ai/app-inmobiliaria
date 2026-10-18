@@ -3,7 +3,11 @@ import { autorizadoCron } from "@/engine/cron/autorizacion";
 import { crearClienteServicio } from "@/lib/supabase/servicio";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
-import { enviarResumenes, topeHoy } from "@/lib/alertas-correo";
+import {
+  alertaDeSimulacro,
+  enviarResumenes,
+  topeHoy,
+} from "@/lib/alertas-correo";
 import { avisarVisita } from "@/lib/visitas-correo";
 import { json } from "@/lib/visitas-http";
 
@@ -17,7 +21,8 @@ import { json } from "@/lib/visitas-http";
 //   3. Purga Ley 1581: compradores sin verificar de 30 días y códigos vencidos de 7; alertas sin confirmar de 7
 //      y dadas de baja de 30; enlaces, historial de precios y cupos viejos.
 // Correr dos veces el mismo día no repite nada. Responde los conteos, sin datos de nadie. Con Brevo en
-// simulacro (CI y pruebas), la cabecera `x-alertas-tope` cambia el tope del día para ESTA corrida.
+// simulacro (CI y pruebas), la cabecera `x-alertas-tope` cambia el tope del día para ESTA corrida y
+// `x-alertas-solo` la limita a una alerta (las pruebas del cron no se llevan los resúmenes de otras pruebas).
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -63,6 +68,7 @@ export async function POST(req: NextRequest) {
 
   const resumenes = await enviarResumenes(
     topeHoy(req.headers.get("x-alertas-tope")),
+    alertaDeSimulacro(req.headers.get("x-alertas-solo")),
   );
 
   const { data: purga, error: errorPurga } =

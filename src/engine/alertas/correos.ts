@@ -49,10 +49,10 @@ const ESTILO_PIE = "color:#888;font-size:12px";
 const ATRIBUTOS_FOTO = 'width="160" alt=""';
 const ESTILO_FOTO = "border-radius:8px;display:block";
 
-/** Texto plano para el asunto: sin saltos de línea ni espacios repetidos. */
+/** Texto plano para el asunto: sin saltos de línea ni otros caracteres de control, ni espacios repetidos. */
 export function plano(texto: string): string {
   return texto
-    .replace(/[\r\n\t]+/g, " ")
+    .replace(/[\u0000-\u001f\u007f\u0085\u2028\u2029]+/g, " ")
     .replace(/ {2,}/g, " ")
     .trim();
 }
@@ -84,7 +84,9 @@ export function armarConfirmacion(
     rellenar(c.noFuiYo, { baja: escaparHtml(enlaces.baja) }) +
     `<p style="${ESTILO_PIE}">${t.pie}</p>`;
   return {
-    asunto: plano(rellenar(c.asunto, { nombre: plano(datos.nombre) })),
+    // Asunto fijo: el nombre de la alerta lo escribe quien la crea y este correo va a un destinatario que aún
+    // no aceptó nada; su texto libre solo aparece en los resúmenes, que ya confirmó.
+    asunto: plano(c.asunto),
     html,
     cabeceras: cabecerasBaja(enlaces.bajaPost),
   };

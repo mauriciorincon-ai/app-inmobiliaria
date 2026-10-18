@@ -78,5 +78,7 @@ export async function POST(req: NextRequest) {
     );
   }
   log.info({ evento: "alerta_creada", enviado: r.enviado }, "ok");
+  // Creada pero sin correo de confirmación: no se le dice «revisa tu correo» a quien no va a recibir nada.
+  if (!r.enviado) return json(502, { error: "correo_no_enviado" });
   return json(200, { ok: true, gestionar: r.gestionar });
 }

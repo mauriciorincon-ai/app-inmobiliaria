@@ -13,8 +13,8 @@ export const CORREOS_ALERTAS = {
   },
   confirmacion: {
     asunto: {
-      es: "Confirma tu alerta «{nombre}»",
-      en: "Confirm your alert «{nombre}»",
+      es: "Confirma tu alerta de Innmobiliaria",
+      en: "Confirm your Innmobiliaria alert",
     },
     cuerpo: {
       es: "<p>Alguien —ojalá tú— pidió recibir en este correo un resumen diario de Innmobiliaria con los anuncios nuevos y las bajas de precio de esta búsqueda:</p><p><strong>{criterios}</strong></p>",

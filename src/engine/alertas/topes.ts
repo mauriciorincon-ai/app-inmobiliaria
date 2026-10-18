@@ -25,3 +25,16 @@ export function topeCorreosAlerta(
   const n = Number(valor);
   return Number.isInteger(n) && n >= 0 ? n : TOPE_CORREOS_ALERTA_DIA;
 }
+
+/**
+ * ¿Hay con qué mandar correo de verdad? `enviarCorreo` cae a MOCK cuando falta `BREVO_API_KEY` y daría por
+ * enviado lo que no salió: bueno para un ensayo (`BREVO_MOCK=1`, explícito), malo para una alerta, que no puede
+ * decir «revisa tu correo» ni dar por reclamado un resumen que nadie recibirá. Sin llave y sin simulacro
+ * explícito, las alertas no operan.
+ */
+export function correoDisponible(
+  simulacro: string | undefined,
+  llave: string | undefined,
+): boolean {
+  return simulacro === "1" || (llave ?? "") !== "";
+}

@@ -5,6 +5,7 @@ import {
   armarResumen,
   asuntoResumen,
   cabecerasBaja,
+  plano,
   type AnuncioCorreo,
   type EnlacesResumen,
 } from "@/engine/alertas/correos";
@@ -19,6 +20,7 @@ import {
 } from "@/engine/alertas/criterios";
 import { respuestaDeErrorGuardar } from "@/engine/alertas/errores";
 import {
+  correoDisponible,
   TOPE_CORREOS_ALERTA_DIA,
   topeCorreosAlerta,
 } from "@/engine/alertas/topes";
@@ -136,6 +138,24 @@ describe("criterios: la búsqueda de /buscar", () => {
   });
 });
 
+describe("¿hay con qué mandar correo de verdad?", () => {
+  it("sí con el simulacro explícito o con la llave de Brevo; no con ninguno de los dos", () => {
+    expect(correoDisponible("1", undefined)).toBe(true);
+    expect(correoDisponible(undefined, "llave-de-prueba")).toBe(true);
+    expect(correoDisponible(undefined, undefined)).toBe(false);
+    expect(correoDisponible(undefined, "")).toBe(false);
+    expect(correoDisponible("0", "")).toBe(false);
+  });
+});
+
+describe("texto plano de un asunto", () => {
+  it("quita saltos de línea y todo carácter de control, y junta los espacios", () => {
+    expect(plano("a\r\nBcc: x\t\tb")).toBe("a Bcc: x b");
+    expect(plano("a\u0000b\u007fc\u0085d\u2028e\u2029f")).toBe("a b c d e f");
+    expect(plano("  mucho   espacio  ")).toBe("mucho espacio");
+  });
+});
+
 describe("el tope de correos de alerta", () => {
   it("con Brevo real siempre el de producción, aunque la variable diga otra cosa", () => {
     expect(topeCorreosAlerta(false, "999999")).toBe(TOPE_CORREOS_ALERTA_DIA);
@@ -172,11 +192,13 @@ describe("el correo de confirmación", () => {
     });
   });
 
-  it("escapa lo que escribió la persona; el asunto es una línea", () => {
+  it("escapa lo que escribió la persona; el asunto es fijo y de una línea", () => {
     expect(c.html).toContain("en &lt;Suba&gt;");
     expect(c.html).not.toContain("<Suba>");
     expect(c.asunto).not.toMatch(/[\r\n]/);
-    expect(c.asunto).toBe("Confirma tu alerta «Casas <b>en</b> Bcc: x»");
+    // El nombre lo escribe quien crea la alerta y el correo va a alguien que aún no aceptó: ahí no aparece.
+    expect(c.asunto).toBe("Confirma tu alerta de Innmobiliaria");
+    expect(c.asunto).not.toContain("Bcc");
   });
 
   it("en inglés", () => {
@@ -185,7 +207,7 @@ describe("el correo de confirmación", () => {
       { confirmar: "x", ...BAJA },
       "en",
     );
-    expect(en.asunto).toBe("Confirm your alert «Houses»");
+    expect(en.asunto).toBe("Confirm your Innmobiliaria alert");
     expect(en.html).toContain("Delete it in one click");
   });
 });

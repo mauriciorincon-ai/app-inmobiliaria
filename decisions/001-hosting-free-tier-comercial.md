@@ -48,9 +48,11 @@ Razones:
 
 ### Restricciones de arquitectura que hacen viable la decisión (obligatorias)
 
-1. **Sin `proxy.ts` / Node middleware.** El guard del panel `/operador` vive en un **Server
-   Component layout** (`src/app/operador/layout.tsx`) que valida sesión + allowlist, **no** en
-   middleware. Evita de raíz el «Node middleware not supported» de OpenNext.
+1. **Sin `proxy.ts` / Node middleware.** El guard del panel `/operador` vive en cada **Server
+   Component de página** (`src/app/[lang]/operador/page.tsx`, `campana/page.tsx` y `zonas/page.tsx`)
+   y en `src/app/api/envios/route.ts`, que validan sesión + allowlist; **no** en middleware ni en un
+   layout (no existe `operador/layout.tsx`). Evita de raíz el «Node middleware not supported» de
+   OpenNext. El idioma de la app tampoco usa middleware: se resuelve con reescrituras (ADR 013).
 2. **Route handlers en runtime `nodejs`, nunca `edge`.** `/api/registro` no declara
    `export const runtime = "edge"`. OpenNext/Workers ejecuta Node vía el flag `nodejs_compat`.
 3. **Config de Workers:** `nodejs_compat` activado + `compatibility_date` ≥ `2024-09-23` en

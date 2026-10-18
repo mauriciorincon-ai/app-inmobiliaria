@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
+import { localeIntl, type Idioma } from "@/i18n/idiomas";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
+import { enIdioma } from "@/i18n/textos";
+import { OPERADOR } from "@/textos/operador";
 import CerrarSesion from "@/components/operador/CerrarSesion";
 import PanelNav from "@/components/operador/PanelNav";
 import EnviarLote from "@/components/operador/EnviarLote";
@@ -9,8 +12,8 @@ import type { EnvioRow } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-const fecha = (iso: string) =>
-  new Date(iso).toLocaleString("es-CO", {
+const fecha = (iso: string, idioma: Idioma) =>
+  new Date(iso).toLocaleString(localeIntl(idioma), {
     day: "2-digit",
     month: "short",
     hour: "2-digit",
@@ -24,6 +27,7 @@ type FilaInmueble = {
 
 export default async function CampanaPage({ params }: PropsLang) {
   const lang = await leerIdioma(params);
+  const t = enIdioma(OPERADOR, lang);
   const supabase = await crearClienteServidor();
   const {
     data: { user },
@@ -55,9 +59,9 @@ export default async function CampanaPage({ params }: PropsLang) {
   const envios = (enviosRaw ?? []) as EnvioRow[];
 
   const embudo = [
-    { etiqueta: "Publicados", valor: publicados },
-    { etiqueta: "Con fotos", valor: conFotos },
-    { etiqueta: "Verificados ⭐", valor: verificados },
+    { etiqueta: t.campana.embudo.publicados, valor: publicados },
+    { etiqueta: t.campana.embudo.conFotos, valor: conFotos },
+    { etiqueta: t.campana.embudo.verificados, valor: verificados },
   ];
 
   const urlApp = process.env.NEXT_PUBLIC_APP_URL ?? "";
@@ -68,11 +72,11 @@ export default async function CampanaPage({ params }: PropsLang) {
       <main className="mx-auto max-w-4xl px-6 py-10">
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-3xl font-extrabold tracking-tight text-ink">
-            Campaña
+            {t.campana.titulo}
           </h1>
-          <CerrarSesion />
+          <CerrarSesion etiqueta={t.cerrarSesion} />
         </div>
-        <PanelNav actual="/operador/campana" />
+        <PanelNav actual="/operador/campana" t={t.nav} />
 
         {/* Embudo */}
         <div className="mt-6 grid grid-cols-3 gap-3">
@@ -91,31 +95,43 @@ export default async function CampanaPage({ params }: PropsLang) {
           ))}
         </div>
 
-        <EnviarLote urlApp={urlApp} />
+        <EnviarLote urlApp={urlApp} lang={lang} t={t.lote} />
 
         {/* Log de envíos */}
-        <h2 className="mt-10 text-xl font-bold text-ink">Envíos recientes</h2>
+        <h2 className="mt-10 text-xl font-bold text-ink">
+          {t.campana.enviosTitulo}
+        </h2>
         {envios.length === 0 ? (
           <p className="mt-3 rounded-2xl bg-cream px-5 py-6 text-sm text-gray">
-            Aún no has enviado lotes.
+            {t.campana.sinEnvios}
           </p>
         ) : (
           <div className="mt-3 overflow-x-auto rounded-2xl border border-purple-200">
             <table className="w-full min-w-[560px] text-left text-sm">
               <thead className="bg-cream text-xs uppercase tracking-wide text-mute">
                 <tr>
-                  <th className="px-4 py-3 font-semibold">Fecha</th>
-                  <th className="px-4 py-3 font-semibold">Plantilla</th>
-                  <th className="px-4 py-3 font-semibold">Destinatarios</th>
-                  <th className="px-4 py-3 font-semibold">Enviados</th>
-                  <th className="px-4 py-3 font-semibold">Estado</th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.campana.tabla.fecha}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.campana.tabla.plantilla}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.campana.tabla.destinatarios}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.campana.tabla.enviados}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.campana.tabla.estado}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-purple-200">
                 {envios.map((e) => (
                   <tr key={e.id}>
                     <td className="whitespace-nowrap px-4 py-3 text-mute">
-                      {fecha(e.created_at)}
+                      {fecha(e.created_at, lang)}
                     </td>
                     <td className="px-4 py-3 text-ink">{e.plantilla}</td>
                     <td className="px-4 py-3 text-mute">{e.destinatarios}</td>

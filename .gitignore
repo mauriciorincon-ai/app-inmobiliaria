@@ -28,3 +28,6 @@ ds-bundle/
 
 # Copia del brochure generada por build:brochure (el canónico es docs/BROCHURE.html)
 public/conoce.html
+
+# Salida local de Lighthouse CI (la genera cada corrida; jamás se versiona)
+.lighthouseci/

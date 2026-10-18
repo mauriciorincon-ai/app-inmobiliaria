@@ -2,14 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import type { Proyectado } from "@/i18n/textos";
 import { crearClienteNavegador } from "@/lib/supabase/client";
+import type { OPERADOR } from "@/textos/operador";
+
+export type TextosVerificar = Proyectado<typeof OPERADOR.marcarVerificado>;
+
+// Ejemplo de formato de una matrícula, no es texto de la interfaz: no se traduce.
+const EJEMPLO_MATRICULA = "50N-1234567";
 
 // Verificación nivel 2 desde el panel. El operador YA vio el CTL (documento JAMÁS almacenado:
 // ni upload, ni logs) y aquí solo captura la matrícula + confirma que lo vio. La RPC persiste
 // matrícula + verificado_at + nivel. Regla de dominio 3.
 export default function MarcarVerificado({
+  t,
   inmuebleId,
 }: {
+  t: TextosVerificar;
   inmuebleId: string;
 }) {
   const router = useRouter();
@@ -32,7 +41,7 @@ export default function MarcarVerificado({
     });
     setGuardando(false);
     if (err) {
-      setError("No se pudo verificar. Intenta de nuevo.");
+      setError(t.error);
       return;
     }
     setAbierto(false);
@@ -46,7 +55,7 @@ export default function MarcarVerificado({
         onClick={() => setAbierto(true)}
         className="rounded-full bg-purple px-4 py-1.5 text-xs font-semibold text-white hover:bg-purple-600"
       >
-        Verificar ⭐
+        {t.boton}
       </button>
     );
   }
@@ -57,13 +66,13 @@ export default function MarcarVerificado({
         htmlFor={`mat-${inmuebleId}`}
         className="block text-xs font-semibold text-ink"
       >
-        Número de matrícula (del CTL)
+        {t.matricula}
       </label>
       <input
         id={`mat-${inmuebleId}`}
         value={matricula}
         onChange={(e) => setMatricula(e.target.value)}
-        placeholder="Ej: 50N-1234567"
+        placeholder={EJEMPLO_MATRICULA}
         className="mt-1 w-full rounded-xl border border-purple-200 px-3 py-1.5 text-sm text-ink focus:border-purple focus:outline-none"
       />
       <label className="mt-2 flex items-start gap-2 text-xs text-gray">
@@ -73,7 +82,7 @@ export default function MarcarVerificado({
           onChange={(e) => setVisto(e.target.checked)}
           className="mt-0.5 accent-purple"
         />
-        Vi el CTL original y el titular coincide con quien publicó.
+        {t.visto}
       </label>
       {error && (
         <p role="alert" className="mt-1 text-xs font-medium text-red-600">
@@ -87,14 +96,14 @@ export default function MarcarVerificado({
           disabled={!listo || guardando}
           className="rounded-full bg-purple px-3 py-1 text-xs font-semibold text-white disabled:opacity-50"
         >
-          {guardando ? "Guardando…" : "Confirmar"}
+          {guardando ? t.guardando : t.confirmar}
         </button>
         <button
           type="button"
           onClick={() => setAbierto(false)}
           className="rounded-full px-3 py-1 text-xs font-semibold text-mute hover:bg-cream"
         >
-          Cancelar
+          {t.cancelar}
         </button>
       </div>
     </div>

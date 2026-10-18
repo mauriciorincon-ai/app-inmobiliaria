@@ -165,23 +165,23 @@
     {
       "clave": "pruebas_unitarias",
       "etiqueta": "Pruebas unitarias y de componente",
-      "valor": 197,
+      "valor": 294,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm test` el 2026-10-17: 27 archivos, 197 pruebas (incluye el test del contrato de este export y los del kit v2.3.0)."
+      "detalle": "Salida de `pnpm test` el 2026-10-17: 32 archivos, 294 pruebas (incluye el test del contrato de este export, los del kit v2.3.0 y las guardas de idioma del S5: paridad es/en y barrido de literales)."
     },
     {
       "clave": "pruebas_e2e",
       "etiqueta": "Pruebas end-to-end",
-      "valor": 100,
+      "valor": 168,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm exec playwright test --list` el 2026-10-17: 100 pruebas en 11 archivos y dos navegadores (móvil y escritorio) contra Postgres; 97 corren y 3 se omiten a propósito en móvil (el catálogo de permisos de funciones se comprueba una sola vez), incluidas las de este brochure."
+      "detalle": "Salida de `pnpm exec playwright test --list` el 2026-10-17: 168 pruebas en 13 archivos y dos navegadores (móvil y escritorio) contra Postgres; 138 corren y 30 se omiten a propósito en móvil (el catálogo de permisos de funciones, las reescrituras de idioma y la publicación en inglés se comprueban una sola vez), incluidas las de este brochure."
     },
     {
       "clave": "cobertura_lineas",
       "etiqueta": "Cobertura de líneas del motor",
-      "valor": 98.31,
+      "valor": 98.38,
       "unidad": "%",
       "fuente": "medido",
       "detalle": "v8 sobre src/engine (la lógica pura), con umbrales por CI en vitest.config.ts."
@@ -189,7 +189,7 @@
     {
       "clave": "decisiones_registradas",
       "etiqueta": "Decisiones de arquitectura registradas",
-      "valor": 12,
+      "valor": 13,
       "unidad": "ADR",
       "fuente": "medido",
       "detalle": "Archivos de decisions/."

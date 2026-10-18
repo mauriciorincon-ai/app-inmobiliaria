@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
+import { enIdioma } from "@/i18n/textos";
+import { COMUN } from "@/textos/comun";
+import { OPERADOR } from "@/textos/operador";
 import CerrarSesion from "@/components/operador/CerrarSesion";
 import PanelNav from "@/components/operador/PanelNav";
 import FijarCupo from "@/components/operador/FijarCupo";
@@ -11,14 +14,10 @@ import type { ZonaPanel, DensidadFila } from "@/lib/supabase/types";
 // Panel protegido (sesión + allowlist) → render dinámico.
 export const dynamic = "force-dynamic";
 
-const RANGO_LABEL: Record<DensidadFila["rango"], string> = {
-  "menos-200M": "< $200M",
-  "200M-400M": "$200M–$400M",
-  "mas-400M": "> $400M",
-};
-
 export default async function ZonasPage({ params }: PropsLang) {
   const lang = await leerIdioma(params);
+  const t = enIdioma(OPERADOR, lang);
+  const tipos: Record<string, string> = enIdioma(COMUN.dominio.tipo, lang);
   const supabase = await crearClienteServidor();
   const {
     data: { user },
@@ -40,26 +39,34 @@ export default async function ZonasPage({ params }: PropsLang) {
       <main className="mx-auto max-w-4xl px-6 py-10">
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-3xl font-extrabold tracking-tight text-ink">
-            Zonas y cupos
+            {t.zonas.titulo}
           </h1>
-          <CerrarSesion />
+          <CerrarSesion etiqueta={t.cerrarSesion} />
         </div>
-        <PanelNav actual="/operador/zonas" />
+        <PanelNav actual="/operador/zonas" t={t.nav} />
 
         <p className="mt-6 text-sm text-mute">
-          Fija el cupo de fundador por localidad. Deja el campo vacío para que
-          esa zona <strong>no muestre contador</strong> (escasez real o no
-          existe). El contador público siempre se calcula desde la BD.
+          {t.zonas.intro.antes}
+          <strong>{t.zonas.intro.resaltado}</strong>
+          {t.zonas.intro.despues}
         </p>
 
         <div className="mt-4 overflow-x-auto rounded-2xl border border-purple-200">
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead className="bg-cream text-xs uppercase tracking-wide text-mute">
               <tr>
-                <th className="px-4 py-3 font-semibold">Localidad</th>
-                <th className="px-4 py-3 font-semibold">Publicados</th>
-                <th className="px-4 py-3 font-semibold">Cupo</th>
-                <th className="px-4 py-3 font-semibold">Restantes</th>
+                <th className="px-4 py-3 font-semibold">
+                  {t.zonas.tabla.localidad}
+                </th>
+                <th className="px-4 py-3 font-semibold">
+                  {t.zonas.tabla.publicados}
+                </th>
+                <th className="px-4 py-3 font-semibold">
+                  {t.zonas.tabla.cupo}
+                </th>
+                <th className="px-4 py-3 font-semibold">
+                  {t.zonas.tabla.restantes}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-purple-200">
@@ -72,7 +79,11 @@ export default async function ZonasPage({ params }: PropsLang) {
                     </td>
                     <td className="px-4 py-3 text-mute">{z.publicados}</td>
                     <td className="px-4 py-3">
-                      <FijarCupo zonaId={z.id} cupoActual={z.cupo_total} />
+                      <FijarCupo
+                        t={t.zonas.fijarCupo}
+                        zonaId={z.id}
+                        cupoActual={z.cupo_total}
+                      />
                     </td>
                     <td className="px-4 py-3 font-semibold text-purple-600">
                       {rest === null ? "—" : rest}
@@ -85,34 +96,41 @@ export default async function ZonasPage({ params }: PropsLang) {
         </div>
 
         <h2 className="mt-12 text-xl font-bold text-ink">
-          Densidad por búsqueda típica
+          {t.zonas.densidad.titulo}
         </h2>
-        <p className="mt-1 text-sm text-mute">
-          Inmuebles vigentes por localidad × tipo × rango de precio. Se mide
-          desde ya; el umbral para abrir a compradores se decide en fase 2.
-        </p>
+        <p className="mt-1 text-sm text-mute">{t.zonas.densidad.detalle}</p>
         {densidad.length === 0 ? (
           <p className="mt-4 rounded-2xl bg-cream px-5 py-6 text-sm text-gray">
-            Aún no hay inmuebles con localidad para medir densidad.
+            {t.zonas.densidad.vacio}
           </p>
         ) : (
           <div className="mt-4 overflow-x-auto rounded-2xl border border-purple-200">
             <table className="w-full min-w-[560px] text-left text-sm">
               <thead className="bg-cream text-xs uppercase tracking-wide text-mute">
                 <tr>
-                  <th className="px-4 py-3 font-semibold">Localidad</th>
-                  <th className="px-4 py-3 font-semibold">Tipo</th>
-                  <th className="px-4 py-3 font-semibold">Rango</th>
-                  <th className="px-4 py-3 font-semibold">Inmuebles</th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.zonas.densidad.tabla.localidad}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.zonas.densidad.tabla.tipo}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.zonas.densidad.tabla.rango}
+                  </th>
+                  <th className="px-4 py-3 font-semibold">
+                    {t.zonas.densidad.tabla.inmuebles}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-purple-200">
                 {densidad.map((d, i) => (
                   <tr key={`${d.zona}-${d.tipo}-${d.rango}-${i}`}>
                     <td className="px-4 py-3 text-ink">{d.zona}</td>
-                    <td className="px-4 py-3 capitalize text-gray">{d.tipo}</td>
                     <td className="px-4 py-3 text-gray">
-                      {RANGO_LABEL[d.rango]}
+                      {tipos[d.tipo] ?? d.tipo}
+                    </td>
+                    <td className="px-4 py-3 text-gray">
+                      {t.zonas.densidad.rangos[d.rango]}
                     </td>
                     <td className="px-4 py-3 font-semibold text-purple-600">
                       {d.n}

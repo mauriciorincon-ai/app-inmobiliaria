@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Payment calculator">
+      Innmobiliaria · Simulador de cuota
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="herramientas"
+    data-estados='[["calculo","Con cálculo","Calculated"],["fuera","Fuera de capacidad","Over capacity"],["sin-tasa","Sin tasa","No rate"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 940px">
+        <div
+          class="seg"
+          role="group"
+          data-aria-es="Herramienta"
+          data-aria-en="Tool"
+        >
+          <a href="10-simulador.html" aria-current="page"
+            ><t-es>Simulador</t-es><t-en>Calculator</t-en></a
+          >
+          <a href="11-papeleo.html"
+            ><t-es>Papeleo</t-es><t-en>Paperwork</t-en></a
+          >
+        </div>
+        <h1>
+          <t-es>¿Cuánto pagarías al mes?</t-es
+          ><t-en>What would you pay per month?</t-en>
+        </h1>
+        <p class="bajada">
+          <t-es
+            >Cuota fija en pesos. Mueve los números: el cálculo es tuyo y no se
+            guarda.</t-es
+          ><t-en
+            >Fixed monthly payment in Colombian pesos. Change the numbers: the
+            math is yours and isn't saved.</t-en
+          >
+        </p>
+
+        <div
+          class="rejilla-2"
+          style="margin-top: 14px"
+          data-simulador
+          data-tope="0.3"
+          data-preset='{"calculo":{"ingresos":"32000000","tasa":"12.5"},"fuera":{"ingresos":"18000000","tasa":"12.5"},"sin-tasa":{"tasa":"","ingresos":"32000000"}}'
+        >
+          <form class="card caja pila" action="10-simulador.html">
+            <label class="campo"
+              ><span
+                ><t-es>Precio del inmueble (COP)</t-es
+                ><t-en>Property price (COP)</t-en></span
+              ><input
+                data-sim="precio"
+                inputmode="numeric"
+                value="1150000000"
+              />
+              <span class="campo__ayuda"
+                ><t-es>Viene del anuncio de Los Rosales.</t-es
+                ><t-en>Taken from the Los Rosales listing.</t-en></span
+              ></label
+            >
+            <label class="campo"
+              ><span
+                ><t-es>Cuota inicial (%)</t-es
+                ><t-en>Down payment (%)</t-en></span
+              ><input data-sim="inicial" inputmode="numeric" value="30"
+            /></label>
+            <label class="campo"
+              ><span><t-es>Plazo (años)</t-es><t-en>Term (years)</t-en></span>
+              <select data-sim="plazo">
+                <option value="15">15</option>
+                <option value="20" selected>20</option>
+                <option value="30">30</option>
+              </select></label
+            >
+            <label class="campo"
+              ><span
+                ><t-es>Tasa efectiva anual (%)</t-es
+                ><t-en>Effective annual rate (%)</t-en></span
+              ><input data-sim="tasa" inputmode="decimal" value="12.5" />
+              <span class="campo__ayuda"
+                ><t-es
+                  >Tasa de ejemplo. En el producto: la escribes tú o usas la de
+                  referencia, con su fecha y su fuente a la vista.</t-es
+                ><t-en
+                  >Sample rate. In the product you type yours or use the
+                  reference rate, with its date and source shown.</t-en
+                ></span
+              ></label
+            >
+            <label class="campo"
+              ><span
+                ><t-es>Ingresos mensuales del hogar (COP)</t-es
+                ><t-en>Monthly household income (COP)</t-en></span
+              ><input
+                data-sim="ingresos"
+                inputmode="numeric"
+                value="32000000"
+              />
+            </label>
+          </form>
+
+          <section class="card caja pila lateral" aria-live="polite">
+            <p class="mute" style="margin: 0">
+              <t-es>Tu cuota mensual</t-es><t-en>Your monthly payment</t-en>
+            </p>
+            <p
+              class="num"
+              style="
+                font-size: 34px;
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                margin: 0;
+                color: var(--purple);
+              "
+              data-sim-out="cuota"
+            >
+              —
+            </p>
+            <table class="tabla">
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    <t-es>Cuota inicial</t-es><t-en>Down payment</t-en>
+                  </th>
+                  <td class="num" data-sim-out="inicial">—</td>
+                </tr>
+                <tr>
+                  <th scope="row"><t-es>Crédito</t-es><t-en>Loan</t-en></th>
+                  <td class="num" data-sim-out="credito">—</td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <t-es>Pagas en total</t-es><t-en>Total you repay</t-en>
+                  </th>
+                  <td class="num" data-sim-out="total">—</td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <t-es>La cuota sería de tus ingresos</t-es
+                    ><t-en>Payment as a share of income</t-en>
+                  </th>
+                  <td class="num" data-sim-out="proporcion">—</td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <t-es>Ingresos para que no pase del 30&nbsp;%</t-es
+                    ><t-en>Income needed to stay under 30%</t-en>
+                  </th>
+                  <td class="num" data-sim-out="ingresos-min">—</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="aviso aviso--ok" data-sim-si="cabe">
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                ><t-es>La cuota no pasa del 30&nbsp;% de tus ingresos.</t-es
+                ><t-en>The payment stays under 30% of your income.</t-en></span
+              >
+            </div>
+            <div class="aviso aviso--aviso" data-sim-si="no-cabe" hidden>
+              <svg class="ico"><use href="#i-alerta" /></svg>
+              <div>
+                <strong
+                  ><t-es>La cuota pasa del 30&nbsp;% de tus ingresos</t-es
+                  ><t-en>The payment is over 30% of your income</t-en></strong
+                ><t-es
+                  >Prueba con una cuota inicial más alta o un plazo más
+                  largo.</t-es
+                ><t-en>Try a bigger down payment or a longer term.</t-en>
+              </div>
+            </div>
+            <div class="aviso aviso--info" data-sim-si="sin-tasa" hidden>
+              <svg class="ico"><use href="#i-info" /></svg
+              ><span
+                ><t-es
+                  >Escribe la tasa que te ofrece tu banco para ver la
+                  cuota.</t-es
+                ><t-en
+                  >Type the rate your bank offers you to see the payment.</t-en
+                ></span
+              >
+            </div>
+            <p class="mute" style="margin: 0">
+              <t-es
+                >Tope del 30&nbsp;% de ejemplo: el sprint del simulador lo fija
+                con su norma y su fecha. Es una estimación, no una oferta de
+                crédito.</t-es
+              ><t-en
+                >The 30% cap is a sample: the calculator's sprint sets it with
+                its rule and date. This is an estimate, not a loan offer.</t-en
+              >
+            </p>
+          </section>
+        </div>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

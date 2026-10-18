@@ -50,7 +50,11 @@ export function rutaDeVuelta(volver: unknown): string | null {
   try {
     const url = new URL(volver, BASE_FICTICIA);
     if (url.origin !== BASE_FICTICIA) return null;
-    return url.pathname + url.search;
+    // `new URL` resuelve los segmentos `.` y `..`: «/.//x» queda como «//x», que un navegador lee como
+    // OTRO sitio. Se mira la ruta YA normalizada, no la que llegó.
+    const ruta = url.pathname + url.search;
+    if (ruta.startsWith("//") || ruta.startsWith("/\\")) return null;
+    return ruta;
   } catch {
     return null;
   }

@@ -88,7 +88,7 @@ agenda de visitas, favoritos y alertas todavía no están.
      un botón para copiar el código.
   4. De vuelta en la ficha, **«Escribirle por WhatsApp»** te muestra el mensaje que se abrirá y
      **«Abrir WhatsApp»** abre el chat con el dueño. El contacto queda registrado.
-- **Qué ve el dueño:** en **Mi anuncio**, **«Compradores que te escribieron»**: tu nombre, los
+- **Qué ve el dueño:** en **Mi anuncio**, **«Compradores que abrieron tu chat»**: tu nombre, los
   últimos 4 dígitos de tu número y la fecha. Tu número completo no sale en ninguna página pública.
 - **Reglas del código:** dura **10 minutos**, sirve **una sola vez** y debe llegar **desde el mismo
   número** que escribiste (si llega de otro, la página lo dice y pides uno nuevo). Si se vence, te
@@ -284,7 +284,7 @@ agenda de visitas, favoritos y alertas todavía no están.
   sello "Propietario verificado"; lo muestras una vez y nunca se sube a la app.
 - **¿Sirve para arriendo?** Sí, aunque el mensaje lidera con la venta directa.
 - **¿Quién ve mi WhatsApp?** Nadie en la ficha pública. Solo lo recibe un comprador que verificó su
-  propio WhatsApp, y solo si tú activaste el contacto; cada vez que alguien te escribe lo ves en
+  propio WhatsApp, y solo si tú activaste el contacto; cada vez que alguien abre el chat contigo lo ves en
   **Mi anuncio** (nombre, últimos 4 dígitos y fecha).
 - **¿Innmobiliaria me escribe por WhatsApp para verificarme?** No: eres tú quien nos manda el código.
   Nosotros solo lo recibimos y nunca respondemos por ahí.
@@ -297,11 +297,11 @@ agenda de visitas, favoritos y alertas todavía no están.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                     |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                 |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                           |
-| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                      |
-| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                   |
-| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel    |
-| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que te escribieron» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL |
+| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                       |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                   |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                             |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                        |
+| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                     |
+| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel      |
+| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL |

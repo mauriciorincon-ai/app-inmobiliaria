@@ -15,15 +15,13 @@ const DUENO = "573001234567";
 test.beforeEach(async ({ page }) => {
   expect(SECRETO, "WHATSAPP_APP_SECRET en el entorno del e2e").not.toBe("");
   // Nada sale a internet: wa.me responde vacío y cada apertura queda registrada.
-  await page
-    .context()
-    .route("https://wa.me/**", (r) =>
-      r.fulfill({
-        status: 200,
-        contentType: "text/html",
-        body: "<p>wa.me</p>",
-      }),
-    );
+  await page.context().route("https://wa.me/**", (r) =>
+    r.fulfill({
+      status: 200,
+      contentType: "text/html",
+      body: "<p>wa.me</p>",
+    }),
+  );
 });
 
 let secuencia = 0;
@@ -66,11 +64,16 @@ async function llenarYPedir(
   page: Page,
   celular: string,
   nombre = "Laura Sintetica",
+  etiquetas = {
+    nombre: "Cómo te llamas",
+    telefono: "Tu WhatsApp",
+    enviar: "Verificar con WhatsApp",
+  },
 ) {
-  await page.getByLabel("Cómo te llamas").fill(nombre);
-  await page.getByLabel("Tu WhatsApp").fill(celular);
+  await page.getByLabel(etiquetas.nombre).fill(nombre);
+  await page.getByLabel(etiquetas.telefono).fill(celular);
   await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Verificar con WhatsApp" }).click();
+  await page.getByRole("button", { name: etiquetas.enviar }).click();
   await expect(page.getByTestId("codigo-verificacion")).toBeVisible();
 }
 
@@ -129,7 +132,7 @@ test("ficha → verificar → código → mensaje firmado → vuelta → contact
   // El dueño, por su enlace privado, ve quién le escribió: nombre, fin del teléfono y fecha.
   await page.goto(`/mi-anuncio#t=${anuncio.token}`);
   await expect(
-    page.getByRole("heading", { name: "Compradores que te escribieron" }),
+    page.getByRole("heading", { name: "Compradores que abrieron tu chat" }),
   ).toBeVisible();
   const fila = page
     .getByRole("listitem")
@@ -187,20 +190,50 @@ test("«No se abrió WhatsApp» da el número de Innmobiliaria y copia el códig
   await expect(page.getByText("Código copiado.")).toBeVisible();
 });
 
-test("la página de verificar en inglés habla inglés y ofrece volver solo a rutas internas", async ({
-  browser,
-}) => {
+test("la página de verificar en inglés habla inglés", async ({ browser }) => {
   const contexto = await browser.newContext({
     locale: "en-US",
     extraHTTPHeaders: { "accept-language": "en-US,en;q=0.9" },
   });
+  await contexto.route("https://wa.me/**", (r) =>
+    r.fulfill({ status: 200, contentType: "text/html", body: "<p>wa.me</p>" }),
+  );
   const page = await contexto.newPage();
-  await page.goto("/verificar?volver=//otro-sitio.example");
+  await page.goto("/verificar");
   await expect(
     page.getByRole("heading", { name: "Verify that your WhatsApp is yours" }),
   ).toBeVisible();
   await expect(page.getByLabel("Your WhatsApp number")).toBeVisible();
+  await llenarYPedir(page, celularNuevo(), "Laura Sintetica", {
+    nombre: "Your name",
+    telefono: "Your WhatsApp number",
+    enviar: "Verify with WhatsApp",
+  });
+  await expect(page.getByText(/Waiting for your message/)).toBeVisible();
   await contexto.close();
+});
+
+test("«Volver al anuncio» nunca apunta fuera de Innmobiliaria, ni con una ruta disfrazada", async ({
+  page,
+}) => {
+  const celular = celularNuevo();
+  await page.goto(
+    `/verificar?volver=${encodeURIComponent("/.//otro-sitio.example")}`,
+  );
+  await llenarYPedir(page, celular);
+  const codigo =
+    (await page.getByTestId("codigo-verificacion").textContent()) ?? "";
+  await mensajeDeMeta(page, `57${celular}`, codigo);
+  await page.getByRole("button", { name: "Ya lo envié" }).click();
+  await expect(page.getByText("Tu WhatsApp quedó verificado")).toBeVisible();
+  // Sin ruta interna válida el botón cae en la búsqueda; jamás en «//otro-sitio…».
+  const destino = await page
+    .getByRole("link", { name: "Buscar inmuebles" })
+    .getAttribute("href");
+  expect(destino).toBe("/buscar");
+  await expect(
+    page.getByRole("link", { name: "Volver al anuncio" }),
+  ).toHaveCount(0);
 });
 
 test("axe sin violaciones en /verificar (formulario y espera del código)", async ({

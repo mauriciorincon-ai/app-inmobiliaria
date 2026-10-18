@@ -188,16 +188,17 @@ export const MI_ANUNCIO = {
     },
   },
 
-  // Los compradores verificados que te escribieron desde el anuncio (S7). Del teléfono solo se ven los
+  // Los compradores verificados que abrieron el chat contigo desde el anuncio (S7); el contacto se registra
+  // al abrir WhatsApp, no al enviar el mensaje. Del teléfono solo se ven los
   // últimos 4 dígitos: el número completo ya te llegó en tu WhatsApp.
   contactos: {
     titulo: {
-      es: "Compradores que te escribieron",
-      en: "Buyers who messaged you",
+      es: "Compradores que abrieron tu chat",
+      en: "Buyers who opened your chat",
     },
     vacio: {
-      es: "Cuando un comprador verificado te escriba desde tu anuncio, aparecerá aquí.",
-      en: "When a verified buyer messages you from your listing, they'll show up here.",
+      es: "Cuando un comprador verificado abra el chat contigo desde tu anuncio, aparecerá aquí.",
+      en: "When a verified buyer opens a chat with you from your listing, they'll show up here.",
     },
     verificado: { es: "WhatsApp verificado", en: "Verified WhatsApp" },
   },

@@ -60,7 +60,8 @@ export default function ContactarDueno({
         return;
       }
       const { href } = (await res.json()) as { href: string };
-      const ventana = window.open(href, "_blank", "noopener,noreferrer");
+      const ventana = window.open(href, "_blank");
+      if (ventana) ventana.opener = null;
       // Si el navegador bloqueó la ventana, se ofrece el enlace en pantalla.
       setEnlace(ventana ? null : href);
     } catch {

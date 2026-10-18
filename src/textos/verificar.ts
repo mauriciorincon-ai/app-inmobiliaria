@@ -18,8 +18,8 @@ export const VERIFICAR = {
     en: "Verify that your WhatsApp is yours",
   },
   subtitulo: {
-    es: "Así los dueños saben que les escribe una persona real con un número real. No verificamos quién eres: eso es opcional y va aparte.",
-    en: "That way owners know a real person with a real number is writing to them. We don't check who you are: that's optional and separate.",
+    es: "Así los dueños saben que les escribe una persona real con un número real. Verificamos que el número es tuyo, no quién eres.",
+    en: "That way owners know a real person with a real number is writing to them. We check that the number is yours, not who you are.",
   },
 
   pasos: {
@@ -44,7 +44,7 @@ export const VERIFICAR = {
     nombre: { es: "Cómo te llamas", en: "Your name" },
     telefono: { es: "Tu WhatsApp", en: "Your WhatsApp number" },
     telefonoAyuda: {
-      es: "Un celular de Colombia. Un dueño lo ve solo cuando tú le escribes.",
+      es: "Un celular de Colombia, por ahora. Un dueño lo ve solo cuando tú le escribes.",
       en: "A Colombian mobile number, for now. An owner sees it only when you write to them.",
     },
     consentimiento: {

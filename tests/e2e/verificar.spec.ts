@@ -72,6 +72,8 @@ async function nuevoContexto(): Promise<APIRequestContext> {
 type Comprador = {
   ctx: APIRequestContext;
   cookie: string;
+  // La cabecera Set-Cookie completa, con sus banderas.
+  cookieCompleta: string;
   codigo: string;
   href: string;
   celular: string;
@@ -91,7 +93,14 @@ async function pedirCodigo(idioma: "es" | "en" = "es"): Promise<Comprador> {
   expect(r.status(), await r.text()).toBe(200);
   const setCookie = r.headers()["set-cookie"] ?? "";
   const { codigo, href } = await r.json();
-  return { ctx, cookie: setCookie.split(";")[0], codigo, href, celular };
+  return {
+    ctx,
+    cookie: setCookie.split(";")[0],
+    cookieCompleta: setCookie,
+    codigo,
+    href,
+    celular,
+  };
 }
 
 async function estado(c: Comprador) {
@@ -139,6 +148,9 @@ test("de punta a punta: código → mensaje firmado desde el mismo número → v
   expect(textoDe(c.href)).toContain(c.codigo);
   // La cookie de la sesión no la lee JavaScript y viaja solo por HTTPS (localhost es contexto seguro).
   expect(c.cookie).toMatch(/^inn_comprador=[A-Za-z0-9_-]{43}$/);
+  expect(c.cookieCompleta).toMatch(/HttpOnly/i);
+  expect(c.cookieCompleta).toMatch(/Secure/i);
+  expect(c.cookieCompleta).toMatch(/SameSite=Lax/i);
   expect(await estado(c)).toMatchObject({ estado: "esperando" });
 
   // Antes de verificar, el número del dueño no sale.

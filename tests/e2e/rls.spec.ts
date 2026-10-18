@@ -719,6 +719,7 @@ test("el sello no se escribe por UPDATE directo, ni siquiera siendo el operador"
   const { reg } = await registrarEn("Los Rosales");
   for (const cambio of [
     "nivel_verificacion = 'verificado'",
+    "ctl_expedido_el = current_date", // la columna de la deuda del S6
     "matricula = '50N-1234567'",
     "verificado_at = now()",
   ]) {

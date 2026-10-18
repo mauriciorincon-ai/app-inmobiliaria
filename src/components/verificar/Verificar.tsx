@@ -155,7 +155,8 @@ export default function Verificar({
           Date.now() + Math.min(datos.segundos, MINUTOS_CODIGO * 60) * 1000,
       });
       // WhatsApp se abre ya con el código escrito; si el navegador lo bloquea queda el botón.
-      window.open(datos.href, "_blank", "noopener,noreferrer");
+      const ventana = window.open(datos.href, "_blank");
+      if (ventana) ventana.opener = null;
     } catch {
       setErrorGeneral(t.errores.servidor);
     } finally {

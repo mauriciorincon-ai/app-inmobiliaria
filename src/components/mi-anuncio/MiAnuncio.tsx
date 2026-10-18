@@ -197,11 +197,11 @@ export default function MiAnuncio({
         <h2 id="contactos-titulo" className="text-xl font-bold text-ink">
           {t.contactos.titulo}
         </h2>
-        {anuncio.contactos.length === 0 ? (
+        {(anuncio.contactos ?? []).length === 0 ? (
           <p className="mt-3 text-sm text-gray">{t.contactos.vacio}</p>
         ) : (
           <ul className="mt-3 divide-y divide-purple-100 rounded-2xl bg-white shadow-card">
-            {anuncio.contactos.map((c) => (
+            {(anuncio.contactos ?? []).map((c) => (
               <li
                 key={`${c.nombre}-${c.telefono_fin}-${c.fecha}`}
                 className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 text-sm"

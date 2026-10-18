@@ -222,6 +222,12 @@ describe("sesión del comprador", () => {
   it.each([
     "//otro-sitio.example",
     "/\\otro-sitio.example",
+    // Los segmentos . y .. se resuelven y dejan «//»: se mira la ruta normalizada.
+    "/.//otro-sitio.example",
+    "/..//otro-sitio.example",
+    "/a/..//otro-sitio.example",
+    "/%2e%2e//otro-sitio.example",
+    "/./\\otro-sitio.example",
     "https://otro-sitio.example",
     "javascript:alert(1)",
     "i/sin-barra",

@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
 import { enIdioma } from "@/i18n/textos";
+import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
 import { LANDING } from "@/textos/landing";
 import { MI_ANUNCIO, VIGENCIA } from "@/textos/mi-anuncio";
 import { REFERIDO } from "@/textos/referido";
+import { SOLICITUDES } from "@/textos/solicitudes";
+import { VISITA } from "@/textos/visita";
 import MiAnuncio from "@/components/mi-anuncio/MiAnuncio";
 
 // El token viaja en el fragment (#t=…), que solo existe en el cliente → la página es un shell
@@ -38,6 +41,12 @@ export default async function MiAnuncioPage({ params }: PropsLang) {
           vigencia={enIdioma(VIGENCIA.tarjeta, lang)}
           referido={enIdioma(REFERIDO, lang)}
           paquete={enIdioma(LANDING.paquete, lang)}
+          solicitudes={{
+            t: enIdioma(SOLICITUDES, lang),
+            intenciones: enIdioma(VISITA.intencion, lang),
+            formasPago: enIdioma(VISITA.formasPago, lang),
+            tipos: enIdioma(COMUN.dominio.tipo, lang),
+          }}
         />
       </main>
     </>

@@ -98,7 +98,19 @@ Measured on the stack pinned to the cloud's versions (Postgres 17.6) and with th
   `authenticated` **and** PUBLIC. The Sprint 004 claim that new functions were born closed was false
   then and is true now.
 - None of the 23 functions that `postgres` owns in `public` depends on PUBLIC. The 13 public RPCs already
-  had explicit grants, so the re-assertion changes no existing permission.
+  had explicit grants, so the re-assertion changes no existing permission for `anon` or `authenticated`.
+
+Applied to the linked project on 2026-10-17, with the user's explicit yes and a read-only look at the
+catalog before and after (`supabase migration list --linked`: 7 of 7 aligned). Production, measured:
+
+- Before, `anon` could execute exactly the 13 public RPCs, the 7 operator RPCs were `authenticated` only,
+  and no function depended on PUBLIC. After, the same sets: `anon` 13, `authenticated` 20, PUBLIC 0.
+- The one real difference from the local stack: in production `service_role` had no EXECUTE on the
+  public RPCs, and now has it on the 13 (plus `obtener_lote`, from migration 7). It is the server key,
+  which already reads every table, so nothing opens outward.
+- The default for `postgres` now has the global entry (no `IN SCHEMA`) `{postgres=X}`, so a function
+  created from here on is closed to PUBLIC. Not probed in production (a probe is a write, even rolled
+  back); the probe runs on the local stack and in CI.
 
 **New rule for migrations:** a new function is closed. Open it explicitly with
 `grant execute … to anon, authenticated` (public RPC) or `… to authenticated` (operator RPC).

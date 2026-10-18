@@ -14,8 +14,11 @@
 --      si es del operador.
 --   2. Reafirma POR FIRMA (no por nombre: paga el B2 del S4) quién ejecuta qué hoy. Medido antes de
 --      escribirla: las 13 RPC públicas YA tenían grants explícitos y ninguna función de `public`
---      dependía de PUBLIC, así que esto no cambia ningún permiso existente: lo deja escrito y
---      verificable. Si una firma de la lista cambia, el cast falla en voz alta.
+--      dependía de PUBLIC, así que `anon` y `authenticated` no ganan ni pierden nada: queda escrito
+--      y verificable. Única diferencia medida en producción (lectura de catálogo, S5): allí
+--      `service_role` no ejecutaba esas RPC y ahora sí; ya es la llave del servidor con acceso total
+--      a las tablas, así que no abre nada hacia fuera. Si una firma de la lista cambia, el cast
+--      falla en voz alta.
 --
 -- Costo declarado: el default global también quita PUBLIC a lo que `postgres` cree en otros esquemas
 -- (p. ej. una extensión futura). Las funciones de la app que usan esas extensiones son SECURITY

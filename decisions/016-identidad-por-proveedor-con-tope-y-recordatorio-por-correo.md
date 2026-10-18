@@ -28,14 +28,17 @@ Sprint 008 lets a buyer **identify** with their cédula, **request a visit**, an
    call and no charge. A `no_disponible` result (the provider could not answer) does not use up the buyer's
    attempts.
 2. **What the database keeps about an identification:** the fact (`identificaciones`: buyer, provider, date).
-   Never the cédula, the issue date or the document. A test lists every column of `public` and fails if one
+   Never the cédula, the issue date or the document (the validated name is written to the buyer's record, see 9). A test lists every column of `public` and fails if one
    looks like a document field; another dumps every table after a simulated identification and looks for the
    synthetic cédula. The logger carries counts only. The buyer can delete the identification at any time
    (`borrar_identificacion`).
-3. **Simulator first.** Without `DIDIT_API_KEY`, or with `IDENTIDAD_MOCK=1`, a deterministic simulator answers
-   (one cédula per state of the mockup). The real adapter (Didit `POST /v3/database-validation/`) is written
-   behind the key and **has not been exercised**; only `MATCH` identifies. It is declared as untested until the
-   dress rehearsal.
+3. **The simulator is opt-in; the real key wins; silence is never a simulation.** `IDENTIDAD_MOCK=1` turns on a
+   deterministic simulator (one cédula per state of the mockup) for development, CI and tests. A configured
+   `DIDIT_API_KEY` always wins over it, so a forgotten mock flag can never hand out the seal with a published
+   test cédula. With neither, «Identificarse» answers «not available». The real adapter (Didit
+   `POST /v3/database-validation/`, multipart form with `x-api-key`) is written behind the key and **has not
+   been exercised**; only `MATCH` with the same name identifies. It is declared as untested until the dress
+   rehearsal.
 4. **The buyer reaches their own request through a link with a token.** `solicitar_visita` generates 32
    random bytes in the database, returns them once and stores only the SHA-256 (the way `edit_token_hash`
    works). The link goes to the buyer's email and works from any browser. The owner keeps acting through the
@@ -58,11 +61,16 @@ Sprint 008 lets a buyer **identify** with their cédula, **request a visit**, an
 8. **Time is stored in UTC and shown in Bogotá time** (UTC−5, no daylight saving). The `.ics` carries a
    `VTIMEZONE` for `America/Bogota` and is generated in the browser, so nothing about the visit is stored for
    it.
-9. **Debt of Sprint 007 paid here:** `iniciar_verificacion` takes the consent as a sixth parameter and rejects
-   it unless it is `true`; the five-argument version loses its grant to `anon` and `authenticated` (a
-   `revoke`, not a `drop`); `registrar_contacto` refuses the 21st distinct listing a buyer contacts in 24
-   hours; `purgar_vencidos` deletes unverified buyers after 30 days and expired unused codes after 7, and
-   never touches used codes (they are the proof of live sessions).
+9. **«Identified» is tied to the name the owner sees.** The name the buyer typed when verifying WhatsApp is
+   free text; the one compared with the registry is the one typed on the ID screen. On success the buyer's
+   stored name becomes the name the registry validated (the one they consented to), and requests that were on
+   hold because they were not identified move to pending. If that cannot be completed, the query is closed as
+   «not available»: nobody is left «identified» halfway.
+10. **Debt of Sprint 007 paid here:** `iniciar_verificacion` takes the consent as a sixth parameter and rejects
+    it unless it is `true`; the five-argument version loses its grant to `anon` and `authenticated` (a
+    `revoke`, not a `drop`); `registrar_contacto` refuses the 21st distinct listing a buyer contacts in 24
+    hours; `purgar_vencidos` deletes unverified buyers after 30 days and expired unused codes after 7, and
+    never touches used codes (they are the proof of live sessions).
 
 ## Alternatives considered
 

@@ -298,12 +298,12 @@ Dos servicios nuevos, los dos **opcionales hasta el ensayo general**: el proveed
 Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la app: 40 consultas al mes,
 5 al día, 3 intentos por comprador; Brevo y Cloudflare, dentro de lo gratis).
 
-| Qué                                                            | Cuándo                                                      | Qué haces tú                                                                   |
-| -------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Cuenta de Didit (validación de cédula contra la Registraduría) | **ensayo general** (hasta entonces la app usa el simulador) | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key    |
-| `CRON_SECRET`                                                  | antes del deploy                                            | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
-| Brevo                                                          | ya existe (S3)                                              | el mismo remitente verificado sirve para los avisos de la visita               |
-| Migraciones 10 y 11                                            | ya aplicadas en la nube con tu «sí»                         | nada                                                                           |
+| Qué                                                            | Cuándo                                                                                                                      | Qué haces tú                                                                   |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Cuenta de Didit (validación de cédula contra la Registraduría) | **ensayo general** (hasta entonces, en producción «Identificarse» dice «no disponible»; el simulador es solo de desarrollo) | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key    |
+| `CRON_SECRET`                                                  | antes del deploy                                                                                                            | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
+| Brevo                                                          | ya existe (S3)                                                                                                              | el mismo remitente verificado sirve para los avisos de la visita               |
+| Migraciones 10 y 11                                            | ya aplicadas en la nube con tu «sí»                                                                                         | nada                                                                           |
 
 ### 6.1 [TÚ] Poner los secretos en el Worker
 

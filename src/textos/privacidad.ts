@@ -38,16 +38,16 @@ export const PRIVACIDAD = {
       en: "What data we collect and why",
     },
     texto: {
-      es: "Recogemos únicamente lo necesario para registrar tu inmueble y contactarte: tu nombre, tu número de WhatsApp, tu ciudad y los datos básicos del inmueble (tipo, zona, área, habitaciones y precio esperado). Los usamos para comunicarnos contigo por WhatsApp sobre tu publicación y las siguientes etapas hacia el lanzamiento. No los vendemos ni los compartimos con terceros con fines comerciales.",
-      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, locality, size, bedrooms and expected price). We use them to reach you on WhatsApp about your listing and the next stages toward launch. We don't sell them or share them with third parties for commercial purposes.",
+      es: "Recogemos únicamente lo necesario para registrar tu inmueble y contactarte: tu nombre, tu número de WhatsApp, tu ciudad y los datos básicos del inmueble (tipo, zona, área, habitaciones y precio esperado). Los usamos para que el equipo de Innmobiliaria pueda escribirte a mano por WhatsApp sobre tu publicación y las siguientes etapas hacia el lanzamiento; Innmobiliaria no envía mensajes automáticos por WhatsApp. No los vendemos ni los compartimos con terceros con fines comerciales.",
+      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, locality, size, bedrooms and expected price). We use them so the Innmobiliaria team can write to you by hand on WhatsApp about your listing and the next stages toward launch; Innmobiliaria does not send automatic WhatsApp messages. We don't sell them or share them with third parties for commercial purposes.",
     },
     // Dice solo lo que el código hace: el correo del paso 3 sirve para los avisos de campaña
     // (`engine/envios/plantillas.ts`: fotos, sello, vigencia) y los envía un proveedor de correo
     // (`lib/brevo.ts`) que recibe correo y nombre. El paquete fundador NO se envía por correo: se sirve
     // como enlaces en la página (ADR 010).
     correoOpcional: {
-      es: "El correo electrónico es opcional. Si lo das en el último paso del registro, lo usamos solo para enviarte avisos sobre tu publicación, por ejemplo completar las fotos, ganar el sello de propietario verificado o renovar la vigencia. Si lo dejas vacío, te escribimos únicamente por WhatsApp. Los avisos salen a través de un proveedor de correo que actúa por encargo nuestro y recibe tu correo y tu nombre solo para hacer ese envío. Puedes pedirnos que dejemos de enviarte avisos o que borremos tu correo cuando quieras, escribiendo al correo del responsable indicado arriba.",
-      en: "Your email is optional. If you give it in the last step of registration, we use it only to send you notices about your listing, for example to add photos, earn the verified-owner seal or renew its validity. If you leave it empty, we contact you by WhatsApp only. The notices go out through an email provider that acts on our behalf and receives your email and name only to send them. You can ask us to stop sending notices, or to delete your email, at any time by writing to the controller's address above.",
+      es: "El correo electrónico es opcional. Si lo das en el último paso del registro, lo usamos solo para enviarte avisos sobre tu publicación, por ejemplo completar las fotos, ganar el sello de propietario verificado o renovar la vigencia. Si lo dejas vacío, no recibes avisos automáticos: el equipo solo puede escribirte a mano por WhatsApp. Los avisos salen a través de un proveedor de correo que actúa por encargo nuestro y recibe tu correo y tu nombre solo para hacer ese envío. Puedes pedirnos que dejemos de enviarte avisos o que borremos tu correo cuando quieras, escribiendo al correo del responsable indicado arriba.",
+      en: "Your email is optional. If you give it in the last step of registration, we use it only to send you notices about your listing, for example to add photos, earn the verified-owner seal or renew its validity. If you leave it empty, you receive no automatic notices: the team can only write to you by hand on WhatsApp. The notices go out through an email provider that acts on our behalf and receives your email and name only to send them. You can ask us to stop sending notices, or to delete your email, at any time by writing to the controller's address above.",
     },
     idioma: {
       es: "También guardamos el idioma en que usaste la página (español o inglés), para escribirte en ese mismo idioma. Para recordar tu elección en el navegador usamos una cookie funcional de un año; no sirve para identificarte ni para publicidad.",
@@ -116,8 +116,8 @@ export const PRIVACIDAD = {
       en: "To request a viewing you give us an email, which we use only for the notices of that viewing: suggested times, confirmation, cancellation and a reminder the day before. We also keep what you state in the request (what you're looking for, your budget, how you'd pay and your message) and the times. The owner sees your name, the last 4 digits of your number, your verification level and what you stated; we never show them your email. When you confirm a time, the owner sees your full number so they can send you the exact address on their own WhatsApp. After the viewing, the owner marks whether you attended, and owners see only a count («attended 2 of 3 viewings»), without detail. Innmobiliaria does not message you on WhatsApp; notices go by email. Notices are sent through an email provider that acts on our behalf.",
     },
     conservacion: {
-      es: "Si nunca verificas tu número, borramos tu nombre y tu número a los 30 días; los códigos vencidos sin usar, a los 7.",
-      en: "If you never verify your number, we delete your name and number after 30 days; expired unused codes after 7.",
+      es: "Si nunca verificas tu número, borramos tu nombre y tu número a los 30 días; los códigos vencidos sin usar, a los 7. Tus solicitudes de visita y tu correo se conservan mientras sigas verificado; puedes pedir que los borremos escribiendo al correo del responsable.",
+      en: "If you never verify your number, we delete your name and number after 30 days; expired unused codes after 7. Your viewing requests and email are kept while you stay verified; you can ask us to delete them by writing to the data controller.",
     },
   },
 
@@ -156,8 +156,8 @@ export const PRIVACIDAD = {
       en: "Security and retention",
     },
     texto: {
-      es: "Tus datos se almacenan con controles de acceso: solo el operador autorizado de Innmobiliaria puede consultarlos. Los conservamos mientras dure la campaña de expectativa y el proceso de lanzamiento, salvo que solicites su supresión antes.",
-      en: "Your data is stored with access controls: only Innmobiliaria's authorized operator can view it. We keep it for as long as the pre-launch campaign and the launch process last, unless you ask us to delete it sooner.",
+      es: "Tus datos se almacenan con controles de acceso: solo el operador autorizado de Innmobiliaria puede consultarlos, salvo lo que cada ficha o solicitud muestra a quien corresponde (por ejemplo, el dueño de un anuncio ve las solicitudes de visita de ese anuncio). Los conservamos mientras dure la campaña de expectativa y el proceso de lanzamiento, salvo que solicites su supresión antes.",
+      en: "Your data is stored with access controls: only Innmobiliaria's authorized operator can view it, apart from what each listing or request shows to the person it concerns (for example, a listing's owner sees the viewing requests for that listing). We keep it for as long as the pre-launch campaign and the launch process last, unless you ask us to delete it sooner.",
     },
   },
 } as const satisfies Arbol;

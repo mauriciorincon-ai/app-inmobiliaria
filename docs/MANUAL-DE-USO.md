@@ -139,7 +139,7 @@ visita; favoritos y alertas todavía no están.
 - **Después de la visita:** el dueño marca **«Sí, vino»** o **«No vino»**. Lo que marca aparece en la
   tarjeta del comprador solo como un conteo; nadie ve el detalle.
 - **Limitaciones conocidas:** la validación real de cédula y el recordatorio en producción se prueban
-  en el ensayo general; hasta entonces la identificación usa un simulador. No hay selector visual de
+  en el ensayo general; hasta entonces, en producción, «Identificarse» responde que no pudo consultar la Registraduría (el simulador es solo de desarrollo y pruebas). No hay selector visual de
   calendario: el dueño escribe la fecha y elige la hora. Si no se identifica con una cédula
   colombiana, no puede identificarse. Un dueño sin correo no recibe avisos.
 
@@ -166,8 +166,8 @@ visita; favoritos y alertas todavía no están.
      muestra**: en el mapa tu anuncio aparece como el área de tu barrio, no como un punto.
   3. **Paso 3 (Revisa y envía):** revisa el resumen, marca la casilla de autorización de datos
      (Ley 1581) y toca **"Publicar mi inmueble"**. Puedes dejar tu **correo (opcional)** si quieres
-     recibir avisos sobre tu publicación (fotos, sello y vigencia); sin correo publicas igual y te
-     escribimos por WhatsApp.
+     recibir avisos sobre tu publicación (fotos, sello y vigencia); sin correo publicas igual, pero no
+     recibes avisos automáticos: lo ves todo al abrir tu enlace privado.
   - Si llegaste por el **enlace de invitación** de otro dueño, tu registro queda atribuido a quien te
     invitó, sin que tengas que hacer nada (desde el Sprint 003).
   - Si cierras la página a mitad, al volver el formulario **retoma donde ibas** (se guarda en tu

@@ -423,6 +423,8 @@ export type AlertaCreada = {
   alerta_id: string;
   gestionar: string;
   confirmar: string;
+  // Migración 13: la baja del correo de confirmación («No la pedí»).
+  baja: string;
 };
 // Un resumen reclamado por el cron: lo que lleva el correo (con el correo de quien lo recibe).
 export type ResumenReclamado = {

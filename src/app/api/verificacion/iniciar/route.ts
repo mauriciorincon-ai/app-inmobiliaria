@@ -89,6 +89,9 @@ export async function POST(req: NextRequest) {
   const res = json(200, {
     codigo,
     href: construirWaMe(numero, mensajeCodigo(codigo, idioma)),
+    // El número al que el comprador escribe: público por naturaleza (se muestra en la ayuda por si el
+    // enlace no abre WhatsApp). Sigue viviendo solo en la variable del Worker.
+    numero,
     segundos: MINUTOS_CODIGO * 60,
   });
   res.cookies.set(COOKIE_COMPRADOR, sesion, {

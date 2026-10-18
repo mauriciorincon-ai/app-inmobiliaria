@@ -3,6 +3,8 @@
   "/publicar",
   "/buscar",
   "/verificar",
+  "/identificarse",
+  "/pedir-visita?slug=demo-apartamento-chapinero",
   "/privacidad",
   "/confirmacion",
   "/i/demo-apartamento-chapinero",

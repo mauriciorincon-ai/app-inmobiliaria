@@ -3,9 +3,15 @@
   // build`. Requiere nodejs_compat + compatibility_date >= 2024-09-23 para las APIs Node del endpoint.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "app-inmobiliaria",
-  "main": ".open-next/worker.js",
+  // S8 (ADR 016): el Worker propio reexporta el de OpenNext y suma el Cron Trigger del trabajo diario.
+  "main": "custom-worker.ts",
   "compatibility_date": "2025-03-01",
   "compatibility_flags": ["nodejs_compat"],
+  // Todos los días a las 13:00 UTC = 8:00 de Bogotá (UTC−5, sin horario de verano): recordatorios de las
+  // visitas de mañana y purga Ley 1581. CRON_SECRET va como SECRET del Worker (`wrangler secret put`).
+  "triggers": {
+    "crons": ["0 13 * * *"]
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -15,6 +21,8 @@
   // el repo es público y el correo del operador no se versiona (anti-harvesting/phishing).
   // WhatsApp (S7, ADR 015): WHATSAPP_APP_SECRET, WHATSAPP_VERIFY_TOKEN, WHATSAPP_NUMERO y
   // SUPABASE_SERVICE_ROLE_KEY van como SECRETS del Worker; el webhook los lee en tiempo de ejecución.
+  // S8: CRON_SECRET (el cron y su respaldo) y DIDIT_API_KEY (el proveedor de identidad, en el ensayo
+  // general) también son SECRETS del Worker; ninguno va en este archivo.
   // R2 (S2): el Account ID y las dos claves S3 (R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY) van como
   // SECRETS del Worker (repo público); aquí solo vive el nombre del bucket, que no es un enlace.
   // NINGUNA `NEXT_PUBLIC_*` va aquí (regla 15 — cero enlaces en repo público): ni la URL de la app, ni

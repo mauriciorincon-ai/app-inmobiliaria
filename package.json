@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm build:brochure && next dev",
-    "build": "pnpm build:brochure && next build",
+    "dev": "pnpm build:brochure && pnpm build:maplibre && next dev",
+    "build": "pnpm build:brochure && pnpm build:maplibre && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -13,7 +13,8 @@
     "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "prepare": "git config core.hooksPath githooks",
-    "build:brochure": "node scripts/copiar-brochure.mjs"
+    "build:brochure": "node scripts/copiar-brochure.mjs",
+    "build:maplibre": "node scripts/copiar-maplibre.mjs"
   },
   "dependencies": {
     "@gsap/react": "2.1.2",

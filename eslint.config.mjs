@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "coverage/**",
     ".open-next/**",
     ".wrangler/**",
+    // Worker de MapLibre copiado de node_modules por `pnpm build:maplibre` (minificado, no es nuestro).
+    "public/maplibre/**",
     // design-sync: scripts staged del skill + build del bundle + caché (máquina, no repo)
     ".ds-sync/**",
     "ds-bundle/**",

@@ -4,6 +4,7 @@
 // búsqueda sigue sin ese filtro. De aquí salen también los argumentos de la RPC `buscar_inmuebles`.
 
 import { z } from "zod";
+import { esEnteroEscrito, parsearCOP } from "@/engine/format/cop";
 import { OPERACIONES, TIPOS } from "@/engine/registro/schema";
 import type { Operacion, TipoInmueble } from "@/engine/registro/schema";
 import { LOCALIDADES } from "@/engine/zonas/localidades";
@@ -32,10 +33,11 @@ export type Filtros = {
 const opSchema = z.enum(OPERACIONES);
 const tipoSchema = z.enum(TIPOS);
 const locSchema = z.enum(LOCALIDADES);
+// El precio llega como lo escribe la persona: «300000000», «300.000.000», «$300,000,000».
 const precioSchema = z
   .string()
-  .regex(/^\d{1,12}$/)
-  .transform(Number)
+  .refine(esEnteroEscrito)
+  .transform((v) => parsearCOP(v) ?? Number.NaN)
   .pipe(z.number().int().min(0).max(PRECIO_MAX));
 const habSchema = z
   .string()

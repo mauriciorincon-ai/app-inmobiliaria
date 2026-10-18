@@ -41,6 +41,13 @@ describe("filtros de búsqueda ↔ URL", () => {
     });
   });
 
+  it("el precio se lee como se escribe: con puntos, comas o el signo de pesos", () => {
+    expect(leerFiltros({ min: "300.000.000" }).precioMin).toBe(300000000);
+    expect(leerFiltros({ max: "$1,400,000,000" }).precioMax).toBe(1400000000);
+    expect(leerFiltros({ max: "85.5" }).precioMax).toBeUndefined();
+    expect(leerFiltros({ max: "1".repeat(14) }).precioMax).toBeUndefined();
+  });
+
   it("acepta los parámetros de Next (arreglos y undefined)", () => {
     expect(leerFiltros({ op: ["venta", "arriendo"], tipo: undefined })).toEqual(
       { operacion: "venta" },

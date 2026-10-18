@@ -20,6 +20,7 @@ export const COMUN = {
     principal: { es: "Principal", en: "Main" },
     comoFunciona: { es: "Cómo funciona", en: "How it works" },
     publicar: { es: "Publicar", en: "List property" },
+    buscar: { es: "Buscar", en: "Search" },
     inicio: { es: "Innmobiliaria — inicio", en: "Innmobiliaria — home" },
   },
   pie: {
@@ -29,6 +30,7 @@ export const COMUN = {
     },
     enlaces: { es: "Enlaces del pie", en: "Footer links" },
     publicarInmueble: { es: "Publicar inmueble", en: "List a property" },
+    buscarInmuebles: { es: "Buscar inmuebles", en: "Search properties" },
     privacidad: { es: "Política de privacidad", en: "Privacy policy" },
     derechos: {
       es: "© 2026 Innmobiliaria · Hecho en Bogotá para vendedores directos.",

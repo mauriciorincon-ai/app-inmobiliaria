@@ -34,6 +34,12 @@ export default function Footer({ lang }: { lang: Idioma }) {
               {t.pie.publicarInmueble}
             </Link>
             <Link
+              href="/buscar"
+              className="text-white/80 underline-offset-4 hover:underline"
+            >
+              {t.pie.buscarInmuebles}
+            </Link>
+            <Link
               href="/privacidad"
               className="text-white/80 underline-offset-4 hover:underline"
             >

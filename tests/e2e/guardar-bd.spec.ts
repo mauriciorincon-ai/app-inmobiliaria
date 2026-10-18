@@ -1306,6 +1306,38 @@ test("quien rechazó desde el correo una alerta que no pidió no recibe otra en 
   ).toEqual(["t|t"]);
 });
 
+test("la purga no acorta el bloqueo de 30 días de una alerta rechazada, y la borra pasados los 30", async () => {
+  const email = correoNuevo();
+  const ajena = crearAlerta({ email, ...banda(precioUnico()) });
+  await api().rpc("baja_alerta", { p_token: ajena.baja });
+  const hay = (id: string) =>
+    consultar(`select count(*) from public.alertas where id = '${id}'`)[0];
+  // A los 10 días una alerta sin confirmar y SIN baja ya se purga; la rechazada se queda y sigue bloqueando.
+  consultar(
+    `update public.alertas set created_at = now() - interval '10 days', rechazada_at = now() - interval '10 days',
+            baja_at = now() - interval '10 days' where id = '${ajena.alerta_id}'`,
+  );
+  const sinBaja = crearAlerta({ ...banda(precioUnico()) });
+  consultar(
+    `update public.alertas set created_at = now() - interval '10 days' where id = '${sinBaja.alerta_id}'`,
+  );
+  consultar(`select public.purgar_vencidos()`);
+  expect(hay(sinBaja.alerta_id)).toBe("0");
+  expect(hay(ajena.alerta_id)).toBe("1");
+  expect(
+    mensaje(() =>
+      consultar(sqlCrearAlerta({ email, ...banda(precioUnico()) })),
+    ),
+  ).toContain("demasiadas_alertas");
+  // Pasados los 30 días de la baja, la purga ya se la lleva.
+  consultar(
+    `update public.alertas set rechazada_at = now() - interval '31 days', baja_at = now() - interval '31 days'
+      where id = '${ajena.alerta_id}'`,
+  );
+  consultar(`select public.purgar_vencidos()`);
+  expect(hay(ajena.alerta_id)).toBe("0");
+});
+
 // ── La purga ─────────────────────────────────────────────────────────────────
 
 test("la purga borra lo caducado y respeta lo vivo", async () => {

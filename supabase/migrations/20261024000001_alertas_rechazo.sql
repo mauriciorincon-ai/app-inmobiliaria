@@ -7,9 +7,12 @@
 -- desde su propio teléfono antes de confirmar, se bloqueaba a sí mismo. Ahora:
 --   · `crear_alerta` devuelve también el token de baja (para el correo de confirmación);
 --   · `baja_alerta` sobre una alerta SIN confirmar marca `rechazada_at` (lo hizo el dueño del correo);
---   · `crear_alerta` bloquea 30 días solo por `rechazada_at`.
+--   · `crear_alerta` bloquea 30 días solo por `rechazada_at`;
+--   · `purgar_vencidos` ya no borra a los 7 días una alerta sin confirmar que SÍ tiene baja (la rechazada):
+--     esa se queda los 30 días del bloqueo. Sin esto, la promesa del correo («no recibirá otra en 30 días»)
+--     duraba, en realidad, hasta 7.
 --
--- 100 % ADITIVA: una columna nueva y dos funciones con la MISMA firma (conservan sus grants). Nada que
+-- 100 % ADITIVA: una columna nueva y tres funciones con la MISMA firma (conservan sus grants). Nada que
 -- existía deja de funcionar; `crear_alerta` solo suma la clave `baja` a lo que devuelve.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
@@ -153,5 +156,71 @@ begin
          rechazada_at = case when confirmada_at is null then coalesce(rechazada_at, now()) else rechazada_at end
    where id = v_id;
   return jsonb_build_object('estado', 'baja', 'nombre', v_nombre);
+end;
+$$;
+
+create or replace function public.purgar_vencidos()
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_compradores integer;
+  v_verificaciones integer;
+  v_alertas integer;
+  v_cambios integer;
+  v_cupos integer;
+  v_enlaces integer;
+begin
+  with b as (
+    delete from public.verificaciones
+     where usado_at is null and vence_at < now() - interval '7 days'
+    returning 1
+  )
+  select count(*) into v_verificaciones from b;
+  with b as (
+    delete from public.compradores
+     where verificado_at is null and created_at < now() - interval '30 days'
+    returning 1
+  )
+  select count(*) into v_compradores from b;
+
+  -- Alertas que nadie confirmó NI dieron de baja (7 días) y las dadas de baja (30 días). Se llevan sus enlaces.
+  -- Una alerta rechazada desde el correo («No la pedí») NUNCA se confirmó, pero lleva `baja_at`: se queda los 30
+  -- días del bloqueo; si la purga la borrara a los 7, el correo ajeno podría recibir otra a la semana.
+  with b as (
+    delete from public.alertas
+     where (confirmada_at is null and baja_at is null and created_at < now() - interval '7 days')
+        or (baja_at is not null and baja_at < now() - interval '30 days')
+    returning 1
+  )
+  select count(*) into v_alertas from b;
+  -- Los enlaces de cada aviso a los 60 días y los de confirmar a los 14; el de gestionar con el que nació la
+  -- alerta (lo guarda el teléfono que la creó) vive lo que viva la alerta.
+  with b as (
+    delete from public.enlaces_alerta
+     where (origen = 'correo' and created_at < now() - interval '60 days')
+        or (proposito = 'confirmar' and created_at < now() - interval '14 days')
+    returning 1
+  )
+  select count(*) into v_enlaces from b;
+  with b as (
+    delete from public.cambios_de_precio where created_at < now() - interval '90 days' returning 1
+  )
+  select count(*) into v_cambios from b;
+  with b as (
+    delete from public.correos_dia where dia < public.dia_bogota() - 60 returning 1
+  )
+  select count(*) into v_cupos from b;
+
+  return jsonb_build_object(
+    'compradores', v_compradores,
+    'verificaciones', v_verificaciones,
+    'alertas', v_alertas,
+    'enlaces', v_enlaces,
+    'cambios_de_precio', v_cambios,
+    'correos_dia', v_cupos
+  );
 end;
 $$;

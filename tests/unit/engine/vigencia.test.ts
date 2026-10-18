@@ -6,6 +6,7 @@ import {
   diasRestantes,
   estaPorVencer,
   nuevaVigencia,
+  diasVivo,
 } from "@/engine/vigencia/vigencia";
 
 const AHORA = new Date("2026-07-19T12:00:00Z");
@@ -72,5 +73,28 @@ describe("vigencia", () => {
     it("VIGENCIA_DIAS es 60", () => {
       expect(VIGENCIA_DIAS).toBe(60);
     });
+  });
+});
+
+describe("diasVivo — «vivo hace N días»", () => {
+  it("un anuncio recién confirmado lleva 0 días", () => {
+    expect(diasVivo(enDias(VIGENCIA_DIAS), AHORA)).toBe(0);
+  });
+  it("cuenta días completos desde la última confirmación (vigente_hasta − 60 d)", () => {
+    expect(diasVivo(enDias(VIGENCIA_DIAS - 10), AHORA)).toBe(10);
+    expect(diasVivo(enDias(1), AHORA)).toBe(VIGENCIA_DIAS - 1);
+  });
+  it("no pasa de un día completo hasta cumplirlo (23 h = 0 días)", () => {
+    const hasta = new Date(
+      AHORA.getTime() - 23 * 3_600_000 + VIGENCIA_DIAS * MS_DIA,
+    );
+    expect(diasVivo(hasta, AHORA)).toBe(0);
+  });
+  it("una confirmación en el futuro no da días negativos", () => {
+    expect(diasVivo(enDias(VIGENCIA_DIAS + 5), AHORA)).toBe(0);
+  });
+  it("fecha inválida ⇒ null (no se muestra nada); acepta string ISO", () => {
+    expect(diasVivo("no-es-fecha", AHORA)).toBeNull();
+    expect(diasVivo(enDias(VIGENCIA_DIAS - 3).toISOString(), AHORA)).toBe(3);
   });
 });

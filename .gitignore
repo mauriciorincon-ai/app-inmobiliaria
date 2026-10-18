@@ -31,3 +31,6 @@ public/conoce.html
 
 # Salida local de Lighthouse CI (la genera cada corrida; jamás se versiona)
 .lighthouseci/
+
+# S6 — datos crudos de Catastro Bogotá (18 MB): se descargan, no se versionan. Ver scripts/sectores/README.md.
+scripts/sectores/crudo/

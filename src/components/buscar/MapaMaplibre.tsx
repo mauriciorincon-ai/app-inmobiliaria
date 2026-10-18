@@ -360,7 +360,7 @@ export default function MapaMaplibre({
       {dibujando && (
         <div
           role="status"
-          className="absolute inset-x-3 bottom-8 z-10 rounded-2xl bg-white p-3 shadow-card"
+          className="absolute inset-x-3 top-16 z-10 rounded-2xl bg-white p-3 shadow-card"
         >
           <p className="text-sm font-semibold text-ink">{t.guia}</p>
           <div className="mt-2 flex items-center justify-between gap-3">

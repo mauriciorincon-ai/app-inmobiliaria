@@ -19,6 +19,7 @@ import InvitaReferido, {
 import SelloNivel, { type TextosSello } from "@/components/ficha/SelloNivel";
 import { formatearFecha } from "@/engine/format/fecha";
 import { estadoSello } from "@/engine/sello/sello";
+import { mascararTelefono } from "@/engine/verificacion/mascara";
 import PaqueteFundador, {
   type TextosPaquete,
 } from "@/components/paquete/PaqueteFundador";
@@ -190,6 +191,33 @@ export default function MiAnuncio({
           activo={anuncio.contacto_publico}
           onCambio={recargar}
         />
+      </section>
+
+      <section aria-labelledby="contactos-titulo">
+        <h2 id="contactos-titulo" className="text-xl font-bold text-ink">
+          {t.contactos.titulo}
+        </h2>
+        {anuncio.contactos.length === 0 ? (
+          <p className="mt-3 text-sm text-gray">{t.contactos.vacio}</p>
+        ) : (
+          <ul className="mt-3 divide-y divide-purple-100 rounded-2xl bg-white shadow-card">
+            {anuncio.contactos.map((c) => (
+              <li
+                key={`${c.nombre}-${c.telefono_fin}-${c.fecha}`}
+                className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 text-sm"
+              >
+                <span className="font-semibold text-ink">{c.nombre}</span>
+                <span className="text-gray">
+                  {mascararTelefono(c.telefono_fin)}
+                </span>
+                <span className="text-mute">
+                  {formatearFecha(c.fecha, lang)}
+                </span>
+                <span className="text-ok">✓ {t.contactos.verificado}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section aria-labelledby="sello-titulo">

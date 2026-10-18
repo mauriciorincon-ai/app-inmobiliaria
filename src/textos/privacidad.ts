@@ -70,12 +70,24 @@ export const PRIVACIDAD = {
       en: " as the person who lists it and, if your property is verified, that seal. Your ",
     },
     whatsapp: {
-      es: "WhatsApp solo aparece si tú lo activas",
-      en: "WhatsApp number appears only if you turn it on",
+      es: "WhatsApp nunca aparece en la página pública",
+      en: "WhatsApp number never appears on the public page",
     },
     despues: {
-      es: " (opción de contacto, desactivable cuando quieras); por defecto no se muestra. Tu correo y el número de matrícula nunca son públicos. Mientras dure esta etapa, las fichas no las indexan los buscadores.",
-      en: " (a contact option you can switch off whenever you like); by default it is not shown. Your email and the property's registry number are never public. During this stage, search engines do not index the listing pages.",
+      es: ": solo lo recibe un comprador que verificó su propio WhatsApp, y únicamente si tú activaste la opción de contacto (desactivable cuando quieras). Tu correo y el número de matrícula nunca son públicos. Mientras dure esta etapa, las fichas no las indexan los buscadores.",
+      en: ": only a buyer who has verified their own WhatsApp receives it, and only if you switched the contact option on (you can switch it off whenever you like). Your email and the property's registry number are never public. During this stage, search engines do not index the listing pages.",
+    },
+  },
+
+  // Lo que se guarda de un comprador (S7, ADR 015). Innmobiliaria solo RECIBE el mensaje de verificación.
+  compradores: {
+    titulo: {
+      es: "Si eres comprador y verificas tu WhatsApp",
+      en: "If you are a buyer and verify your WhatsApp",
+    },
+    texto: {
+      es: "Para escribirle a un dueño verificas tu WhatsApp: tú nos envías un código desde tu número y así probamos que es tuyo. Innmobiliaria nunca te envía mensajes por WhatsApp. Guardamos tu nombre, tu número, el idioma, la fecha en que aceptaste y la fecha en que verificaste, y a qué anuncios escribiste y cuándo. El código no se guarda: solo una huella irreversible, de un solo uso y de 10 minutos. Tu número completo no se muestra en ninguna página pública; el dueño del anuncio al que escribes ve tu nombre y los últimos 4 dígitos.",
+      en: "To message an owner you verify your WhatsApp: you send us a code from your number, which proves it is yours. Innmobiliaria never sends you WhatsApp messages. We keep your name, your number, your language, when you consented and when you verified, and which listings you messaged and when. The code itself is not kept: only an irreversible fingerprint of it, single-use and valid for 10 minutes. Your full number is shown on no public page; the owner of the listing you message sees your name and the last 4 digits.",
     },
   },
 

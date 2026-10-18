@@ -8,21 +8,31 @@ import { registrar, entrarOperador } from "./utils/registrar";
 test("la ficha muestra el inmueble y NO expone contacto sin opt-in", async ({
   page,
 }) => {
-  const { barrio } = await registrar(page, {
+  const { barrio, nombre } = await registrar(page, {
     nombre: "Beto Ficha",
-    barrioBase: "Suba",
+    localidad: "Suba",
+    barrio: "Britalia",
   });
 
   // El operador abre la ficha desde el panel.
   await entrarOperador(page);
-  const fila = page.getByRole("row").filter({ hasText: barrio });
+  const fila = page.getByRole("row").filter({ hasText: nombre });
   await expect(fila).toBeVisible({ timeout: 10000 });
   await fila.getByRole("link", { name: /Ver ficha/i }).click();
 
-  // El barrio es único (`Suba {timestamp}`) → el slug queda `apartamento-suba-{timestamp}-{6hex}`.
-  await expect(page).toHaveURL(/\/i\/apartamento-suba-\d+-[0-9a-f]{6}$/);
+  // El slug sale del barrio del catálogo: `apartamento-britalia-{6hex}`.
+  await expect(page).toHaveURL(/\/i\/apartamento-britalia-[0-9a-f]{6}$/);
   await expect(
     page.getByRole("heading", { name: new RegExp(`en ${barrio}`) }),
+  ).toBeVisible();
+  // «Vivo hace N días» (recién publicado = hoy), el sello de fundador explicado y dónde queda: el
+  // barrio y la localidad del catálogo, nunca un punto ni una dirección.
+  await expect(page.getByText("Vivo: el dueño lo confirmó hoy")).toBeVisible();
+  await expect(
+    page.getByText("Fundador: aún sin CTL verificado"),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/Britalia, Suba\. Mostramos el área del barrio/),
   ).toBeVisible();
   // Estado sin fotos (SVG del sistema).
   await expect(page.getByText(/aún no tiene fotos/i)).toBeVisible();

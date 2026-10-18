@@ -17,7 +17,7 @@ const paso2Valido = {
   operacion: "venta",
   tipo: "apartamento",
   localidad: "Chapinero",
-  barrio: "Cedritos",
+  barrio: "Los Rosales",
   direccion_aproximada: "Calle 140 aprox.",
   area_m2: "78",
   habitaciones: "3",
@@ -83,7 +83,7 @@ describe("paso2Schema (inmueble)", () => {
       operacion: "venta",
       tipo: "apartamento",
       localidad: "Chapinero",
-      barrio: "Cedritos",
+      barrio: "Los Rosales",
       area_m2: "78",
       habitaciones: "3",
       precio_esperado: "420.000.000",
@@ -98,6 +98,22 @@ describe("paso2Schema (inmueble)", () => {
     expect(
       paso2Schema.safeParse({ ...paso2Valido, localidad: "Medellín" }).success,
     ).toBe(false);
+  });
+
+  it("el barrio es del catálogo catastral de esa localidad (ADR 014)", () => {
+    const err = (barrio: string, localidad = "Chapinero") => {
+      const r = paso2Schema.safeParse({ ...paso2Valido, barrio, localidad });
+      return r.success
+        ? null
+        : r.error.issues.map((i) => `${String(i.path[0])}:${i.message}`);
+    };
+    expect(err("Los Rosales")).toBeNull();
+    // sin tildes ni mayúsculas también vale: así lo ve el trigger de la BD
+    expect(err("LOS ROSALES")).toBeNull();
+    expect(err("Usaquen", "Usaquén")).toBeNull();
+    // texto libre, o un barrio de OTRA localidad, no
+    expect(err("Cedritos Libre")).toEqual(["barrio:barrioNoCatalogo"]);
+    expect(err("Los Rosales", "Suba")).toEqual(["barrio:barrioNoCatalogo"]);
   });
 
   it("rechaza operación o tipo fuera del enum", () => {
@@ -174,7 +190,7 @@ describe("registroSchema (completo) + construirPayload", () => {
       zona: "Chapinero", // S3 — la localidad va como zona
       operacion: "venta",
       tipo: "apartamento",
-      barrio: "Cedritos",
+      barrio: "Los Rosales",
       direccion: "Calle 140 aprox.",
       area: 78,
       habitaciones: 3,
@@ -182,6 +198,11 @@ describe("registroSchema (completo) + construirPayload", () => {
       consentimiento: true,
       ref: null,
     });
+  });
+
+  it("el payload lleva el nombre del catálogo, no lo escrito (la BD y el slug usan el mismo)", () => {
+    const datos = registroSchema.parse({ ...completo, barrio: "los rosales" });
+    expect(construirPayload(datos).barrio).toBe("Los Rosales");
   });
 
   it("recoge email del paso 3 y normaliza el ref (inválido ⇒ null)", () => {

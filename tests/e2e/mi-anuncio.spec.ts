@@ -13,7 +13,6 @@ const FOTO_VALIDA = join(FOTOS, "valida-1600x1200.jpg");
 const FOTO_BAJA = join(FOTOS, "baja-resolucion-320x240.jpg");
 
 async function registrarYObtenerLink(page: Page): Promise<string> {
-  const barrioUnico = `Chapinero ${Date.now()}`;
   await page.goto("/publicar");
   await page.getByLabel("Cómo te llamas").fill("Sara Fundadora");
   await page.getByLabel("Tu WhatsApp").fill("300 987 6543");
@@ -23,7 +22,7 @@ async function registrarYObtenerLink(page: Page): Promise<string> {
   await page.getByRole("radio", { name: "Venta" }).check({ force: true });
   await page.getByLabel("Tipo de inmueble").selectOption("apartamento");
   await page.getByLabel("Localidad").selectOption("Chapinero");
-  await page.getByLabel("Barrio").fill(barrioUnico);
+  await page.getByLabel("Barrio").selectOption("Los Rosales");
   await page.getByLabel("Área (m²)").fill("80");
   await page.getByLabel("Habitaciones").fill("3");
   await page.getByLabel("Precio esperado (COP)").fill("450000000");

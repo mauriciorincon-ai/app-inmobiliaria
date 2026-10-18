@@ -78,7 +78,15 @@ export const PUBLICAR = {
     },
     barrio: {
       etiqueta: { es: "Barrio", en: "Neighborhood (barrio)" },
-      ejemplo: { es: "Ej: Cedritos", en: "e.g. Cedritos" },
+      ejemplo: { es: "Elige tu barrio", en: "Choose your neighborhood" },
+      primeroLocalidad: {
+        es: "Elige primero la localidad",
+        en: "Choose the locality first",
+      },
+      ayuda: {
+        es: "Usamos los barrios oficiales de Catastro Bogotá. En el mapa tu anuncio aparece en el área de tu barrio, nunca en un punto.",
+        en: "We use the official neighborhoods from Bogotá's cadastre. On the map your listing shows as the area of your neighborhood, never as a point.",
+      },
     },
     direccion: {
       etiqueta: {
@@ -202,8 +210,12 @@ export const PUBLICAR = {
     },
     localidad: { es: "Elige la localidad", en: "Choose the locality" },
     barrioCorto: {
-      es: "Escribe el barrio o zona",
-      en: "Enter the neighborhood or area",
+      es: "Elige tu barrio",
+      en: "Choose your neighborhood",
+    },
+    barrioNoCatalogo: {
+      es: "Elige un barrio de la lista de esa localidad",
+      en: "Choose a neighborhood from that locality's list",
     },
     barrioLargo: { es: "Máximo 80 caracteres", en: "80 characters maximum" },
     direccionLarga: {

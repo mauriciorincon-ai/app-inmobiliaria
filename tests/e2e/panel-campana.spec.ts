@@ -32,7 +32,6 @@ test("el operador envía un lote (mock) y queda registrado en el log", async ({
   // Un fundador con correo y sin fotos ⇒ destinatario del lote "sin-fotos".
   await registrar(page, {
     nombre: "Dora Correo",
-    barrioBase: "Lote",
     email: `dora-${Date.now()}@example.test`,
   });
 

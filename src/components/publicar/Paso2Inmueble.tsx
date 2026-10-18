@@ -1,6 +1,7 @@
 import Campo from "@/components/ui/Campo";
 import { OPERACIONES, TIPOS } from "@/engine/registro/schema";
 import { LOCALIDADES } from "@/engine/zonas/localidades";
+import { sectorPorNombre, sectoresDeLocalidad } from "@/engine/zonas/sectores";
 import type { EstadoFormulario } from "@/engine/registro/wizard";
 import type { Errores } from "@/components/publicar/Paso1Contacto";
 import type { Proyectado } from "@/i18n/textos";
@@ -100,7 +101,12 @@ export default function Paso2Inmueble({
         label={t.localidad.etiqueta}
         requerido
         value={datos.localidad}
-        onChange={(v) => set("localidad", v)}
+        onChange={(v) => {
+          set("localidad", v);
+          // Un barrio de otra localidad ya no vale: se vuelve a elegir.
+          if (datos.barrio && !sectorPorNombre(v, datos.barrio))
+            set("barrio", "");
+        }}
         error={errores.localidad}
         hint={t.localidad.ayuda}
         placeholder={t.localidad.ejemplo}
@@ -108,12 +114,21 @@ export default function Paso2Inmueble({
       />
       <Campo
         id="barrio"
+        control="select"
         label={t.barrio.etiqueta}
         requerido
         value={datos.barrio}
         onChange={(v) => set("barrio", v)}
         error={errores.barrio}
-        placeholder={t.barrio.ejemplo}
+        hint={t.barrio.ayuda}
+        deshabilitado={!datos.localidad}
+        placeholder={
+          datos.localidad ? t.barrio.ejemplo : t.barrio.primeroLocalidad
+        }
+        opciones={sectoresDeLocalidad(datos.localidad).map((s) => ({
+          value: s.nombre,
+          label: s.nombre,
+        }))}
       />
       <Campo
         id="direccion_aproximada"

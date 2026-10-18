@@ -96,6 +96,6 @@ funcionalidad después del S7 lo fija la planeadora.
 
 ## Registro de la mirada (G-Diseño del comprador)
 
-| Fecha | Artefacto                                           | Veredicto del usuario | Qué se construye encima |
-| ----- | --------------------------------------------------- | --------------------- | ----------------------- |
-|       | `docs/diseno/comprador/` (12 pantallas + recorrido) |                       | F2 y F3 del S6          |
+| Fecha      | Artefacto                                           | Veredicto del usuario | Qué se construye encima                       |
+| ---------- | --------------------------------------------------- | --------------------- | --------------------------------------------- |
+| 2026-10-17 | `docs/diseno/comprador/` (12 pantallas + recorrido) | «apruebo»             | F2 y F3 del S6; S7–S12 construyen contra ella |

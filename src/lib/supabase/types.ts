@@ -359,6 +359,97 @@ export type ResultadoBusqueda = {
   portada: string | null; // r2_key de la foto de portada
 };
 
+// ── S9 — guardar y avisar (migración 12) ─────────────────────────────────────────
+// Un anuncio de los favoritos, las listas y los resúmenes: la misma LISTA BLANCA que `/buscar`.
+export type AnuncioGuardado = ResultadoBusqueda;
+export type BajaDePrecio = ResultadoBusqueda & { precio_anterior: number };
+
+// De la gente solo sale el PRIMER nombre.
+export type NotaDeLista = {
+  id: string;
+  autor: string;
+  es_mia: boolean;
+  texto: string;
+  created_at: string;
+};
+export type ItemDeLista = ResultadoBusqueda & { notas: NotaDeLista[] };
+export type ListaDetalle = {
+  id: string;
+  nombre: string;
+  dueno: string;
+  es_dueno: boolean;
+  puede_escribir: boolean;
+  compartida: boolean;
+  no_disponibles: number;
+  items: ItemDeLista[];
+};
+export type ListaResumen = {
+  id: string;
+  nombre: string;
+  compartida: boolean;
+  slugs: string[];
+  notas: number;
+};
+
+export type EstadoAlerta = "sin_confirmar" | "activa" | "pausada";
+export type AccionAlerta =
+  | "pausar"
+  | "reanudar"
+  | "bajas_si"
+  | "bajas_no"
+  | "nuevos_si"
+  | "nuevos_no"
+  | "borrar";
+// Una alerta tal como la ve el teléfono que guarda su token: el correo enmascarado y ningún token.
+export type AlertaDelTelefono = {
+  indice: number;
+  nombre: string;
+  estado: EstadoAlerta;
+  correo: string;
+  operacion: Operacion | null;
+  tipo: TipoInmueble | null;
+  localidad: string | null;
+  precio_min: number | null;
+  precio_max: number | null;
+  habitaciones_min: number | null;
+  poligono: string | null;
+  avisar_nuevos: boolean;
+  avisar_bajas: boolean;
+  ultimo_envio_at: string | null;
+  ultimo_resumen: { nuevos: number; bajas: number } | null;
+  created_at: string;
+};
+export type AlertaCreada = {
+  alerta_id: string;
+  gestionar: string;
+  confirmar: string;
+};
+// Un resumen reclamado por el cron: lo que lleva el correo (con el correo de quien lo recibe).
+export type ResumenReclamado = {
+  alerta_id: string;
+  email: string;
+  idioma: "es" | "en";
+  nombre: string;
+  operacion: Operacion | null;
+  tipo: TipoInmueble | null;
+  localidad: string | null;
+  precio_min: number | null;
+  precio_max: number | null;
+  habitaciones_min: number | null;
+  poligono: string | null;
+  total_nuevos: number;
+  total_bajas: number;
+  nuevos: ResultadoBusqueda[];
+  bajas: BajaDePrecio[];
+  token_gestionar: string;
+  token_baja: string;
+};
+export type ResultadoResumenes = {
+  alertas: ResumenReclamado[];
+  diferidas: number;
+  sin_novedad: number;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -510,6 +601,65 @@ export type Database = {
           estado?: string;
         };
         Update: Partial<EnvioRow>;
+        Relationships: [];
+      };
+      // S9 — tablas CERRADAS a la API (RLS sin políticas): solo las toca la llave del servidor.
+      alertas: {
+        Row: { id: string; email: string; nombre: string; created_at: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      enlaces_alerta: {
+        Row: { id: string; alerta_id: string; proposito: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      cambios_de_precio: {
+        Row: {
+          id: string;
+          inmueble_id: string;
+          anterior: number;
+          nuevo: number;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      favoritos: {
+        Row: { comprador_id: string; inmueble_id: string; created_at: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      listas: {
+        Row: { id: string; comprador_id: string; nombre: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      lista_inmuebles: {
+        Row: { lista_id: string; inmueble_id: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      notas_lista: {
+        Row: {
+          id: string;
+          lista_id: string;
+          comprador_id: string;
+          texto: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      correos_dia: {
+        Row: { dia: string; visita: number; alerta: number };
+        Insert: never;
+        Update: never;
         Relationships: [];
       };
     };
@@ -685,7 +835,134 @@ export type Database = {
       };
       purgar_vencidos: {
         Args: Record<string, never>;
-        Returns: { compradores: number; verificaciones: number };
+        Returns: {
+          compradores: number;
+          verificaciones: number;
+          alertas: number;
+          enlaces: number;
+          cambios_de_precio: number;
+          correos_dia: number;
+        };
+      };
+      // S9 — guardar y avisar. Públicas (anon + authenticated):
+      guardar_precio: {
+        Args: { p_token: string; p_precio: number };
+        Returns: { precio_esperado: number };
+      };
+      resumen_anuncios: {
+        Args: { p_slugs: string[] };
+        Returns: ResultadoBusqueda[];
+      };
+      mis_favoritos: { Args: { p_sesion_hash: string }; Returns: string[] };
+      fusionar_favoritos: {
+        Args: { p_sesion_hash: string; p_slugs: string[] };
+        Returns: string[];
+      };
+      quitar_favorito: {
+        Args: { p_sesion_hash: string; p_slug: string };
+        Returns: undefined;
+      };
+      mis_listas: { Args: { p_sesion_hash: string }; Returns: ListaResumen[] };
+      crear_lista: {
+        Args: { p_sesion_hash: string; p_nombre: string };
+        Returns: string;
+      };
+      renombrar_lista: {
+        Args: { p_sesion_hash: string; p_lista: string; p_nombre: string };
+        Returns: undefined;
+      };
+      borrar_lista: {
+        Args: { p_sesion_hash: string; p_lista: string };
+        Returns: undefined;
+      };
+      agregar_a_lista: {
+        Args: { p_sesion_hash: string; p_lista: string; p_slug: string };
+        Returns: undefined;
+      };
+      quitar_de_lista: {
+        Args: { p_sesion_hash: string; p_lista: string; p_slug: string };
+        Returns: undefined;
+      };
+      compartir_lista: {
+        Args: { p_sesion_hash: string; p_lista: string };
+        Returns: string;
+      };
+      revocar_lista: {
+        Args: { p_sesion_hash: string; p_lista: string };
+        Returns: undefined;
+      };
+      obtener_lista: {
+        Args: {
+          p_sesion_hash: string | null;
+          p_token: string | null;
+          p_lista: string | null;
+        };
+        Returns: ListaDetalle;
+      };
+      escribir_nota: {
+        Args: {
+          p_sesion_hash: string;
+          p_lista: string | null;
+          p_token: string | null;
+          p_slug: string;
+          p_texto: string;
+        };
+        Returns: string;
+      };
+      borrar_nota: {
+        Args: { p_sesion_hash: string; p_nota: string };
+        Returns: undefined;
+      };
+      confirmar_alerta: {
+        Args: { p_token: string };
+        Returns: { estado: "confirmada" | "ya_confirmada"; nombre: string };
+      };
+      obtener_alertas: {
+        Args: { p_tokens: string[] };
+        Returns: AlertaDelTelefono[];
+      };
+      gestionar_alerta: {
+        Args: { p_token: string; p_accion: AccionAlerta };
+        Returns:
+          | { estado: "borrada" }
+          | {
+              estado: EstadoAlerta;
+              avisar_nuevos: boolean;
+              avisar_bajas: boolean;
+            };
+      };
+      baja_alerta: {
+        Args: { p_token: string };
+        Returns: { estado: "baja"; nombre: string };
+      };
+      // S9 — SOLO service_role: crear la alerta (devuelve el token de confirmar), el resumen del cron y el cupo.
+      crear_alerta: {
+        Args: {
+          p_email: string;
+          p_idioma: "es" | "en";
+          p_nombre: string;
+          p_operacion: Operacion | null;
+          p_tipo: TipoInmueble | null;
+          p_localidad: string | null;
+          p_precio_min: number | null;
+          p_precio_max: number | null;
+          p_habitaciones_min: number | null;
+          p_poligono: string | null;
+          p_avisar_nuevos: boolean;
+          p_avisar_bajas: boolean;
+          p_consentimiento: boolean;
+          p_ip_hash: string;
+          p_tope?: number;
+        };
+        Returns: AlertaCreada;
+      };
+      reclamar_resumenes: {
+        Args: { p_tope?: number; p_alerta?: string };
+        Returns: ResultadoResumenes;
+      };
+      sumar_correos_dia: {
+        Args: { p_clase: "visita" | "alerta"; p_n: number };
+        Returns: undefined;
       };
       generar_link_anuncio: {
         Args: { p_inmueble_id: string };

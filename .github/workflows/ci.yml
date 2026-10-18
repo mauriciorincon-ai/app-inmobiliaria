@@ -77,6 +77,8 @@ jobs:
       BREVO_MOCK: "1"
       IDENTIDAD_TOPE_DIA: "100000"
       IDENTIDAD_TOPE_MES: "100000"
+      # S9: el tope diario de correos de alerta (solo se respeta con Brevo en simulacro).
+      ALERTAS_TOPE_DIA: "100000"
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6

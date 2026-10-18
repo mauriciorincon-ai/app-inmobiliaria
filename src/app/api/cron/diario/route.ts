@@ -3,6 +3,7 @@ import { autorizadoCron } from "@/engine/cron/autorizacion";
 import { crearClienteServicio } from "@/lib/supabase/servicio";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
+import { enviarResumenes, topeHoy } from "@/lib/alertas-correo";
 import { avisarVisita } from "@/lib/visitas-correo";
 import { json } from "@/lib/visitas-http";
 
@@ -11,8 +12,12 @@ import { json } from "@/lib/visitas-http";
 // `Authorization: Bearer <CRON_SECRET>`, comparado en tiempo constante.
 //   1. Recordatorios: la base RECLAMA las visitas de mañana (y las de hoy que no han empezado) de forma
 //      atómica, a lo sumo una vez cada una y nunca una cancelada; a cada una le llegan dos correos.
-//   2. Purga Ley 1581: compradores sin verificar de 30 días y códigos vencidos de 7.
-// Correr dos veces el mismo día no repite nada. Responde los conteos, sin datos de nadie.
+//   2. Resúmenes de las alertas (S9, ADR 017): DESPUÉS de los recordatorios, para que la visita nunca ceda su
+//      sitio en el cupo diario de correos. La base reclama a lo sumo un resumen por alerta y día.
+//   3. Purga Ley 1581: compradores sin verificar de 30 días y códigos vencidos de 7; alertas sin confirmar de 7
+//      y dadas de baja de 30; enlaces, historial de precios y cupos viejos.
+// Correr dos veces el mismo día no repite nada. Responde los conteos, sin datos de nadie. Con Brevo en
+// simulacro (CI y pruebas), la cabecera `x-alertas-tope` cambia el tope del día para ESTA corrida.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -56,6 +61,10 @@ export async function POST(req: NextRequest) {
     fallidos += r.fallidos;
   }
 
+  const resumenes = await enviarResumenes(
+    topeHoy(req.headers.get("x-alertas-tope")),
+  );
+
   const { data: purga, error: errorPurga } =
     await supabase.rpc("purgar_vencidos");
   if (errorPurga) {
@@ -68,6 +77,7 @@ export async function POST(req: NextRequest) {
   const salida = {
     recordatorios: (ids ?? []).length,
     correos: { enviados, fallidos },
+    resumenes,
     purga: purga ?? null,
   };
   log.info(
@@ -75,9 +85,10 @@ export async function POST(req: NextRequest) {
       evento: "cron",
       ...salida.correos,
       recordatorios: salida.recordatorios,
+      resumenes,
       ms: Date.now() - t0,
     },
     "ok",
   );
-  return json(errorPurga ? 500 : 200, salida);
+  return json(errorPurga || !resumenes ? 500 : 200, salida);
 }

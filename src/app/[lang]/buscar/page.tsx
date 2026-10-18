@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import BuscarLayout from "@/components/buscar/BuscarLayout";
 import FiltrosBusqueda from "@/components/buscar/FiltrosBusqueda";
@@ -11,6 +12,7 @@ import MapaConResultados from "@/components/buscar/MapaConResultados";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import {
   aArgsBuscar,
+  aParams,
   hayFiltros,
   leerFiltros,
   type Filtros,
@@ -65,8 +67,8 @@ export default async function BuscarPage({
 
   return (
     <>
-      <EncabezadoInterior lang={lang} />
-      <main className="mx-auto max-w-6xl px-6 py-6">
+      <EncabezadoInterior lang={lang} seccion="buscar" />
+      <main className="mx-auto max-w-6xl px-6 py-6 pb-28 sm:pb-6">
         <FiltrosBusqueda
           filtros={filtros}
           t={t.filtros}
@@ -108,6 +110,17 @@ export default async function BuscarPage({
             </h1>
             <span className="text-sm text-mute">{t.lista.orden}</span>
           </div>
+          {hayFiltros(filtros) && (
+            <p className="mt-2">
+              <Link
+                href={`/alertas/nueva?${aParams(filtros).toString()}`}
+                className="inline-flex items-center gap-1.5 rounded-full bg-purple-tint px-4 py-1.5 text-sm font-semibold text-purple-600 hover:bg-purple-200"
+              >
+                <span aria-hidden="true">🔔</span>
+                {t.lista.guardarAlerta}
+              </Link>
+            </p>
+          )}
           <p className="mb-4 mt-2 flex items-start gap-2 text-sm text-mute">
             <span aria-hidden="true">🔒</span>
             <span>{t.lista.privacidad}</span>

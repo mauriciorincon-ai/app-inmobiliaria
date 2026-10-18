@@ -1,6 +1,11 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
+import CorazonFavorito, {
+  type TextosFavorito,
+} from "@/components/guardados/CorazonFavorito";
 import SelloNivel, { type TextosSello } from "@/components/ficha/SelloNivel";
 import type { TextosVivo } from "@/components/ficha/VivoHace";
+import { textoVivo } from "@/components/ficha/vivo-texto";
 import { formatearCOP } from "@/engine/format/cop";
 import { diasVivo } from "@/engine/vigencia/vigencia";
 import type { Idioma } from "@/i18n/idiomas";
@@ -14,16 +19,10 @@ export type TextosTarjeta = Proyectado<typeof BUSCAR.tarjeta>;
 // Unidad de superficie: igual en los dos idiomas, no es texto de la interfaz.
 const UNIDAD_AREA = "m²";
 
-function textoVivo(n: number | null, t: TextosVivo): string | null {
-  if (n === null) return null;
-  if (n === 0) return t.cortoHoy;
-  if (n === 1) return t.cortoUno;
-  return rellenar(t.cortoVarios, { n });
-}
-
 // Una tarjeta de la lista. El anuncio se ubica por el NOMBRE de su barrio y su localidad: jamás hay un
 // punto ni una dirección. Sello y «vivo hace N días» son datos reales (la fecha del CTL y la última
-// confirmación del dueño).
+// confirmación del dueño). El corazón es una isla hermana del enlace (S9); `pie` deja a «Guardados» poner
+// ahí sus controles (comparar), por encima del enlace que cubre la tarjeta.
 export default function TarjetaAnuncio({
   r,
   tipo,
@@ -31,7 +30,9 @@ export default function TarjetaAnuncio({
   t,
   tSello,
   tVivo,
+  tFavorito,
   ahora,
+  pie,
 }: {
   r: ResultadoBusqueda;
   tipo: string;
@@ -39,7 +40,9 @@ export default function TarjetaAnuncio({
   t: TextosTarjeta;
   tSello: TextosSello;
   tVivo: TextosVivo;
+  tFavorito: TextosFavorito;
   ahora: Date;
+  pie?: ReactNode;
 }) {
   const vivo = textoVivo(diasVivo(r.vigente_hasta, ahora), tVivo);
   return (
@@ -94,6 +97,8 @@ export default function TarjetaAnuncio({
             )}
           </div>
         </Link>
+        <CorazonFavorito slug={r.slug} t={tFavorito} />
+        {pie && <div className="relative z-10 mt-3">{pie}</div>}
       </article>
     </li>
   );

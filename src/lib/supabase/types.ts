@@ -419,6 +419,8 @@ export type AlertaDelTelefono = {
   ultimo_resumen: { nuevos: number; bajas: number } | null;
   created_at: string;
 };
+// Lo que devuelve «Mis alertas»: la alerta más sus criterios ya escritos y el enlace a su búsqueda.
+export type AlertaMia = AlertaDelTelefono & { resumen: string; buscar: string };
 export type AlertaCreada = {
   alerta_id: string;
   gestionar: string;

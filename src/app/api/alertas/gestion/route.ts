@@ -1,14 +1,23 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
+import {
+  enlaceBusqueda,
+  filtrosDeAlerta,
+  resumenCriterios,
+} from "@/engine/alertas/criterios";
 import { respuestaDeErrorGuardar } from "@/engine/alertas/errores";
 import { MAX_ALERTAS_TELEFONO } from "@/engine/alertas/topes";
+import { IDIOMAS } from "@/i18n/idiomas";
+import type { AlertaMia } from "@/lib/supabase/types";
 import { crearClienteAnon } from "@/lib/supabase/server";
 import { logger } from "@/lib/logger";
 import { cuerpoJson, json, responderError } from "@/lib/visitas-http";
 
 // «Mis alertas» sin cuenta (S9, ADR 017), todo con tokens que viajan en el CUERPO (jamás en la URL):
 //   · confirmar: el token que llegó por correo (`/alertas#c=…`);
-//   · mias: los tokens de gestionar que guarda este teléfono (máx. 20) → las alertas, sin correo ni tokens;
+//   · mias: los tokens de gestionar que guarda este teléfono (máx. 20) → las alertas, sin correo ni tokens,
+//     con sus criterios ya escritos en el idioma de quien mira y el enlace a `/buscar` (así el navegador no
+//     carga los diccionarios);
 //   · gestionar: pausar, reanudar, qué se avisa o borrar, con un token de gestionar.
 export const runtime = "nodejs";
 
@@ -19,6 +28,7 @@ const cuerpoSchema = z.discriminatedUnion("accion", [
   z.object({
     accion: z.literal("mias"),
     tokens: z.array(TOKEN).max(MAX_ALERTAS_TELEFONO),
+    idioma: z.enum(IDIOMAS).default("es"),
   }),
   z.object({
     accion: z.literal("gestionar"),
@@ -69,7 +79,15 @@ export async function POST(req: NextRequest) {
     if (error) {
       return responderError(error, log, contexto, respuestaDeErrorGuardar);
     }
-    return json(200, { alertas: data ?? [] });
+    const alertas: AlertaMia[] = (data ?? []).map((a) => {
+      const filtros = filtrosDeAlerta(a);
+      return {
+        ...a,
+        resumen: resumenCriterios(filtros, b.idioma),
+        buscar: enlaceBusqueda("", filtros),
+      };
+    });
+    return json(200, { alertas });
   }
 
   const { data, error } = await supabase.rpc("gestionar_alerta", {

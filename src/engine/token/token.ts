@@ -21,11 +21,12 @@ export function construirLinkAnuncio(origin: string, token: string): string {
 }
 
 // Extrae y valida el token del fragment de la URL (`#t=…` o `t=…`). Devuelve null si no hay un
-// token bien formado — el cliente entonces muestra el estado "necesitas tu enlace".
-export function extraerTokenDeHash(hash: string): string | null {
-  if (typeof hash !== "string") return null;
+// token bien formado — el cliente entonces muestra el estado "necesitas tu enlace". `clave` es el
+// nombre del parámetro: `t` por omisión; `c` es el de confirmar una alerta (S9).
+export function extraerTokenDeHash(hash: string, clave = "t"): string | null {
+  if (typeof hash !== "string" || !/^\w+$/.test(clave)) return null;
   const limpio = hash.replace(/^#/, "");
-  const match = limpio.match(/(?:^|&)t=([^&]+)/);
+  const match = limpio.match(new RegExp(`(?:^|&)${clave}=([^&]+)`));
   if (!match) return null;
   let valor: string;
   try {

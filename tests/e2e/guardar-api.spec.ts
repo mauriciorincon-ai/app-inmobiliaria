@@ -306,8 +306,9 @@ async function visitaDeManana(): Promise<string> {
 }
 
 test.describe("POST /api/cron/diario — resúmenes", () => {
-  // El cron reclama TODAS las alertas de la base: si dos de estas pruebas lo corren a la vez, una se lleva el
-  // resumen de la otra. En serie.
+  // El cron reclamaría TODAS las alertas de la base y le robaría el resumen a las pruebas de otros archivos
+  // que corren a la vez: cada corrida se limita a SU alerta con `x-alertas-solo` (solo con Brevo en simulacro).
+  // Entre ellas, en serie.
   test.describe.configure({ mode: "serial" });
 
   test("una alerta confirmada con un anuncio nuevo recibe su resumen UNA vez; una sin confirmar, nunca", async ({
@@ -319,17 +320,26 @@ test.describe("POST /api/cron/diario — resúmenes", () => {
     const sinConfirmar = crearAlerta({ ...banda(precio) });
     await crearAnuncio({ precio });
 
-    const r = await cron(request);
+    const r = await cron(request, { "x-alertas-solo": confirmada.alerta_id });
     expect(r.status()).toBe(200);
     const cuerpo = await r.json();
     expect(cuerpo.resumenes).toMatchObject({ fallidos: 0 });
     expect(JSON.stringify(cuerpo)).not.toContain("@");
     const envio = campo(confirmada.alerta_id, "ultimo_envio_at");
     expect(envio).not.toBe("null");
+    // La sin confirmar, pedida a propósito: tampoco sale.
+    const ajena = await cron(request, {
+      "x-alertas-solo": sinConfirmar.alerta_id,
+    });
+    expect(ajena.status()).toBe(200);
     expect(campo(sinConfirmar.alerta_id, "ultimo_envio_at")).toBe("null");
 
     // Otra corrida el mismo día no la toca.
-    expect((await cron(request)).status()).toBe(200);
+    expect(
+      (
+        await cron(request, { "x-alertas-solo": confirmada.alerta_id })
+      ).status(),
+    ).toBe(200);
     expect(campo(confirmada.alerta_id, "ultimo_envio_at")).toBe(envio);
   });
 
@@ -343,7 +353,10 @@ test.describe("POST /api/cron/diario — resúmenes", () => {
     const solicitud = await visitaDeManana();
 
     // Tope 0 (solo con Brevo en simulacro): el cupo del día está lleno.
-    const lleno = await cron(request, { "x-alertas-tope": "0" });
+    const lleno = await cron(request, {
+      "x-alertas-tope": "0",
+      "x-alertas-solo": alerta.alerta_id,
+    });
     expect(lleno.status()).toBe(200);
     const cuerpo = await lleno.json();
     expect(cuerpo.resumenes.enviados).toBe(0);
@@ -356,7 +369,7 @@ test.describe("POST /api/cron/diario — resúmenes", () => {
     ).toEqual(["t"]);
 
     // Al día siguiente (o con cupo), la alerta sale completa: no se perdió nada.
-    const conCupo = await cron(request);
+    const conCupo = await cron(request, { "x-alertas-solo": alerta.alerta_id });
     expect(conCupo.status()).toBe(200);
     expect(campo(alerta.alerta_id, "ultimo_envio_at")).not.toBe("null");
     expect(campo(alerta.alerta_id, "ultimo_resumen")).toContain('"nuevos": 1');
@@ -370,7 +383,9 @@ test.describe("POST /api/cron/diario — resúmenes", () => {
       (await post(request, "/api/alertas/baja", { token: a.baja })).status(),
     ).toBe(200);
     await crearAnuncio({ precio });
-    expect((await cron(request)).status()).toBe(200);
+    expect(
+      (await cron(request, { "x-alertas-solo": a.alerta_id })).status(),
+    ).toBe(200);
     expect(campo(a.alerta_id, "ultimo_envio_at")).toBe("null");
   });
 });

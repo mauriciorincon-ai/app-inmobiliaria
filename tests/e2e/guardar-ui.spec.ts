@@ -367,10 +367,20 @@ test.describe("alertas por correo", () => {
     await expect(tarjeta).not.toContainText(correo);
     await expect(tarjeta.getByRole("switch")).toHaveCount(0);
 
-    // 4. El enlace «Confirmar» del correo (fragmento `#c=`): confirma y se borra de la barra de direcciones.
+    // 4. El enlace «Confirmar» del correo (fragmento `#c=`): abrirlo NO confirma (un escáner de correo no puede
+    // suscribir a nadie); hay que tocar el botón. El token se borra de la barra de direcciones.
     const confirmar = enlaceDeCorreo(correo, "confirmar");
     await page.goto("/privacidad");
     await page.goto(`/alertas#c=${confirmar}`);
+    await expect(
+      page.getByRole("heading", { name: "Confirma tu correo" }),
+    ).toBeVisible();
+    expect(
+      consultar(
+        `select (confirmada_at is null)::text from public.alertas where email = '${correo}'`,
+      ),
+    ).toEqual(["true"]);
+    await page.getByRole("button", { name: "Confirmar mi correo" }).click();
     await expect(page.getByText("Correo confirmado")).toBeVisible();
     await expect(page).toHaveURL(/\/alertas$/);
     const viva = page.getByRole("listitem").filter({ hasText: "Activa" });

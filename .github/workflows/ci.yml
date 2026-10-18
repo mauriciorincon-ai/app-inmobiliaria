@@ -69,6 +69,8 @@ jobs:
       R2_SECRET_ACCESS_KEY: dummy-secret
       R2_BUCKET: innmobiliaria-fotos
       NEXT_PUBLIC_RESPONSABLE_CORREO: responsable@ejemplo.test
+      # S7: número FICTICIO de Innmobiliaria para el e2e (rango 555, reservado para ficción).
+      WHATSAPP_NUMERO: "+15555550100"
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -81,6 +83,9 @@ jobs:
         run: |
           echo "OPERADOR_PASSWORD=op-$(openssl rand -hex 12)" >> "$GITHUB_ENV"
           echo "RATE_LIMIT_PEPPER=$(openssl rand -hex 16)" >> "$GITHUB_ENV"
+          # S7: secretos del webhook de WhatsApp. El e2e firma sus cargas con este mismo secreto.
+          echo "WHATSAPP_APP_SECRET=wa-$(openssl rand -hex 16)" >> "$GITHUB_ENV"
+          echo "WHATSAPP_VERIFY_TOKEN=vt-$(openssl rand -hex 8)" >> "$GITHUB_ENV"
       # Stack Supabase real (Docker preinstalado en ubuntu-latest); `start` aplica las migraciones.
       - name: Levantar Supabase local
         run: pnpm exec supabase start

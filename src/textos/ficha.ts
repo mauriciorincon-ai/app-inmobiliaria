@@ -140,8 +140,8 @@ export const FICHA = {
         en: "This owner was verified; we're renewing the proof",
       },
       detalle: {
-        es: "Al abrir la búsqueda a compradores pedimos a cada propietario verificado un CTL nuevo, de máximo 30 días, para confirmar que sigue siendo el dueño. Mientras llega, el sello lo dice.",
-        en: "When we opened search to buyers we asked every verified owner for a new title record, at most 30 days old, to confirm they still own the property. Until it arrives, the seal says so.",
+        es: "Con la búsqueda abierta a compradores, pedimos a cada propietario verificado un CTL nuevo, de máximo 30 días, para confirmar que sigue siendo el dueño. Mientras llega, el sello lo dice.",
+        en: "With search open to buyers, we ask every verified owner for a new title record, at most 30 days old, to confirm they still own the property. Until it arrives, the seal says so.",
       },
     },
     fundador: {

@@ -52,8 +52,8 @@ locality are disambiguated by code order (` (2)`, ` (3)`) so the name stays a ke
 (added on purpose to the whitelist in `permisos-funciones.spec.ts`), and returns exactly: slug,
 operation, type, neighbourhood, sector code, locality, area, rooms, price, level, CTL date, expiry and
 cover photo. **Never `direccion_aproximada`, never anything of the seller.** Only unexpired listings,
-most recently confirmed first, capped at 60. `tests/e2e/rls.spec.ts` proves it red/green by patching the
-function to leak the address.
+most recently confirmed first, capped at 60. `tests/e2e/rls.spec.ts` asserts the exact key list and that neither the address nor the seller appear; the
+gate was shown failing by temporarily patching the local function to leak the address.
 
 **6. The seal carries the date of the CTL.** `marcar_verificado_ctl(uuid, text, date)` (operator only)
 requires a CTL issued within the last 30 days (Bogotá date, no future) and stores the date; the CTL
@@ -83,5 +83,6 @@ it. The code does not change. Nothing is provisioned now (G-Plan 3a).
   stored `sector_codigo` of a listing never changes under it) plus a re-run of `convertir.mjs`.
 - Listings published before the catalogue whose neighbourhood was typed freely are searchable by filter
   but not by zone until the operator assigns a neighbourhood.
-- Everything here is additive: one table, two columns, one trigger, two new functions and four
-  `create or replace` with unchanged signatures. The Worker deployed before the migration keeps working.
+- Everything here is additive: one table, two columns, one trigger, four new functions
+  (`clave_barrio`, `fijar_sector`, `marcar_verificado_ctl`, `buscar_inmuebles`) and three `create or replace`
+  (`obtener_ficha`, `obtener_mi_anuncio`, `obtener_lote`) with unchanged signatures. The Worker deployed before the migration keeps working.

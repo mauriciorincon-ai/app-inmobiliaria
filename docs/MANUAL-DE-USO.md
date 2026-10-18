@@ -6,8 +6,8 @@
 ## Qué es esta app
 
 Innmobiliaria es la casa de los **vendedores directos** de inmuebles en Bogotá. Permite publicar un
-inmueble como "fundador" —sin comisión y sin intermediarios— antes de que la plataforma abra a los
-compradores. **Publicar el inmueble ES el registro**: no se pide un correo para una lista de espera,
+inmueble como "fundador" —sin comisión y sin intermediarios— y que los compradores lo encuentren.
+**Publicar el inmueble ES el registro**: no se pide un correo para una lista de espera,
 se pide el inmueble.
 
 Hay tres usos: el del **vendedor** (publica su inmueble), el del **comprador** (desde el Sprint 006

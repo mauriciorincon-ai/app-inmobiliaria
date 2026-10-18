@@ -68,7 +68,10 @@ export default function MapaBusqueda({
         role="alert"
         className="rounded-2xl border border-red-200 bg-red-50 p-5 text-red-700"
       >
-        <p className="font-semibold">✕ {t.caido.titulo}</p>
+        <p className="font-semibold">
+          <span aria-hidden="true">✕ </span>
+          {t.caido.titulo}
+        </p>
         <p className="mt-1 text-sm">{t.caido.detalle}</p>
         <button
           type="button"

@@ -343,7 +343,8 @@ export default function MapaMaplibre({
             onClick={empezar}
             className="rounded-full bg-purple px-4 py-2 text-sm font-semibold text-white shadow-soft hover:bg-purple-600"
           >
-            ✎ {t.dibujar}
+            <span aria-hidden="true">✎ </span>
+            {t.dibujar}
           </button>
         )}
         {cargado && (zona || dibujando) && (
@@ -352,7 +353,8 @@ export default function MapaMaplibre({
             onClick={borrar}
             className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-purple-600 shadow-soft hover:bg-purple-tint"
           >
-            ✕ {t.borrar}
+            <span aria-hidden="true">✕ </span>
+            {t.borrar}
           </button>
         )}
       </div>

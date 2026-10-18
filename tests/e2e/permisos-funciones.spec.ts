@@ -10,6 +10,7 @@ import { consultar, ejecutar } from "./utils/bd";
 // solo consulta el catálogo; la sonda vive dentro de una transacción que se revierte.
 
 const PUBLICAS = [
+  "buscar_inmuebles(operacion,tipo_inmueble,text,bigint,bigint,smallint,text,integer)",
   "eliminar_foto(text,uuid)",
   "guardar_contacto_publico(text,boolean)",
   "guardar_descripcion(text,text)",
@@ -26,7 +27,13 @@ const PUBLICAS = [
 ];
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
-const SOLO_SERVIDOR = ["marcar_vencidos", "generar_slug", "tocar_updated_at"];
+const SOLO_SERVIDOR = [
+  "marcar_vencidos",
+  "generar_slug",
+  "tocar_updated_at",
+  "fijar_sector",
+  "clave_barrio",
+];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
 // (los gestiona Supabase) ni funciones de otros dueños.
@@ -64,6 +71,14 @@ test("las funciones de cron e internas no las ejecuta ni anon ni authenticated",
      order by 1`,
   );
   expect(abiertas).toEqual([]);
+});
+
+test("marcar_verificado_ctl la ejecuta el operador (authenticated), jamás anon", async () => {
+  const [fila] = consultar(
+    `select has_function_privilege('anon', 'public.marcar_verificado_ctl(uuid,text,date)', 'execute')::text
+        || ',' || has_function_privilege('authenticated', 'public.marcar_verificado_ctl(uuid,text,date)', 'execute')::text`,
+  );
+  expect(fila).toBe("false,true");
 });
 
 test("ninguna función de public depende de PUBLIC", async () => {

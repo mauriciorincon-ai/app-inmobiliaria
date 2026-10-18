@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
 import { enIdioma } from "@/i18n/textos";
+import { FICHA } from "@/textos/ficha";
 import { LANDING } from "@/textos/landing";
 import { MI_ANUNCIO, VIGENCIA } from "@/textos/mi-anuncio";
 import { REFERIDO } from "@/textos/referido";
@@ -33,6 +34,7 @@ export default async function MiAnuncioPage({ params }: PropsLang) {
         <MiAnuncio
           lang={lang}
           t={t}
+          tSello={enIdioma(FICHA.sello, lang)}
           vigencia={enIdioma(VIGENCIA.tarjeta, lang)}
           referido={enIdioma(REFERIDO, lang)}
           paquete={enIdioma(LANDING.paquete, lang)}

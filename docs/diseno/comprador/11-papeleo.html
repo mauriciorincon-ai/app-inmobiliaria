@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Paperwork">
+      Innmobiliaria · Papeleo
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="herramientas"
+    data-estados='[["gastos","Gastos","Costs"],["documentos","Documentos","Documents"],["linea","Línea de tiempo","Timeline"],["lector-ctl","Lector de CTL (condicionado)","Title-record reader (conditional)"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 940px">
+        <div
+          class="seg"
+          role="group"
+          data-aria-es="Herramienta"
+          data-aria-en="Tool"
+        >
+          <a href="10-simulador.html"
+            ><t-es>Simulador</t-es><t-en>Calculator</t-en></a
+          >
+          <a href="11-papeleo.html" aria-current="page"
+            ><t-es>Papeleo</t-es><t-en>Paperwork</t-en></a
+          >
+        </div>
+        <h1>
+          <t-es>El papeleo, sin sorpresas</t-es
+          ><t-en>The paperwork, with no surprises</t-en>
+        </h1>
+        <p class="bajada">
+          <t-es
+            >Cada peso del cierre con su norma, antes de firmar nada. Para
+            comprar vivienda usada en Bogotá.</t-es
+          ><t-en
+            >Every peso of the closing with the rule behind it, before you sign
+            anything. For buying a pre-owned home in Bogotá.</t-en
+          >
+        </p>
+
+        <div
+          class="seg"
+          role="group"
+          data-aria-es="Sección"
+          data-aria-en="Section"
+          style="margin: 12px 0 16px; max-width: 100%; overflow-x: auto"
+        >
+          <button type="button" data-ir-estado="gastos" aria-pressed="false">
+            <t-es>Gastos</t-es><t-en>Costs</t-en>
+          </button>
+          <button
+            type="button"
+            data-ir-estado="documentos"
+            aria-pressed="false"
+          >
+            <t-es>Documentos</t-es><t-en>Documents</t-en>
+          </button>
+          <button type="button" data-ir-estado="linea" aria-pressed="false">
+            <t-es>Plazos</t-es><t-en>Timeline</t-en>
+          </button>
+          <button
+            type="button"
+            data-ir-estado="lector-ctl"
+            aria-pressed="false"
+          >
+            <t-es>Lector de CTL</t-es><t-en>CTL reader</t-en>
+          </button>
+        </div>
+
+        <!-- Gastos -->
+        <section class="pila" data-para-estado="gastos" data-papeleo>
+          <label class="campo" style="max-width: 360px"
+            ><span
+              ><t-es>Precio de la compraventa (COP)</t-es
+              ><t-en>Sale price (COP)</t-en></span
+            ><input data-papeleo-precio inputmode="numeric" value="1150000000"
+          /></label>
+          <div class="aviso aviso--info">
+            <svg class="ico"><use href="#i-documento" /></svg>
+            <span
+              ><t-es
+                >Tarifas 2026, de una tabla versionada por año con su norma. Es
+                un estimado hasta validarlo con el liquidador de la
+                Superintendencia de Notariado y Registro.</t-es
+              ><t-en
+                >2026 rates, from a table versioned by year with its rule. It's
+                an estimate until checked against the Superintendencia de
+                Notariado y Registro's calculator (the national notary and
+                land-registry authority).</t-en
+              ></span
+            >
+          </div>
+          <div class="rejilla-2">
+            <div class="card caja">
+              <h2><t-es>Paga el comprador</t-es><t-en>The buyer pays</t-en></h2>
+              <table class="tabla">
+                <tbody>
+                  <tr>
+                    <td>
+                      <t-es>Notaría (la mitad)</t-es
+                      ><t-en>Notary fees (half)</t-en><br /><span class="mute"
+                        ><t-es>Res. SNR 2026-000964-6 + IVA 19&nbsp;%</t-es
+                        ><t-en>SNR Res. 2026-000964-6 + 19% VAT</t-en></span
+                      >
+                    </td>
+                    <td class="num" data-papeleo-linea="notaria-c">—</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <t-es>Beneficencia y registro departamental</t-es
+                      ><t-en>Departmental registration tax (beneficencia)</t-en
+                      ><br /><span class="mute"
+                        ><t-es
+                          >1,67&nbsp;% a 2&nbsp;%: rango hasta fijar la
+                          norma</t-es
+                        ><t-en
+                          >1.67% to 2%: a range until the rule is pinned
+                          down</t-en
+                        ></span
+                      >
+                    </td>
+                    <td class="num" data-papeleo-linea="beneficencia">—</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <t-es>Derechos de registro (Oficina de Registro)</t-es
+                      ><t-en
+                        >Land-registry fees (ORIP, the registry office)</t-en
+                      ><br /><span class="mute"
+                        ><t-es>Res. SNR 2026-001726-6, por rango de valor</t-es
+                        ><t-en
+                          >SNR Res. 2026-001726-6, by value bracket</t-en
+                        ></span
+                      >
+                    </td>
+                    <td class="num" data-papeleo-linea="registro">—</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <t-es>CTL (certificado de tradición)</t-es
+                      ><t-en>CTL (title record certificate)</t-en><br /><span
+                        class="mute"
+                        ><t-es>Tarifa registral 2026, electrónico</t-es
+                        ><t-en>2026 registry fee, electronic copy</t-en></span
+                      >
+                    </td>
+                    <td class="num" data-papeleo-linea="ctl">—</td>
+                  </tr>
+                  <tr class="total">
+                    <th scope="row">
+                      <t-es>Total comprador</t-es><t-en>Buyer total</t-en>
+                    </th>
+                    <th class="num" data-papeleo-total="comprador">—</th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card caja">
+              <h2><t-es>Paga el vendedor</t-es><t-en>The seller pays</t-en></h2>
+              <table class="tabla">
+                <tbody>
+                  <tr>
+                    <td>
+                      <t-es>Notaría (la mitad)</t-es
+                      ><t-en>Notary fees (half)</t-en><br /><span class="mute"
+                        ><t-es>Res. SNR 2026-000964-6 + IVA 19&nbsp;%</t-es
+                        ><t-en>SNR Res. 2026-000964-6 + 19% VAT</t-en></span
+                      >
+                    </td>
+                    <td class="num" data-papeleo-linea="notaria-v">—</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <t-es>Retención en la fuente (1&nbsp;%)</t-es
+                      ><t-en>Withholding tax (1%)</t-en><br /><span class="mute"
+                        ><t-es>Estatuto Tributario, art. 398</t-es
+                        ><t-en
+                          >Tax Code (Estatuto Tributario), art. 398</t-en
+                        ></span
+                      >
+                    </td>
+                    <td class="num" data-papeleo-linea="retencion">—</td>
+                  </tr>
+                  <tr class="total">
+                    <th scope="row">
+                      <t-es>Total vendedor</t-es><t-en>Seller total</t-en>
+                    </th>
+                    <th class="num" data-papeleo-total="vendedor">—</th>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="mute" style="margin: 10px 0 0">
+                <t-es
+                  >La ganancia ocasional (15&nbsp;% de la utilidad) depende de
+                  cada caso: aquí no la calculamos.</t-es
+                ><t-en
+                  >Capital gains tax (ganancia ocasional, 15% of the gain)
+                  depends on each case: we don't calculate it here.</t-en
+                >
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Documentos -->
+        <section class="card caja pila" data-para-estado="documentos">
+          <h2 style="margin: 0">
+            <t-es>Qué pedir antes de firmar la promesa</t-es
+            ><t-en>What to ask for before signing the promise of sale</t-en>
+          </h2>
+          <label class="check"
+            ><input type="checkbox" checked /><span
+              ><strong
+                ><t-es>CTL de máximo 30 días.</t-es
+                ><t-en>A title record (CTL) at most 30 days old.</t-en></strong
+              >
+              <t-es
+                >Dice quién es el dueño y si hay hipotecas, embargos o demandas
+                inscritas.</t-es
+              ><t-en
+                >It shows who the owner is and whether there are registered
+                mortgages, liens or lawsuits.</t-en
+              ></span
+            ></label
+          >
+          <label class="check"
+            ><input type="checkbox" /><span
+              ><strong
+                ><t-es>Copia de la escritura anterior.</t-es
+                ><t-en>A copy of the previous deed (escritura).</t-en></strong
+              ></span
+            ></label
+          >
+          <label class="check"
+            ><input type="checkbox" /><span
+              ><strong
+                ><t-es>Paz y salvo del impuesto predial.</t-es
+                ><t-en
+                  >Proof the property tax (predial) is paid up.</t-en
+                ></strong
+              >
+              <t-es>Otros paz y salvos, según el inmueble.</t-es
+              ><t-en>Other clearances depend on the property.</t-en></span
+            ></label
+          >
+          <label class="check"
+            ><input type="checkbox" /><span
+              ><strong
+                ><t-es
+                  >Cédula del vendedor, y de su cónyuge si la vivienda está
+                  afectada a vivienda familiar.</t-es
+                ><t-en
+                  >The seller's cédula, and their spouse's if the home is
+                  protected as a family home.</t-en
+                ></strong
+              >
+              <t-es>Así lo exige la Ley 258 de 1996: firman los dos.</t-es
+              ><t-en>Ley 258 of 1996 requires it: both sign.</t-en></span
+            ></label
+          >
+          <label class="check"
+            ><input type="checkbox" /><span
+              ><strong
+                ><t-es>La promesa de compraventa por escrito</t-es
+                ><t-en>The promise of sale in writing</t-en></strong
+              >
+              <t-es>con precio, forma de pago, fecha de entrega y arras.</t-es
+              ><t-en
+                >(promesa de compraventa) with price, payment terms, handover
+                date and deposit (arras).</t-en
+              ></span
+            ></label
+          >
+        </section>
+
+        <!-- Plazos -->
+        <section class="card caja" data-para-estado="linea">
+          <ol class="pasos">
+            <li class="hecho">
+              <span class="pasos__n">1</span
+              ><span
+                ><strong
+                  ><t-es>Antes de firmar</t-es
+                  ><t-en>Before signing</t-en></strong
+                ><br /><t-es>CTL de máximo 30 días y estudio de títulos.</t-es
+                ><t-en
+                  >A title record at most 30 days old and a title review.</t-en
+                ></span
+              >
+            </li>
+            <li class="actual">
+              <span class="pasos__n">2</span
+              ><span
+                ><strong
+                  ><t-es>Promesa de compraventa</t-es
+                  ><t-en>Promise of sale</t-en></strong
+                ><br /><t-es
+                  >Si te retiras pierdes las arras; si el vendedor incumple, te
+                  devuelve el doble.</t-es
+                ><t-en
+                  >If you back out you lose the deposit (arras); if the seller
+                  defaults, they pay you back double.</t-en
+                ></span
+              >
+            </li>
+            <li>
+              <span class="pasos__n">3</span
+              ><span
+                ><strong
+                  ><t-es>Escritura en la notaría</t-es
+                  ><t-en>Deed at the notary's office</t-en></strong
+                ><br /><t-es>Se pagan notaría y retención.</t-es
+                ><t-en>Notary fees and withholding tax are paid.</t-en></span
+              >
+            </li>
+            <li>
+              <span class="pasos__n">4</span
+              ><span
+                ><strong
+                  ><t-es>Registro: dentro de 2 meses</t-es
+                  ><t-en>Registration: within 2 months</t-en></strong
+                ><br /><t-es
+                  >Desde la firma de la escritura, en la Oficina de
+                  Registro.</t-es
+                ><t-en
+                  >From the signing of the deed, at the land-registry
+                  office.</t-en
+                ></span
+              >
+            </li>
+            <li>
+              <span class="pasos__n">5</span
+              ><span
+                ><strong><t-es>Entrega</t-es><t-en>Handover</t-en></strong
+                ><br /><t-es>Acta de entrega y traslado de servicios.</t-es
+                ><t-en>A handover record and transfer of utilities.</t-en></span
+              >
+            </li>
+          </ol>
+        </section>
+
+        <!-- Lector de CTL (condicionado) -->
+        <section class="pila" data-para-estado="lector-ctl">
+          <div class="aviso aviso--aviso">
+            <svg class="ico"><use href="#i-alerta" /></svg>
+            <div>
+              <strong><t-es>Condicionado</t-es><t-en>Conditional</t-en></strong
+              ><t-es
+                >Se construye solo si las reglas funcionan con CTL reales. Si no
+                alcanzan, se descarta con nombre.</t-es
+              ><t-en
+                >It's only built if the rules work on real title records. If
+                they fall short, it's dropped and named as such.</t-en
+              >
+            </div>
+          </div>
+          <label class="campo"
+            ><span
+              ><t-es>Pega el texto de tu CTL</t-es
+              ><t-en>Paste your title record's text</t-en></span
+            >
+            <textarea
+              data-es="ANOTACIÓN: Nro 012 … ESPECIFICACIÓN: HIPOTECA …"
+              data-en="ANOTACIÓN: Nro 012 … ESPECIFICACIÓN: HIPOTECA …"
+            ></textarea>
+            <span class="campo__ayuda"
+              ><t-es>El texto no se guarda: lo leemos en tu teléfono.</t-es
+              ><t-en
+                >The text isn't saved: we read it on your phone.</t-en
+              ></span
+            ></label
+          >
+          <div class="card caja pila">
+            <div class="aviso aviso--aviso">
+              <svg class="ico"><use href="#i-alerta" /></svg
+              ><span
+                ><strong
+                  ><t-es>Hipoteca vigente (anotación 12)</t-es
+                  ><t-en>Active mortgage (entry 12)</t-en></strong
+                ><t-es>Pregunta cómo se cancela antes de la escritura.</t-es
+                ><t-en>Ask how it will be paid off before the deed.</t-en></span
+              >
+            </div>
+            <div class="aviso aviso--aviso">
+              <svg class="ico"><use href="#i-persona" /></svg
+              ><span
+                ><strong
+                  ><t-es>Afectación a vivienda familiar (anotación 14)</t-es
+                  ><t-en>Protected family home (entry 14)</t-en></strong
+                ><t-es>Deben firmar los dos cónyuges.</t-es
+                ><t-en>Both spouses must sign.</t-en></span
+              >
+            </div>
+            <div class="aviso aviso--ok">
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                ><strong
+                  ><t-es>Sin embargos ni demandas inscritas</t-es
+                  ><t-en>No registered liens or lawsuits</t-en></strong
+                ></span
+              >
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

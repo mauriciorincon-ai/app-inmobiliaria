@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import SelectorIdioma from "@/components/ui/SelectorIdioma";
 import type { Idioma } from "@/i18n/idiomas";
@@ -13,7 +14,15 @@ export default function EncabezadoInterior({ lang }: { lang: Idioma }) {
     <header className="border-b border-purple-200/60">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5 lg:px-10">
         <Logo etiqueta={t.nav.inicio} />
-        <SelectorIdioma idioma={lang} etiqueta={t.selector.etiqueta} />
+        <div className="flex items-center gap-4 sm:gap-6">
+          <Link
+            href="/buscar"
+            className="text-sm font-semibold text-gray underline-offset-4 hover:underline"
+          >
+            {t.nav.buscar}
+          </Link>
+          <SelectorIdioma idioma={lang} etiqueta={t.selector.etiqueta} />
+        </div>
       </div>
     </header>
   );

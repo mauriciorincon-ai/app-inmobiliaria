@@ -11,10 +11,11 @@ import {
 import { IDIOMAS } from "@/i18n/idiomas";
 
 describe("plantillas de envío (deterministas, cifras citables)", () => {
-  it("hay 3 plantillas, una por filtro", () => {
-    expect(PLANTILLAS).toHaveLength(3);
+  it("hay 4 plantillas, una por filtro", () => {
+    expect(PLANTILLAS).toHaveLength(4);
     expect(PLANTILLAS.map((p) => p.filtroSugerido).sort()).toEqual([
       "por-vencer",
+      "re-verificar",
       "sin-fotos",
       "sin-sello",
     ]);

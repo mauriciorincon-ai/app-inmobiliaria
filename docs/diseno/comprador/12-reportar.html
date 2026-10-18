@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Report a listing">
+      Innmobiliaria · Reportar un anuncio
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-lado-por-estado='{"cola-operador":"operador"}'
+    data-estados='[["formulario","Reportar","Report"],["enviado","Enviado","Sent"],["cola-operador","Cola del operador","Operator queue"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 820px">
+        <!-- Comprador: reportar -->
+        <section class="pila" data-para-estado="formulario enviado">
+          <a
+            class="btn btn--txt btn--peq"
+            href="02-ficha.html"
+            style="justify-self: start"
+            ><svg class="ico ico--s"><use href="#i-atras" /></svg
+            ><t-es>Volver al anuncio</t-es><t-en>Back to the listing</t-en></a
+          >
+          <h1>
+            <t-es>Reportar este anuncio</t-es><t-en>Report this listing</t-en>
+          </h1>
+          <p class="bajada">
+            <t-es
+              >Apartamento en El Retiro · $620.000.000. El dueño no sabe quién
+              reporta.</t-es
+            ><t-en
+              >Apartment in El Retiro · COP 620,000,000. The owner doesn't know
+              who reported it.</t-en
+            >
+          </p>
+        </section>
+
+        <form
+          class="card caja pila"
+          data-para-estado="formulario"
+          action="12-reportar.html"
+          style="margin-top: 12px"
+        >
+          <fieldset style="border: 0; padding: 0; margin: 0" class="pila">
+            <legend class="campo__label">
+              <t-es>¿Qué pasa con este anuncio?</t-es
+              ><t-en>What's wrong with this listing?</t-en>
+            </legend>
+            <label class="check"
+              ><input type="radio" name="motivo" checked /><span
+                ><t-es>El precio es demasiado bueno para ser verdad</t-es
+                ><t-en>The price is too good to be true</t-en></span
+              ></label
+            >
+            <label class="check"
+              ><input type="radio" name="motivo" /><span
+                ><t-es>Las fotos son de otro anuncio</t-es
+                ><t-en>The photos belong to another listing</t-en></span
+              ></label
+            >
+            <label class="check"
+              ><input type="radio" name="motivo" /><span
+                ><t-es>Quien publica no parece el dueño</t-es
+                ><t-en
+                  >The person listing doesn't seem to be the owner</t-en
+                ></span
+              ></label
+            >
+            <label class="check"
+              ><input type="radio" name="motivo" /><span
+                ><t-es>Me pidió plata antes de la visita</t-es
+                ><t-en>They asked me for money before the viewing</t-en></span
+              ></label
+            >
+            <label class="check"
+              ><input type="radio" name="motivo" /><span
+                ><t-es>Ya se vendió o se arrendó</t-es
+                ><t-en>It's already sold or rented</t-en></span
+              ></label
+            >
+            <label class="check"
+              ><input type="radio" name="motivo" /><span
+                ><t-es>Otra cosa</t-es><t-en>Something else</t-en></span
+              ></label
+            >
+          </fieldset>
+          <label class="campo"
+            ><span
+              ><t-es>Cuéntanos más (opcional)</t-es
+              ><t-en>Tell us more (optional)</t-en></span
+            ><textarea
+              data-es="Ej.: me pidió el 50 % por adelantado por WhatsApp"
+              data-en="E.g. they asked for 50% up front on WhatsApp"
+            ></textarea>
+          </label>
+          <button type="button" class="btn" data-ir-estado="enviado">
+            <svg class="ico"><use href="#i-bandera" /></svg
+            ><t-es>Enviar reporte</t-es><t-en>Send report</t-en>
+          </button>
+        </form>
+
+        <section
+          class="pila"
+          data-para-estado="enviado"
+          style="margin-top: 12px"
+        >
+          <div class="aviso aviso--ok" role="status">
+            <svg class="ico"><use href="#i-check" /></svg>
+            <div>
+              <strong
+                ><t-es>Gracias: una persona del equipo lo revisa</t-es
+                ><t-en
+                  >Thanks: a person on our team will review it</t-en
+                ></strong
+              ><t-es
+                >Si confirmamos el problema, el anuncio sale de la búsqueda. No
+                compartimos tu nombre con el dueño.</t-es
+              ><t-en
+                >If we confirm the problem, the listing comes off search. We
+                don't share your name with the owner.</t-en
+              >
+            </div>
+          </div>
+          <div class="card caja pila">
+            <h2 style="margin: 0">
+              <t-es>Mientras tanto, protégete</t-es
+              ><t-en>Meanwhile, protect yourself</t-en>
+            </h2>
+            <ul class="pasos">
+              <li>
+                <span class="pasos__n"
+                  ><svg class="ico ico--s"><use href="#i-candado" /></svg></span
+                ><span
+                  ><t-es>No pagues anticipos antes de visitar.</t-es
+                  ><t-en>Don't pay deposits before a viewing.</t-en></span
+                >
+              </li>
+              <li>
+                <span class="pasos__n"
+                  ><svg class="ico ico--s">
+                    <use href="#i-documento" /></svg></span
+                ><span
+                  ><t-es
+                    >Pide el CTL y compara el nombre del dueño con su
+                    cédula.</t-es
+                  ><t-en
+                    >Ask for the title record and compare the owner's name with
+                    their cédula.</t-en
+                  ></span
+                >
+              </li>
+              <li>
+                <span class="pasos__n"
+                  ><svg class="ico ico--s"><use href="#i-persona" /></svg></span
+                ><span
+                  ><t-es
+                    >No envíes tu cédula ni tus soportes por redes
+                    sociales.</t-es
+                  ><t-en
+                    >Don't send your ID or financial documents over social
+                    media.</t-en
+                  ></span
+                >
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Operador: cola antifraude (reglas visibles, sin IA) -->
+        <section class="pila" data-para-estado="cola-operador">
+          <div class="aviso aviso--info">
+            <svg class="ico"><use href="#i-escudo" /></svg
+            ><span
+              ><t-es>Vista del operador, en su panel.</t-es
+              ><t-en>The operator's view, in their panel.</t-en></span
+            >
+          </div>
+          <h1>
+            <t-es>Revisión antifraude</t-es><t-en>Anti-fraud review</t-en>
+          </h1>
+          <p class="bajada">
+            <t-es
+              >Cada bandera sale de una regla escrita, no de una corazonada. Tú
+              decides.</t-es
+            ><t-en
+              >Every flag comes from a written rule, not a hunch. You
+              decide.</t-en
+            >
+          </p>
+          <article class="card caja pila">
+            <div class="fila" style="justify-content: space-between">
+              <div>
+                <h2 style="margin: 0">
+                  <t-es>Apartamento · El Retiro · $620 M</t-es
+                  ><t-en>Apartment · El Retiro · COP 620M</t-en>
+                </h2>
+                <p class="mute" style="margin: 0">
+                  <t-es>Publicado hace 2 días · Fundador</t-es
+                  ><t-en>Listed 2 days ago · Founding seller</t-en>
+                </p>
+              </div>
+              <span
+                class="nivel"
+                style="background: var(--error-fondo); color: var(--error)"
+                ><svg class="ico ico--s"><use href="#i-bandera" /></svg
+                ><t-es>4 banderas</t-es><t-en>4 flags</t-en></span
+              >
+            </div>
+            <ul class="pasos">
+              <li>
+                <span
+                  class="pasos__n"
+                  style="background: var(--error-fondo); color: var(--error)"
+                  >!</span
+                ><span
+                  ><strong
+                    ><t-es>Precio 37&nbsp;% bajo la mediana de su zona</t-es
+                    ><t-en>Price 37% below its area's median</t-en></strong
+                  ><br /><span class="mute"
+                    ><t-es>Regla: 30&nbsp;% o más por debajo.</t-es
+                    ><t-en>Rule: 30% or more below.</t-en></span
+                  ></span
+                >
+              </li>
+              <li>
+                <span
+                  class="pasos__n"
+                  style="background: var(--error-fondo); color: var(--error)"
+                  >!</span
+                ><span
+                  ><strong
+                    ><t-es>Foto repetida en otro anuncio</t-es
+                    ><t-en>Photo repeated in another listing</t-en></strong
+                  ><br /><span class="mute"
+                    ><t-es
+                      >La foto 3 es idéntica a la portada de un anuncio de Chicó
+                      Norte.</t-es
+                    ><t-en
+                      >Photo 3 is identical to the cover of a Chicó Norte
+                      listing.</t-en
+                    ></span
+                  ></span
+                >
+              </li>
+              <li>
+                <span
+                  class="pasos__n"
+                  style="background: var(--aviso-fondo); color: var(--aviso)"
+                  >!</span
+                ><span
+                  ><strong
+                    ><t-es>Teléfono repetido</t-es
+                    ><t-en>Phone number repeated</t-en></strong
+                  ><br /><span class="mute"
+                    ><t-es
+                      >El mismo WhatsApp publicó otros 2 anuncios con otros
+                      nombres.</t-es
+                    ><t-en
+                      >The same WhatsApp listed 2 more properties under other
+                      names.</t-en
+                    ></span
+                  ></span
+                >
+              </li>
+              <li>
+                <span
+                  class="pasos__n"
+                  style="background: var(--aviso-fondo); color: var(--aviso)"
+                  >!</span
+                ><span
+                  ><strong
+                    ><t-es>2 reportes de compradores</t-es
+                    ><t-en>2 buyer reports</t-en></strong
+                  ><br /><span class="mute"
+                    ><t-es
+                      >«Me pidió plata antes de la visita» · «Precio demasiado
+                      bueno»</t-es
+                    ><t-en
+                      >"They asked me for money before the viewing" · "Price too
+                      good"</t-en
+                    ></span
+                  ></span
+                >
+              </li>
+            </ul>
+            <div class="fila">
+              <button
+                type="button"
+                class="btn btn--peq"
+                data-abre="pausado"
+                aria-expanded="false"
+              >
+                <t-es>Pausar el anuncio</t-es><t-en>Pause the listing</t-en>
+              </button>
+              <button
+                type="button"
+                class="btn btn--sec btn--peq"
+                data-abre="ctl-pedido"
+                aria-expanded="false"
+              >
+                <t-es>Pedir el CTL al dueño</t-es
+                ><t-en>Ask the owner for the title record</t-en>
+              </button>
+              <button
+                type="button"
+                class="btn btn--txt btn--peq"
+                data-abre="descartadas"
+                aria-expanded="false"
+              >
+                <t-es>Descartar las banderas</t-es
+                ><t-en>Dismiss the flags</t-en>
+              </button>
+            </div>
+            <p id="ctl-pedido" class="aviso aviso--info" hidden>
+              <svg class="ico"><use href="#i-documento" /></svg
+              ><span
+                ><t-es
+                  >Le escribimos al dueño por WhatsApp: el anuncio sigue visible
+                  con «re-verificación pendiente» hasta que muestre un CTL de
+                  máximo 30 días.</t-es
+                ><t-en
+                  >We messaged the owner on WhatsApp: the listing stays visible
+                  as "re-check pending" until they show a title record at most
+                  30 days old.</t-en
+                ></span
+              >
+            </p>
+            <p id="descartadas" class="aviso aviso--info" hidden>
+              <svg class="ico"><use href="#i-info" /></svg
+              ><span
+                ><t-es
+                  >Banderas descartadas, con tu nombre y la fecha en el registro
+                  de la revisión.</t-es
+                ><t-en
+                  >Flags dismissed, with your name and the date in the review
+                  log.</t-en
+                ></span
+              >
+            </p>
+            <p id="pausado" class="aviso aviso--ok" hidden>
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                ><t-es
+                  >Pausado: salió de la búsqueda y de su ficha. Le avisamos al
+                  dueño.</t-es
+                ><t-en
+                  >Paused: it's off search and its page. We told the
+                  owner.</t-en
+                ></span
+              >
+            </p>
+          </article>
+          <article
+            class="card caja fila"
+            style="justify-content: space-between"
+          >
+            <span
+              ><strong
+                ><t-es>Matrícula repetida</t-es
+                ><t-en>Registry number repeated</t-en></strong
+              ><br /><span class="mute"
+                ><t-es
+                  >Casa · Antiguo Country: la misma matrícula está en otro
+                  anuncio verificado.</t-es
+                ><t-en
+                  >House · Antiguo Country: the same registry number is on
+                  another verified listing.</t-en
+                ></span
+              ></span
+            >
+            <span
+              class="nivel"
+              style="background: var(--aviso-fondo); color: var(--aviso)"
+              ><svg class="ico ico--s"><use href="#i-bandera" /></svg>1</span
+            >
+          </article>
+        </section>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

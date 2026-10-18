@@ -50,6 +50,24 @@ export const CORREOS = {
       },
       cta: { es: "Cómo ganar mi sello →", en: "How to earn my seal →" },
     },
+    "re-verificar": {
+      etiqueta: {
+        es: "Re-verifica tu sello ⭐ (CTL nuevo)",
+        en: "Re-check your ⭐ seal (new title record)",
+      },
+      asunto: {
+        es: "Renueva la prueba de tu sello ⭐ con un CTL nuevo",
+        en: "Renew the proof behind your ⭐ seal with a new title record",
+      },
+      cuerpo: {
+        es: "<p>Ahora los compradores pueden buscar y ver los anuncios, y el sello ⭐ de propietario verificado muestra la <strong>fecha del Certificado de Tradición y Libertad</strong>. El tuyo todavía no tiene fecha, así que dice «re-verificación pendiente».</p><p>Saca un CTL nuevo (<strong>$23.000</strong> en línea, emisión inmediata), de máximo 30 días, y escríbenos: lo vemos una vez, no lo guardamos, y tu sello vuelve a mostrarse completo.</p>",
+        en: "<p>Buyers can now search and view listings, and the ⭐ verified-owner seal shows the <strong>date of the Certificado de Tradición y Libertad</strong> (CTL, the official record of who owns a property). Yours doesn't have a date yet, so it reads «re-check pending».</p><p>Get a new CTL (<strong>COP 23,000</strong> online, issued immediately), at most 30 days old, and write to us: we look at it once, we don't keep it, and your seal shows in full again.</p>",
+      },
+      cta: {
+        es: "Cómo re-verificar mi sello →",
+        en: "How to re-check my seal →",
+      },
+    },
     "renueva-vigencia": {
       etiqueta: { es: "Renueva tu vigencia", en: "Renew your listing" },
       asunto: {

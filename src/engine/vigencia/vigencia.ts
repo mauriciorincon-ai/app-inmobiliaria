@@ -48,3 +48,16 @@ export function estaPorVencer(
 export function nuevaVigencia(desde: Date = new Date()): Date {
   return new Date(desde.getTime() + VIGENCIA_DIAS * MS_DIA);
 }
+
+// Días COMPLETOS desde la última confirmación del anuncio, para «vivo hace N días». No hay columna:
+// cada confirmación (publicar, renovar) fija `vigente_hasta = ahora + 60 d` (ADR 007), así que la
+// última confirmación es `vigente_hasta − 60 d`. null si la fecha no es válida (no se muestra nada).
+export function diasVivo(
+  vigenteHasta: string | Date,
+  ahora: Date = new Date(),
+): number | null {
+  const hasta = aFecha(vigenteHasta);
+  if (hasta === null) return null;
+  const ms = ahora.getTime() - (hasta.getTime() - VIGENCIA_DIAS * MS_DIA);
+  return ms <= 0 ? 0 : Math.floor(ms / MS_DIA);
+}

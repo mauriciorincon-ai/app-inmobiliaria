@@ -45,7 +45,7 @@ describe("borrador (serializar / cargar)", () => {
     ...ESTADO_INICIAL,
     nombre: "Ana",
     whatsapp: "3001234567",
-    barrio: "Cedritos",
+    barrio: "Los Rosales",
     precio_esperado: "420000000",
   };
 

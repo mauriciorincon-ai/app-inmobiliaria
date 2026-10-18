@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Viewing requests">
+      Innmobiliaria · Solicitudes de visita
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-lado="dueno"
+    data-estados='[["identificado","Comprador identificado","ID-checked buyer"],["solo-whatsapp","Solo WhatsApp","WhatsApp only"],["ajuste","Ajuste del dueño","Owner setting"],["vacio","Sin solicitudes","No requests"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 760px">
+        <p class="mute" style="margin: 0">
+          <t-es>Apartamento en Los Rosales · lo ve el dueño</t-es
+          ><t-en>Apartment in Los Rosales · the owner's view</t-en>
+        </p>
+        <h1><t-es>Solicitudes de visita</t-es><t-en>Viewing requests</t-en></h1>
+        <p class="bajada">
+          <t-es
+            >Antes de aceptar, ves quién es: su nivel de verificación, para qué
+            busca y cuánto dice tener.</t-es
+          ><t-en
+            >Before you accept, you see who it is: their verification level,
+            what they're looking for and what they say they can spend.</t-en
+          >
+        </p>
+
+        <div
+          class="seg"
+          role="group"
+          data-aria-es="Vista"
+          data-aria-en="View"
+          style="margin: 10px 0 18px"
+        >
+          <button
+            type="button"
+            data-ir-estado="identificado"
+            data-activo-en="identificado solo-whatsapp vacio"
+            aria-pressed="false"
+          >
+            <t-es>Solicitudes</t-es><t-en>Requests</t-en>
+          </button>
+          <button type="button" data-ir-estado="ajuste" aria-pressed="false">
+            <t-es>Ajustes de visita</t-es><t-en>Viewing settings</t-en>
+          </button>
+        </div>
+
+        <!-- Tarjeta: comprador identificado -->
+        <article class="card caja pila" data-para-estado="identificado">
+          <div class="fila" style="align-items: flex-start; flex-wrap: nowrap">
+            <span
+              class="logo__chip"
+              style="
+                width: 48px;
+                height: 48px;
+                border-radius: 16px;
+                font-weight: 800;
+              "
+              >LM</span
+            >
+            <div style="flex: 1">
+              <h2 style="margin: 0">Laura Martínez</h2>
+              <div class="fila" style="margin-top: 6px">
+                <span class="nivel nivel--si"
+                  ><svg class="ico ico--s"><use href="#i-check" /></svg
+                  ><t-es>WhatsApp verificado</t-es
+                  ><t-en>WhatsApp verified</t-en></span
+                >
+                <span class="nivel nivel--si"
+                  ><svg class="ico ico--s"><use href="#i-persona" /></svg
+                  ><t-es>Identificada con cédula</t-es
+                  ><t-en>ID checked (cédula)</t-en></span
+                >
+              </div>
+            </div>
+          </div>
+          <table class="tabla">
+            <tbody>
+              <tr>
+                <th scope="row"><t-es>Busca</t-es><t-en>Looking to</t-en></th>
+                <td>
+                  <t-es>Comprar para vivir</t-es
+                  ><t-en>Buy a home to live in</t-en>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><t-es>Presupuesto</t-es><t-en>Budget</t-en></th>
+                <td>
+                  <t-es>$1.000 a $1.200 millones</t-es
+                  ><t-en>COP 1.0 to 1.2 billion</t-en><br /><span class="mute"
+                    ><t-es>Lo declara ella; no lo verificamos.</t-es
+                    ><t-en>Stated by her; we don't verify it.</t-en></span
+                  >
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <t-es>Cómo pagaría</t-es><t-en>How she'd pay</t-en>
+                </th>
+                <td>
+                  <t-es>Crédito hipotecario y ahorros</t-es
+                  ><t-en>Mortgage plus savings</t-en>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><t-es>Visitas</t-es><t-en>Viewings</t-en></th>
+                <td>
+                  <t-es>Asistió a 1 de 1 visitas en Innmobiliaria</t-es
+                  ><t-en>Attended 1 of 1 viewings on Innmobiliaria</t-en>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="caja caja--crema">
+            <t-es
+              >«Hola, Andrés. ¿Podría ver el apartamento el sábado en la mañana?
+              Vamos con mi pareja.»</t-es
+            ><t-en
+              >"Hi Andrés. Could I see the apartment on Saturday morning? I'd
+              come with my partner."</t-en
+            >
+          </div>
+          <div class="fila">
+            <a
+              class="btn"
+              href="06-agenda.html"
+              data-estado-destino="dueno-propone"
+              ><svg class="ico"><use href="#i-calendario" /></svg
+              ><t-es>Proponer horarios</t-es><t-en>Suggest times</t-en></a
+            >
+            <button type="button" class="btn btn--txt" data-ir-estado="vacio">
+              <t-es>No me interesa</t-es><t-en>Not interested</t-en>
+            </button>
+          </div>
+        </article>
+
+        <!-- Tarjeta: solo WhatsApp, con el dueño en «solo identificados» -->
+        <article class="card caja pila" data-para-estado="solo-whatsapp">
+          <div class="fila" style="align-items: flex-start; flex-wrap: nowrap">
+            <span
+              class="logo__chip"
+              style="
+                width: 48px;
+                height: 48px;
+                border-radius: 16px;
+                font-weight: 800;
+                background: var(--gray);
+              "
+              >CP</span
+            >
+            <div style="flex: 1">
+              <h2 style="margin: 0">Camilo P.</h2>
+              <div class="fila" style="margin-top: 6px">
+                <span class="nivel nivel--si"
+                  ><svg class="ico ico--s"><use href="#i-check" /></svg
+                  ><t-es>WhatsApp verificado</t-es
+                  ><t-en>WhatsApp verified</t-en></span
+                >
+                <span class="nivel nivel--no"
+                  ><svg class="ico ico--s"><use href="#i-persona" /></svg
+                  ><t-es>Sin identificar</t-es><t-en>ID not checked</t-en></span
+                >
+              </div>
+            </div>
+          </div>
+          <table class="tabla">
+            <tbody>
+              <tr>
+                <th scope="row"><t-es>Busca</t-es><t-en>Looking to</t-en></th>
+                <td>
+                  <t-es>Comprar para invertir</t-es
+                  ><t-en>Buy as an investment</t-en>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><t-es>Presupuesto</t-es><t-en>Budget</t-en></th>
+                <td><t-es>No lo dijo</t-es><t-en>Not stated</t-en></td>
+              </tr>
+              <tr>
+                <th scope="row"><t-es>Visitas</t-es><t-en>Viewings</t-en></th>
+                <td>
+                  <t-es>Primera visita en Innmobiliaria</t-es
+                  ><t-en>First viewing on Innmobiliaria</t-en>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="aviso aviso--aviso">
+            <svg class="ico"><use href="#i-persona" /></svg>
+            <div>
+              <strong
+                ><t-es>Pediste visitas solo de compradores identificados</t-es
+                ><t-en
+                  >You asked for viewings from ID-checked buyers only</t-en
+                ></strong
+              >
+              <t-es
+                >Le pedimos a Camilo que valide su cédula. Su solicitud queda en
+                espera; si quieres, la aceptas igual.</t-es
+              ><t-en
+                >We asked Camilo to check his ID. His request is on hold; you
+                can accept it anyway if you like.</t-en
+              >
+            </div>
+          </div>
+          <div class="fila">
+            <button
+              type="button"
+              class="btn btn--sec"
+              data-ir-estado="identificado"
+            >
+              <t-es>Aceptar igual</t-es><t-en>Accept anyway</t-en>
+            </button>
+            <button type="button" class="btn btn--txt" data-ir-estado="ajuste">
+              <t-es>Cambiar mi ajuste</t-es><t-en>Change my setting</t-en>
+            </button>
+          </div>
+        </article>
+
+        <!-- Ajuste del dueño -->
+        <section class="card caja pila" data-para-estado="ajuste">
+          <button
+            type="button"
+            class="interruptor"
+            role="switch"
+            aria-checked="true"
+            data-alternar="nota-solo-identificados"
+          >
+            <span>
+              <strong
+                ><t-es>Visitas solo de compradores identificados</t-es
+                ><t-en>Viewings from ID-checked buyers only</t-en></strong
+              ><br />
+              <span class="mute"
+                ><t-es
+                  >Recibirás menos solicitudes, pero de personas validadas en la
+                  Registraduría.</t-es
+                ><t-en
+                  >You'll get fewer requests, but from people checked against
+                  the national registry.</t-en
+                ></span
+              >
+            </span>
+            <span class="interruptor__riel" aria-hidden="true"></span>
+          </button>
+          <p
+            id="nota-solo-identificados"
+            class="aviso aviso--info"
+            style="margin: 0"
+          >
+            <svg class="ico"><use href="#i-info" /></svg>
+            <span
+              ><t-es
+                >Quien solo verificó su WhatsApp puede escribirte, pero para
+                pedir visita le pediremos su cédula.</t-es
+              ><t-en
+                >Someone who only verified their WhatsApp can still message you,
+                but to request a viewing we'll ask for their ID.</t-en
+              ></span
+            >
+          </p>
+          <hr class="sep" />
+          <button
+            type="button"
+            class="interruptor"
+            role="switch"
+            aria-checked="false"
+            data-alternar
+          >
+            <span>
+              <strong
+                ><t-es>Mostrar mi WhatsApp en el anuncio</t-es
+                ><t-en>Show my WhatsApp on the listing</t-en></strong
+              ><br />
+              <span class="mute"
+                ><t-es
+                  >Si lo apagas, te escriben solo compradores verificados desde
+                  Innmobiliaria.</t-es
+                ><t-en
+                  >If it's off, only verified buyers can reach you, through
+                  Innmobiliaria.</t-en
+                ></span
+              >
+            </span>
+            <span class="interruptor__riel" aria-hidden="true"></span>
+          </button>
+        </section>
+
+        <!-- Vacío -->
+        <div class="vacio" data-para-estado="vacio">
+          <svg class="vacio__dibujo" viewBox="0 0 120 96" aria-hidden="true">
+            <rect
+              x="22"
+              y="18"
+              width="76"
+              height="62"
+              rx="12"
+              fill="#ebe9fc"
+              stroke="#7b5dd6"
+              stroke-width="2.5"
+            />
+            <path
+              d="M22 36h76M44 10v16M76 10v16"
+              stroke="#7b5dd6"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+            <circle
+              cx="60"
+              cy="58"
+              r="9"
+              fill="#fff"
+              stroke="#191a1d"
+              stroke-width="2.5"
+            />
+          </svg>
+          <h2>
+            <t-es>Todavía no hay solicitudes de visita</t-es
+            ><t-en>No viewing requests yet</t-en>
+          </h2>
+          <p>
+            <t-es
+              >Cuando un comprador verificado pida ver tu inmueble, aquí verás
+              su tarjeta antes de decir que sí. Te avisamos por WhatsApp.</t-es
+            ><t-en
+              >When a verified buyer asks to see your property, you'll see their
+              card here before you say yes. We'll let you know on
+              WhatsApp.</t-en
+            >
+          </p>
+        </div>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

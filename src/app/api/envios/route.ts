@@ -16,7 +16,7 @@ const TANDA_MAX = 300;
 
 const bodySchema = z.object({
   plantilla: z.string(),
-  filtro: z.enum(["sin-fotos", "sin-sello", "por-vencer"]),
+  filtro: z.enum(["sin-fotos", "sin-sello", "por-vencer", "re-verificar"]),
 });
 
 function json(status: number, body: Record<string, unknown>) {

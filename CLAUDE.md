@@ -27,7 +27,7 @@
 7. **Fotos:** compresión en el cliente (WebP 1600 + thumb 400) → **R2** por URL prefirmada; **jamás Supabase Storage**; el control de calidad fotográfica es código determinista.
 8. **Público:** dueños directos (venta + arriendo, mensaje liderado por VENTA) y, desde la VISION v2 aprobada, **compradores**. **Inmobiliarias jamás** como usuarias ni como público del mensaje.
 9. **Cero enlaces y cero datos personales en el repo:** el dominio de producción vive en el producto y la campaña, nunca en README, homepage del repo, docs públicos ni CV Viva; su valor solo en variables (`NEXT_PUBLIC_APP_URL`). Los datos del **responsable Ley 1581** (nombre, correo, teléfono) entran por variables de build, jamás commiteados.
-10. **Bilingüe:** la app nació monolingüe (deuda declarada; se paga en H-2 con su sprint). Desde el S4, **todo texto NUEVO nace como mapa `{es, en}`** con test de paridad; nada nuevo se escribe solo en español.
+10. **Bilingüe ES/EN en todo** (deuda monolingüe pagada en el S5, ADR 013): diccionario `{es, en}` en `src/textos/` sin librería; idioma por navegador y selector con cookie, resuelto con reescrituras de `next.config` (no `proxy.ts`: en Cloudflare es experimental); mismas URLs y páginas estáticas. La paridad y el barrido de literales corren en la CI: **todo texto nuevo nace en el diccionario**, jamás como literal en JSX. Correo y WhatsApp salen en el `idioma` guardado del vendedor. Manual, guía, BLUEPRINT y cierres van en español.
 
 ## Workflow del sprint (5 pasos)
 
@@ -135,4 +135,4 @@ Detalle canónico: `estandares/estandares.md` de la planeadora (solo lectura). �
 - **Correo:** Brevo cae a MOCK sin `BREVO_API_KEY` (`src/lib/brevo.ts`): ningún flujo se da por probado con el mock; el entorno de ensayo general de H-2 usa el servicio real.
 - **Indexación:** `noindex` global hasta H-4; robots y sitemap llegan con el dominio.
 
-Constitución núcleo kit v2.3.0 — Innmobiliaria, regenerada 2026-10-17 para el S4 (sustituye la v1 de kit v1.6.2). Las reglas del kit en detalle viven en docs/REGLAS-ANEXO.md y se leen solo cuando una regla se cita.
+Constitución núcleo kit v2.3.0 — Innmobiliaria, regenerada 2026-10-17 para el S4 (sustituye la v1 de kit v1.6.2); regla 10 al día tras el S5. Las reglas del kit en detalle viven en docs/REGLAS-ANEXO.md y se leen solo cuando una regla se cita.

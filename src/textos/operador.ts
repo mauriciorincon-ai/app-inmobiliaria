@@ -73,6 +73,15 @@ export const OPERADOR = {
       acciones: { es: "Acciones", en: "Actions" },
     },
     verFicha: { es: "Ver ficha →", en: "View listing →" },
+    // S6 — el anuncio de antes del catálogo: barrio escrito a mano, sin área en el mapa.
+    sinBarrio: {
+      es: "Sin barrio del catálogo",
+      en: "No catalogue neighborhood",
+    },
+    sinBarrioAyuda: {
+      es: "No sale en la búsqueda por zona dibujada hasta que le asignes uno.",
+      en: "It won't show in the drawn-area search until you assign one.",
+    },
     // El idioma en que el vendedor publicó, y por tanto el de sus avisos.
     idiomaVendedor: {
       es: "Idioma de sus avisos: {idioma}",
@@ -82,6 +91,8 @@ export const OPERADOR = {
 
   marcarVerificado: {
     boton: { es: "Verificar ⭐", en: "Verify ⭐" },
+    // Para un anuncio ya verificado pero sin fecha de CTL (re-verificación pendiente).
+    botonReverificar: { es: "Registrar CTL nuevo", en: "Record new CTL" },
     matricula: {
       es: "Número de matrícula (del CTL)",
       en: "Registry number (matrícula, from the CTL)",
@@ -90,12 +101,53 @@ export const OPERADOR = {
       es: "Vi el CTL original y el titular coincide con quien publicó.",
       en: "I saw the original CTL and the owner matches the person who listed.",
     },
+    // S6 — la fecha del CTL: el sello la muestra y el comprador ve cuán reciente es la prueba.
+    fechaCtl: {
+      es: "Fecha en que se expidió el CTL",
+      en: "Date the CTL was issued",
+    },
+    fechaAyuda: {
+      es: "De máximo 30 días. El documento no se guarda: solo la matrícula y las fechas.",
+      en: "At most 30 days old. The document isn't kept: only the registry number and the dates.",
+    },
+    ctlVencido: {
+      es: "Ese CTL tiene más de 30 días: pide uno nuevo.",
+      en: "That CTL is more than 30 days old: ask for a new one.",
+    },
+    ctlFuturo: {
+      es: "La fecha no puede ser futura.",
+      en: "The date can't be in the future.",
+    },
+    ctlInvalido: {
+      es: "Escribe la fecha completa.",
+      en: "Enter the full date.",
+    },
     confirmar: { es: "Confirmar", en: "Confirm" },
     guardando: { es: "Guardando…", en: "Saving…" },
     cancelar: { es: "Cancelar", en: "Cancel" },
     error: {
       es: "No se pudo verificar. Intenta de nuevo.",
       en: "Verification failed. Try again.",
+    },
+  },
+
+  // S6 — asignar a mano un barrio del catálogo a un anuncio de antes del catálogo.
+  asignarBarrio: {
+    boton: { es: "Asignar barrio", en: "Assign neighborhood" },
+    escrito: {
+      es: "Escribieron: «{barrio}». Elige el barrio del catálogo.",
+      en: "They wrote: «{barrio}». Choose the catalogue neighborhood.",
+    },
+    localidad: { es: "Localidad", en: "Locality" },
+    barrio: { es: "Barrio", en: "Neighborhood" },
+    elegirLocalidad: { es: "Elige la localidad", en: "Choose the locality" },
+    elegirBarrio: { es: "Elige el barrio", en: "Choose the neighborhood" },
+    confirmar: { es: "Asignar", en: "Assign" },
+    guardando: { es: "Guardando…", en: "Saving…" },
+    cancelar: { es: "Cancelar", en: "Cancel" },
+    error: {
+      es: "No se pudo asignar. Intenta de nuevo.",
+      en: "Couldn't assign it. Try again.",
     },
   },
 
@@ -141,6 +193,10 @@ export const OPERADOR = {
       "sin-fotos": { es: "anuncios sin fotos", en: "missing photos" },
       "sin-sello": { es: "anuncios sin sello ⭐", en: "missing the ⭐ seal" },
       "por-vencer": { es: "anuncios por vencer", en: "about to expire" },
+      "re-verificar": {
+        es: "anuncios verificados sin fecha de CTL",
+        en: "verified with no CTL date",
+      },
     },
     vistaPrevia: { es: "Vista previa", en: "Preview" },
     // Nombre ficticio con el que se arma el saludo de la vista previa.

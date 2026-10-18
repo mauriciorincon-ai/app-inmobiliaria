@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Verify your WhatsApp">
+      Innmobiliaria · Verifica tu WhatsApp
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-estados='[["inicio","Inicio","Start"],["esperando","Esperando el mensaje","Waiting for the message"],["listo","Verificado","Verified"],["error","Error","Error"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 640px">
+        <span class="eyebrow"
+          ><t-es>Comprador verificado</t-es><t-en>Verified buyer</t-en></span
+        >
+        <h1>
+          <t-es>Verifica que tu WhatsApp es tuyo</t-es
+          ><t-en>Verify that your WhatsApp is yours</t-en>
+        </h1>
+        <p class="bajada">
+          <t-es
+            >Así los dueños saben que les escribe una persona real con un número
+            real. No verificamos quién eres: eso es opcional y va aparte.</t-es
+          ><t-en
+            >That way owners know a real person with a real number is writing to
+            them. We don't check who you are: that's optional and
+            separate.</t-en
+          >
+        </p>
+
+        <ol class="pasos" style="margin: 18px 0 22px">
+          <li class="actual" data-para-estado="inicio error">
+            <span class="pasos__n">1</span
+            ><span
+              ><t-es>Escribe tu nombre y tu número.</t-es
+              ><t-en>Enter your name and number.</t-en></span
+            >
+          </li>
+          <li class="hecho" data-para-estado="esperando listo">
+            <span class="pasos__n">✓</span
+            ><span
+              ><t-es>Escribe tu nombre y tu número.</t-es
+              ><t-en>Enter your name and number.</t-en></span
+            >
+          </li>
+          <li class="actual" data-para-estado="esperando">
+            <span class="pasos__n">2</span
+            ><span
+              ><t-es
+                >WhatsApp se abre con un código ya escrito hacia Innmobiliaria.
+                Envíalo sin cambiarlo.</t-es
+              ><t-en
+                >WhatsApp opens with a code already typed to Innmobiliaria. Send
+                it as it is.</t-en
+              ></span
+            >
+          </li>
+          <li data-para-estado="inicio error">
+            <span class="pasos__n">2</span
+            ><span
+              ><t-es
+                >WhatsApp se abre con un código ya escrito hacia Innmobiliaria.
+                Envíalo sin cambiarlo.</t-es
+              ><t-en
+                >WhatsApp opens with a code already typed to Innmobiliaria. Send
+                it as it is.</t-en
+              ></span
+            >
+          </li>
+          <li class="hecho" data-para-estado="listo">
+            <span class="pasos__n">✓</span
+            ><span
+              ><t-es>Recibimos tu código desde tu número.</t-es
+              ><t-en>We got your code from your number.</t-en></span
+            >
+          </li>
+          <li data-para-estado="inicio esperando error">
+            <span class="pasos__n">3</span
+            ><span
+              ><t-es>Vuelves aquí y quedas verificado.</t-es
+              ><t-en>Come back here and you're verified.</t-en></span
+            >
+          </li>
+        </ol>
+
+        <!-- Inicio -->
+        <form
+          class="card caja pila"
+          data-para-estado="inicio error"
+          action="03-verificar-whatsapp.html"
+        >
+          <div class="aviso aviso--error" data-para-estado="error" role="alert">
+            <svg class="ico"><use href="#i-alerta" /></svg>
+            <div>
+              <strong
+                ><t-es>El código llegó desde otro número</t-es
+                ><t-en>The code came from a different number</t-en></strong
+              >
+              <t-es
+                >Revisa que el número de abajo sea el de tu WhatsApp y vuelve a
+                intentarlo. Si el código venció (dura 10 minutos), te damos uno
+                nuevo.</t-es
+              ><t-en
+                >Check that the number below is your WhatsApp number and try
+                again. If the code expired (it lasts 10 minutes), we'll give you
+                a new one.</t-en
+              >
+            </div>
+          </div>
+          <label class="campo"
+            ><span><t-es>Cómo te llamas</t-es><t-en>Your name</t-en></span
+            ><input value="Laura" autocomplete="given-name"
+          /></label>
+          <label class="campo"
+            ><span
+              ><t-es>Tu WhatsApp</t-es><t-en>Your WhatsApp number</t-en></span
+            ><input value="300 123 4567" inputmode="tel" autocomplete="tel" />
+            <span class="campo__ayuda"
+              ><t-es
+                >Un número de Colombia. Lo ve un dueño solo cuando tú le
+                escribes.</t-es
+              ><t-en
+                >A Colombian number. An owner sees it only when you write to
+                them.</t-en
+              ></span
+            ></label
+          >
+          <label class="check"
+            ><input type="checkbox" checked /><span
+              ><t-es
+                >Acepto que Innmobiliaria guarde mi nombre y mi número para
+                verificarme y registrar mis contactos (Ley 1581).</t-es
+              ><t-en
+                >I agree that Innmobiliaria keeps my name and number to verify
+                me and log my contacts (Colombia's data-protection law, Ley
+                1581).</t-en
+              >
+              <a href="#" class="btn--txt" style="padding: 0"
+                ><t-es>Política de datos</t-es><t-en>Data policy</t-en></a
+              ></span
+            ></label
+          >
+          <button
+            type="button"
+            class="btn btn--ancho"
+            data-ir-estado="esperando"
+          >
+            <svg class="ico"><use href="#i-chat" /></svg
+            ><t-es>Verificar con WhatsApp</t-es
+            ><t-en>Verify with WhatsApp</t-en>
+          </button>
+        </form>
+
+        <!-- Esperando -->
+        <section
+          class="card caja pila"
+          data-para-estado="esperando"
+          aria-live="polite"
+        >
+          <p style="margin: 0">
+            <strong
+              ><t-es
+                >WhatsApp se abrió con este mensaje para Innmobiliaria:</t-es
+              ><t-en
+                >WhatsApp opened with this message to Innmobiliaria:</t-en
+              ></strong
+            >
+          </p>
+          <div
+            class="caja caja--tinta num"
+            style="
+              font-size: 22px;
+              font-weight: 800;
+              text-align: center;
+              letter-spacing: 0.04em;
+            "
+          >
+            INN-4821
+          </div>
+          <div class="fila" style="gap: 10px">
+            <span
+              class="esq"
+              style="width: 22px; height: 22px; border-radius: 99px"
+            ></span>
+            <span
+              ><t-es
+                >Esperando tu mensaje… Envíalo sin cambiarlo y vuelve
+                aquí.</t-es
+              ><t-en
+                >Waiting for your message… Send it as it is and come back
+                here.</t-en
+              ></span
+            >
+          </div>
+          <p class="mute" style="margin: 0">
+            <t-es>El código vence en 10 minutos.</t-es
+            ><t-en>The code expires in 10 minutes.</t-en>
+          </p>
+          <button type="button" class="btn btn--ancho" data-ir-estado="listo">
+            <t-es>Ya lo envié</t-es><t-en>I sent it</t-en>
+          </button>
+          <button
+            type="button"
+            class="btn btn--txt"
+            data-abre="sin-whatsapp"
+            aria-expanded="false"
+          >
+            <t-es>No se abrió WhatsApp</t-es><t-en>WhatsApp didn't open</t-en>
+          </button>
+          <div id="sin-whatsapp" class="caja caja--crema pila" hidden>
+            <p style="margin: 0">
+              <t-es
+                >Copia el código y envíalo desde tu WhatsApp al número de
+                Innmobiliaria: +57 601 000 0000 (número de ejemplo).</t-es
+              ><t-en
+                >Copy the code and send it from your WhatsApp to Innmobiliaria's
+                number: +57 601 000 0000 (sample number).</t-en
+              >
+            </p>
+            <button
+              type="button"
+              class="btn btn--sec btn--peq"
+              data-copiar="copiado"
+            >
+              <svg class="ico ico--s"><use href="#i-copiar" /></svg
+              ><t-es>Copiar el código</t-es><t-en>Copy the code</t-en>
+            </button>
+            <p id="copiado" class="aviso aviso--ok" hidden>
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                ><t-es>Código copiado.</t-es><t-en>Code copied.</t-en></span
+              >
+            </p>
+          </div>
+        </section>
+
+        <!-- Listo -->
+        <section class="pila" data-para-estado="listo">
+          <div class="aviso aviso--ok" role="status">
+            <svg class="ico"><use href="#i-check" /></svg>
+            <div>
+              <strong
+                ><t-es>Tu WhatsApp quedó verificado</t-es
+                ><t-en>Your WhatsApp is verified</t-en></strong
+              >
+              <t-es
+                >Ya puedes escribirles a los dueños y pedir visitas. Lo hiciste
+                una vez: no te lo volvemos a pedir.</t-es
+              ><t-en
+                >You can now message owners and request viewings. You did it
+                once: we won't ask again.</t-en
+              >
+            </div>
+          </div>
+          <a
+            class="btn btn--ancho"
+            href="02-ficha.html"
+            data-estado-destino="contactar"
+            ><t-es>Volver al anuncio</t-es><t-en>Back to the listing</t-en></a
+          >
+          <div class="card caja caja--banda pila">
+            <h2 style="margin: 0">
+              <t-es>¿Quieres que los dueños te abran la puerta más rápido?</t-es
+              ><t-en>Want owners to open the door faster?</t-en>
+            </h2>
+            <p class="bajada" style="margin: 0">
+              <t-es
+                >Algunos dueños reciben visitas solo de compradores
+                identificados. Valida tu cédula en un minuto; no guardamos el
+                documento.</t-es
+              ><t-en
+                >Some owners only accept viewings from ID-checked buyers.
+                Validate your cédula (Colombian national ID) in a minute; we
+                don't keep the document.</t-en
+              >
+            </p>
+            <a class="btn btn--sec" href="04-identificarse.html"
+              ><svg class="ico"><use href="#i-persona" /></svg
+              ><t-es>Identificarme (opcional)</t-es
+              ><t-en>Check my ID (optional)</t-en></a
+            >
+          </div>
+        </section>
+
+        <p class="mute" style="margin-top: 22px; display: flex; gap: 6px">
+          <svg class="ico ico--s" style="margin-top: 2px">
+            <use href="#i-candado" />
+          </svg>
+          <span
+            ><t-es
+              >Verificamos que el número es tuyo, no quién eres. Mirar anuncios
+              y guardar favoritos nunca lo exige.</t-es
+            ><t-en
+              >We check that the number is yours, not who you are. Browsing
+              listings and saving favorites never requires it.</t-en
+            ></span
+          >
+        </p>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

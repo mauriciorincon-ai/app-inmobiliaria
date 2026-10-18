@@ -11,6 +11,7 @@ const rutas = [
   "/confirmacion",
   "/operador/login",
   "/mi-anuncio",
+  "/buscar",
 ];
 
 for (const ruta of rutas) {
@@ -24,9 +25,12 @@ for (const ruta of rutas) {
 }
 
 test("axe sin violaciones en la ficha pública /i/[slug]", async ({ page }) => {
-  const { barrio } = await registrar(page, { barrioBase: "Kennedy" });
+  const { nombre } = await registrar(page, {
+    localidad: "Kennedy",
+    barrio: "Ciudad Kennedy Central",
+  });
   await entrarOperador(page);
-  const fila = page.getByRole("row").filter({ hasText: barrio });
+  const fila = page.getByRole("row").filter({ hasText: nombre });
   await fila.getByRole("link", { name: /Ver ficha/i }).click();
   await expect(page).toHaveURL(/\/i\//);
   // Se llega por navegación cliente (Link) → en `next dev` el <title> del generateMetadata se aplica
@@ -58,7 +62,7 @@ test("axe sin violaciones en cada paso de /publicar", async ({ page }) => {
   await page.getByRole("radio", { name: "Venta" }).check({ force: true });
   await page.getByLabel("Tipo de inmueble").selectOption("apartamento");
   await page.getByLabel("Localidad").selectOption("Chapinero");
-  await page.getByLabel("Barrio").fill("Cedritos");
+  await page.getByLabel("Barrio").selectOption("Los Rosales");
   await page.getByLabel("Área (m²)").fill("78");
   await page.getByLabel("Habitaciones").fill("3");
   await page.getByLabel("Precio esperado (COP)").fill("420000000");

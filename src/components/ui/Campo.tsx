@@ -24,7 +24,13 @@ type Props = Base &
         autoComplete?: string;
       }
     | { control: "textarea" }
-    | { control: "select"; opciones: Opcion[]; placeholder: string }
+    | {
+        control: "select";
+        opciones: Opcion[];
+        placeholder: string;
+        // Un select que espera a otro (p. ej. el barrio espera a la localidad).
+        deshabilitado?: boolean;
+      }
   );
 
 const claseControl =
@@ -65,7 +71,11 @@ export default function Campo(props: Props) {
     );
   } else if (props.control === "select") {
     control = (
-      <select {...comun} onChange={(e) => onChange(e.target.value)}>
+      <select
+        {...comun}
+        disabled={props.deshabilitado}
+        onChange={(e) => onChange(e.target.value)}
+      >
         <option value="" disabled>
           {props.placeholder}
         </option>

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Check your ID">
+      Innmobiliaria · Identifícate
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-comprador-inicial="c1"
+    data-estados='[["inicio","Inicio","Start"],["validando","Validando","Checking"],["identificado","Identificado","ID checked"],["no-coincide","No coincide","No match"],["no-disponible","Servicio no disponible","Service unavailable"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 640px">
+        <span class="eyebrow"
+          ><t-es>Comprador identificado · opcional</t-es
+          ><t-en>ID-checked buyer · optional</t-en></span
+        >
+        <h1>
+          <t-es>Identifícate con tu cédula</t-es
+          ><t-en>Check your ID with your cédula</t-en>
+        </h1>
+        <p class="bajada">
+          <t-es
+            >Validamos que tu nombre y tu número de cédula coinciden en la
+            Registraduría. Sube tu confianza para visitas y ofertas: algunos
+            dueños solo reciben a compradores identificados.</t-es
+          ><t-en
+            >We check that your name and cédula number (Colombia's national ID)
+            match the Registraduría, the national registry. It raises your trust
+            for viewings and offers: some owners only welcome ID-checked
+            buyers.</t-en
+          >
+        </p>
+
+        <div class="fila" style="margin: 14px 0 18px">
+          <span class="nivel nivel--si" data-para-comprador="c1 c2"
+            ><svg class="ico ico--s"><use href="#i-check" /></svg
+            ><t-es>WhatsApp verificado</t-es
+            ><t-en>WhatsApp verified</t-en></span
+          >
+          <span class="nivel nivel--no" data-para-comprador="c0"
+            ><svg class="ico ico--s"><use href="#i-escudo" /></svg
+            ><t-es>WhatsApp sin verificar</t-es
+            ><t-en>WhatsApp not verified</t-en></span
+          >
+          <span class="nivel nivel--si" data-para-estado="identificado"
+            ><svg class="ico ico--s"><use href="#i-check" /></svg
+            ><t-es>Identificado</t-es><t-en>ID checked</t-en></span
+          >
+          <span
+            class="nivel nivel--no"
+            data-para-estado="inicio validando no-coincide no-disponible"
+            ><svg class="ico ico--s"><use href="#i-persona" /></svg
+            ><t-es>Sin identificar</t-es><t-en>ID not checked</t-en></span
+          >
+        </div>
+
+        <div
+          class="aviso aviso--aviso"
+          data-para-comprador="c0"
+          style="margin-bottom: 14px"
+        >
+          <svg class="ico"><use href="#i-escudo" /></svg>
+          <div>
+            <strong
+              ><t-es>Primero verifica tu WhatsApp</t-es
+              ><t-en>Verify your WhatsApp first</t-en></strong
+            >
+            <t-es
+              >La identificación se suma a la verificación de tu número; no la
+              reemplaza.</t-es
+            ><t-en
+              >The ID check adds to your number's verification; it doesn't
+              replace it.</t-en
+            >
+            <div style="margin-top: 6px">
+              <a class="btn btn--txt btn--peq" href="03-verificar-whatsapp.html"
+                ><t-es>Verificar mi WhatsApp</t-es
+                ><t-en>Verify my WhatsApp</t-en></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <form
+          class="card caja pila"
+          data-para-estado="inicio no-coincide validando"
+          action="04-identificarse.html"
+        >
+          <div
+            class="aviso aviso--error"
+            data-para-estado="no-coincide"
+            role="alert"
+          >
+            <svg class="ico"><use href="#i-alerta" /></svg>
+            <div>
+              <strong
+                ><t-es>Los datos no coinciden con la Registraduría</t-es
+                ><t-en>The details don't match the Registraduría</t-en></strong
+              >
+              <t-es
+                >Escribe el nombre exactamente como aparece en tu cédula, con
+                los dos apellidos, y revisa la fecha de expedición.</t-es
+              ><t-en
+                >Type your name exactly as it appears on your cédula, with both
+                surnames, and check the date of issue.</t-en
+              >
+            </div>
+          </div>
+          <label class="campo"
+            ><span><t-es>Número de cédula</t-es><t-en>Cédula number</t-en></span
+            ><input value="1.020.304.050" inputmode="numeric"
+          /></label>
+          <label class="campo"
+            ><span
+              ><t-es>Fecha de expedición</t-es><t-en>Date of issue</t-en></span
+            ><input value="2014-05-12" type="date" />
+            <span class="campo__ayuda"
+              ><t-es>Está al respaldo de tu cédula.</t-es
+              ><t-en>It's on the back of your cédula.</t-en></span
+            ></label
+          >
+          <label class="campo"
+            ><span
+              ><t-es>Nombres y apellidos, como en la cédula</t-es
+              ><t-en>Full name, as on the cédula</t-en></span
+            ><input value="Laura Martínez Ruiz" autocomplete="name"
+          /></label>
+          <label class="check"
+            ><input type="checkbox" checked /><span
+              ><t-es
+                >Autorizo consultar estos datos en la Registraduría para
+                identificarme (Ley 1581). Innmobiliaria guarda solo el resultado
+                y la fecha, nunca una foto ni el documento.</t-es
+              ><t-en
+                >I authorize checking these details with the Registraduría to
+                confirm my identity (Ley 1581). Innmobiliaria keeps only the
+                result and the date, never a photo or the document.</t-en
+              ></span
+            ></label
+          >
+          <button
+            type="button"
+            class="btn btn--ancho"
+            data-ir-estado="validando"
+            data-para-estado="inicio no-coincide"
+          >
+            <t-es>Validar mi cédula</t-es><t-en>Check my cédula</t-en>
+          </button>
+          <div
+            class="fila"
+            data-para-estado="validando"
+            aria-live="polite"
+            style="justify-content: center; gap: 10px"
+          >
+            <span
+              class="esq"
+              style="width: 22px; height: 22px; border-radius: 99px"
+            ></span>
+            <span
+              ><t-es>Consultando la Registraduría…</t-es
+              ><t-en>Checking with the Registraduría…</t-en></span
+            >
+            <button
+              type="button"
+              class="btn btn--txt btn--peq"
+              data-ir-estado="identificado"
+            >
+              <t-es>(simular respuesta)</t-es><t-en>(simulate reply)</t-en>
+            </button>
+          </div>
+        </form>
+
+        <section class="pila" data-para-estado="identificado">
+          <div class="aviso aviso--ok" role="status">
+            <svg class="ico"><use href="#i-check" /></svg>
+            <div>
+              <strong
+                ><t-es>Listo, Laura: quedaste identificada</t-es
+                ><t-en>Done, Laura: your ID is checked</t-en></strong
+              >
+              <t-es
+                >Los dueños verán «Comprador identificado» y tu nombre en tu
+                tarjeta. Tu número de cédula no lo ve nadie.</t-es
+              ><t-en
+                >Owners will see "ID-checked buyer" and your name on your card.
+                Nobody sees your cédula number.</t-en
+              >
+            </div>
+          </div>
+          <a class="btn btn--sec btn--ancho" href="05-tarjeta-comprador.html"
+            ><t-es>Ver cómo me ve un dueño</t-es
+            ><t-en>See how an owner sees me</t-en></a
+          >
+        </section>
+
+        <section
+          class="aviso aviso--aviso"
+          data-para-estado="no-disponible"
+          role="status"
+        >
+          <svg class="ico"><use href="#i-reloj" /></svg>
+          <div>
+            <strong
+              ><t-es>Hoy no podemos validar más cédulas</t-es
+              ><t-en>We can't check more IDs today</t-en></strong
+            >
+            <t-es
+              >Llegamos al tope gratuito del servicio de identificación. Tu
+              WhatsApp sigue verificado y puedes escribirles a los dueños;
+              vuelve mañana para identificarte.</t-es
+            ><t-en
+              >We reached the free limit of the ID service. Your WhatsApp is
+              still verified and you can message owners; come back tomorrow to
+              check your ID.</t-en
+            >
+          </div>
+        </section>
+
+        <ul class="pasos" style="margin-top: 22px">
+          <li>
+            <span class="pasos__n"
+              ><svg class="ico ico--s"><use href="#i-candado" /></svg></span
+            ><span
+              ><t-es>No subes una foto de tu cédula ni la guardamos.</t-es
+              ><t-en
+                >You don't upload a photo of your cédula and we don't keep
+                one.</t-en
+              ></span
+            >
+          </li>
+          <li>
+            <span class="pasos__n"
+              ><svg class="ico ico--s"><use href="#i-persona" /></svg></span
+            ><span
+              ><t-es
+                >El dueño ve tu nombre y tu nivel, nunca tu número de
+                cédula.</t-es
+              ><t-en
+                >The owner sees your name and your level, never your cédula
+                number.</t-en
+              ></span
+            >
+          </li>
+          <li>
+            <span class="pasos__n"
+              ><svg class="ico ico--s"><use href="#i-x" /></svg></span
+            ><span
+              ><t-es
+                >Puedes pedir que borremos tu identificación cuando
+                quieras.</t-es
+              ><t-en
+                >You can ask us to delete your ID check at any time.</t-en
+              ></span
+            >
+          </li>
+        </ul>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

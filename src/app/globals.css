@@ -14,6 +14,11 @@
   --color-cream: #fbf9f6;
   --color-mint: #e6f4ee;
   --color-sky: #e7eefb;
+  /* S6 — estados (propuestos en la maqueta del comprador, aprobada): siempre con símbolo y texto, jamás solo color. */
+  --color-ok: #1f6f4a;
+  --color-aviso: #8a5300;
+  --color-aviso-tint: #fff3d6;
+  --color-aviso-borde: #f0c36d;
 
   --font-display: var(--font-poppins);
   --font-sans: var(--font-poppins);

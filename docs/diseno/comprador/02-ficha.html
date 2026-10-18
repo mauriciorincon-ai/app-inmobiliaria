@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Apartment in Los Rosales">
+      Innmobiliaria · Apartamento en Los Rosales
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-estados='[["verificado","Verificado con CTL","Verified with title record"],["reverificacion","Re-verificación pendiente","Re-check pending"],["fundador","Fundador (sin CTL)","Founding seller (no title record)"],["contactar","Contactar","Contact"]]'
+  >
+    <div class="app">
+      <main class="app__main">
+        <a class="btn btn--txt btn--peq" href="01-buscar.html"
+          ><svg class="ico ico--s"><use href="#i-atras" /></svg
+          ><t-es>Volver a la búsqueda</t-es><t-en>Back to search</t-en></a
+        >
+
+        <div class="rejilla-2 rejilla-2--ficha" style="margin-top: 8px">
+          <div class="pila">
+            <!-- Galería -->
+            <div
+              style="display: grid; grid-template-columns: 2fr 1fr; gap: 8px"
+            >
+              <div
+                class="foto"
+                style="aspect-ratio: auto; grid-row: span 2; min-height: 240px"
+              >
+                <span class="foto__n">1/9</span>
+              </div>
+              <div
+                class="foto foto--2"
+                style="aspect-ratio: auto; min-height: 116px"
+              ></div>
+              <div
+                class="foto foto--3"
+                style="aspect-ratio: auto; min-height: 116px"
+              ></div>
+            </div>
+
+            <div>
+              <div class="fila">
+                <span
+                  class="sello sello--verificado"
+                  data-para-estado="verificado contactar"
+                  >⭐ <t-es>Propietario verificado</t-es
+                  ><t-en>Verified owner</t-en></span
+                >
+                <span
+                  class="sello sello--pendiente"
+                  data-para-estado="reverificacion"
+                  ><svg class="ico ico--s"><use href="#i-reloj" /></svg
+                  ><t-es>Re-verificación pendiente</t-es
+                  ><t-en>Re-check pending</t-en></span
+                >
+                <span class="sello sello--fundador" data-para-estado="fundador"
+                  ><t-es>Fundador</t-es><t-en>Founding seller</t-en></span
+                >
+                <span class="mute"
+                  ><t-es>Venta · Apartamento</t-es
+                  ><t-en>For sale · Apartment</t-en></span
+                >
+              </div>
+              <h1>
+                <t-es>Apartamento en Los Rosales</t-es
+                ><t-en>Apartment in Los Rosales</t-en>
+              </h1>
+              <p
+                class="anuncio__precio num"
+                style="font-size: 26px; color: var(--purple); margin: 0"
+              >
+                <t-es>$1.150.000.000</t-es><t-en>COP 1,150,000,000</t-en>
+              </p>
+              <div class="anuncio__datos" style="margin-top: 8px">
+                <span
+                  ><svg class="ico ico--s"><use href="#i-area" /></svg>118
+                  m²</span
+                >
+                <span
+                  ><svg class="ico ico--s"><use href="#i-cama" /></svg>3
+                  <t-es>habitaciones</t-es><t-en>bedrooms</t-en></span
+                >
+                <span>Chapinero · Bogotá</span>
+              </div>
+            </div>
+
+            <!-- Vivo hace N días: la promesa anti-zombie, visible -->
+            <div
+              class="caja caja--crema fila"
+              style="align-items: flex-start; flex-wrap: nowrap"
+            >
+              <span class="vivo" style="margin-top: 2px"
+                ><span class="sr">✓</span></span
+              >
+              <div>
+                <strong
+                  ><t-es
+                    >Vivo: el dueño confirmó hace 2 días que sigue
+                    disponible</t-es
+                  ><t-en
+                    >Live: the owner confirmed 2 days ago that it's still
+                    available</t-en
+                  ></strong
+                >
+                <p class="mute" style="margin: 2px 0 0">
+                  <t-es
+                    >Un anuncio que su dueño no confirma en 60 días desaparece
+                    solo. Aquí no hay anuncios zombie.</t-es
+                  ><t-en
+                    >A listing its owner doesn't confirm within 60 days
+                    disappears on its own. No zombie listings here.</t-en
+                  >
+                </p>
+              </div>
+            </div>
+
+            <!-- El sello, explicado (un solo sello fuerte, con criterio objetivo) -->
+            <section class="card caja" data-para-estado="verificado contactar">
+              <div class="fila" style="justify-content: space-between">
+                <h2 style="margin: 0">
+                  ⭐ <t-es>Propietario verificado</t-es
+                  ><t-en>Verified owner</t-en>
+                </h2>
+                <span class="nivel nivel--si"
+                  ><svg class="ico ico--s"><use href="#i-check" /></svg
+                  ><t-es>CTL del 3 oct 2026</t-es
+                  ><t-en>Title record of Oct 3, 2026</t-en></span
+                >
+              </div>
+              <p class="bajada" style="margin-top: 8px">
+                <t-es
+                  >Vimos el Certificado de Tradición y Libertad (CTL) de este
+                  inmueble, expedido el 3 de octubre de 2026, y quien lo publica
+                  es la misma persona que figura como dueña. El documento solo
+                  se vio: no lo guardamos.</t-es
+                ><t-en
+                  >We saw this property's Certificado de Tradición y Libertad
+                  (CTL, the official record of who owns a property in Colombia),
+                  issued on October 3, 2026, and the person who listed it is the
+                  owner named on it. We only looked at the document: we don't
+                  keep it.</t-en
+                >
+              </p>
+              <button
+                type="button"
+                class="btn btn--txt btn--peq"
+                data-abre="que-revisamos"
+                aria-expanded="false"
+              >
+                <t-es>¿Qué revisamos?</t-es><t-en>What do we check?</t-en
+                ><svg class="ico ico--s"><use href="#i-abajo" /></svg>
+              </button>
+              <ul
+                id="que-revisamos"
+                class="pasos"
+                hidden
+                style="margin-top: 8px"
+              >
+                <li class="hecho">
+                  <span class="pasos__n">✓</span
+                  ><span
+                    ><t-es
+                      >El CTL es reciente: de máximo 30 días cuando lo
+                      vimos.</t-es
+                    ><t-en
+                      >The title record is recent: at most 30 days old when we
+                      saw it.</t-en
+                    ></span
+                  >
+                </li>
+                <li class="hecho">
+                  <span class="pasos__n">✓</span
+                  ><span
+                    ><t-es>El titular del CTL coincide con quien publica.</t-es
+                    ><t-en
+                      >The owner on the title record matches the person who
+                      listed.</t-en
+                    ></span
+                  >
+                </li>
+                <li class="hecho">
+                  <span class="pasos__n">✓</span
+                  ><span
+                    ><t-es
+                      >Guardamos solo la matrícula (que nunca es pública), la
+                      fecha del CTL y el resultado.</t-es
+                    ><t-en
+                      >We keep only the registry number (never public), the
+                      record's date and the result.</t-en
+                    ></span
+                  >
+                </li>
+              </ul>
+            </section>
+
+            <section
+              class="aviso aviso--aviso"
+              data-para-estado="reverificacion"
+            >
+              <svg class="ico"><use href="#i-reloj" /></svg>
+              <div>
+                <strong
+                  ><t-es
+                    >Este dueño ya fue verificado; estamos renovando la
+                    prueba</t-es
+                  ><t-en
+                    >This owner was verified; we're renewing the proof</t-en
+                  ></strong
+                >
+                <t-es
+                  >Al abrir a compradores pedimos a cada propietario verificado
+                  un CTL nuevo, de máximo 30 días, para confirmar que sigue
+                  siendo el dueño. Mientras llega, el sello lo dice.</t-es
+                ><t-en
+                  >When we opened to buyers we asked every verified owner for a
+                  new title record, at most 30 days old, to confirm they still
+                  own the property. Until it arrives, the seal says so.</t-en
+                >
+              </div>
+            </section>
+
+            <section class="aviso aviso--info" data-para-estado="fundador">
+              <svg class="ico"><use href="#i-info" /></svg>
+              <div>
+                <strong
+                  ><t-es>Fundador: aún sin CTL verificado</t-es
+                  ><t-en
+                    >Founding seller: title record not checked yet</t-en
+                  ></strong
+                >
+                <t-es
+                  >Es un dueño directo que publicó sin papeles. Antes de pagar
+                  nada, pídele el CTL o mira el papeleo paso a paso.</t-es
+                ><t-en
+                  >A direct owner who listed without paperwork. Before you pay
+                  anything, ask for the title record (CTL) or see the paperwork
+                  step by step.</t-en
+                >
+                <div style="margin-top: 6px">
+                  <a
+                    class="btn btn--txt btn--peq"
+                    href="11-papeleo.html"
+                    data-estado-destino="documentos"
+                    ><t-es>Qué documentos pedir</t-es
+                    ><t-en>Which documents to ask for</t-en></a
+                  >
+                </div>
+              </div>
+            </section>
+
+            <!-- Ubicación: el área del barrio, jamás un punto -->
+            <section>
+              <h2><t-es>Dónde queda</t-es><t-en>Where it is</t-en></h2>
+              <div
+                class="mapa"
+                style="height: 200px"
+                data-mapa
+                data-foco="008304"
+                data-vista="240 490 160 120"
+                data-aria-es="Barrio del anuncio"
+                data-aria-en="Listing's neighborhood"
+              >
+                <div class="mapa__lienzo" data-mapa-lienzo></div>
+                <div class="mapa__atrib">
+                  <t-es>Barrios: Catastro Bogotá (CC BY 4.0)</t-es
+                  ><t-en>Neighborhoods: Bogotá cadastre (CC BY 4.0)</t-en>
+                </div>
+              </div>
+              <p class="mute" style="margin-top: 8px">
+                <t-es
+                  >Barrio Los Rosales, localidad de Chapinero. La dirección
+                  exacta te la da el dueño cuando acepta tu visita.</t-es
+                ><t-en
+                  >Los Rosales neighborhood, in the Chapinero locality (one of
+                  Bogotá's 20 districts). The owner gives you the exact address
+                  once they accept your viewing.</t-en
+                >
+              </p>
+            </section>
+
+            <section>
+              <h2>
+                <t-es>Lo que cuenta el dueño</t-es
+                ><t-en>What the owner says</t-en>
+              </h2>
+              <p class="bajada">
+                <t-es
+                  >Piso 6, exterior, con balcón hacia los cerros. Dos
+                  parqueaderos y depósito. Edificio de 2008 con portería 24
+                  horas. (Texto de ejemplo.)</t-es
+                ><t-en
+                  >Sixth floor, outward-facing, with a balcony looking at the
+                  hills. Two parking spots and a storage room. Built in 2008,
+                  24-hour front desk. (Sample text.)</t-en
+                >
+              </p>
+            </section>
+          </div>
+
+          <!-- Columna de acción -->
+          <aside class="pila lateral">
+            <div class="card caja pila">
+              <div>
+                <p class="mute" style="margin: 0">
+                  <t-es>Publica</t-es><t-en>Listed by</t-en>
+                </p>
+                <p style="font-weight: 700; font-size: 17px; margin: 0">
+                  Andrés R. · <t-es>dueño directo</t-es
+                  ><t-en>direct owner</t-en>
+                </p>
+              </div>
+              <button
+                type="button"
+                class="btn btn--ancho"
+                data-ir-estado="contactar"
+              >
+                <svg class="ico"><use href="#i-chat" /></svg
+                ><t-es>Escribirle por WhatsApp</t-es
+                ><t-en>Message on WhatsApp</t-en>
+              </button>
+              <a
+                class="btn btn--sec btn--ancho"
+                href="06-agenda.html"
+                data-estado-destino="comprador-elige"
+                ><svg class="ico"><use href="#i-calendario" /></svg
+                ><t-es>Pedir una visita</t-es><t-en>Request a viewing</t-en></a
+              >
+              <p
+                class="mute"
+                data-para-comprador="c0"
+                style="margin: 0; display: flex; gap: 6px"
+              >
+                <svg class="ico ico--s" style="margin-top: 2px">
+                  <use href="#i-escudo" />
+                </svg>
+                <span
+                  ><t-es
+                    >Para escribir o pedir visita verificas tu WhatsApp una vez
+                    (unos 30 segundos). Mirar y guardar es libre.</t-es
+                  ><t-en
+                    >To message or request a viewing you verify your WhatsApp
+                    once (about 30 seconds). Browsing and saving are free.</t-en
+                  ></span
+                >
+              </p>
+              <div class="fila">
+                <button
+                  type="button"
+                  class="icono-btn"
+                  data-alternar
+                  aria-pressed="true"
+                  data-aria-es="Guardado en favoritos"
+                  data-aria-en="Saved"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+                <button
+                  type="button"
+                  class="icono-btn"
+                  data-abre="compartido"
+                  aria-expanded="false"
+                  data-aria-es="Compartir"
+                  data-aria-en="Share"
+                >
+                  <svg class="ico"><use href="#i-compartir" /></svg>
+                </button>
+                <a
+                  class="btn btn--txt btn--peq"
+                  href="12-reportar.html"
+                  style="margin-left: auto"
+                  ><svg class="ico ico--s"><use href="#i-bandera" /></svg
+                  ><t-es>Reportar</t-es><t-en>Report</t-en></a
+                >
+              </div>
+              <p id="compartido" class="aviso aviso--ok" hidden>
+                <svg class="ico"><use href="#i-check" /></svg
+                ><span
+                  ><t-es>Enlace copiado. Compártelo por WhatsApp.</t-es
+                  ><t-en>Link copied. Share it on WhatsApp.</t-en></span
+                >
+              </p>
+            </div>
+
+            <a
+              class="card caja"
+              href="09-esta-caro.html"
+              style="display: block; text-decoration: none"
+            >
+              <p class="mute" style="margin: 0">
+                <t-es>¿Está caro?</t-es><t-en>Is it overpriced?</t-en>
+              </p>
+              <p style="font-weight: 700; margin: 2px 0 8px; color: var(--ok)">
+                ✓ <t-es>Dentro del rango de su zona</t-es
+                ><t-en>Within its area's range</t-en>
+              </p>
+              <div class="rango rango--mini">
+                <div class="rango__riel"></div>
+                <div class="rango__banda" style="left: 30%; width: 40%"></div>
+                <div class="rango__marca" style="left: 52%">
+                  <span class="sr">●</span>
+                </div>
+              </div>
+              <p class="mute" style="margin: 6px 0 0">
+                <t-es>Frente a 14 anuncios comparables · ver el detalle</t-es
+                ><t-en>Against 14 comparable listings · see the detail</t-en> →
+              </p>
+            </a>
+
+            <div class="card caja pila">
+              <a
+                class="fila"
+                href="10-simulador.html"
+                style="text-decoration: none; justify-content: space-between"
+              >
+                <span
+                  ><strong
+                    ><t-es>¿Cuánto pagarías al mes?</t-es
+                    ><t-en>What would you pay per month?</t-en></strong
+                  ><br /><span class="mute"
+                    ><t-es>Simulador de cuota</t-es
+                    ><t-en>Mortgage payment calculator</t-en></span
+                  ></span
+                >
+                <svg class="ico"><use href="#i-flecha" /></svg>
+              </a>
+              <hr class="sep" style="margin: 4px 0" />
+              <a
+                class="fila"
+                href="11-papeleo.html"
+                style="text-decoration: none; justify-content: space-between"
+              >
+                <span
+                  ><strong
+                    ><t-es>¿Cuánto cuesta el papeleo?</t-es
+                    ><t-en>How much is the paperwork?</t-en></strong
+                  ><br /><span class="mute"
+                    ><t-es>Notaría, impuestos y registro, con su norma</t-es
+                    ><t-en
+                      >Notary, taxes and registration, each with its rule</t-en
+                    ></span
+                  ></span
+                >
+                <svg class="ico"><use href="#i-flecha" /></svg>
+              </a>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Hoja de contacto: el nivel del comprador decide qué ve -->
+        <div
+          class="velo"
+          data-para-estado="contactar"
+          data-enfocar
+          style="margin-top: 20px"
+        >
+          <div
+            class="hoja pila"
+            role="dialog"
+            aria-modal="false"
+            data-aria-es="Escribirle al dueño"
+            data-aria-en="Message the owner"
+          >
+            <div data-para-comprador="c0" class="pila">
+              <h2>
+                <t-es>Primero, verifica tu WhatsApp</t-es
+                ><t-en>First, verify your WhatsApp</t-en>
+              </h2>
+              <p class="bajada">
+                <t-es
+                  >Así el dueño sabe que le escribe una persona real con un
+                  número real. Toma unos 30 segundos y lo haces una sola
+                  vez.</t-es
+                ><t-en
+                  >That way the owner knows a real person with a real number is
+                  writing. It takes about 30 seconds and you only do it
+                  once.</t-en
+                >
+              </p>
+              <a class="btn btn--ancho" href="03-verificar-whatsapp.html"
+                ><svg class="ico"><use href="#i-escudo" /></svg
+                ><t-es>Verificar mi WhatsApp</t-es
+                ><t-en>Verify my WhatsApp</t-en></a
+              >
+              <button
+                type="button"
+                class="btn btn--txt"
+                data-ir-estado="verificado"
+              >
+                <t-es>Ahora no</t-es><t-en>Not now</t-en>
+              </button>
+            </div>
+            <div data-para-comprador="c1 c2" class="pila">
+              <h2>
+                <t-es>Se abrirá WhatsApp con este mensaje</t-es
+                ><t-en>WhatsApp will open with this message</t-en>
+              </h2>
+              <div class="caja caja--crema" style="font-size: 14px">
+                <t-es
+                  >Hola, Andrés. Vi tu apartamento en Los Rosales en
+                  Innmobiliaria y me interesa. ¿Sigue disponible? — Laura
+                  (WhatsApp verificado)</t-es
+                ><t-en
+                  >Hi Andrés. I saw your apartment in Los Rosales on
+                  Innmobiliaria and I'm interested. Is it still available? —
+                  Laura (WhatsApp verified)</t-en
+                >
+              </div>
+              <p class="mute" style="display: flex; gap: 6px; margin: 0">
+                <svg class="ico ico--s" style="margin-top: 2px">
+                  <use href="#i-nota" />
+                </svg>
+                <span
+                  ><t-es
+                    >El contacto queda registrado para los dos: el dueño ve tu
+                    nivel de verificación y tú lo encuentras en tus
+                    guardados.</t-es
+                  ><t-en
+                    >The contact is logged for both of you: the owner sees your
+                    verification level and you'll find it in your saved
+                    items.</t-en
+                  ></span
+                >
+              </p>
+              <button
+                type="button"
+                class="btn btn--ancho"
+                data-ir-estado="verificado"
+              >
+                <svg class="ico"><use href="#i-chat" /></svg
+                ><t-es>Abrir WhatsApp</t-es><t-en>Open WhatsApp</t-en>
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/mapa-datos.js"></script>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

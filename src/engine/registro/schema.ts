@@ -2,6 +2,7 @@ import { z } from "zod";
 import { esWhatsappValido, normalizarWhatsapp } from "../format/whatsapp";
 import { esEnteroEscrito, parsearCOP } from "../format/cop";
 import { LOCALIDADES } from "../zonas/localidades";
+import { sectorPorNombre } from "../zonas/sectores";
 import { normalizarCodigo } from "../referidos/referidos";
 
 // Contrato único de validación del flujo "publicar = registro". Lo usan tanto el wizard (validación
@@ -41,6 +42,7 @@ export const ERR = {
   localidad: "localidad",
   barrioCorto: "barrioCorto",
   barrioLargo: "barrioLargo",
+  barrioNoCatalogo: "barrioNoCatalogo",
   direccionLarga: "direccionLarga",
   areaVacia: "areaVacia",
   soloEnteros: "soloEnteros",
@@ -76,7 +78,7 @@ export const paso1Schema = z.object({
 // ---------------------------------------------------------------------------
 // Paso 2 — Datos del inmueble (mínimo indispensable — sin fotos ni documentos)
 // ---------------------------------------------------------------------------
-export const paso2Schema = z.object({
+const paso2Base = z.object({
   operacion: z.enum(OPERACIONES, { error: ERR.operacion }),
   tipo: z.enum(TIPOS, { error: ERR.tipo }),
   // Localidad de Bogotá (para el contador de cupos por zona). Lista cerrada (fase 1 = Bogotá).
@@ -119,6 +121,24 @@ export const paso2Schema = z.object({
     }, ERR.precioRango),
 });
 
+// S6 — el barrio es un barrio del catálogo catastral dentro de la localidad elegida (ADR 014): el
+// anuncio se ubica por él. El wizard lo ofrece en un select; esto es la defensa de la API y de un
+// borrador viejo con texto libre.
+function barrioDelCatalogo(
+  d: { localidad: string; barrio: string },
+  ctx: z.RefinementCtx,
+) {
+  if (!sectorPorNombre(d.localidad, d.barrio)) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["barrio"],
+      message: ERR.barrioNoCatalogo,
+    });
+  }
+}
+
+export const paso2Schema = paso2Base.superRefine(barrioDelCatalogo);
+
 // ---------------------------------------------------------------------------
 // Paso 3 — Consentimiento (Ley 1581): sin `true` explícito no hay envío
 // ---------------------------------------------------------------------------
@@ -138,8 +158,9 @@ export const paso3Schema = z.object({
 
 // Esquema completo (los tres pasos combinados) — lo re-valida el endpoint.
 export const registroSchema = paso1Schema
-  .extend(paso2Schema.shape)
-  .extend(paso3Schema.shape);
+  .extend(paso2Base.shape)
+  .extend(paso3Schema.shape)
+  .superRefine(barrioDelCatalogo);
 
 export type DatosPaso1 = z.infer<typeof paso1Schema>;
 export type DatosPaso2 = z.infer<typeof paso2Schema>;
@@ -193,7 +214,10 @@ export function construirPayload(
     zona: datos.localidad,
     operacion: datos.operacion,
     tipo: datos.tipo,
-    barrio: datos.barrio.trim(),
+    // El nombre del catálogo, no lo que llegó escrito: la BD y el slug usan el mismo.
+    barrio:
+      sectorPorNombre(datos.localidad, datos.barrio)?.nombre ??
+      datos.barrio.trim(),
     direccion: datos.direccion_aproximada?.trim() || null,
     area,
     habitaciones,

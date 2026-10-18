@@ -48,7 +48,7 @@ test("ante un error de red muestra aviso y permite reintentar", async ({
   await page.getByRole("radio", { name: "Venta" }).check({ force: true });
   await page.getByLabel("Tipo de inmueble").selectOption("casa");
   await page.getByLabel("Localidad").selectOption("Chapinero");
-  await page.getByLabel("Barrio").fill(`Chapinero ${Date.now()}`);
+  await page.getByLabel("Barrio").selectOption("Los Rosales");
   await page.getByLabel("Área (m²)").fill("120");
   await page.getByLabel("Habitaciones").fill("4");
   await page.getByLabel("Precio esperado (COP)").fill("650000000");

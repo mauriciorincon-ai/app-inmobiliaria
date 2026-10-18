@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Viewing">
+      Innmobiliaria · Visita
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-lado-por-estado='{"dueno-propone":"dueno","despues":"dueno"}'
+    data-comprador-inicial="c2"
+    data-estados='[["comprador-elige","Comprador elige","Buyer picks"],["dueno-propone","Dueño propone","Owner suggests"],["confirmada","Confirmada","Confirmed"],["despues","Después de la visita","After the viewing"],["cancelada","Cancelada","Cancelled"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 720px">
+        <div
+          class="aviso aviso--info"
+          data-para-estado="dueno-propone despues"
+          style="margin-bottom: 14px"
+        >
+          <svg class="ico"><use href="#i-casa" /></svg>
+          <span
+            ><t-es>Vista del dueño, desde su anuncio.</t-es
+            ><t-en>The owner's view, from their listing.</t-en></span
+          >
+        </div>
+
+        <!-- Comprador no verificado: la agenda exige verificación -->
+        <div
+          class="aviso aviso--aviso"
+          data-para-comprador="c0"
+          style="margin-bottom: 14px"
+        >
+          <svg class="ico"><use href="#i-escudo" /></svg>
+          <div>
+            <strong
+              ><t-es>Para pedir una visita, verifica tu WhatsApp</t-es
+              ><t-en>To request a viewing, verify your WhatsApp</t-en></strong
+            >
+            <t-es>Es una sola vez y toma unos 30 segundos.</t-es
+            ><t-en>It's one time and takes about 30 seconds.</t-en>
+            <div style="margin-top: 6px">
+              <a class="btn btn--txt btn--peq" href="03-verificar-whatsapp.html"
+                ><t-es>Verificar mi WhatsApp</t-es
+                ><t-en>Verify my WhatsApp</t-en></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Dueño propone -->
+        <section class="pila" data-para-estado="dueno-propone">
+          <h1>
+            <t-es>Propón horarios para Laura</t-es
+            ><t-en>Suggest times for Laura</t-en>
+          </h1>
+          <p class="bajada">
+            <t-es
+              >Elige hasta 3. Ella confirma uno y los dos reciben un
+              recordatorio por correo el día antes.</t-es
+            ><t-en
+              >Pick up to 3. She confirms one and you both get an email reminder
+              the day before.</t-en
+            >
+          </p>
+          <div class="dias" role="group" data-aria-es="Día" data-aria-en="Day">
+            <button
+              type="button"
+              class="dia"
+              data-elegir="dia"
+              aria-pressed="false"
+            >
+              <t-es>mar</t-es><t-en>Tue</t-en><strong>20</strong>
+            </button>
+            <button
+              type="button"
+              class="dia"
+              data-elegir="dia"
+              aria-pressed="false"
+            >
+              <t-es>mié</t-es><t-en>Wed</t-en><strong>21</strong>
+            </button>
+            <button
+              type="button"
+              class="dia"
+              data-elegir="dia"
+              aria-pressed="false"
+            >
+              <t-es>jue</t-es><t-en>Thu</t-en><strong>22</strong>
+            </button>
+            <button
+              type="button"
+              class="dia"
+              data-elegir="dia"
+              aria-pressed="false"
+            >
+              <t-es>vie</t-es><t-en>Fri</t-en><strong>23</strong>
+            </button>
+            <button
+              type="button"
+              class="dia"
+              data-elegir="dia"
+              aria-pressed="true"
+            >
+              <t-es>sáb</t-es><t-en>Sat</t-en><strong>24</strong>
+            </button>
+          </div>
+          <div
+            class="horas"
+            role="group"
+            data-aria-es="Hora"
+            data-aria-en="Time"
+          >
+            <button
+              type="button"
+              class="chip"
+              data-alternar
+              aria-pressed="false"
+            >
+              8:00
+            </button>
+            <button
+              type="button"
+              class="chip"
+              data-alternar
+              aria-pressed="true"
+            >
+              10:00
+            </button>
+            <button
+              type="button"
+              class="chip"
+              data-alternar
+              aria-pressed="false"
+            >
+              12:00
+            </button>
+            <button
+              type="button"
+              class="chip"
+              data-alternar
+              aria-pressed="false"
+            >
+              16:00
+            </button>
+          </div>
+          <div class="caja caja--crema">
+            <p class="mute" style="margin: 0 0 6px">
+              <t-es>Tus horarios (2 de 3)</t-es><t-en>Your times (2 of 3)</t-en>
+            </p>
+            <p style="margin: 0">
+              <strong
+                ><t-es>Sábado 24 de octubre · 10:00</t-es
+                ><t-en>Saturday, October 24 · 10:00 a.m.</t-en></strong
+              >
+            </p>
+            <p style="margin: 0">
+              <strong
+                ><t-es>Martes 20 de octubre · 18:00</t-es
+                ><t-en>Tuesday, October 20 · 6:00 p.m.</t-en></strong
+              >
+            </p>
+          </div>
+          <button type="button" class="btn" data-ir-estado="comprador-elige">
+            <t-es>Enviar horarios a Laura</t-es><t-en>Send times to Laura</t-en>
+          </button>
+        </section>
+
+        <!-- Comprador elige -->
+        <section class="pila" data-para-estado="comprador-elige">
+          <p class="mute" style="margin: 0">
+            <t-es>Apartamento en Los Rosales</t-es
+            ><t-en>Apartment in Los Rosales</t-en>
+          </p>
+          <h1>
+            <t-es>Andrés te propone estos horarios</t-es
+            ><t-en>Andrés suggests these times</t-en>
+          </h1>
+          <div
+            class="pila"
+            role="group"
+            data-aria-es="Horarios"
+            data-aria-en="Times"
+          >
+            <button
+              type="button"
+              class="chip"
+              style="
+                justify-content: space-between;
+                width: 100%;
+                padding: 14px 16px;
+              "
+              data-elegir="hora"
+              aria-pressed="true"
+            >
+              <span
+                ><t-es>Sábado 24 de octubre · 10:00</t-es
+                ><t-en>Saturday, October 24 · 10:00 a.m.</t-en></span
+              ><svg class="ico ico--s"><use href="#i-check" /></svg>
+            </button>
+            <button
+              type="button"
+              class="chip"
+              style="
+                justify-content: space-between;
+                width: 100%;
+                padding: 14px 16px;
+              "
+              data-elegir="hora"
+              aria-pressed="false"
+            >
+              <span
+                ><t-es>Martes 20 de octubre · 18:00</t-es
+                ><t-en>Tuesday, October 20 · 6:00 p.m.</t-en></span
+              ><svg class="ico ico--s"><use href="#i-check" /></svg>
+            </button>
+          </div>
+          <button type="button" class="btn" data-ir-estado="confirmada">
+            <t-es>Confirmar la visita</t-es><t-en>Confirm the viewing</t-en>
+          </button>
+          <button type="button" class="btn btn--txt" data-ir-estado="cancelada">
+            <t-es>Ninguno me sirve</t-es><t-en>None of these work for me</t-en>
+          </button>
+        </section>
+
+        <!-- Confirmada -->
+        <section class="pila" data-para-estado="confirmada">
+          <div class="aviso aviso--ok" role="status">
+            <svg class="ico"><use href="#i-check" /></svg>
+            <span
+              ><strong
+                ><t-es>Visita confirmada</t-es
+                ><t-en>Viewing confirmed</t-en></strong
+              ></span
+            >
+          </div>
+          <div class="card caja pila">
+            <h2 style="margin: 0">
+              <t-es>Sábado 24 de octubre · 10:00</t-es
+              ><t-en>Saturday, October 24 · 10:00 a.m.</t-en>
+            </h2>
+            <p style="margin: 0">
+              <t-es
+                >Apartamento en Los Rosales, Chapinero · con Andrés R., el
+                dueño</t-es
+              ><t-en
+                >Apartment in Los Rosales, Chapinero · with Andrés R., the
+                owner</t-en
+              >
+            </p>
+            <ul class="pasos">
+              <li>
+                <span class="pasos__n"
+                  ><svg class="ico ico--s"><use href="#i-casa" /></svg></span
+                ><span
+                  ><t-es>Andrés te envía la dirección exacta por WhatsApp.</t-es
+                  ><t-en
+                    >Andrés sends you the exact address on WhatsApp.</t-en
+                  ></span
+                >
+              </li>
+              <li>
+                <span class="pasos__n"
+                  ><svg class="ico ico--s"><use href="#i-campana" /></svg></span
+                ><span
+                  ><t-es>Te recordamos por correo el viernes.</t-es
+                  ><t-en>We'll remind you by email on Friday.</t-en></span
+                >
+              </li>
+              <li>
+                <span class="pasos__n"
+                  ><svg class="ico ico--s">
+                    <use href="#i-documento" /></svg></span
+                ><span
+                  ><t-es
+                    >Lleva tu cédula; nunca pagues nada antes de visitar.</t-es
+                  ><t-en
+                    >Bring your cédula; never pay anything before the
+                    viewing.</t-en
+                  ></span
+                >
+              </li>
+            </ul>
+            <div class="fila">
+              <button
+                type="button"
+                class="btn btn--sec btn--peq"
+                data-abre="calendario-ok"
+                aria-expanded="false"
+              >
+                <svg class="ico ico--s"><use href="#i-calendario" /></svg
+                ><t-es>Agregar a mi calendario</t-es
+                ><t-en>Add to my calendar</t-en>
+              </button>
+              <button
+                type="button"
+                class="btn btn--txt btn--peq"
+                data-ir-estado="cancelada"
+              >
+                <t-es>Cancelar la visita</t-es><t-en>Cancel the viewing</t-en>
+              </button>
+            </div>
+            <p id="calendario-ok" class="aviso aviso--ok" hidden>
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                ><t-es>Descargamos el evento para tu calendario.</t-es
+                ><t-en>We downloaded the event for your calendar.</t-en></span
+              >
+            </p>
+          </div>
+        </section>
+
+        <!-- Después: el dueño marca asistió / no asistió -->
+        <section class="pila" data-para-estado="despues">
+          <h1>
+            <t-es>¿Laura vino a la visita del sábado?</t-es
+            ><t-en>Did Laura come to Saturday's viewing?</t-en>
+          </h1>
+          <p class="bajada">
+            <t-es
+              >Lo que marques aparece en su tarjeta como un conteo («asistió a 2
+              de 2 visitas»). Nadie ve el detalle.</t-es
+            ><t-en
+              >What you mark shows on her card as a count ("attended 2 of 2
+              viewings"). Nobody sees the detail.</t-en
+            >
+          </p>
+          <div
+            class="fila"
+            role="group"
+            data-aria-es="Asistencia"
+            data-aria-en="Attendance"
+          >
+            <button
+              type="button"
+              class="btn btn--sec"
+              data-elegir="asistio"
+              aria-pressed="false"
+            >
+              <svg class="ico"><use href="#i-check" /></svg><t-es>Sí, vino</t-es
+              ><t-en>Yes, she came</t-en>
+            </button>
+            <button
+              type="button"
+              class="btn btn--sec"
+              data-elegir="asistio"
+              aria-pressed="false"
+            >
+              <svg class="ico"><use href="#i-x" /></svg><t-es>No vino</t-es
+              ><t-en>She didn't come</t-en>
+            </button>
+          </div>
+        </section>
+
+        <!-- Cancelada -->
+        <section class="pila" data-para-estado="cancelada">
+          <div class="aviso aviso--aviso" role="status">
+            <svg class="ico"><use href="#i-calendario" /></svg>
+            <div>
+              <strong
+                ><t-es>La visita quedó cancelada</t-es
+                ><t-en>The viewing was cancelled</t-en></strong
+              >
+              <t-es
+                >Le avisamos a Andrés. Puedes pedirle otros horarios cuando
+                quieras.</t-es
+              ><t-en
+                >We let Andrés know. You can ask him for other times whenever
+                you like.</t-en
+              >
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn--sec"
+            data-ir-estado="comprador-elige"
+          >
+            <t-es>Pedir otros horarios</t-es><t-en>Ask for other times</t-en>
+          </button>
+        </section>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

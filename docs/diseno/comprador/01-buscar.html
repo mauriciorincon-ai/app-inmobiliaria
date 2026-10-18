@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Search on the map">
+      Innmobiliaria · Buscar en el mapa
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-estados='[["resultados","Con resultados","With results"],["primera-vez","Primera vez","First visit"],["cargando","Cargando","Loading"],["sin-resultados","Sin resultados","No results"],["mapa-caido","Mapa caído","Map down"]]'
+  >
+    <div class="app">
+      <main class="app__main" data-busqueda>
+        <!-- Filtros: la búsqueda vive en la URL; sin JS es un formulario GET -->
+        <div class="fila" style="justify-content: space-between">
+          <div
+            class="seg"
+            role="group"
+            data-aria-es="Operación"
+            data-aria-en="Deal type"
+          >
+            <button type="button" data-elegir="op" aria-pressed="true">
+              <t-es>Venta</t-es><t-en>For sale</t-en>
+            </button>
+            <button type="button" data-elegir="op" aria-pressed="false">
+              <t-es>Arriendo</t-es><t-en>For rent</t-en>
+            </button>
+          </div>
+          <div
+            class="seg solo-movil"
+            role="group"
+            data-aria-es="Vista"
+            data-aria-en="View"
+          >
+            <button type="button" data-vista-movil="lista" aria-pressed="true">
+              <svg class="ico ico--s"><use href="#i-lista" /></svg
+              ><t-es>Lista</t-es><t-en>List</t-en>
+            </button>
+            <button type="button" data-vista-movil="mapa" aria-pressed="false">
+              <svg class="ico ico--s"><use href="#i-mapa" /></svg
+              ><t-es>Mapa</t-es><t-en>Map</t-en>
+            </button>
+          </div>
+        </div>
+
+        <div class="chips" style="margin-top: 12px">
+          <button
+            type="button"
+            class="chip chip--activo"
+            data-abre="filtros"
+            aria-expanded="false"
+          >
+            <svg class="ico ico--s"><use href="#i-filtro" /></svg
+            ><t-es>Filtros · 3</t-es><t-en>Filters · 3</t-en>
+          </button>
+          <button
+            type="button"
+            class="chip"
+            data-abre="filtros"
+            aria-expanded="false"
+          >
+            <t-es>Apartamento</t-es><t-en>Apartment</t-en>
+          </button>
+          <button
+            type="button"
+            class="chip"
+            data-abre="filtros"
+            aria-expanded="false"
+          >
+            <t-es>Hasta $1.400 M</t-es><t-en>Up to COP 1.4 bn</t-en>
+          </button>
+          <button
+            type="button"
+            class="chip"
+            data-abre="filtros"
+            aria-expanded="false"
+          >
+            <t-es>2+ habitaciones</t-es><t-en>2+ bedrooms</t-en>
+          </button>
+          <button
+            type="button"
+            class="chip"
+            data-abre="filtros"
+            aria-expanded="false"
+          >
+            <t-es>Localidad: todas</t-es><t-en>Locality: all</t-en>
+          </button>
+        </div>
+
+        <form
+          id="filtros"
+          class="card caja"
+          hidden
+          style="margin: 4px 0 14px"
+          action="01-buscar.html"
+          method="get"
+        >
+          <div class="rejilla-2">
+            <label class="campo"
+              ><span
+                ><t-es>Tipo de inmueble</t-es><t-en>Property type</t-en></span
+              >
+              <select>
+                <option data-es="Apartamento" data-en="Apartment">
+                  Apartamento
+                </option>
+                <option data-es="Casa" data-en="House">Casa</option>
+                <option data-es="Apartaestudio" data-en="Studio apartment">
+                  Apartaestudio
+                </option>
+              </select></label
+            >
+            <label class="campo"
+              ><span><t-es>Localidad</t-es><t-en>Locality</t-en></span>
+              <select>
+                <option data-es="Todas" data-en="All">Todas</option>
+                <option>Chapinero</option>
+                <option>Usaquén</option>
+              </select>
+              <span class="campo__ayuda"
+                ><t-es
+                  >Bogotá se divide en 20 localidades; dentro de cada una hay
+                  barrios.</t-es
+                ><t-en
+                  >A localidad is one of Bogotá's 20 districts; each one
+                  contains several neighborhoods (barrios).</t-en
+                ></span
+              ></label
+            >
+            <label class="campo"
+              ><span><t-es>Precio mínimo</t-es><t-en>Minimum price</t-en></span
+              ><input inputmode="numeric" value=""
+            /></label>
+            <label class="campo"
+              ><span><t-es>Precio máximo</t-es><t-en>Maximum price</t-en></span
+              ><input inputmode="numeric" value="1400000000"
+            /></label>
+            <label class="campo"
+              ><span
+                ><t-es>Habitaciones (mínimo)</t-es
+                ><t-en>Bedrooms (at least)</t-en></span
+              >
+              <select>
+                <option>2</option>
+                <option>3</option>
+              </select></label
+            >
+          </div>
+          <div class="fila" style="margin-top: 14px">
+            <button class="btn btn--peq" type="submit">
+              <t-es>Ver resultados</t-es><t-en>Show results</t-en>
+            </button>
+            <button class="btn btn--txt btn--peq" type="reset">
+              <t-es>Quitar filtros</t-es><t-en>Clear filters</t-en>
+            </button>
+          </div>
+        </form>
+
+        <div class="buscar">
+          <!-- MAPA: barrios reales (Catastro Bogotá). El anuncio se dibuja como el ÁREA de su barrio. -->
+          <section
+            class="buscar__mapa mapa"
+            data-mapa
+            data-vista="120 300 380 480"
+            data-con='{"008304":2,"008307":2,"008311":1,"008309":1,"008310":1,"008314":1,"008201":1,"008313":1,"008213":1}'
+            data-zonas='{"resultados":"225,360 350,340 370,590 260,600 212,470","sin-resultados":"140,395 214,392 214,470 140,480"}'
+            data-sin-cuentas="cargando"
+            data-mapa-caido="mapa-caido"
+            data-aria-es="Mapa de búsqueda"
+            data-aria-en="Search map"
+          >
+            <div class="mapa__lienzo" data-mapa-lienzo></div>
+            <div
+              class="mapa__ctrl"
+              data-para-estado="resultados primera-vez sin-resultados cargando"
+            >
+              <button type="button" class="btn btn--peq" data-mapa-dibujar>
+                <svg class="ico ico--s"><use href="#i-lapiz" /></svg
+                ><t-es>Dibujar zona</t-es><t-en>Draw an area</t-en>
+              </button>
+              <button
+                type="button"
+                class="btn btn--sec btn--peq"
+                data-mapa-borrar
+              >
+                <svg class="ico ico--s"><use href="#i-x" /></svg
+                ><t-es>Borrar zona</t-es><t-en>Clear area</t-en>
+              </button>
+            </div>
+            <div class="mapa__guia fila" data-mapa-guia hidden>
+              <span style="flex: 1"
+                ><t-es
+                  >Toca el mapa para marcar las esquinas de tu zona (mínimo
+                  3).</t-es
+                ><t-en
+                  >Tap the map to mark the corners of your area (at least
+                  3).</t-en
+                ></span
+              >
+              <button
+                type="button"
+                class="btn btn--peq"
+                data-mapa-listo
+                aria-disabled="true"
+              >
+                <t-es>Listo</t-es><t-en>Done</t-en>
+              </button>
+            </div>
+            <div
+              class="mapa__caido aviso aviso--error"
+              data-para-estado="mapa-caido"
+              role="alert"
+            >
+              <svg class="ico"><use href="#i-alerta" /></svg>
+              <div>
+                <strong
+                  ><t-es>El mapa no cargó</t-es
+                  ><t-en>The map didn't load</t-en></strong
+                >
+                <t-es
+                  >La lista sigue funcionando con tus filtros. Reintentamos en
+                  un momento.</t-es
+                ><t-en
+                  >The list still works with your filters. We'll try again in a
+                  moment.</t-en
+                >
+                <div style="margin-top: 8px">
+                  <button
+                    type="button"
+                    class="btn btn--sec btn--peq"
+                    data-ir-estado="resultados"
+                  >
+                    <t-es>Reintentar</t-es><t-en>Try again</t-en>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mapa__atrib">
+              <t-es
+                >Calles © OpenStreetMap · OpenFreeMap · Barrios: Catastro Bogotá
+                (CC BY 4.0)</t-es
+              ><t-en
+                >Streets © OpenStreetMap · OpenFreeMap · Neighborhoods: Bogotá
+                cadastre (CC BY 4.0)</t-en
+              >
+            </div>
+          </section>
+
+          <section class="buscar__lista">
+            <div
+              class="aviso aviso--info"
+              data-para-estado="primera-vez"
+              style="margin-bottom: 14px"
+            >
+              <svg class="ico"><use href="#i-lapiz" /></svg>
+              <div>
+                <strong
+                  ><t-es>Dibuja tu zona en el mapa</t-es
+                  ><t-en>Draw your area on the map</t-en></strong
+                >
+                <t-es
+                  >Marca las calles donde quieres vivir y te mostramos solo lo
+                  que está adentro.</t-es
+                ><t-en
+                  >Mark the streets where you want to live and we'll show only
+                  what's inside.</t-en
+                >
+              </div>
+            </div>
+
+            <div
+              class="fila"
+              style="justify-content: space-between; margin-bottom: 10px"
+            >
+              <h1 class="h2" style="margin: 0">
+                <span
+                  data-para-estado="resultados primera-vez sin-resultados mapa-caido"
+                  ><span class="num" data-conteo>8</span>
+                  <span data-para-estado="resultados sin-resultados"
+                    ><t-es>anuncios vivos en tu zona</t-es
+                    ><t-en>live listings in your area</t-en></span
+                  ><span data-para-estado="primera-vez mapa-caido"
+                    ><t-es>anuncios vivos en Bogotá</t-es
+                    ><t-en>live listings in Bogotá</t-en></span
+                  ></span
+                >
+                <span data-para-estado="cargando"
+                  ><t-es>Buscando…</t-es><t-en>Searching…</t-en></span
+                >
+              </h1>
+              <span class="mute"
+                ><t-es>Más recientes primero</t-es
+                ><t-en>Newest first</t-en></span
+              >
+            </div>
+            <p
+              class="mute"
+              style="display: flex; gap: 6px; align-items: flex-start"
+            >
+              <svg class="ico ico--s" style="margin-top: 2px">
+                <use href="#i-candado" />
+              </svg>
+              <span
+                ><t-es
+                  >Cada anuncio aparece en el área de su barrio, nunca en un
+                  punto exacto: la dirección te la da el dueño cuando acepta tu
+                  visita.</t-es
+                ><t-en
+                  >Each listing shows as the area of its neighborhood, never as
+                  an exact point: the owner gives you the address once they
+                  accept your viewing.</t-en
+                ></span
+              >
+            </p>
+
+            <!-- Cargando -->
+            <div
+              class="rejilla-anuncios"
+              data-para-estado="cargando"
+              aria-busy="true"
+            >
+              <div class="card" style="padding: 10px">
+                <div class="esq" style="aspect-ratio: 4/3"></div>
+                <div
+                  class="esq"
+                  style="height: 20px; width: 60%; margin-top: 12px"
+                ></div>
+                <div
+                  class="esq"
+                  style="height: 14px; width: 80%; margin-top: 8px"
+                ></div>
+              </div>
+              <div class="card" style="padding: 10px">
+                <div class="esq" style="aspect-ratio: 4/3"></div>
+                <div
+                  class="esq"
+                  style="height: 20px; width: 50%; margin-top: 12px"
+                ></div>
+                <div
+                  class="esq"
+                  style="height: 14px; width: 70%; margin-top: 8px"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Sin resultados -->
+            <div class="vacio" data-para-estado="sin-resultados">
+              <svg
+                class="vacio__dibujo"
+                viewBox="0 0 120 96"
+                aria-hidden="true"
+              >
+                <path
+                  d="M14 70 40 18l34 10 32-12-14 62-34-8z"
+                  fill="#ebe9fc"
+                  stroke="#7b5dd6"
+                  stroke-width="2.5"
+                  stroke-dasharray="6 4"
+                />
+                <circle
+                  cx="78"
+                  cy="50"
+                  r="13"
+                  fill="#fff"
+                  stroke="#191a1d"
+                  stroke-width="3"
+                />
+                <path
+                  d="m88 60 12 12"
+                  stroke="#191a1d"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <h2>
+                <t-es>Aún no hay anuncios vivos en esta zona</t-es
+                ><t-en>No live listings in this area yet</t-en>
+              </h2>
+              <p>
+                <t-es
+                  >Prueba con una zona más grande o quita un filtro. O deja una
+                  alerta y te escribimos cuando aparezca uno.</t-es
+                ><t-en
+                  >Try a bigger area or remove a filter. Or set an alert and
+                  we'll write to you when one shows up.</t-en
+                >
+              </p>
+              <div
+                class="fila"
+                style="justify-content: center; margin-top: 12px"
+              >
+                <a
+                  class="btn btn--peq"
+                  href="08-alertas.html"
+                  data-estado-destino="crear"
+                  ><svg class="ico ico--s"><use href="#i-campana" /></svg
+                  ><t-es>Avísame en esta zona</t-es
+                  ><t-en>Alert me for this area</t-en></a
+                >
+                <button
+                  type="button"
+                  class="btn btn--sec btn--peq"
+                  data-ir-estado="resultados"
+                >
+                  <t-es>Agrandar la zona</t-es><t-en>Make the area bigger</t-en>
+                </button>
+              </div>
+            </div>
+
+            <!-- Resultados (el mapa filtra estas tarjetas por el centroide de su barrio) -->
+            <div
+              class="rejilla-anuncios"
+              data-para-estado="resultados primera-vez mapa-caido"
+            >
+              <article class="card anuncio" data-sector="008304">
+                <a class="anuncio__enlace" href="02-ficha.html">
+                  <div class="foto"><span class="foto__n">1/9</span></div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$1.150.000.000</t-es><t-en>COP 1,150,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · Los Rosales</t-es
+                      ><t-en>Apartment · Los Rosales</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>118
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>3
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--verificado"
+                      >⭐ <t-es>CTL del 3 oct</t-es
+                      ><t-en>Title record Oct 3</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 2 días</t-es
+                      ><t-en>Confirmed 2 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="true"
+                  data-aria-es="Guardado en favoritos"
+                  data-aria-en="Saved"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008307">
+                <a
+                  class="anuncio__enlace"
+                  href="02-ficha.html"
+                  data-estado-destino="reverificacion"
+                >
+                  <div class="foto foto--3">
+                    <span class="foto__n">1/12</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$1.320.000.000</t-es><t-en>COP 1,320,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · Chicó Norte</t-es
+                      ><t-en>Apartment · Chicó Norte</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>142
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>3
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--pendiente"
+                      ><svg class="ico ico--s"><use href="#i-reloj" /></svg
+                      ><t-es>Re-verificación pendiente</t-es
+                      ><t-en>Re-check pending</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 1 día</t-es
+                      ><t-en>Confirmed 1 day ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008311">
+                <a
+                  class="anuncio__enlace"
+                  href="02-ficha.html"
+                  data-estado-destino="fundador"
+                >
+                  <div class="foto foto--2">
+                    <span class="foto__n">1/7</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$980.000.000</t-es><t-en>COP 980,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · El Nogal</t-es
+                      ><t-en>Apartment · El Nogal</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>96
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>2
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--fundador"
+                      ><t-es>Fundador</t-es><t-en>Founding seller</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 5 días</t-es
+                      ><t-en>Confirmed 5 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008309">
+                <a class="anuncio__enlace" href="02-ficha.html">
+                  <div class="foto foto--4">
+                    <span class="foto__n">1/10</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$890.000.000</t-es><t-en>COP 890,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · La Cabrera</t-es
+                      ><t-en>Apartment · La Cabrera</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>84
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>2
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--verificado"
+                      >⭐ <t-es>CTL del 9 oct</t-es
+                      ><t-en>Title record Oct 9</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 6 días</t-es
+                      ><t-en>Confirmed 6 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008304">
+                <a
+                  class="anuncio__enlace"
+                  href="02-ficha.html"
+                  data-estado-destino="fundador"
+                >
+                  <div class="foto foto--2">
+                    <span class="foto__n">1/6</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$1.240.000.000</t-es><t-en>COP 1,240,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · Los Rosales</t-es
+                      ><t-en>Apartment · Los Rosales</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>126
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>3
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--fundador"
+                      ><t-es>Fundador</t-es><t-en>Founding seller</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 3 días</t-es
+                      ><t-en>Confirmed 3 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008310">
+                <a
+                  class="anuncio__enlace"
+                  href="02-ficha.html"
+                  data-estado-destino="fundador"
+                >
+                  <div class="foto"><span class="foto__n">1/5</span></div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$520.000.000</t-es><t-en>COP 520,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartaestudio · El Retiro</t-es
+                      ><t-en>Studio apartment · El Retiro</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>48
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>1
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--fundador"
+                      ><t-es>Fundador</t-es><t-en>Founding seller</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 3 días</t-es
+                      ><t-en>Confirmed 3 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008307">
+                <a class="anuncio__enlace" href="02-ficha.html">
+                  <div class="foto foto--4">
+                    <span class="foto__n">1/8</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$1.080.000.000</t-es><t-en>COP 1,080,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · Chicó Norte</t-es
+                      ><t-en>Apartment · Chicó Norte</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>104
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>2
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--verificado"
+                      >⭐ <t-es>CTL del 6 oct</t-es
+                      ><t-en>Title record Oct 6</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 8 días</t-es
+                      ><t-en>Confirmed 8 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008314">
+                <a class="anuncio__enlace" href="02-ficha.html">
+                  <div class="foto foto--3">
+                    <span class="foto__n">1/14</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$1.650.000.000</t-es><t-en>COP 1,650,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Casa · Antiguo Country</t-es
+                      ><t-en>House · Antiguo Country</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>210
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>4
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--verificado"
+                      >⭐ <t-es>CTL del 1 oct</t-es
+                      ><t-en>Title record Oct 1</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 9 días</t-es
+                      ><t-en>Confirmed 9 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <!-- Fuera de la zona de ejemplo: aparecen en «Primera vez» y al borrar la zona -->
+              <article class="card anuncio" data-sector="008201">
+                <a
+                  class="anuncio__enlace"
+                  href="02-ficha.html"
+                  data-estado-destino="fundador"
+                >
+                  <div class="foto foto--2">
+                    <span class="foto__n">1/9</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$640.000.000</t-es><t-en>COP 640,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · Quinta Camacho</t-es
+                      ><t-en>Apartment · Quinta Camacho</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>72
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>2
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--fundador"
+                      ><t-es>Fundador</t-es><t-en>Founding seller</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 4 días</t-es
+                      ><t-en>Confirmed 4 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008313">
+                <a class="anuncio__enlace" href="02-ficha.html">
+                  <div class="foto"><span class="foto__n">1/7</span></div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$760.000.000</t-es><t-en>COP 760,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartamento · Lago Gaitán</t-es
+                      ><t-en>Apartment · Lago Gaitán</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>88
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>2
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--verificado"
+                      >⭐ <t-es>CTL del 30 sep</t-es
+                      ><t-en>Title record Sep 30</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 10 días</t-es
+                      ><t-en>Confirmed 10 days ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+
+              <article class="card anuncio" data-sector="008213">
+                <a
+                  class="anuncio__enlace"
+                  href="02-ficha.html"
+                  data-estado-destino="fundador"
+                >
+                  <div class="foto foto--4">
+                    <span class="foto__n">1/6</span>
+                  </div>
+                  <div>
+                    <div class="anuncio__precio num">
+                      <t-es>$410.000.000</t-es><t-en>COP 410,000,000</t-en>
+                    </div>
+                    <div class="anuncio__lugar">
+                      <t-es>Apartaestudio · Chapinero Central</t-es
+                      ><t-en>Studio apartment · Chapinero Central</t-en>
+                    </div>
+                    <div class="mute">Chapinero</div>
+                  </div>
+                  <div class="anuncio__datos">
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-area" /></svg>45
+                      m²</span
+                    >
+                    <span
+                      ><svg class="ico ico--s"><use href="#i-cama" /></svg>1
+                      <t-es>hab.</t-es><t-en>bd</t-en></span
+                    >
+                  </div>
+                  <div class="anuncio__pie">
+                    <span class="sello sello--fundador"
+                      ><t-es>Fundador</t-es><t-en>Founding seller</t-en></span
+                    >
+                    <span class="vivo"
+                      ><t-es>Vivo hace 1 día</t-es
+                      ><t-en>Confirmed 1 day ago</t-en></span
+                    >
+                  </div>
+                </a>
+                <button
+                  type="button"
+                  class="icono-btn foto__fav"
+                  data-alternar
+                  aria-pressed="false"
+                  data-aria-es="Guardar en favoritos"
+                  data-aria-en="Save"
+                >
+                  <svg class="ico"><use href="#i-corazon" /></svg>
+                </button>
+              </article>
+            </div>
+
+            <div
+              class="caja caja--banda fila"
+              data-para-estado="resultados"
+              style="margin-top: 18px; justify-content: space-between"
+            >
+              <span
+                ><strong
+                  ><t-es>¿No ves lo tuyo todavía?</t-es
+                  ><t-en>Not seeing the one yet?</t-en></strong
+                ><br /><span class="mute"
+                  ><t-es
+                    >Te avisamos por correo cuando aparezca algo en esta
+                    zona.</t-es
+                  ><t-en
+                    >We'll email you when something shows up in this area.</t-en
+                  ></span
+                ></span
+              >
+              <a
+                class="btn btn--sec btn--peq"
+                href="08-alertas.html"
+                data-estado-destino="crear"
+                ><svg class="ico ico--s"><use href="#i-campana" /></svg
+                ><t-es>Guardar como alerta</t-es
+                ><t-en>Save as an alert</t-en></a
+              >
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/mapa-datos.js"></script>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

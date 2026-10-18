@@ -9,7 +9,6 @@ test("un registro por link de referido queda atribuido al referente", async ({
   // A publica y, en la confirmación, obtiene su enlace de invitación (con su código de referido).
   const { link: linkA } = await registrar(page, {
     nombre: "Ana Referente",
-    barrioBase: "RefA",
   });
   const invitar = page.getByRole("link", { name: /Invitar por WhatsApp/i });
   await expect(invitar).toBeVisible({ timeout: 10000 });
@@ -26,7 +25,6 @@ test("un registro por link de referido queda atribuido al referente", async ({
   // B publica ENTRANDO por el link de referido de A (?ref=CODIGO).
   await registrar(page, {
     nombre: "Beto Referido",
-    barrioBase: "RefB",
     ref,
   });
 
@@ -42,7 +40,6 @@ test("el fundador renueva la vigencia de su anuncio (POST, nunca GET)", async ({
 }) => {
   const { link } = await registrar(page, {
     nombre: "Carmen Vigencia",
-    barrioBase: "Vig",
   });
   await page.goto(link);
 

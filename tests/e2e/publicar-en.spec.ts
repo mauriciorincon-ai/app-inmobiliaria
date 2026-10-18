@@ -15,7 +15,7 @@ test.describe("publicar en inglés", () => {
   }, testInfo) => {
     // Una sola vez: el resultado no depende del tamaño de pantalla y la BD es compartida.
     test.skip(testInfo.project.name !== "desktop-chromium", "una sola vez");
-    const barrioUnico = `Cedritos ${Date.now()}`;
+    const nombreUnico = `Ana Founder ${Date.now()}`;
 
     // Portada: el navegador pide inglés y la URL no cambia.
     await page.goto("/");
@@ -39,7 +39,7 @@ test.describe("publicar en inglés", () => {
     await expect(page).toHaveURL(/\/publicar$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
 
-    await page.getByLabel("What's your name?").fill("Ana Founder");
+    await page.getByLabel("What's your name?").fill(nombreUnico);
     await page.getByLabel("Your WhatsApp number").fill("300 123 4567");
     await page.getByLabel("Which city is your property in?").fill("Bogotá");
     await page.getByRole("button", { name: "Continue" }).click();
@@ -53,7 +53,8 @@ test.describe("publicar en inglés", () => {
       }),
     ).toBeAttached();
     await page.getByLabel("Locality (localidad)").selectOption("Chapinero");
-    await page.getByLabel("Neighborhood (barrio)").fill(barrioUnico);
+    // El barrio se elige del catálogo catastral (no hay texto libre) y espera a la localidad.
+    await page.getByLabel("Neighborhood (barrio)").selectOption("Los Rosales");
     await page.getByLabel("Area (m²)").fill("78");
     await page.getByLabel("Bedrooms").fill("3");
     await page.getByLabel("Expected price").fill("420000000");
@@ -82,14 +83,14 @@ test.describe("publicar en inglés", () => {
       page.getByText("We'll message you on WhatsApp when the time comes."),
     ).toBeVisible();
 
-    // El idioma activo quedó guardado con el vendedor (lo usarán los avisos). Se busca por el barrio
-    // único de esta corrida.
+    // El idioma activo quedó guardado con el vendedor (lo usarán los avisos), y el barrio del catálogo
+    // dejó al anuncio ubicado. Se busca por el nombre único de esta corrida.
     const filas = consultar(
-      `select v.idioma from public.vendedores v
+      `select v.idioma || '|' || coalesce(i.sector_codigo, 'sin-sector') from public.vendedores v
          join public.inmuebles i on i.vendedor_id = v.id
-        where i.barrio = '${barrioUnico}'`,
+        where v.nombre = '${nombreUnico}'`,
     );
-    expect(filas).toEqual(["en"]);
+    expect(filas).toEqual(["en|008304"]);
   });
 
   test("el selector pasa a español, lo recuerda y la URL no cambia", async ({

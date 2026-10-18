@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Is it overpriced?">
+      Innmobiliaria · ¿Está caro?
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-estados='[["en-rango","En rango","In range"],["caro","Caro","Overpriced"],["barato","Sospechosamente barato","Suspiciously cheap"],["sin-datos","Sin datos suficientes","Not enough data"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 880px">
+        <a class="btn btn--txt btn--peq" href="02-ficha.html"
+          ><svg class="ico ico--s"><use href="#i-atras" /></svg
+          ><t-es>Volver al anuncio</t-es><t-en>Back to the listing</t-en></a
+        >
+        <h1>
+          <t-es>¿Está caro este anuncio?</t-es
+          ><t-en>Is this listing overpriced?</t-en>
+        </h1>
+        <p class="bajada" data-para-estado="en-rango sin-datos">
+          <t-es
+            >Apartamento en Los Rosales · $1.150.000.000 · 118 m² = $9,7 M por
+            m²</t-es
+          ><t-en
+            >Apartment in Los Rosales · COP 1,150,000,000 · 118 m² = COP 9.7M
+            per m²</t-en
+          >
+        </p>
+        <p class="bajada" data-para-estado="caro">
+          <t-es
+            >Apartamento en Chicó Norte · $1.790.000.000 · 142 m² = $12,6 M por
+            m²</t-es
+          ><t-en
+            >Apartment in Chicó Norte · COP 1,790,000,000 · 142 m² = COP 12.6M
+            per m²</t-en
+          >
+        </p>
+        <p class="bajada" data-para-estado="barato">
+          <t-es
+            >Apartamento en El Retiro · $620.000.000 · 97 m² = $6,4 M por
+            m²</t-es
+          ><t-en
+            >Apartment in El Retiro · COP 620,000,000 · 97 m² = COP 6.4M per
+            m²</t-en
+          >
+        </p>
+
+        <div class="rejilla-2" style="margin-top: 16px">
+          <section class="card caja pila">
+            <div data-para-estado="en-rango caro barato">
+              <p class="mute" style="margin: 0">
+                <t-es>Precio por m² frente a 14 anuncios comparables</t-es
+                ><t-en>Price per m² against 14 comparable listings</t-en>
+              </p>
+              <div class="rango" aria-hidden="true">
+                <div class="rango__riel"></div>
+                <div class="rango__banda" style="left: 36%; width: 29%"></div>
+                <div
+                  class="rango__marca"
+                  data-para-estado="en-rango"
+                  style="left: 46%"
+                >
+                  <t-es>Este</t-es><t-en>This one</t-en>
+                </div>
+                <div
+                  class="rango__marca"
+                  data-para-estado="caro"
+                  style="left: 82%"
+                >
+                  <t-es>Este</t-es><t-en>This one</t-en>
+                </div>
+                <div
+                  class="rango__marca"
+                  data-para-estado="barato"
+                  style="left: 5%"
+                >
+                  <t-es>Este</t-es><t-en>This one</t-en>
+                </div>
+              </div>
+              <div class="rango__escala num">
+                <span><t-es>$6 M</t-es><t-en>COP 6M</t-en></span
+                ><span
+                  ><t-es>P25 $8,9 M · P75 $11,2 M</t-es
+                  ><t-en>P25 COP 8.9M · P75 COP 11.2M</t-en></span
+                ><span><t-es>$14 M</t-es><t-en>COP 14M</t-en></span>
+              </div>
+            </div>
+
+            <div class="aviso aviso--ok" data-para-estado="en-rango">
+              <svg class="ico"><use href="#i-check" /></svg>
+              <div>
+                <strong
+                  ><t-es>Dentro del rango de su zona</t-es
+                  ><t-en>Within its area's range</t-en></strong
+                ><t-es
+                  >La mitad de los comparables pide entre $8,9 M y $11,2 M por
+                  m². Este pide $9,7 M.</t-es
+                ><t-en
+                  >Half of the comparables ask between COP 8.9M and 11.2M per
+                  m². This one asks 9.7M.</t-en
+                >
+              </div>
+            </div>
+            <div class="aviso aviso--aviso" data-para-estado="caro">
+              <svg class="ico"><use href="#i-alerta" /></svg>
+              <div>
+                <strong
+                  ><t-es>Por encima del rango</t-es
+                  ><t-en>Above the range</t-en></strong
+                ><t-es
+                  >Pide $12,6 M por m², 13&nbsp;% sobre el tope del rango. Puede
+                  tener algo que lo justifique; pregúntale al dueño qué.</t-es
+                ><t-en
+                  >It asks COP 12.6M per m², 13% above the top of the range.
+                  Something may justify it; ask the owner what.</t-en
+                >
+              </div>
+            </div>
+            <div
+              class="aviso aviso--error"
+              data-para-estado="barato"
+              role="alert"
+            >
+              <svg class="ico"><use href="#i-alerta" /></svg>
+              <div>
+                <strong
+                  ><t-es>Muy por debajo de su zona: revisa con cuidado</t-es
+                  ><t-en>Far below its area: check carefully</t-en></strong
+                >
+                <t-es
+                  >Pide 37&nbsp;% menos que la mediana. Un precio así es una
+                  señal frecuente de estafa. Visita antes de pagar, pide el CTL
+                  y nunca des anticipos.</t-es
+                ><t-en
+                  >It asks 37% less than the median. A price like this is a
+                  common sign of a scam. View it before you pay, ask for the
+                  title record (CTL) and never pay a deposit up front.</t-en
+                >
+                <div style="margin-top: 6px">
+                  <a class="btn btn--txt btn--peq" href="12-reportar.html"
+                    ><svg class="ico ico--s"><use href="#i-bandera" /></svg
+                    ><t-es>Reportar este anuncio</t-es
+                    ><t-en>Report this listing</t-en></a
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              class="vacio"
+              data-para-estado="sin-datos"
+              style="padding: 18px"
+            >
+              <h2>
+                <t-es>Aún no hay suficientes comparables</t-es
+                ><t-en>Not enough comparables yet</t-en>
+              </h2>
+              <p>
+                <t-es
+                  >Para dar un rango honesto pedimos al menos 8 anuncios
+                  parecidos en la zona; hoy hay 5. Te mostramos el rango apenas
+                  existan.</t-es
+                ><t-en
+                  >To give an honest range we need at least 8 similar listings
+                  in the area; today there are 5. We'll show the range as soon
+                  as there are.</t-en
+                >
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn--txt btn--peq"
+              data-abre="como-calculamos"
+              aria-expanded="false"
+              style="justify-self: start"
+            >
+              <t-es>Cómo lo calculamos</t-es><t-en>How we calculate it</t-en
+              ><svg class="ico ico--s"><use href="#i-abajo" /></svg>
+            </button>
+            <ul id="como-calculamos" class="pasos" hidden>
+              <li>
+                <span class="pasos__n">1</span
+                ><span
+                  ><t-es
+                    >Comparables: mismo tipo, en su barrio y los vecinos, con
+                    área parecida (±30&nbsp;%), vivos hoy.</t-es
+                  ><t-en
+                    >Comparables: same type, in its neighborhood and the ones
+                    next to it, similar size (±30%), live today.</t-en
+                  ></span
+                >
+              </li>
+              <li>
+                <span class="pasos__n">2</span
+                ><span
+                  ><t-es
+                    >Es el precio que piden los dueños, no el de cierre. No es
+                    un avalúo.</t-es
+                  ><t-en
+                    >It's the owners' asking price, not the sale price. It's not
+                    an appraisal (avalúo).</t-en
+                  ></span
+                >
+              </li>
+              <li>
+                <span class="pasos__n">3</span
+                ><span
+                  ><t-es
+                    >Fuente: anuncios vivos en Innmobiliaria al 17 de octubre de
+                    2026.</t-es
+                  ><t-en
+                    >Source: live listings on Innmobiliaria as of October 17,
+                    2026.</t-en
+                  ></span
+                >
+              </li>
+            </ul>
+          </section>
+
+          <section class="card caja pila">
+            <h2 style="margin: 0">
+              <t-es>Datos de la zona</t-es><t-en>Area data</t-en>
+            </h2>
+            <p class="mute" style="margin: 0">
+              <t-es>Chicó–Rosales · apartamentos en venta</t-es
+              ><t-en>Chicó–Rosales · apartments for sale</t-en>
+            </p>
+            <table class="tabla">
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    <t-es>m² mediano de oferta</t-es
+                    ><t-en>Median asking price per m²</t-en>
+                  </th>
+                  <td class="num">
+                    <strong><t-es>$10,1 M</t-es><t-en>COP 10.1M</t-en></strong
+                    ><br /><span class="mute"
+                      ><t-es>Innmobiliaria · 17 oct 2026</t-es
+                      ><t-en>Innmobiliaria · Oct 17, 2026</t-en></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <t-es>Oferta activa</t-es><t-en>Active listings</t-en>
+                  </th>
+                  <td class="num">
+                    <strong>14</strong><br /><span class="mute"
+                      ><t-es>vivos hoy</t-es><t-en>live today</t-en></span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <t-es>Valor de referencia del m² de terreno</t-es
+                    ><t-en>Reference value per m² of land</t-en>
+                  </th>
+                  <td class="num">
+                    <strong
+                      ><t-es>$7,8 M (ejemplo)</t-es
+                      ><t-en>COP 7.8M (sample)</t-en></strong
+                    ><br /><span class="mute"
+                      ><t-es>Catastro Bogotá · vigencia 2026</t-es
+                      ><t-en>Bogotá cadastre · 2026 values</t-en></span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mute" style="margin: 0">
+              <t-es
+                >El valor de Catastro es solo del terreno, por manzana: sirve de
+                referencia, no de precio de un apartamento.</t-es
+              ><t-en
+                >The cadastre's value is for land only, by block: it's a
+                reference, not the price of an apartment.</t-en
+              >
+            </p>
+            <p class="aviso aviso--info" style="margin: 0">
+              <svg class="ico"><use href="#i-casa" /></svg
+              ><span
+                ><t-es
+                  >El dueño ve este mismo rango cuando publica, para poner un
+                  precio con datos.</t-es
+                ><t-en
+                  >The owner sees this same range when listing, to set a price
+                  with data.</t-en
+                ></span
+              >
+            </p>
+          </section>
+        </div>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

@@ -4,6 +4,7 @@ import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
 import CerrarSesion from "@/components/operador/CerrarSesion";
 import MarcarVerificado from "@/components/operador/MarcarVerificado";
+import AsignarBarrio from "@/components/operador/AsignarBarrio";
 import BotonReContacto from "@/components/operador/BotonReContacto";
 import PanelNav from "@/components/operador/PanelNav";
 import SelloNivel from "@/components/ficha/SelloNivel";
@@ -14,6 +15,7 @@ import { FICHA } from "@/textos/ficha";
 import { OPERADOR } from "@/textos/operador";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { formatearCOP } from "@/engine/format/cop";
+import { formatearFecha } from "@/engine/format/fecha";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
 import type { NivelVerificacion } from "@/lib/supabase/types";
@@ -41,6 +43,8 @@ type Fila = {
   precio_esperado: number;
   slug: string;
   nivel_verificacion: NivelVerificacion;
+  sector_codigo: string | null;
+  ctl_expedido_el: string | null;
   created_at: string;
   vendedor: Vendedor | null;
   n_fotos: number;
@@ -92,7 +96,7 @@ export default async function Panel({
     .from("inmuebles")
     .select(
       // Hint de FK explícito + conteo de fotos embebido.
-      "id,operacion,tipo,barrio,area_m2,habitaciones,precio_esperado,slug,nivel_verificacion,created_at,vendedor:vendedores!inmuebles_vendedor_id_fkey(nombre,whatsapp,email,ciudad,zona,idioma),fotos(count)",
+      "id,operacion,tipo,barrio,area_m2,habitaciones,precio_esperado,slug,nivel_verificacion,sector_codigo,ctl_expedido_el,created_at,vendedor:vendedores!inmuebles_vendedor_id_fkey(nombre,whatsapp,email,ciudad,zona,idioma),fotos(count)",
     )
     .order("created_at", { ascending: false });
   if (filtro === "por-verificar")
@@ -237,6 +241,14 @@ export default async function Panel({
                       <p className="text-mute">
                         {f.barrio} · {formatearCOP(f.precio_esperado, lang)}
                       </p>
+                      {!f.sector_codigo && (
+                        <p className="mt-1 text-xs font-semibold text-aviso">
+                          {t.registros.sinBarrio}
+                          <span className="block font-normal text-mute">
+                            {t.registros.sinBarrioAyuda}
+                          </span>
+                        </p>
+                      )}
                       <Link
                         href={`/i/${f.slug}`}
                         className="text-xs font-semibold text-purple-600 underline-offset-2 hover:underline"
@@ -250,15 +262,34 @@ export default async function Panel({
                     <td className="px-4 py-3">
                       <SelloNivel
                         nivel={f.nivel_verificacion}
+                        ctlExpedidoEl={f.ctl_expedido_el}
+                        lang={lang}
                         t={enIdioma(FICHA.sello, lang)}
                       />
+                      {f.ctl_expedido_el && (
+                        <p className="mt-1 text-xs text-mute">
+                          {rellenar(enIdioma(FICHA.sello, lang).ctlDel, {
+                            fecha: formatearFecha(f.ctl_expedido_el, lang),
+                          })}
+                        </p>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col gap-2">
-                        {f.nivel_verificacion === "fundador" && (
+                        {(f.nivel_verificacion === "fundador" ||
+                          !f.ctl_expedido_el) && (
                           <MarcarVerificado
                             t={t.marcarVerificado}
                             inmuebleId={f.id}
+                            reverificar={f.nivel_verificacion === "verificado"}
+                          />
+                        )}
+                        {!f.sector_codigo && (
+                          <AsignarBarrio
+                            t={t.asignarBarrio}
+                            inmuebleId={f.id}
+                            barrioEscrito={f.barrio}
+                            localidadInicial={f.vendedor?.zona ?? ""}
                           />
                         )}
                         <BotonReContacto

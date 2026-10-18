@@ -39,6 +39,23 @@ export const MI_ANUNCIO = {
     fotos: { es: "Fotos", en: "Photos" },
     descripcion: { es: "Descripción", en: "Description" },
     contacto: { es: "Contacto", en: "Contact" },
+    sello: { es: "Tu sello", en: "Your seal" },
+  },
+
+  // Lo que el dueño ve de su propio sello; los compradores ven el sello en la ficha y en la búsqueda.
+  sello: {
+    verificado: {
+      es: "Vimos tu Certificado de Tradición y Libertad (CTL), expedido el {fecha}. Los compradores ven el sello ⭐ con esa fecha.",
+      en: "We saw your Certificado de Tradición y Libertad (CTL), issued on {fecha}. Buyers see the ⭐ seal with that date.",
+    },
+    pendiente: {
+      es: "Tu sello dice «re-verificación pendiente» hasta que veamos un CTL nuevo, de máximo 30 días.",
+      en: "Your seal reads «re-check pending» until we see a new CTL, at most 30 days old.",
+    },
+    fundador: {
+      es: "Con un CTL (Certificado de Tradición y Libertad) vigente ganas el sello ⭐ de propietario verificado. El documento solo se ve: no se guarda.",
+      en: "With a current CTL (Certificado de Tradición y Libertad, the official record of who owns a property) you earn the ⭐ verified-owner seal. We only look at the document: we don't keep it.",
+    },
   },
 
   score: {

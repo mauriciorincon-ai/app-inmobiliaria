@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Alerts">
+      Innmobiliaria · Alertas
+    </title>
+    <link rel="stylesheet" href="assets/maqueta.css" />
+  </head>
+  <body
+    data-nav="alertas"
+    data-estados='[["lista","Mis alertas","My alerts"],["crear","Crear alerta","Create alert"],["correo","El correo que llega","The email you get"],["vacio","Sin alertas","No alerts"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 760px">
+        <h1><t-es>Alertas</t-es><t-en>Alerts</t-en></h1>
+        <p class="bajada">
+          <t-es
+            >Te escribimos cuando aparece lo que buscas o cuando baja de precio.
+            Por correo; por WhatsApp solo si lo pides.</t-es
+          ><t-en
+            >We write to you when what you're looking for shows up or drops in
+            price. By email; on WhatsApp only if you ask.</t-en
+          >
+        </p>
+
+        <!-- Mis alertas -->
+        <section class="pila" data-para-estado="lista" style="margin-top: 16px">
+          <article class="card caja pila">
+            <div
+              class="fila"
+              style="justify-content: space-between; align-items: flex-start"
+            >
+              <div>
+                <h2 style="margin: 0">
+                  <t-es>Apartamentos en Chicó–Rosales</t-es
+                  ><t-en>Apartments in Chicó–Rosales</t-en>
+                </h2>
+                <p class="mute" style="margin: 2px 0 0">
+                  <t-es
+                    >Venta · zona dibujada · hasta $1.400 M · 2+
+                    habitaciones</t-es
+                  ><t-en
+                    >For sale · drawn area · up to COP 1.4 bn · 2+
+                    bedrooms</t-en
+                  >
+                </p>
+              </div>
+              <span class="nivel nivel--si"
+                ><svg class="ico ico--s"><use href="#i-campana" /></svg
+                ><t-es>Activa</t-es><t-en>On</t-en></span
+              >
+            </div>
+            <p style="margin: 0">
+              <strong>2</strong>
+              <t-es>anuncios nuevos esta semana · 1 bajó de precio</t-es
+              ><t-en>new listings this week · 1 price drop</t-en>
+            </p>
+            <button
+              type="button"
+              class="interruptor"
+              role="switch"
+              aria-checked="true"
+              data-alternar
+            >
+              <span
+                ><t-es>Avisarme también si baja de precio</t-es
+                ><t-en>Also tell me about price drops</t-en></span
+              ><span class="interruptor__riel" aria-hidden="true"></span>
+            </button>
+            <button
+              type="button"
+              class="interruptor"
+              role="switch"
+              aria-checked="false"
+              data-alternar="nota-whatsapp"
+            >
+              <span
+                ><t-es>También por WhatsApp</t-es
+                ><t-en>Also on WhatsApp</t-en></span
+              ><span class="interruptor__riel" aria-hidden="true"></span>
+            </button>
+            <p id="nota-whatsapp" class="mute" hidden style="margin: 0">
+              <t-es
+                >Te escribimos al WhatsApp que verificaste. Lo apagas cuando
+                quieras.</t-es
+              ><t-en
+                >We'll write to the WhatsApp number you verified. Turn it off
+                whenever you like.</t-en
+              >
+            </p>
+            <div class="fila">
+              <a class="btn btn--sec btn--peq" href="01-buscar.html"
+                ><t-es>Ver resultados</t-es><t-en>See results</t-en></a
+              >
+              <button
+                type="button"
+                class="btn btn--txt btn--peq"
+                data-ir-estado="correo"
+              >
+                <t-es>Ver el último correo</t-es
+                ><t-en>See the latest email</t-en>
+              </button>
+              <button
+                type="button"
+                class="btn btn--txt btn--peq"
+                data-ir-estado="vacio"
+              >
+                <t-es>Borrar</t-es><t-en>Delete</t-en>
+              </button>
+            </div>
+          </article>
+          <article class="card caja pila" style="opacity: 0.85">
+            <div
+              class="fila"
+              style="justify-content: space-between; align-items: flex-start"
+            >
+              <div>
+                <h2 style="margin: 0">
+                  <t-es>Casas en Usaquén</t-es><t-en>Houses in Usaquén</t-en>
+                </h2>
+                <p class="mute" style="margin: 2px 0 0">
+                  <t-es>Venta · localidad Usaquén · hasta $1.800 M</t-es
+                  ><t-en>For sale · Usaquén locality · up to COP 1.8 bn</t-en>
+                </p>
+              </div>
+              <span class="nivel nivel--no"
+                ><svg class="ico ico--s"><use href="#i-reloj" /></svg
+                ><t-es>En pausa</t-es><t-en>Paused</t-en></span
+              >
+            </div>
+            <button
+              type="button"
+              class="btn btn--sec btn--peq"
+              style="width: max-content"
+              data-abre="reanudada"
+              aria-expanded="false"
+            >
+              <t-es>Reanudar</t-es><t-en>Resume</t-en>
+            </button>
+            <p id="reanudada" class="aviso aviso--ok" hidden>
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                ><t-es
+                  >Alerta reanudada: te escribimos cuando aparezca algo.</t-es
+                ><t-en
+                  >Alert resumed: we'll write when something shows up.</t-en
+                ></span
+              >
+            </p>
+          </article>
+          <button
+            type="button"
+            class="btn"
+            data-ir-estado="crear"
+            style="justify-self: start"
+          >
+            + <t-es>Nueva alerta</t-es><t-en>New alert</t-en>
+          </button>
+        </section>
+
+        <!-- Crear -->
+        <form
+          class="card caja pila"
+          data-para-estado="crear"
+          style="margin-top: 16px"
+          action="08-alertas.html"
+        >
+          <p class="caja caja--tinta" style="margin: 0; padding: 12px 14px">
+            <strong><t-es>Tu búsqueda:</t-es><t-en>Your search:</t-en></strong>
+            <t-es
+              >apartamentos en venta · zona dibujada en Chicó–Rosales · hasta
+              $1.400 M · 2+ habitaciones</t-es
+            ><t-en
+              >apartments for sale · area drawn around Chicó–Rosales · up to COP
+              1.4 bn · 2+ bedrooms</t-en
+            >
+          </p>
+          <label class="campo"
+            ><span><t-es>Nombre de la alerta</t-es><t-en>Alert name</t-en></span
+            ><input
+              data-es="Apartamentos en Chicó–Rosales"
+              data-en="Apartments in Chicó–Rosales"
+          /></label>
+          <fieldset style="border: 0; padding: 0; margin: 0" class="pila">
+            <legend class="campo__label">
+              <t-es>Qué te avisamos</t-es><t-en>What we tell you about</t-en>
+            </legend>
+            <label class="check"
+              ><input type="checkbox" checked /><span
+                ><t-es>Anuncios nuevos</t-es><t-en>New listings</t-en></span
+              ></label
+            >
+            <label class="check"
+              ><input type="checkbox" checked /><span
+                ><t-es>Bajas de precio en lo que coincide</t-es
+                ><t-en>Price drops on matching listings</t-en></span
+              ></label
+            >
+          </fieldset>
+          <div>
+            <span class="campo__label"
+              ><t-es>Cada cuánto</t-es><t-en>How often</t-en></span
+            >
+            <div
+              class="seg"
+              role="group"
+              data-aria-es="Frecuencia"
+              data-aria-en="Frequency"
+            >
+              <button
+                type="button"
+                data-elegir="frecuencia"
+                aria-pressed="true"
+              >
+                <t-es>En cuanto aparezca</t-es><t-en>As it happens</t-en>
+              </button>
+              <button
+                type="button"
+                data-elegir="frecuencia"
+                aria-pressed="false"
+              >
+                <t-es>Un resumen al día</t-es><t-en>A daily digest</t-en>
+              </button>
+            </div>
+          </div>
+          <label class="campo"
+            ><span><t-es>Tu correo</t-es><t-en>Your email</t-en></span
+            ><input
+              value="laura@example.com"
+              type="email"
+              autocomplete="email"
+            />
+            <span class="campo__ayuda"
+              ><t-es
+                >Te enviamos un enlace para confirmar que es tuyo. Cada correo
+                trae cómo dejar de recibirlo.</t-es
+              ><t-en
+                >We'll send you a link to confirm it's yours. Every email shows
+                how to stop receiving it.</t-en
+              ></span
+            ></label
+          >
+          <p
+            class="mute"
+            data-para-comprador="c0"
+            style="margin: 0; display: flex; gap: 6px"
+          >
+            <svg class="ico ico--s" style="margin-top: 2px">
+              <use href="#i-escudo" />
+            </svg>
+            <span
+              ><t-es
+                >Para recibirla también por WhatsApp, primero verifica tu
+                número.</t-es
+              ><t-en
+                >To also get it on WhatsApp, verify your number first.</t-en
+              ></span
+            >
+          </p>
+          <button type="button" class="btn" data-ir-estado="lista">
+            <svg class="ico"><use href="#i-campana" /></svg
+            ><t-es>Crear alerta</t-es><t-en>Create alert</t-en>
+          </button>
+        </form>
+
+        <!-- El correo que llega -->
+        <section
+          class="pila"
+          data-para-estado="correo"
+          style="margin-top: 16px"
+        >
+          <p class="mute" style="margin: 0">
+            <t-es>Así llega a tu bandeja (vista previa):</t-es
+            ><t-en>This is how it lands in your inbox (preview):</t-en>
+          </p>
+          <div class="card" style="overflow: hidden">
+            <div
+              class="caja"
+              style="border-radius: 0; border-bottom: 1px solid var(--borde)"
+            >
+              <p class="mute" style="margin: 0">
+                <t-es>De: Innmobiliaria · Asunto:</t-es
+                ><t-en>From: Innmobiliaria · Subject:</t-en>
+              </p>
+              <p style="margin: 0; font-weight: 700">
+                <t-es>2 anuncios nuevos en Chicó–Rosales</t-es
+                ><t-en>2 new listings in Chicó–Rosales</t-en>
+              </p>
+            </div>
+            <div class="caja pila">
+              <p style="margin: 0">
+                <t-es>Hola, Laura. Esto apareció esta semana en tu zona:</t-es
+                ><t-en>Hi Laura. This showed up in your area this week:</t-en>
+              </p>
+              <div class="mini" style="padding: 0">
+                <div class="foto foto--4"></div>
+                <div>
+                  <strong class="num"
+                    ><t-es>$890.000.000</t-es
+                    ><t-en>COP 890,000,000</t-en></strong
+                  ><br /><t-es>Apartamento · La Cabrera · 84 m²</t-es
+                  ><t-en>Apartment · La Cabrera · 84 m²</t-en><br /><span
+                    class="sello sello--verificado"
+                    style="margin-top: 4px"
+                    >⭐ <t-es>CTL del 9 oct</t-es
+                    ><t-en>Title record Oct 9</t-en></span
+                  >
+                </div>
+              </div>
+              <div class="mini" style="padding: 0">
+                <div class="foto foto--2"></div>
+                <div>
+                  <strong class="num"
+                    ><t-es>$980.000.000</t-es
+                    ><t-en>COP 980,000,000</t-en></strong
+                  >
+                  <span class="mute" style="text-decoration: line-through"
+                    ><t-es>$1.020.000.000</t-es
+                    ><t-en>COP 1,020,000,000</t-en></span
+                  ><br />
+                  <t-es>Apartamento · El Nogal · bajó de precio</t-es
+                  ><t-en>Apartment · El Nogal · price dropped</t-en>
+                </div>
+              </div>
+              <a
+                class="btn btn--peq"
+                href="01-buscar.html"
+                style="width: max-content"
+                ><t-es>Ver en el mapa</t-es><t-en>See on the map</t-en></a
+              >
+              <p class="mute" style="margin: 0">
+                <t-es
+                  >Recibes esto porque creaste la alerta «Apartamentos en
+                  Chicó–Rosales». Dejar de recibirla: un clic.</t-es
+                ><t-en
+                  >You get this because you created the alert "Apartments in
+                  Chicó–Rosales". Stop receiving it: one click.</t-en
+                >
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vacío -->
+        <div class="vacio" data-para-estado="vacio" style="margin-top: 16px">
+          <svg class="vacio__dibujo" viewBox="0 0 120 96" aria-hidden="true">
+            <path
+              d="M38 66V44a22 22 0 1 1 44 0v22l6 8H32l6-8Z"
+              fill="#ebe9fc"
+              stroke="#7b5dd6"
+              stroke-width="3"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M52 82a8 8 0 0 0 16 0"
+              stroke="#191a1d"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+          <h2><t-es>No tienes alertas</t-es><t-en>You have no alerts</t-en></h2>
+          <p>
+            <t-es
+              >Busca en el mapa, dibuja tu zona y toca «Guardar como alerta». Te
+              escribimos cuando aparezca algo.</t-es
+            ><t-en
+              >Search the map, draw your area and tap "Save as an alert". We'll
+              write when something shows up.</t-en
+            >
+          </p>
+          <a class="btn btn--peq" href="01-buscar.html" style="margin-top: 8px"
+            ><svg class="ico ico--s"><use href="#i-buscar" /></svg
+            ><t-es>Ir a buscar</t-es><t-en>Go search</t-en></a
+          >
+        </div>
+      </main>
+      <footer class="pie">
+        <t-es>Innmobiliaria · Bogotá · Tus datos protegidos (Ley 1581)</t-es
+        ><t-en
+          >Innmobiliaria · Bogotá · Your data protected (Colombia's Ley
+          1581)</t-en
+        >
+      </footer>
+    </div>
+    <script src="assets/maqueta.js"></script>
+  </body>
+</html>

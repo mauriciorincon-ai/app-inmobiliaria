@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import Boton from "@/components/ui/Boton";
 import SelectorIdioma from "@/components/ui/SelectorIdioma";
@@ -23,6 +24,12 @@ export default function Navbar({ lang }: { lang: Idioma }) {
           >
             {t.nav.comoFunciona}
           </a>
+          <Link
+            href="/buscar"
+            className="hidden text-sm font-semibold text-gray underline-offset-4 hover:underline sm:inline"
+          >
+            {t.nav.buscar}
+          </Link>
           <SelectorIdioma idioma={lang} etiqueta={t.selector.etiqueta} />
           <Boton href="/publicar" className="!px-5 !py-2.5 text-sm">
             {t.nav.publicar}

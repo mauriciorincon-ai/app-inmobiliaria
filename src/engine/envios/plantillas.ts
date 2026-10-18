@@ -12,17 +12,22 @@ import { enIdioma, rellenar } from "@/i18n/textos";
 import { CORREOS } from "@/textos/correos";
 
 export type PlantillaId =
-  "completa-anuncio" | "gana-sello" | "renueva-vigencia";
+  "completa-anuncio" | "gana-sello" | "renueva-vigencia" | "re-verificar";
+
+export type FiltroLote =
+  "sin-fotos" | "sin-sello" | "por-vencer" | "re-verificar";
 
 export type Plantilla = {
   id: PlantillaId;
-  filtroSugerido: "sin-fotos" | "sin-sello" | "por-vencer";
+  filtroSugerido: FiltroLote;
 };
 
 export const PLANTILLAS: Plantilla[] = [
   { id: "completa-anuncio", filtroSugerido: "sin-fotos" },
   { id: "gana-sello", filtroSugerido: "sin-sello" },
   { id: "renueva-vigencia", filtroSugerido: "por-vencer" },
+  // S6 — el sello ahora muestra la fecha del CTL: a los verificados sin fecha se les pide uno nuevo.
+  { id: "re-verificar", filtroSugerido: "re-verificar" },
 ];
 
 export function plantillaPorId(id: string): Plantilla | null {

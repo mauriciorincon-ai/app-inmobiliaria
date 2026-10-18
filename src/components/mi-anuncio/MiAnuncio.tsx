@@ -16,11 +16,14 @@ import RenovarVigencia, {
 import InvitaReferido, {
   type TextosReferido,
 } from "@/components/referido/InvitaReferido";
+import SelloNivel, { type TextosSello } from "@/components/ficha/SelloNivel";
+import { formatearFecha } from "@/engine/format/fecha";
+import { estadoSello } from "@/engine/sello/sello";
 import PaqueteFundador, {
   type TextosPaquete,
 } from "@/components/paquete/PaqueteFundador";
 import type { Idioma } from "@/i18n/idiomas";
-import type { Proyectado } from "@/i18n/textos";
+import { rellenar, type Proyectado } from "@/i18n/textos";
 import type { MI_ANUNCIO } from "@/textos/mi-anuncio";
 
 export type TextosMiAnuncio = Proyectado<typeof MI_ANUNCIO>;
@@ -34,12 +37,14 @@ type Estado = "cargando" | "sin-token" | "no-encontrado" | "listo" | "error";
 export default function MiAnuncio({
   lang,
   t,
+  tSello,
   vigencia,
   referido,
   paquete,
 }: {
   lang: Idioma;
   t: TextosMiAnuncio;
+  tSello: TextosSello;
   vigencia: TextosTarjeta;
   referido: TextosReferido;
   paquete: TextosPaquete;
@@ -185,6 +190,35 @@ export default function MiAnuncio({
           activo={anuncio.contacto_publico}
           onCambio={recargar}
         />
+      </section>
+
+      <section aria-labelledby="sello-titulo">
+        <h2 id="sello-titulo" className="text-xl font-bold text-ink">
+          {t.secciones.sello}
+        </h2>
+        <div className="mt-3 flex flex-col items-start gap-2">
+          <SelloNivel
+            nivel={anuncio.nivel_verificacion}
+            ctlExpedidoEl={anuncio.ctl_expedido_el}
+            lang={lang}
+            t={tSello}
+          />
+          <p className="text-sm text-gray">
+            {estadoSello(
+              anuncio.nivel_verificacion,
+              anuncio.ctl_expedido_el,
+            ) === "verificado" && anuncio.ctl_expedido_el
+              ? rellenar(t.sello.verificado, {
+                  fecha: formatearFecha(anuncio.ctl_expedido_el, lang),
+                })
+              : estadoSello(
+                    anuncio.nivel_verificacion,
+                    anuncio.ctl_expedido_el,
+                  ) === "reverificacion_pendiente"
+                ? t.sello.pendiente
+                : t.sello.fundador}
+          </p>
+        </div>
       </section>
 
       <RenovarVigencia

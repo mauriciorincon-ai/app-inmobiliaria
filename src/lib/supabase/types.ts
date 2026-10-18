@@ -3,6 +3,7 @@
 // Dan tipado a `.from(...)` y `.rpc(...)` del cliente Supabase.
 
 import type { Operacion, TipoInmueble } from "@/engine/registro/schema";
+import type { ArgsBuscar } from "@/engine/busqueda/filtros";
 
 export type EstadoInmueble = "borrador" | "publicado_fundador";
 export type NivelVerificacion = "fundador" | "verificado";
@@ -47,6 +48,19 @@ export type InmuebleRow = {
   zona_id: string | null;
   vigente_hasta: string;
   vigente: boolean;
+  // S6 — barrio del catálogo catastral (lo fija un trigger por nombre + localidad; null = sin barrio del
+  // catálogo) y fecha de expedición del CTL (solo en un anuncio verificado).
+  sector_codigo: string | null;
+  ctl_expedido_el: string | null;
+};
+
+export type SectorRow = {
+  codigo: string;
+  nombre: string;
+  localidad: string;
+  tipo: "urbano" | "rural" | "mixto";
+  // `point` de Postgres tal como lo devuelve PostgREST: «(lon,lat)».
+  centroide: string;
 };
 
 export type ZonaRow = {
@@ -134,6 +148,9 @@ export type MiAnuncioData = {
   descripcion: string | null;
   contacto_publico: boolean;
   nivel_verificacion: NivelVerificacion;
+  // S6 — fecha del CTL (null = verificado sin fecha ⇒ re-verificación pendiente) y barrio del catálogo.
+  ctl_expedido_el: string | null;
+  sector_codigo: string | null;
   // S3 — vigencia (para el aviso de renovación); `vigente` va derivado (vigente_hasta > now()).
   vigente_hasta: string;
   vigente: boolean;
@@ -185,16 +202,39 @@ export type FichaData = {
   operacion: Operacion;
   tipo: TipoInmueble;
   barrio: string;
+  // S6 — barrio del catálogo y su localidad (null si el anuncio es de antes del catálogo).
+  sector_codigo: string | null;
+  localidad: string | null;
   ciudad: string;
   area_m2: number;
   habitaciones: number;
   precio_esperado: number;
   descripcion: string | null;
   nivel_verificacion: NivelVerificacion;
+  // S6 — fecha del CTL y última confirmación (`vigente_hasta − 60 d` ⇒ «vivo hace N días»).
+  ctl_expedido_el: string | null;
+  vigente_hasta: string;
   nombre_publicador: string;
   fotos: FotoFicha[];
   contacto_publico: boolean;
   whatsapp: string | null; // solo con opt-in; email y matrícula JAMÁS salen de la BD.
+};
+
+// Una fila de buscar_inmuebles: LISTA BLANCA. Jamás dirección ni datos del vendedor.
+export type ResultadoBusqueda = {
+  slug: string;
+  operacion: Operacion;
+  tipo: TipoInmueble;
+  barrio: string;
+  sector_codigo: string | null;
+  localidad: string | null;
+  area_m2: number;
+  habitaciones: number;
+  precio_esperado: number;
+  nivel_verificacion: NivelVerificacion;
+  ctl_expedido_el: string | null;
+  vigente_hasta: string;
+  portada: string | null; // r2_key de la foto de portada
 };
 
 export type Database = {
@@ -224,6 +264,8 @@ export type Database = {
           | "matricula"
           | "verificado_at"
           | "edit_token_hash"
+          | "sector_codigo"
+          | "ctl_expedido_el"
         > & {
           id?: string;
           created_at?: string;
@@ -235,6 +277,8 @@ export type Database = {
           matricula?: string | null;
           verificado_at?: string | null;
           edit_token_hash?: string | null;
+          sector_codigo?: string | null;
+          ctl_expedido_el?: string | null;
         };
         Update: Partial<InmuebleRow>;
         Relationships: [
@@ -267,6 +311,12 @@ export type Database = {
         Row: { id: number; ip_hash: string; creado_at: string };
         Insert: { id?: number; ip_hash: string; creado_at?: string };
         Update: Partial<{ id: number; ip_hash: string; creado_at: string }>;
+        Relationships: [];
+      };
+      sectores: {
+        Row: SectorRow;
+        Insert: SectorRow;
+        Update: Partial<SectorRow>;
         Relationships: [];
       };
       zonas: {
@@ -348,6 +398,20 @@ export type Database = {
       marcar_verificado: {
         Args: { p_inmueble_id: string; p_matricula: string };
         Returns: undefined;
+      };
+      // S6 — la verificación con fecha del CTL (SOLO authenticated; ≤ 30 días).
+      marcar_verificado_ctl: {
+        Args: {
+          p_inmueble_id: string;
+          p_matricula: string;
+          p_ctl_expedido_el: string;
+        };
+        Returns: undefined;
+      };
+      // S6 — búsqueda pública (anon + authenticated), lista blanca de campos.
+      buscar_inmuebles: {
+        Args: ArgsBuscar;
+        Returns: ResultadoBusqueda[];
       };
       generar_link_anuncio: {
         Args: { p_inmueble_id: string };

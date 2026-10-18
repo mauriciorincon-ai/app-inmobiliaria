@@ -143,6 +143,8 @@ export const OPERADOR = {
       "por-vencer": { es: "anuncios por vencer", en: "about to expire" },
     },
     vistaPrevia: { es: "Vista previa", en: "Preview" },
+    // Nombre ficticio con el que se arma el saludo de la vista previa.
+    nombreEjemplo: { es: "Vendedor", en: "Seller" },
     // La vista previa se muestra en el idioma del panel; los destinatarios reciben el suyo.
     vistaPreviaNota: {
       es: "Vista previa en español.",

@@ -38,10 +38,8 @@ export const FICHA = {
 
   encabezado: {
     titulo: { es: "{tipo} en {barrio}", en: "{tipo} in {barrio}" },
-    medidas: {
-      es: "{ciudad} · {area} m² · {habitaciones} habitaciones",
-      en: "{ciudad} · {area} m² · {habitaciones} bedrooms",
-    },
+    habitacionesUna: { es: "1 habitación", en: "1 bedroom" },
+    habitacionesVarias: { es: "{n} habitaciones", en: "{n} bedrooms" },
   },
 
   publicadoPor: { es: "Publicado por", en: "Listed by" },

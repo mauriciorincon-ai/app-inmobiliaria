@@ -39,7 +39,7 @@ export const PRIVACIDAD = {
     },
     texto: {
       es: "Recogemos únicamente lo necesario para registrar tu inmueble y contactarte: tu nombre, tu número de WhatsApp, tu ciudad y los datos básicos del inmueble (tipo, zona, área, habitaciones y precio esperado). Los usamos para comunicarnos contigo por WhatsApp sobre tu publicación y las siguientes etapas hacia el lanzamiento. No los vendemos ni los compartimos con terceros con fines comerciales.",
-      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, area, bedrooms and expected price). We use them to reach you on WhatsApp about your listing and the next stages toward launch. We don't sell them or share them with third parties for commercial purposes.",
+      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, locality, size, bedrooms and expected price). We use them to reach you on WhatsApp about your listing and the next stages toward launch. We don't sell them or share them with third parties for commercial purposes.",
     },
     // Dice solo lo que el código hace: el correo del paso 3 sirve para los avisos de campaña
     // (`engine/envios/plantillas.ts`: fotos, sello, vigencia) y los envía un proveedor de correo
@@ -62,7 +62,7 @@ export const PRIVACIDAD = {
     },
     antes: {
       es: "Cada inmueble tiene una ficha con un enlace propio que puedes compartir. En ella se muestran los datos del inmueble (tipo, zona, área, habitaciones, precio), las fotos que subas, tu ",
-      en: "Each property has a listing page with its own link that you can share. It shows the property's details (type, area, bedrooms, price), the photos you upload, your ",
+      en: "Each property has a listing page with its own link that you can share. It shows the property's details (type, locality, size, bedrooms, price), the photos you upload, your ",
     },
     nombre: { es: "nombre", en: "name" },
     medio: {

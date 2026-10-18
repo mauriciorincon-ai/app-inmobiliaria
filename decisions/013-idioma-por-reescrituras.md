@@ -78,6 +78,13 @@ against both `next start` and the local Workers runtime (`opennextjs-cloudflare 
   by hand in F1 and is not a CI job.
 - Not measured: client-side navigation through `<Link>` prefetch with the cookie set (the e2e switches
   language and navigates with full loads).
+- Not measured: the language of link previews. The crawler that builds the preview when a listing link
+  is pasted into WhatsApp sends no cookie, so rule 3 decides on its `Accept-Language`; if that header
+  asks for English the preview may come out in English («COP 420,000,000») for a Spanish-speaking
+  chat. Check with a real paste after the first deploy (guide test G1); the fix, if needed, is a
+  `missing` condition on the crawler's `user-agent` in the English-by-header rule.
+- A browser sending `fr,es;q=0.8,en;q=0.5` gets English: rule 3 only asks that the header does not
+  _start_ with `es` and contains `en`, not that English outranks Spanish.
 
 ## Alternatives considered
 

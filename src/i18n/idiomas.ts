@@ -36,12 +36,17 @@ export function localeIntl(idioma: Idioma): string {
 }
 
 // Texto de la cookie `idioma` para `document.cookie = …`. Función pura: se prueba sin navegador.
-export function cookieDeIdioma(idioma: Idioma): string {
-  return `${COOKIE_IDIOMA}=${idioma}; Path=/; Max-Age=${VIGENCIA_COOKIE_SEGUNDOS}; SameSite=Lax`;
+export function cookieDeIdioma(idioma: Idioma, seguro = false): string {
+  const base = `${COOKIE_IDIOMA}=${idioma}; Path=/; Max-Age=${VIGENCIA_COOKIE_SEGUNDOS}; SameSite=Lax`;
+  return seguro ? `${base}; Secure` : base;
 }
 
 // Recuerda la elección en el navegador. Vive aquí y no en el componente porque asignar a
 // `document.cookie` dentro de un componente lo rechaza la regla react-hooks/immutability.
 export function recordarIdioma(idioma: Idioma): void {
-  document.cookie = cookieDeIdioma(idioma);
+  // Bajo HTTPS la cookie viaja solo cifrada; en http://localhost (desarrollo y e2e) no se puede.
+  document.cookie = cookieDeIdioma(
+    idioma,
+    window.location.protocol === "https:",
+  );
 }

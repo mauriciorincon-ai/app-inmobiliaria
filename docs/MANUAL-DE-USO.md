@@ -26,10 +26,10 @@ En esta primera etapa hay dos usos: el del **vendedor** (publica su inmueble) y 
   **español y en inglés**. El inglés está pensado para colombianos que viven afuera y para
   extranjeros que compran o arriendan en Bogotá: los términos de aquí (localidad, barrio, CTL,
   matrícula, apartaestudio) se nombran en español y se explican en una línea.
-- **Cómo se usa:** al entrar, la página elige el idioma de tu navegador (si tu navegador está en
-  inglés, la verás en inglés; en cualquier otro caso, en español). Para cambiarlo toca **ES** o
+- **Cómo se usa:** al entrar, la página elige el idioma de tu navegador (si tu navegador pide inglés y
+  no tiene el español como primera opción, la verás en inglés; en cualquier otro caso, en español). Para cambiarlo toca **ES** o
   **EN** arriba a la derecha: la página se recarga en el otro idioma y **recuerda tu elección** (un
-  año). **Los enlaces no cambian:** el mismo enlace de una ficha se ve en el idioma de quien lo abre.
+  año). **Los enlaces no cambian:** el mismo enlace de una ficha se ve en el idioma de quien lo abre (la vista previa que WhatsApp arma al pegar un enlace no sabe qué idioma lees: ver la prueba G1 de la guía).
   Tu enlace privado «mi anuncio» tampoco cambia al cambiar de idioma.
 - **Los avisos te llegan en el idioma en que publicaste:** el correo de campaña y el mensaje de
   WhatsApp con el que el equipo te escribe salen en ese idioma. La invitación que mandas a otros

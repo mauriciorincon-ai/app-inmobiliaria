@@ -228,7 +228,10 @@ export const PUBLICAR = {
       es: "Escribe el precio esperado",
       en: "Enter the expected price",
     },
-    precioNumero: { es: "Escribe un número", en: "Enter a number" },
+    precioNumero: {
+      es: "Escribe un número entero, sin decimales",
+      en: "Enter a whole number with no decimals",
+    },
     precioRango: {
       es: "El precio está fuera de rango",
       en: "The price is out of range",

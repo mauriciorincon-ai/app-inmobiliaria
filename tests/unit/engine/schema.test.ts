@@ -40,6 +40,40 @@ describe("paso1Schema (contacto)", () => {
 });
 
 describe("paso2Schema (inmueble)", () => {
+  it("rechaza decimales en área, habitaciones y precio: «85.5» no puede leerse como 855", () => {
+    for (const [campo, valor] of [
+      ["area_m2", "85.5"],
+      ["area_m2", "85,5"],
+      ["habitaciones", "2.5"],
+      ["precio_esperado", "420,000,000.00"],
+      ["precio_esperado", "420.000.000,50"],
+    ] as const) {
+      const r = paso2Schema.safeParse({ ...paso2Valido, [campo]: valor });
+      expect(r.success, `${campo}=${valor}`).toBe(false);
+    }
+  });
+
+  it("acepta el entero escrito a la inglesa o a la colombiana, y construirPayload lo lee igual", () => {
+    for (const precio of ["420,000,000", "420.000.000", "420000000"]) {
+      const r = paso2Schema.safeParse({
+        ...paso2Valido,
+        area_m2: "1,200",
+        precio_esperado: precio,
+      });
+      expect(r.success, precio).toBe(true);
+    }
+    const completo = {
+      ...paso1Valido,
+      ...paso2Valido,
+      area_m2: "1,200",
+      precio_esperado: "420,000,000",
+      consentimiento: true as const,
+    };
+    const p = construirPayload(completo as DatosRegistro);
+    expect(p.area).toBe(1200);
+    expect(p.precio).toBe(420000000);
+  });
+
   it("acepta un inmueble válido", () => {
     expect(paso2Schema.safeParse(paso2Valido).success).toBe(true);
   });

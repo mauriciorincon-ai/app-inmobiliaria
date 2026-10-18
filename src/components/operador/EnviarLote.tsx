@@ -18,9 +18,6 @@ import type { OPERADOR } from "@/textos/operador";
 
 export type TextosLote = Proyectado<typeof OPERADOR.lote>;
 
-// Nombre de ejemplo de la vista previa: marcador de posición, no texto de la interfaz.
-const NOMBRE_EJEMPLO = "Vendedor";
-
 type Cuenta = { total: number; es: number; en: number };
 
 // Selector de lote: elige plantilla → previsualiza destinatarios (obtener_lote) → envía por tandas
@@ -146,7 +143,7 @@ export default function EnviarLote({
           className="prose-sm mt-2 text-sm text-gray [&_a]:text-purple-600"
           // HTML propio del diccionario; el nombre y la URL entran escapados (cuerpoHtml).
           dangerouslySetInnerHTML={{
-            __html: cuerpoHtml(plantilla.id, lang, NOMBRE_EJEMPLO, urlApp),
+            __html: cuerpoHtml(plantilla.id, lang, t.nombreEjemplo, urlApp),
           }}
         />
       </div>

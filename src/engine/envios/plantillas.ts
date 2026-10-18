@@ -7,7 +7,7 @@
 // dos idiomas y cada vendedor recibe el suyo (`vendedores.idioma`). El nombre del vendedor es TEXTO
 // DEL USUARIO: se escapa antes de entrar al HTML.
 import type { Idioma } from "@/i18n/idiomas";
-import { IDIOMAS } from "@/i18n/idiomas";
+import { esIdioma, IDIOMA_POR_DEFECTO, IDIOMAS } from "@/i18n/idiomas";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { CORREOS } from "@/textos/correos";
 
@@ -76,6 +76,9 @@ export function agruparPorIdioma<T extends { idioma: Idioma }>(
   const grupos = Object.fromEntries(
     IDIOMAS.map((i) => [i, [] as T[]]),
   ) as Record<Idioma, T[]>;
-  for (const item of lista) grupos[item.idioma].push(item);
+  // Un idioma fuera de es/en (la columna lo impide) cae en el español: nadie se queda sin correo.
+  for (const item of lista) {
+    grupos[esIdioma(item.idioma) ? item.idioma : IDIOMA_POR_DEFECTO].push(item);
+  }
   return grupos;
 }

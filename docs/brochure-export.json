@@ -165,10 +165,10 @@
     {
       "clave": "pruebas_unitarias",
       "etiqueta": "Pruebas unitarias y de componente",
-      "valor": 294,
+      "valor": 318,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm test` el 2026-10-17: 32 archivos, 294 pruebas (incluye el test del contrato de este export, los del kit v2.3.0 y las guardas de idioma del S5: paridad es/en y barrido de literales)."
+      "detalle": "Salida de `pnpm test` el 2026-10-17: 33 archivos, 318 pruebas (incluye el test del contrato de este export, los del kit v2.3.0 y las guardas de idioma del S5: paridad es/en y barrido de literales)."
     },
     {
       "clave": "pruebas_e2e",
@@ -181,7 +181,7 @@
     {
       "clave": "cobertura_lineas",
       "etiqueta": "Cobertura de líneas del motor",
-      "valor": 98.38,
+      "valor": 98.42,
       "unidad": "%",
       "fuente": "medido",
       "detalle": "v8 sobre src/engine (la lógica pura), con umbrales por CI en vitest.config.ts."

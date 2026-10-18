@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { esWhatsappValido, normalizarWhatsapp } from "../format/whatsapp";
-import { parsearCOP } from "../format/cop";
+import { esEnteroEscrito, parsearCOP } from "../format/cop";
 import { LOCALIDADES } from "../zonas/localidades";
 import { normalizarCodigo } from "../referidos/referidos";
 
@@ -60,8 +60,6 @@ export function esCodigoError(valor: string): valor is CodigoError {
   return (Object.values(ERR) as string[]).includes(valor);
 }
 
-const numeroEntero = (s: string) => /^\d+$/.test(s.replace(/[.\s]/g, ""));
-
 // ---------------------------------------------------------------------------
 // Paso 1 — Contacto (MÁXIMO 3 campos — acceptance criterion del sprint)
 // ---------------------------------------------------------------------------
@@ -93,22 +91,28 @@ export const paso2Schema = z.object({
     .string()
     .trim()
     .min(1, ERR.areaVacia)
-    .refine(numeroEntero, ERR.soloEnteros)
+    .refine(esEnteroEscrito, ERR.soloEnteros)
     .refine((s) => {
-      const n = Number(s.replace(/[.\s]/g, ""));
-      return n >= LIMITES.areaMin && n <= LIMITES.areaMax;
+      const n = parsearCOP(s);
+      return n !== null && n >= LIMITES.areaMin && n <= LIMITES.areaMax;
     }, ERR.areaRango),
   habitaciones: z
     .string()
     .trim()
     .min(1, ERR.habitacionesVacio)
-    .refine(numeroEntero, ERR.soloEnteros)
-    .refine((s) => Number(s) <= LIMITES.habMax, ERR.habitacionesMax),
+    .refine(esEnteroEscrito, ERR.soloEnteros)
+    .refine(
+      (s) => (parsearCOP(s) ?? Infinity) <= LIMITES.habMax,
+      ERR.habitacionesMax,
+    ),
   precio_esperado: z
     .string()
     .trim()
     .min(1, ERR.precioVacio)
-    .refine((s) => parsearCOP(s) !== null, ERR.precioNumero)
+    .refine(
+      (s) => parsearCOP(s) !== null && esEnteroEscrito(s),
+      ERR.precioNumero,
+    )
     .refine((s) => {
       const n = parsearCOP(s);
       return n !== null && n >= PRECIO_MIN && n <= PRECIO_MAX;
@@ -171,7 +175,14 @@ export function construirPayload(
 ): PayloadRegistro {
   const whatsapp = normalizarWhatsapp(datos.whatsapp);
   const precio = parsearCOP(datos.precio_esperado);
-  if (whatsapp === null || precio === null) {
+  const area = parsearCOP(datos.area_m2);
+  const habitaciones = parsearCOP(datos.habitaciones);
+  if (
+    whatsapp === null ||
+    precio === null ||
+    area === null ||
+    habitaciones === null
+  ) {
     throw new Error("construirPayload recibió datos inválidos");
   }
   return {
@@ -184,8 +195,8 @@ export function construirPayload(
     tipo: datos.tipo,
     barrio: datos.barrio.trim(),
     direccion: datos.direccion_aproximada?.trim() || null,
-    area: Number(datos.area_m2.replace(/[.\s]/g, "")),
-    habitaciones: Number(datos.habitaciones),
+    area,
+    habitaciones,
     precio,
     consentimiento: true,
     ref: normalizarCodigo(ref),

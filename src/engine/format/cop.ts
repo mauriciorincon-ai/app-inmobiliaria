@@ -30,6 +30,17 @@ export function formatearCOP(valor: number, idioma: Idioma = "es"): string {
 }
 
 /**
+ * ¿Lo escrito es un número ENTERO? Dígitos con separador de miles opcional (punto, coma o espacio, en
+ * grupos de tres) y un «$» o «COP» delante. «85.5» o «420,000,000.00» no lo son: sin esta guarda,
+ * `parsearCOP` los leería como 855 y 42.000.000.000 (se vuelve alcanzable cuando quien escribe es de un
+ * país donde el punto es el decimal).
+ */
+export function esEnteroEscrito(texto: string): boolean {
+  const limpio = texto.trim().replace(/^(COP|\$)\s*/i, "");
+  return /^\d+$/.test(limpio) || /^\d{1,3}([.,\s]\d{3})+$/.test(limpio);
+}
+
+/**
  * Convierte lo que el usuario escribe ("420.000.000", "420000000", "$ 420.000.000") a un entero
  * de pesos. Devuelve `null` si no hay dígitos. No valida rango (eso es del esquema zod).
  */

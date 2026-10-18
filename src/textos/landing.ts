@@ -14,7 +14,12 @@ export const LANDING = {
     titulo: {
       antes: { es: "Vende tu casa ", en: "Sell your home " },
       resaltado: { es: "directo", en: "direct" },
-      despues: { es: ", sin pagar comisión", en: ", with no commission" },
+      // U+2060 (unión de palabras) pega la coma al resaltado: sin él, en pantallas angostas la coma
+      // quedaba sola al inicio de la línea siguiente («direct» / «, with no commission»).
+      despues: {
+        es: "\u2060, sin pagar comisión",
+        en: "\u2060, with no commission",
+      },
     },
     subtitulo: {
       antes: {

@@ -122,4 +122,11 @@ describe("agruparPorIdioma", () => {
     expect(g.en.map((x) => x.email)).toEqual(["b"]);
     expect(agruparPorIdioma([]).en).toEqual([]);
   });
+
+  it("un idioma fuera de es/en cae en español: nadie se queda sin correo", () => {
+    const g = agruparPorIdioma([
+      { email: "a", idioma: "fr" as unknown as "es" },
+    ]);
+    expect(g.es.map((x) => x.email)).toEqual(["a"]);
+  });
 });

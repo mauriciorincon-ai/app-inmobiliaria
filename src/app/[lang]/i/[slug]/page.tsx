@@ -20,6 +20,9 @@ import type { FichaData } from "@/lib/supabase/types";
 // en H1; la difusión abierta llega en S3 con G-Release.
 export const dynamic = "force-dynamic";
 
+// Unidad de superficie: igual en los dos idiomas, no es texto de la interfaz.
+const UNIDAD_AREA = "m²";
+
 type ParamsFicha = Promise<{ lang: string; slug: string }>;
 
 async function cargarFicha(slug: string): Promise<FichaData | null> {
@@ -112,11 +115,12 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
           {formatearCOP(f.precio_esperado, lang)}
         </p>
         <p className="mt-2 text-sm text-gray">
-          {rellenar(t.encabezado.medidas, {
-            ciudad: f.ciudad,
-            area: f.area_m2,
-            habitaciones: f.habitaciones,
-          })}
+          {f.ciudad} · {f.area_m2} {UNIDAD_AREA} ·{" "}
+          {f.habitaciones === 1
+            ? t.encabezado.habitacionesUna
+            : rellenar(t.encabezado.habitacionesVarias, {
+                n: f.habitaciones,
+              })}
         </p>
 
         {f.descripcion && (

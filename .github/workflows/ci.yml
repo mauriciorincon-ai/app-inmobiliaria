@@ -71,6 +71,12 @@ jobs:
       NEXT_PUBLIC_RESPONSABLE_CORREO: responsable@ejemplo.test
       # S7: número FICTICIO de Innmobiliaria para el e2e (rango 555, reservado para ficción).
       WHATSAPP_NUMERO: "+15555550100"
+      # S8: identidad con el SIMULADOR (cédulas de prueba, sin costo) y Brevo en MOCK. Los topes del día y
+      # del mes solo se pueden ampliar con el simulador: una corrida larga no se queda sin cupo.
+      IDENTIDAD_MOCK: "1"
+      BREVO_MOCK: "1"
+      IDENTIDAD_TOPE_DIA: "100000"
+      IDENTIDAD_TOPE_MES: "100000"
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -86,6 +92,8 @@ jobs:
           # S7: secretos del webhook de WhatsApp. El e2e firma sus cargas con este mismo secreto.
           echo "WHATSAPP_APP_SECRET=wa-$(openssl rand -hex 16)" >> "$GITHUB_ENV"
           echo "WHATSAPP_VERIFY_TOKEN=vt-$(openssl rand -hex 8)" >> "$GITHUB_ENV"
+          # S8: el secreto del trabajo diario. El e2e llama a /api/cron/diario con él.
+          echo "CRON_SECRET=cron-$(openssl rand -hex 16)" >> "$GITHUB_ENV"
       # Stack Supabase real (Docker preinstalado en ubuntu-latest); `start` aplica las migraciones.
       - name: Levantar Supabase local
         run: pnpm exec supabase start

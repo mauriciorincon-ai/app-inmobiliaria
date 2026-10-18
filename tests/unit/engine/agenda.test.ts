@@ -261,3 +261,20 @@ describe("qué botones ve cada quien", () => {
     expect(estaViva("cancelada")).toBe(false);
   });
 });
+
+describe("el día antes y el día de la visita", () => {
+  it("el recordatorio cae el día de la semana anterior, en hora de Bogotá", async () => {
+    const { diaAntes, formatearDia } = await import("@/engine/agenda/bogota");
+    // Sábado 24 de octubre de 2026, 10:00 de Bogotá.
+    expect(diaAntes("2026-10-24T15:00:00Z", "es")).toBe("viernes");
+    expect(diaAntes("2026-10-24T15:00:00Z", "en")).toBe("Friday");
+    // 00:30 de Bogotá del sábado sigue siendo «viernes» el día antes (en UTC ya es 05:30 del sábado).
+    expect(diaAntes("2026-10-24T05:30:00Z", "es")).toBe("viernes");
+    expect(formatearDia("2026-10-24T15:00:00Z", "es")).toMatch(
+      /sábado.*24.*octubre/i,
+    );
+    expect(formatearDia("2026-10-24T15:00:00Z", "en")).toMatch(
+      /Saturday.*October/,
+    );
+  });
+});

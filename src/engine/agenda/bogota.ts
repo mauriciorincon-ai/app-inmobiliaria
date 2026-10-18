@@ -59,3 +59,21 @@ export function formatearHorario(iso: string, idioma: Idioma): string {
     minute: "2-digit",
   }).format(new Date(iso));
 }
+
+/** El día de la semana del día ANTES de la visita, en hora de Bogotá («viernes» / «Friday»): cuándo llega el recordatorio. */
+export function diaAntes(iso: string, idioma: Idioma): string {
+  return new Intl.DateTimeFormat(localeIntl(idioma), {
+    timeZone: ZONA_BOGOTA,
+    weekday: "long",
+  }).format(new Date(Date.parse(iso) - 86_400_000));
+}
+
+/** Solo la fecha larga de la visita («sábado, 24 de octubre»), sin la hora. */
+export function formatearDia(iso: string, idioma: Idioma): string {
+  return new Intl.DateTimeFormat(localeIntl(idioma), {
+    timeZone: ZONA_BOGOTA,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(new Date(iso));
+}

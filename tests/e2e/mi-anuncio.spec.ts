@@ -72,7 +72,7 @@ test("un fundador completa su anuncio y el score sube en vivo", async ({
       "Apartamento luminoso en excelente zona, cerca de transporte, parques y colegios. Listo para entrar a vivir.",
     );
   await expect(score(page)).toHaveAttribute("aria-valuenow", "70");
-  await page.getByRole("button", { name: "Guardar" }).click();
+  await page.getByRole("button", { name: "Guardar", exact: true }).click();
 
   // El opt-in de contacto suma 10. Es un checkbox CONTROLADO cuyo `checked` refleja el estado del
   // servidor tras el round-trip del RPC → `.check()` (que hace clic y reafirma el estado) haría

@@ -15,6 +15,9 @@ export default defineConfig({
     // lo cambian con `test.use({ locale: "en-US" })`.
     locale: "es-CO",
     trace: "on-first-retry",
+    // El mapa de /buscar (MapLibre) necesita WebGL; el Chromium sin pantalla de la CI no tiene GPU y
+    // Chrome desactiva por defecto el WebGL por software (SwiftShader). Este flag lo permite.
+    launchOptions: { args: ["--enable-unsafe-swiftshader"] },
   },
   projects: [
     {

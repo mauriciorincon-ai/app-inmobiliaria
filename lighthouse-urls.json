@@ -8,5 +8,8 @@
   "/privacidad",
   "/confirmacion",
   "/i/demo-apartamento-chapinero",
-  "/conoce"
+  "/conoce",
+  "/guardados",
+  "/alertas",
+  "/alertas/nueva?op=venta"
 ]

@@ -73,8 +73,15 @@ a shared list with notes, and **be told by email** about new listings and price 
    reminders first, then digests.
 10. **Owners can change the price.** `guardar_precio(p_token, p_precio)` (same range as the column, at most 5
     changes in 24 h) and a trigger that writes `cambios_de_precio(anterior, nuevo)`. Without it no listing could
-    ever drop. The history is kept 90 days.
-11. **Why not WhatsApp, and why not «as soon as it appears».** WhatsApp would make Innmobiliaria a sender
+    ever drop. The history is kept 90 days. There is **no HTTP route** for it: «My listing» already calls its own
+    RPCs from the browser with the owner's private token, so the price editor does the same.
+11. **An alert nobody asked for is rejected from its confirmation email, not by its creator.** Migration 13
+    adds `alertas.rechazada_at`. The confirmation email carries a «I did not ask for this» link built from an
+    unsubscribe token that `crear_alerta` now also returns (migration 12 returned only the manage and confirm
+    tokens). Only that path (an unconfirmed alert unsubscribed from the email) marks the rejection and blocks
+    the address for 30 days; someone who creates an alert and deletes it from their own phone before confirming
+    is not locked out of their own address.
+12. **Why not WhatsApp, and why not «as soon as it appears».** WhatsApp would make Innmobiliaria a sender
     (templates, per-message cost, opt-in rules). «As soon as it appears» needs a trigger per listing and
     breaks the quota in a burst; the approved plan (G-Plan 1a) is a single digest at 8:00.
 
@@ -106,5 +113,7 @@ a shared list with notes, and **be told by email** about new listings and price 
 - Listings that come back after expiring are **not** «new» (new = created in the window). A drop is measured
   against the price at the start of the window, so an owner who raises and then lowers the price on different
   days can announce a «drop» to the original price; that is a real change for a buyer who saw the higher one.
+- Migration 13 (`alertas_rechazo`) is additive: one column and two `create or replace` functions with the same
+  signature. It reached the cloud project in a separate step from migration 12.
 - **Known limits, for H-3:** no general rate limiting; «My alerts» lives in the phone (and in the links of the
   emails), it is not tied to the account; a Brevo outage after a claim loses that day's digest.

@@ -144,6 +144,7 @@ const TABLAS = [
   "solicitudes_visita",
   "horarios_propuestos",
   "visitas",
+  "enlaces_visita",
 ] as const;
 
 // ── Cerrado por construcción ──────────────────────────────────────────────────
@@ -1139,12 +1140,14 @@ test("el recordatorio: una vez por visita, solo para las de mañana, ninguno a u
     JSON.parse(
       (await consultarAsync(`select public.reclamar_recordatorios()::text`))[0],
     ) as string[];
-  // Dos corridas a la vez: cada visita sale UNA vez entre las dos.
+  // Dos corridas a la vez: ninguna visita sale dos veces. (El cron de otra spec puede correr en paralelo y
+  // llevarse alguna: por eso se cuenta «a lo sumo una» aquí y se comprueba en la base que quedó reclamada.)
   const [x, y] = await Promise.all([reclamar(), reclamar()]);
   const salieron = [...x, ...y];
   const veces = (id: string) => salieron.filter((i) => i === id).length;
-  expect(veces(deManana.solicitud_id)).toBe(1);
-  expect(veces(hoyTarde.solicitud_id)).toBe(1);
+  for (const s of [deManana, hoyTarde]) {
+    expect(veces(s.solicitud_id)).toBeLessThanOrEqual(1);
+  }
   for (const s of [lejana, cancelada, pasada])
     expect(veces(s.solicitud_id)).toBe(0);
   // Una tercera corrida no repite nada.
@@ -1157,6 +1160,8 @@ test("el recordatorio: una vez por visita, solo para las de mañana, ninguno a u
       `select (recordatorio_at is not null)::text from public.visitas where solicitud_id = '${s.solicitud_id}'`,
     )[0];
   expect(marcada(deManana)).toBe("true");
+  expect(marcada(hoyTarde)).toBe("true");
   expect(marcada(cancelada)).toBe("false");
   expect(marcada(lejana)).toBe("false");
+  expect(marcada(pasada)).toBe("false");
 });

@@ -1,6 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 import { expect } from "@playwright/test";
-import { consultar } from "./bd";
+import { consultar, ejecutar } from "./bd";
+import {
+  generarSesion,
+  hashSesion,
+} from "../../../src/engine/verificacion/sesion";
 
 // Compradores SINTÉTICOS para las pruebas de la base: una sesión (el hash de una cookie que nadie más
 // conoce), un código por la RPC pública y su canje como `postgres` (el rol con el que el webhook usaría la
@@ -68,4 +72,26 @@ export async function compradorVerificado(
   expect(error).toBeNull();
   expect(canjear(codigo, telefono)).toBe("ok");
   return { sesion, telefono, nombre };
+}
+
+// Para las pruebas de las RUTAS (S8): una cookie de comprador con el WhatsApp ya verificado, sembrada en la
+// base como la dejaría el canje del webhook (la verificación por WhatsApp ya tiene sus propias e2e). Devuelve
+// el valor de la cookie `inn_comprador`.
+export async function cookieCompradorVerificado(
+  opts: { telefono?: string; nombre?: string; idioma?: "es" | "en" } = {},
+): Promise<{ cookie: string; sesion: string; telefono: string }> {
+  const sesion = generarSesion();
+  const hash = await hashSesion(sesion);
+  const telefono = opts.telefono ?? telefonoNuevo();
+  const codigo = sesionNueva(); // 64 hex: el hash de un código que nadie conoce
+  ejecutar(`
+    with c as (
+      insert into public.compradores (telefono, nombre, idioma, consentimiento_at, verificado_at)
+      values ('${telefono}', '${opts.nombre ?? "Laura Sintetica"}', '${opts.idioma ?? "es"}', now(), now())
+      returning id
+    )
+    insert into public.verificaciones (sesion_hash, comprador_id, codigo_hash, ip_hash, vence_at, usado_at)
+    select '${hash}', id, '${codigo}', 'e2e-ip-sintetica', now() + interval '10 minutes', now() from c;
+  `);
+  return { cookie: `inn_comprador=${sesion}`, sesion, telefono };
 }

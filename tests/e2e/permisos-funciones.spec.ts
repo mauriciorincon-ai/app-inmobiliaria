@@ -61,6 +61,7 @@ const SOLO_SERVIDOR = [
   "comprador_de_sesion",
   "inmueble_de_token",
   "solicitud_de_token",
+  "nuevo_enlace_visita",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
@@ -142,6 +143,9 @@ test("las funciones del servidor del S8 las ejecuta service_role", async () => {
     "datos_correo_visita(uuid)",
     "reclamar_recordatorios()",
     "purgar_vencidos()",
+    // migración 11: el enlace nuevo de cada correo y de qué solicitud es un token.
+    "nuevo_enlace_visita(uuid)",
+    "solicitud_de_token(text)",
   ];
   for (const f of firmas) {
     const [fila] = consultar(

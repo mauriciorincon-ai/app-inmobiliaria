@@ -10,14 +10,25 @@ import {
   type AnuncioCreado,
 } from "./utils/anuncios";
 import { compradorVerificado, sesionNueva } from "./utils/comprador";
+import {
+  alertaConfirmada,
+  banda,
+  confirmar,
+  correoNuevo,
+  crearAlerta,
+  ipNueva,
+  lit,
+  mensaje,
+  miResumen,
+  reclamar,
+  sqlCrearAlerta,
+  type CriteriosAlerta,
+} from "./utils/alertas";
 import type {
-  AlertaCreada,
   AlertaDelTelefono,
   ListaDetalle,
   ListaResumen,
   ResultadoBusqueda,
-  ResultadoResumenes,
-  ResumenReclamado,
 } from "../../src/lib/supabase/types";
 
 // S9 «Guardar y avisar» — la base de datos: favoritos, listas con notas, alertas por correo, el precio del
@@ -33,116 +44,6 @@ const UUID_NULO = "00000000-0000-0000-0000-000000000000";
 const DIRECCION = "Calle 93 # 14-20 piso 3";
 
 const api = () => createClient(url, anon);
-
-// Cada alerta de prueba gasta cupo del día (250 en producción) y la base local se comparte entre corridas: las
-// pruebas pasan un tope enorme, salvo las que prueban el tope a propósito.
-const TOPE_PRUEBAS = 1_000_000;
-
-let secuenciaCorreo = 0;
-function correoNuevo(): string {
-  secuenciaCorreo += 1;
-  return `alerta.${Date.now()}.${secuenciaCorreo}.${Math.floor(Math.random() * 1e6)}@ejemplo.test`;
-}
-
-function ipNueva(): string {
-  return `s9-ip-${Date.now()}-${Math.floor(Math.random() * 1e9)}`;
-}
-
-function lit(v: string | number | boolean | null | undefined): string {
-  if (v === null || v === undefined) return "null";
-  if (typeof v === "number" || typeof v === "boolean") return String(v);
-  return `'${v.replace(/'/g, "''")}'`;
-}
-
-// Lo que dice la base cuando una sentencia como `postgres` falla (el cliente psql lo manda a stderr).
-function mensaje(fn: () => unknown): string | null {
-  try {
-    fn();
-    return null;
-  } catch (e) {
-    const err = e as { stderr?: Buffer | string; message?: string };
-    return String(err.stderr ?? err.message ?? e);
-  }
-}
-
-type CriteriosAlerta = {
-  email?: string;
-  idioma?: "es" | "en";
-  nombre?: string;
-  operacion?: "venta" | "arriendo" | null;
-  tipo?: string | null;
-  localidad?: string | null;
-  precioMin?: number | null;
-  precioMax?: number | null;
-  habitacionesMin?: number | null;
-  poligono?: string | null;
-  nuevos?: boolean;
-  bajas?: boolean;
-  consentimiento?: boolean;
-  ip?: string;
-  tope?: number;
-};
-
-function sqlCrearAlerta(c: CriteriosAlerta): string {
-  return `select public.crear_alerta(
-    p_email => ${lit(c.email ?? correoNuevo())},
-    p_idioma => ${lit(c.idioma ?? "es")},
-    p_nombre => ${lit(c.nombre ?? "Mi alerta sintetica")},
-    p_operacion => ${c.operacion ? lit(c.operacion) : "null"}::public.operacion,
-    p_tipo => ${c.tipo ? lit(c.tipo) : "null"}::public.tipo_inmueble,
-    p_localidad => ${lit(c.localidad ?? null)},
-    p_precio_min => ${lit(c.precioMin ?? null)}::bigint,
-    p_precio_max => ${lit(c.precioMax ?? null)}::bigint,
-    p_habitaciones_min => ${lit(c.habitacionesMin ?? null)}::smallint,
-    p_poligono => ${lit(c.poligono ?? null)},
-    p_avisar_nuevos => ${c.nuevos ?? true},
-    p_avisar_bajas => ${c.bajas ?? true},
-    p_consentimiento => ${c.consentimiento ?? true},
-    p_ip_hash => ${lit(c.ip ?? ipNueva())},
-    p_tope => ${c.tope ?? TOPE_PRUEBAS}
-  )::text`;
-}
-
-function crearAlerta(c: CriteriosAlerta = {}): AlertaCreada {
-  return JSON.parse(consultar(sqlCrearAlerta(c))[0]) as AlertaCreada;
-}
-
-function confirmar(token: string): { estado: string; nombre: string } {
-  return JSON.parse(
-    consultar(`select public.confirmar_alerta(${lit(token)})::text`)[0],
-  );
-}
-
-// Una alerta ya confirmada, con la ventana que empieza ahora.
-function alertaConfirmada(c: CriteriosAlerta = {}): AlertaCreada {
-  const a = crearAlerta(c);
-  expect(confirmar(a.confirmar).estado).toBe("confirmada");
-  return a;
-}
-
-// El reclamo del resumen, limitado a UNA alerta para no robarse los de otras pruebas.
-function reclamar(
-  alertaId: string,
-  tope: number = TOPE_PRUEBAS,
-): ResultadoResumenes {
-  return JSON.parse(
-    consultar(
-      `select public.reclamar_resumenes(p_tope => ${tope}, p_alerta => '${alertaId}')::text`,
-    )[0],
-  ) as ResultadoResumenes;
-}
-
-function miResumen(
-  r: ResultadoResumenes,
-  alertaId: string,
-): ResumenReclamado | undefined {
-  return r.alertas.find((x) => x.alerta_id === alertaId);
-}
-
-// Una banda de precio estrecha: ningún otro anuncio de la corrida cae dentro.
-function banda(precio: number) {
-  return { precioMin: precio - 1000, precioMax: precio + 1000 };
-}
 
 function guardarPrecio(a: AnuncioCreado, precio: number) {
   return api().rpc("guardar_precio", { p_token: a.token, p_precio: precio });
@@ -1350,13 +1251,18 @@ test("máx. 3 alertas por correo en 24 h (contadas aunque se borren) y 10 por IP
   ).toContain("demasiadas_alertas");
 });
 
-test("quien rechazó una alerta que no pidió no recibe otra en 30 días", async () => {
+test("quien rechazó desde el correo una alerta que no pidió no recibe otra en 30 días; el creador que borra la suya no se bloquea", async () => {
   const email = correoNuevo();
   const ajena = crearAlerta({ email, ...banda(precioUnico()) });
-  // «No la pedí»: la baja de una alerta sin confirmar.
-  consultar(
-    `update public.alertas set baja_at = now() where id = '${ajena.alerta_id}'`,
-  );
+  expect(ajena.baja).toMatch(/^[A-Za-z0-9_-]{43}$/);
+  // «No la pedí»: la baja del correo de confirmación, sin sesión.
+  const r = await api().rpc("baja_alerta", { p_token: ajena.baja });
+  expect(r.error).toBeNull();
+  expect(
+    consultar(
+      `select rechazada_at is not null from public.alertas where id = '${ajena.alerta_id}'`,
+    ),
+  ).toEqual(["t"]);
   expect(
     mensaje(() =>
       consultar(sqlCrearAlerta({ email, ...banda(precioUnico()) })),
@@ -1364,13 +1270,40 @@ test("quien rechazó una alerta que no pidió no recibe otra en 30 días", async
   ).toContain("demasiadas_alertas");
   // Pasados los 30 días, de nuevo puede.
   consultar(
-    `update public.alertas set baja_at = now() - interval '31 days', created_at = now() - interval '31 days' where id = '${ajena.alerta_id}'`,
+    `update public.alertas set rechazada_at = now() - interval '31 days', baja_at = now() - interval '31 days',
+            created_at = now() - interval '31 days' where id = '${ajena.alerta_id}'`,
   );
   expect(
     mensaje(() =>
       consultar(sqlCrearAlerta({ email, ...banda(precioUnico()) })),
     ),
   ).toBeNull();
+
+  // El creador que borra SU alerta sin confirmar desde el teléfono no rechaza nada.
+  const otroCorreo = correoNuevo();
+  const propia = crearAlerta({ email: otroCorreo, ...banda(precioUnico()) });
+  await api().rpc("gestionar_alerta", {
+    p_token: propia.gestionar,
+    p_accion: "borrar",
+  });
+  expect(
+    consultar(
+      `select rechazada_at is null from public.alertas where id = '${propia.alerta_id}'`,
+    ),
+  ).toEqual(["t"]);
+  expect(
+    mensaje(() =>
+      consultar(sqlCrearAlerta({ email: otroCorreo, ...banda(precioUnico()) })),
+    ),
+  ).toBeNull();
+  // Dar de baja una alerta YA confirmada tampoco es un rechazo.
+  const confirmada = alertaConfirmada({ ...banda(precioUnico()) });
+  await api().rpc("baja_alerta", { p_token: confirmada.baja });
+  expect(
+    consultar(
+      `select baja_at is not null, rechazada_at is null from public.alertas where id = '${confirmada.alerta_id}'`,
+    ),
+  ).toEqual(["t|t"]);
 });
 
 // ── La purga ─────────────────────────────────────────────────────────────────
@@ -1393,11 +1326,14 @@ test("la purga borra lo caducado y respeta lo vivo", async () => {
   consultar(
     `update public.alertas set baja_at = now() - interval '5 days' where id = '${bajaReciente.alerta_id}'`,
   );
-  // Un enlace de correo de hace 61 días se va; el de gestionar con el que nació la alerta se queda.
+  // Un enlace de correo de hace 61 días se va; uno de hace 5 y el de gestionar con el que nació la alerta
+  // se quedan.
+  const hashViejo = sesionNueva();
+  const hashReciente = sesionNueva();
   consultar(
     `insert into public.enlaces_alerta (alerta_id, proposito, origen, token_hash, created_at)
-     values ('${viva.alerta_id}', 'baja', 'correo', '${sesionNueva()}', now() - interval '61 days'),
-            ('${viva.alerta_id}', 'baja', 'correo', '${sesionNueva()}', now() - interval '5 days')`,
+     values ('${viva.alerta_id}', 'baja', 'correo', '${hashViejo}', now() - interval '61 days'),
+            ('${viva.alerta_id}', 'baja', 'correo', '${hashReciente}', now() - interval '5 days')`,
   );
   // Un cambio de precio de hace 91 días y un cupo de hace 61.
   consultar(
@@ -1434,9 +1370,10 @@ test("la purga borra lo caducado y respeta lo vivo", async () => {
   expect(existe(viva.alerta_id)).toBe("1");
   expect(
     consultar(
-      `select count(*) from public.enlaces_alerta where alerta_id = '${viva.alerta_id}' and proposito = 'baja'`,
+      `select string_agg(case token_hash when '${hashViejo}' then 'viejo' when '${hashReciente}' then 'reciente' end, ',')
+         from public.enlaces_alerta where token_hash in ('${hashViejo}', '${hashReciente}')`,
     )[0],
-  ).toBe("1");
+  ).toBe("reciente");
   expect(
     consultar(
       `select count(*) from public.enlaces_alerta where alerta_id = '${viva.alerta_id}' and proposito = 'gestionar'`,

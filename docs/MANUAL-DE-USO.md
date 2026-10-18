@@ -172,8 +172,8 @@ solicitudes de visita.
   hasta 30 anuncios cada una.
 - **Alertas por correo:** en **Buscar** pon tus filtros (o dibuja tu zona) y toca **«Guardar como
   alerta»**. Elige el nombre, qué quieres que te avisemos (**anuncios nuevos** y/o **bajas de
-  precio**), escribe tu correo y acepta. **Te llega un correo con «Confirmar»: hasta que lo toques no
-  te avisamos de nada** (si nadie lo confirma, la alerta se borra a los 7 días). Después recibes **un
+  precio**), escribe tu correo y acepta. **Te llega un correo con «Confirmar»: el enlace te lleva a
+  Alertas y ahí tocas «Confirmar mi correo»; hasta entonces no te avisamos de nada** (si nadie lo confirma, la alerta se borra a los 7 días). Después recibes **un
   resumen al día, a las 8:00 de Bogotá, solo si hay algo**.
 - **Dejar de recibir, en un clic:** **cada correo** trae **«Dejar de recibirla: un clic»**. No pide
   sesión ni contraseña: abres el enlace y listo. También puedes gestionar la alerta desde el enlace
@@ -188,8 +188,9 @@ solicitudes de visita.
 - **Limitaciones conocidas:** el aviso es **un resumen al día**, no «en cuanto aparezca». Es **solo
   por correo**. Las alertas no están en una cuenta: viven en el teléfono que las creó y en el enlace
   «gestionar» de cada correo. Hay un tope diario de correos de alertas; los correos de las visitas
-  siempre salen primero. En producción los correos salen cuando se activan las llaves del servicio de
-  correo (se prueba en el ensayo general; hasta entonces el sistema los registra pero no los envía).
+  siempre salen primero. En producción las alertas funcionan cuando están puestas las llaves del servicio de correo y del
+  servidor (se prueba en el ensayo general); mientras no lo estén, crear una alerta responde que no está
+  disponible y no se guarda nada.
 
 ## Features
 

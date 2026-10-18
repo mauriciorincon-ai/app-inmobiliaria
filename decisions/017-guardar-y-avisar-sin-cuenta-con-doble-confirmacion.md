@@ -51,7 +51,11 @@ a shared list with notes, and **be told by email** about new listings and price 
    for this»). The digest query requires `confirmada_at`; a test proves an unconfirmed alert with matching
    listings gets nothing. Abuse: 3 alerts per email and 10 per IP every 24 h (counted even after deletion), and
    an address that rejected an unconfirmed alert gets none for 30 days; all three answer with the same code so
-   nobody learns which applied. Unconfirmed alerts are purged after 7 days. Consent (Ley 1581) is a required
+   nobody learns which applied. **Opening the confirmation link does not confirm:** `/alertas#c=…` asks for a
+   tap on «Confirm my email», so a mail scanner that runs scripts cannot subscribe anybody (unsubscribing, in
+   contrast, runs on load: the worst a scanner can do there is stop an alert). The confirmation subject is fixed:
+   the alert's name is free text from someone who may not be the address's owner. Unconfirmed alerts are
+   purged after 7 days; one that was rejected from the email carries `baja_at` and stays the full 30 days. Consent (Ley 1581) is a required
    checkbox: `consentimiento_at not null`.
 7. **One daily digest, claimed atomically.** `reclamar_resumenes` (service only, advisory lock) takes confirmed,
    active alerts without a digest today and looks at their **window** `[desde_at, now]`:
@@ -115,5 +119,12 @@ a shared list with notes, and **be told by email** about new listings and price 
   days can announce a «drop» to the original price; that is a real change for a buyer who saw the higher one.
 - Migration 13 (`alertas_rechazo`) is additive: one column and two `create or replace` functions with the same
   signature. It reached the cloud project in a separate step from migration 12.
-- **Known limits, for H-3:** no general rate limiting; «My alerts» lives in the phone (and in the links of the
+- Without a real Brevo key (or the explicit `BREVO_MOCK=1` rehearsal) alerts do not operate: creating one
+  answers 503 and the cron claims nothing (it answers 500), because `enviarCorreo` falls back to a mock that
+  would report as sent what nobody receives. If the mail does not go out the page says so instead of «check
+  your email».
+- **Known limits, for H-3:** on Cloudflare's free plan one invocation allows about 50 subrequests (every Brevo
+  call and every RPC counts), so roughly 40 digests a day; beyond that the plan must be paid or the run capped.
+  Favorites merge by union, so one removed on a device can come back from another device that still holds it
+  locally. no general rate limiting; «My alerts» lives in the phone (and in the links of the
   emails), it is not tied to the account; a Brevo outage after a claim loses that day's digest.

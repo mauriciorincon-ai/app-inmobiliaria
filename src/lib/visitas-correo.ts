@@ -10,6 +10,7 @@ import {
 } from "@/engine/visita/avisos";
 import { enviarCorreo } from "@/lib/brevo";
 import { crearClienteServicio } from "@/lib/supabase/servicio";
+import { reportError } from "@/lib/observability";
 
 export type ResultadoAviso = { enviados: number; fallidos: number };
 
@@ -67,6 +68,8 @@ export async function avisarVisita(
     }
     return { enviados, fallidos };
   } catch {
+    // Un correo que falla no revierte la acción, pero tampoco puede pasar en silencio.
+    reportError("aviso_visita_error", { evento });
     return NADA;
   }
 }

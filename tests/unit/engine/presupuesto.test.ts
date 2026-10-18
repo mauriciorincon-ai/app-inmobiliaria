@@ -43,6 +43,10 @@ describe("pesosDeMillones (lo que escribe la persona)", () => {
     expect(pesosDeMillones("300")).toBe(300_000_000);
     expect(pesosDeMillones(" 1.200 ")).toBe(1_200_000_000);
     expect(pesosDeMillones("350,5")).toBe(350_500_000);
+    expect(pesosDeMillones("1,200")).toBe(1_200_000_000);
+    expect(pesosDeMillones("350.5")).toBe(350_500_000);
+    expect(pesosDeMillones("1.5")).toBe(1_500_000);
+    expect(pesosDeMillones("1.200,5")).toBe(1_200_500_000);
     expect(pesosDeMillones("")).toBeNull();
     expect(pesosDeMillones("   ")).toBeNull();
   });

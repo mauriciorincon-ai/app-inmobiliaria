@@ -435,6 +435,39 @@ export type Database = {
         Update: Partial<{ id: number; ip_hash: string; creado_at: string }>;
         Relationships: [];
       };
+      // S8 — tablas CERRADAS a la API (RLS sin políticas): solo las toca la llave del servidor.
+      compradores: {
+        Row: {
+          id: string;
+          telefono: string;
+          nombre: string;
+          idioma: "es" | "en";
+          email: string | null;
+          consentimiento_at: string;
+          verificado_at: string | null;
+          created_at: string;
+        };
+        Insert: never;
+        Update: Partial<{ nombre: string; email: string | null }>;
+        Relationships: [];
+      };
+      identidad_consultas: {
+        Row: {
+          id: string;
+          comprador_id: string | null;
+          resultado: "identificado" | "no_coincide" | "no_disponible" | null;
+          creado_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      solicitudes_visita: {
+        Row: { id: string; comprador_id: string; estado: EstadoSolicitud };
+        Insert: never;
+        Update: Partial<{ estado: EstadoSolicitud }>;
+        Relationships: [];
+      };
       sectores: {
         Row: SectorRow;
         Insert: SectorRow;

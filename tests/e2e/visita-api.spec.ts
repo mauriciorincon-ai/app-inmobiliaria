@@ -371,6 +371,61 @@ test.describe("visitas", () => {
     ).toBe(404);
   });
 
+  test("identificarse ata la identidad al nombre que ve el dueño y saca del «en espera» la solicitud", async ({
+    request,
+  }) => {
+    const a = await anuncioAbierto();
+    await api().rpc("guardar_solo_identificados", {
+      p_token: a.token,
+      p_activo: true,
+    });
+    // Verificó su WhatsApp como «Ana»; la cédula que valida es la de «Laura Sintetica Prueba».
+    const c = await cookieCompradorVerificado({ nombre: "Ana Sintetica" });
+    const { token, estado } = await (
+      await pedirVisita(request, c.cookie, a.slug)
+    ).json();
+    expect(estado).toBe("en_espera");
+    expect(estadoDe(token)).toBe("en_espera");
+    const r = await identificarse(
+      request,
+      c.cookie,
+      CEDULAS_PRUEBA.identificado,
+    );
+    expect(await r.json()).toEqual({ resultado: "identificado" });
+    // Lo que el dueño ve junto a «Identificado» es el nombre que validó el registro, no el que se escribió antes.
+    expect(
+      consultar(
+        `select nombre from public.compradores where telefono = '${c.telefono}'`,
+      ),
+    ).toEqual(["Laura Sintetica Prueba"]);
+    const { data } = await api().rpc("obtener_mi_anuncio", {
+      p_token: a.token,
+    });
+    const tarjeta = (
+      data as unknown as {
+        solicitudes: Array<{
+          comprador: { nombre: string; identificado: boolean };
+          estado: string;
+        }>;
+      }
+    ).solicitudes[0];
+    expect(tarjeta.comprador).toMatchObject({
+      nombre: "Laura Sintetica Prueba",
+      identificado: true,
+    });
+    // Y la solicitud que esperaba por no estar identificado avanzó sola.
+    expect(tarjeta.estado).toBe("pendiente");
+    expect(estadoDe(token)).toBe("pendiente");
+    // Una cédula que no coincide no cambia el nombre de nadie.
+    const otro = await cookieCompradorVerificado({ nombre: "Camilo Prueba" });
+    await identificarse(request, otro.cookie, CEDULAS_PRUEBA.no_coincide);
+    expect(
+      consultar(
+        `select nombre from public.compradores where telefono = '${otro.telefono}'`,
+      ),
+    ).toEqual(["Camilo Prueba"]);
+  });
+
   test("«ninguno me sirve», rechazar y cancelar de los dos lados", async ({
     request,
   }) => {

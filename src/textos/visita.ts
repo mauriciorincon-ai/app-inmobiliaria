@@ -137,8 +137,8 @@ export const VISITA = {
     listo: {
       titulo: { es: "Solicitud enviada", en: "Request sent" },
       texto: {
-        es: "Le avisamos al dueño. Cuando proponga horarios te escribimos al correo que dejaste y eliges uno.",
-        en: "We let the owner know. When they offer times we'll write to the email you gave us and you pick one.",
+        es: "Tu solicitud ya está en el anuncio del dueño. Cuando proponga horarios te escribimos al correo que dejaste y eliges uno.",
+        en: "Your request is now on the owner's listing. When they offer times we'll write to the email you gave us and you pick one.",
       },
       ver: { es: "Ver mi solicitud", en: "See my request" },
     },
@@ -180,8 +180,8 @@ export const VISITA = {
       pendiente: {
         titulo: { es: "Esperando horarios", en: "Waiting for times" },
         texto: {
-          es: "Le avisamos a {dueno}. Cuando proponga horarios te escribimos al correo que dejaste y los eliges aquí.",
-          en: "We let {dueno} know. When they offer times we'll write to the email you gave us and you pick one here.",
+          es: "Tu solicitud ya está con {dueno}. Cuando proponga horarios te escribimos al correo que dejaste y los eliges aquí.",
+          en: "Your request is now with {dueno}. When they offer times we'll write to the email you gave us and you pick one here.",
         },
       },
       propuesta: {
@@ -194,8 +194,8 @@ export const VISITA = {
         confirmando: { es: "Confirmando…", en: "Confirming…" },
         ninguno: { es: "Ninguno me sirve", en: "None of these work for me" },
         ningunoListo: {
-          es: "Le avisamos a {dueno} que necesitas otros horarios.",
-          en: "We told {dueno} you need other times.",
+          es: "{dueno} verá que necesitas otros horarios.",
+          en: "{dueno} will see that you need other times.",
         },
       },
       confirmada: {
@@ -237,8 +237,8 @@ export const VISITA = {
           en: "{dueno} cancelled the viewing. You can ask for other times whenever you like.",
         },
         porComprador: {
-          es: "Le avisamos a {dueno}. Puedes pedirle otros horarios cuando quieras.",
-          en: "We let {dueno} know. You can ask for other times whenever you like.",
+          es: "{dueno} lo verá en su anuncio. Puedes pedirle otros horarios cuando quieras.",
+          en: "{dueno} will see it on their listing. You can ask for other times whenever you like.",
         },
         otros: { es: "Pedir otros horarios", en: "Ask for other times" },
       },
@@ -258,8 +258,8 @@ export const VISITA = {
       retirar: { es: "Retirar mi solicitud", en: "Withdraw my request" },
       titulo: { es: "¿Cancelar?", en: "Cancel?" },
       texto: {
-        es: "Le avisamos a {dueno} por correo.",
-        en: "We'll tell {dueno} by email.",
+        es: "{dueno} lo verá en su anuncio y, si dejó su correo, le escribimos.",
+        en: "{dueno} will see it on their listing and, if they left their email, we'll write to them.",
       },
       si: { es: "Sí, cancelar", en: "Yes, cancel" },
       no: { es: "No, mantener", en: "No, keep it" },

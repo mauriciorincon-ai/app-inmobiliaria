@@ -378,7 +378,7 @@ function Tarjeta({
         </blockquote>
       )}
 
-      {s.estado === "en_espera" && (
+      {s.estado === "en_espera" && !s.comprador.identificado && (
         <div className="mt-4 rounded-2xl bg-cream p-4">
           <p className="text-sm font-semibold text-ink">{t.enEspera.titulo}</p>
           <p className="mt-1 text-sm text-gray">

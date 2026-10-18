@@ -151,7 +151,7 @@ export default function VisitaComprador({
     if (!inicio || !token) return;
     const ics = generarIcs(
       {
-        uid: `visita-${token.slice(0, 16)}@innmobiliaria`,
+        uid: `visita-${v.inmueble.slug}-${inicio.replace(/\D/g, "")}@innmobiliaria`,
         inicio,
         titulo: rellenar(t.ics.titulo, { inmueble }),
         descripcion: rellenar(t.ics.descripcion, { dueno }),
@@ -251,7 +251,9 @@ export default function VisitaComprador({
           </p>
           <div className="mt-4">
             <Link
-              href={`/identificarse?volver=${encodeURIComponent(`/visita#t=${token}`)}`}
+              // El token viaja en el FRAGMENTO (no llega al servidor ni a los registros de acceso); la pantalla de
+              // identificación lo recompone al volver.
+              href={`/identificarse?volver=${encodeURIComponent("/visita")}#t=${token}`}
               className={BOTON}
             >
               {t.estados.en_espera.identificar}

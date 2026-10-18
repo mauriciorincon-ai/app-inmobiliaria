@@ -264,6 +264,85 @@ test.describe("pedir, proponer, confirmar, calendario y asistencia", () => {
       page.getByRole("heading", { name: "Tu solicitud está en espera" }),
     ).toBeVisible();
 
+    // Desde la solicitud en espera, «Identificarme» lleva el token en el FRAGMENTO (no en la consulta, que
+    // sí llega al servidor y a sus registros) y al volver la solicitud sigue ahí.
+    const enlace = page.getByRole("link", {
+      name: "Identificarme con mi cédula",
+    });
+    const href = (await enlace.getAttribute("href")) ?? "";
+    expect(href).toMatch(
+      /^\/identificarse\?volver=%2Fvisita#t=[A-Za-z0-9_-]{43}$/,
+    );
+    const peticiones: string[] = [];
+    page.on("request", (r) => peticiones.push(r.url()));
+    await enlace.click();
+    await expect(page).toHaveURL(/\/identificarse\?volver=%2Fvisita#t=/);
+    await page
+      .getByRole("textbox", { name: /^Número de cédula/ })
+      .fill(CEDULAS_PRUEBA.identificado);
+    await page
+      .getByRole("textbox", { name: /^Fecha de expedición/ })
+      .fill("2009-07-14");
+    await page
+      .getByRole("textbox", { name: /^Nombres y apellidos/ })
+      .fill("Camilo Prueba Sintetico");
+    await page
+      .getByRole("checkbox", { name: /Autorizo que mi número de cédula/ })
+      .check();
+    await page.getByRole("button", { name: "Validar mi cédula" }).click();
+    await expect(
+      page.getByRole("heading", { name: /tu identificación quedó validada/ }),
+    ).toBeVisible();
+    await page.getByRole("link", { name: "Volver" }).click();
+    await expect(page).toHaveURL(/\/visita#t=/);
+    // La identificación sacó la solicitud del «en espera».
+    await expect(
+      page.getByRole("heading", { name: "Esperando horarios" }),
+    ).toBeVisible();
+    // Ninguna petición llevó el token en su dirección.
+    expect(
+      peticiones.filter(
+        (u) =>
+          /[?&]volver=[^&]*t(%3D|=)/i.test(u) || /t=[A-Za-z0-9_-]{43}/.test(u),
+      ),
+    ).toEqual([]);
+
+    await dueno.reload();
+    const tarjeta = dueno.getByRole("article", {
+      name: "Camilo Prueba Sintetico",
+    });
+    await expect(tarjeta).toContainText("Nueva");
+    await expect(tarjeta).toContainText("Identificado con cédula");
+    await contexto.close();
+  });
+
+  test("«solo identificados»: la solicitud sin identificar queda en espera y el dueño la acepta igual", async ({
+    page,
+    browser,
+  }) => {
+    const anuncio = await crearAnuncio();
+    conContactoPublico(anuncio);
+    const contexto = await browser.newContext();
+    const dueno = await contexto.newPage();
+    await dueno.goto(`/mi-anuncio#t=${anuncio.token}`);
+    await dueno
+      .getByRole("checkbox", {
+        name: /Visitas solo de compradores identificados/,
+      })
+      .click();
+    const comprador = await cookieCompradorVerificado({
+      nombre: "Camilo Prueba",
+    });
+    await sembrar(page.context(), comprador.sesion);
+    const solicitar = await page.request.post("/api/visitas/solicitar", {
+      data: {
+        slug: anuncio.slug,
+        intencion: "invertir",
+        email: CORREO,
+        formaPago: [],
+      },
+    });
+    expect((await solicitar.json()).estado).toBe("en_espera");
     await dueno.reload();
     const tarjeta = dueno.getByRole("article", { name: "Camilo Prueba" });
     await expect(tarjeta).toContainText("En espera");
@@ -316,9 +395,11 @@ test.describe("identificarse", () => {
       await page
         .getByRole("textbox", { name: /^Número de cédula/ })
         .fill(cedula);
-      await page.getByLabel("Fecha de expedición").fill("2009-07-14");
       await page
-        .getByLabel("Nombres y apellidos, como en la cédula")
+        .getByRole("textbox", { name: /^Fecha de expedición/ })
+        .fill("2009-07-14");
+      await page
+        .getByRole("textbox", { name: /^Nombres y apellidos/ })
         .fill("Laura Sintetica Prueba");
     };
     await llenar(CEDULAS_PRUEBA.no_coincide);

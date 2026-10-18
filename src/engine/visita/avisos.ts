@@ -93,6 +93,15 @@ export function planearCorreos(
   enlaces: Enlaces,
   ahora: Date,
 ): CorreoSaliente[] {
+  // Entre el reclamo y el envío la visita pudo cancelarse: un recordatorio jamás sale a una cancelada.
+  if (
+    evento === "recordatorio" &&
+    (datos.estado !== "confirmada" ||
+      !datos.visita ||
+      datos.visita.cancelada_por !== null)
+  ) {
+    return [];
+  }
   const base = {
     comprador: datos.comprador.nombre,
     dueno: datos.dueno.nombre,

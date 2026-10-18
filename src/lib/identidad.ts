@@ -26,8 +26,10 @@ export type ModoIdentidad = "simulador" | "didit" | "apagado";
 const ESPERA_MAXIMA_MS = 10_000;
 
 export function modoIdentidad(): ModoIdentidad {
-  if (process.env.IDENTIDAD_MOCK === "1") return "simulador";
+  // La llave real GANA: un `IDENTIDAD_MOCK=1` olvidado junto a ella jamás da el sello con una cédula de
+  // prueba (están publicadas en el repo).
   if (process.env.DIDIT_API_KEY) return "didit";
+  if (process.env.IDENTIDAD_MOCK === "1") return "simulador";
   return "apagado";
 }
 
@@ -49,6 +51,39 @@ async function consultarDidit(
   });
   const cuerpo: unknown = await res.json().catch(() => null);
   return interpretarDidit(res.status, cuerpo, datos.nombre);
+}
+
+type ClienteServicio = NonNullable<ReturnType<typeof crearClienteServicio>>;
+
+/**
+ * Ata la identificación al comprador que la pidió: su nombre pasa a ser el que validó el registro (el que
+ * consintió, y el que ve el dueño junto a «Identificado»), y sus solicitudes que esperaban por no estar
+ * identificado pasan a pendientes. Devuelve false si no pudo dejarlo completo.
+ */
+async function ligarIdentificacion(
+  supabase: ClienteServicio,
+  consultaId: string,
+  datos: DatosIdentidad,
+): Promise<boolean> {
+  const { data: consulta } = await supabase
+    .from("identidad_consultas")
+    .select("comprador_id")
+    .eq("id", consultaId)
+    .maybeSingle();
+  const compradorId = consulta?.comprador_id;
+  if (!compradorId) return false;
+  const { error } = await supabase
+    .from("compradores")
+    .update({ nombre: datos.nombre.slice(0, 80) })
+    .eq("id", compradorId);
+  if (error) return false;
+  // Quien se identifica ya no está «en espera» ante un dueño que pidió compradores identificados.
+  await supabase
+    .from("solicitudes_visita")
+    .update({ estado: "pendiente" })
+    .eq("comprador_id", compradorId)
+    .eq("estado", "en_espera");
+  return true;
 }
 
 /**
@@ -85,13 +120,21 @@ export async function identificarComprador(
         return data as Reserva;
       },
       consultar: simulador ? async (d) => simular(d) : consultarDidit,
-      registrar: async (consultaId, resultado) => {
+      registrar: async (consultaId, resultado, datos) => {
+        let final = resultado;
+        if (resultado === "identificado") {
+          // «Identificado» debe valer para el nombre que ve el dueño: se escribe el nombre que validó el
+          // registro. Si no se puede dejar completo, la consulta se cierra como no disponible.
+          const ligado = await ligarIdentificacion(supabase, consultaId, datos);
+          if (!ligado) final = "no_disponible";
+        }
         const { error } = await supabase.rpc("registrar_identificacion", {
           p_consulta_id: consultaId,
-          p_resultado: resultado,
+          p_resultado: final,
           p_proveedor: simulador ? "simulador" : "didit",
         });
         if (error) throw new Error(error.code ?? "registro");
+        return final;
       },
     },
     datos,

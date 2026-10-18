@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import Campo from "@/components/ui/Campo";
 import { hoyBogota } from "@/engine/agenda/bogota";
+import { extraerTokenDeHash } from "@/engine/token/token";
 import { camposInvalidos } from "@/engine/identidad/datos";
 import { rellenar, type Proyectado } from "@/i18n/textos";
 import type { IDENTIDAD } from "@/textos/identidad";
@@ -52,6 +53,8 @@ export default function Identificarse({
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null);
   const [nombreListo, setNombreListo] = useState("");
   const [borrando, setBorrando] = useState(false);
+  // Si se llegó desde la solicitud de un comprador (`volver=/visita`), su token viene en el fragmento.
+  const [tokenVisita, setTokenVisita] = useState<string | null>(null);
 
   const leerEstado = useCallback(async (): Promise<Fase> => {
     try {
@@ -73,7 +76,9 @@ export default function Identificarse({
   useEffect(() => {
     let vigente = true;
     void leerEstado().then((f) => {
-      if (vigente) setFase(f);
+      if (!vigente) return;
+      setFase(f);
+      setTokenVisita(extraerTokenDeHash(window.location.hash));
     });
     return () => {
       vigente = false;
@@ -155,7 +160,10 @@ export default function Identificarse({
 
   const whatsappListo = fase !== "sin-whatsapp" && fase !== "cargando";
   const identificado = fase === "identificado";
-  const volverA = volver ?? "/buscar";
+  const volverA =
+    volver === "/visita" && tokenVisita
+      ? `/visita#t=${tokenVisita}`
+      : (volver ?? "/buscar");
 
   return (
     <div className="mt-6">
@@ -335,7 +343,7 @@ export default function Identificarse({
                 ? rellenar(t.resultado.identificado.titulo, {
                     nombre: nombreListo,
                   })
-                : t.estado.identificado}
+                : t.resultado.identificado.tituloSinNombre}
             </h2>
             <p className="mt-2 text-sm text-gray">
               {t.resultado.identificado.texto}

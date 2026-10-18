@@ -282,7 +282,7 @@ describe("el flujo: reservar ANTES de llamar al proveedor (gate del dinero)", ()
     });
     expect(await identificar(op, datos)).toBe("identificado");
     expect(consultar).toHaveBeenCalledTimes(1);
-    expect(registrar).toHaveBeenCalledWith("c-1", "identificado");
+    expect(registrar).toHaveBeenCalledWith("c-1", "identificado", datos);
   });
 
   it("si el proveedor se cae, es no disponible y se registra así (no gasta intentos)", async () => {
@@ -291,7 +291,13 @@ describe("el flujo: reservar ANTES de llamar al proveedor (gate del dinero)", ()
       throw new Error("red");
     });
     expect(await identificar(op, datos)).toBe("no_disponible");
-    expect(registrar).toHaveBeenCalledWith("c-2", "no_disponible");
+    expect(registrar).toHaveBeenCalledWith("c-2", "no_disponible", datos);
+  });
+
+  it("si el registro no puede dejar la identificación completa, lo que se responde es lo que quedó guardado", async () => {
+    const { op } = operaciones({ ok: true, consulta_id: "c-3" });
+    op.registrar = vi.fn(async () => "no_disponible" as const);
+    expect(await identificar(op, datos)).toBe("no_disponible");
   });
 
   it("respuestaSinReserva junta los topes de la plataforma", () => {

@@ -38,10 +38,22 @@ export function presupuestoDicho(
   return { tipo: "ninguno" };
 }
 
-/** Lo que escribió la persona en el formulario (millones, entero o vacío) → pesos, o null si va vacío. */
+/**
+ * Lo que escribió la persona en el formulario (millones, entero o con un decimal) → pesos, o null si va
+ * vacío. Acepta las dos convenciones: «1.200» y «1,200» son mil doscientos (el separador de miles va de a
+ * tres dígitos); «350,5» y «350.5» son trescientos cincuenta y medio.
+ */
 export function pesosDeMillones(texto: string): number | null | "invalido" {
-  const limpio = texto.trim().replace(/[.\s]/g, "").replace(",", ".");
-  if (limpio === "") return null;
+  const t = texto.trim().replace(/\s/g, "");
+  if (t === "") return null;
+  let limpio: string;
+  if (/^\d{1,3}(\.\d{3})+(,\d)?$/.test(t)) {
+    limpio = t.replace(/\./g, "").replace(",", ".");
+  } else if (/^\d{1,3}(,\d{3})+(\.\d)?$/.test(t)) {
+    limpio = t.replace(/,/g, "");
+  } else {
+    limpio = t.replace(",", ".");
+  }
   if (!/^\d{1,6}(\.\d)?$/.test(limpio)) return "invalido";
   return Math.round(Number(limpio) * MILLON);
 }

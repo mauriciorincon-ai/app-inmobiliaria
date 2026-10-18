@@ -31,6 +31,23 @@ vi.mock("@/lib/supabase/servicio", () => ({
         return { data: reserva, error: null };
       return { data: null, error: null };
     },
+    // Las tablas que toca el adaptador al identificar: leer la consulta y actualizar nombre y solicitudes.
+    from: (tabla: string) => {
+      const cadena = {
+        select: () => cadena,
+        eq: () => cadena,
+        maybeSingle: async () => ({
+          data: { comprador_id: "cmp-sintetico" },
+          error: null,
+        }),
+        update: (valores: unknown) => {
+          llamadas.push({ fn: `update:${tabla}`, args: valores });
+          return cadena;
+        },
+        then: (res: (v: unknown) => void) => res({ error: null }),
+      };
+      return cadena;
+    },
   }),
 }));
 
@@ -73,19 +90,28 @@ const BIEN = {
 };
 
 describe("POST /api/identidad", () => {
-  it("identifica con el simulador y no deja la cédula, la fecha ni el nombre en ningún registro ni en la base", async () => {
+  it("identifica con el simulador y no deja la cédula ni la fecha en ningún registro ni en la base", async () => {
     const r = await correr(BIEN);
     expect(r).toEqual({ status: 200, cuerpo: { resultado: "identificado" } });
-    const visto = JSON.stringify([lineas, reportes, llamadas]);
+    // Ni los registros ni los reportes llevan nada de lo que escribió el comprador.
+    const registros = JSON.stringify([lineas, reportes]);
     for (const dato of [CEDULA, FECHA, NOMBRE, "Sintetica"]) {
-      expect(visto, dato).not.toContain(dato);
+      expect(registros, dato).not.toContain(dato);
     }
-    // A la base solo llegan la sesión (hash), los topes y el resultado.
+    // A la base solo llegan la sesión (hash), los topes, el resultado y —nada más— el nombre validado,
+    // que el comprador consintió y es el que ve el dueño. La cédula y la fecha, jamás.
+    const enBase = JSON.stringify(llamadas);
+    expect(enBase).not.toContain(CEDULA);
+    expect(enBase).not.toContain(FECHA);
     expect(llamadas.map((l) => l.fn)).toEqual([
       "reservar_consulta_identidad",
+      "update:compradores",
+      "update:solicitudes_visita",
       "registrar_identificacion",
     ]);
-    expect(llamadas[1].args).toEqual({
+    expect(llamadas[1].args).toEqual({ nombre: NOMBRE });
+    expect(llamadas[2].args).toEqual({ estado: "pendiente" });
+    expect(llamadas[3].args).toEqual({
       p_consulta_id: "c-sintetica",
       p_resultado: "identificado",
       p_proveedor: "simulador",
@@ -131,6 +157,17 @@ describe("POST /api/identidad", () => {
       cuerpo: { resultado: "no_disponible" },
     });
     expect(llamadas).toEqual([]);
+  });
+
+  it("la llave del proveedor GANA al simulador: un IDENTIDAD_MOCK olvidado no da el sello con una cédula de prueba", async () => {
+    vi.stubEnv("IDENTIDAD_MOCK", "1");
+    vi.stubEnv("DIDIT_API_KEY", "llave-sintetica");
+    const { modoIdentidad } = await import("@/lib/identidad");
+    expect(modoIdentidad()).toBe("didit");
+    vi.stubEnv("DIDIT_API_KEY", "");
+    expect(modoIdentidad()).toBe("simulador");
+    vi.stubEnv("IDENTIDAD_MOCK", "");
+    expect(modoIdentidad()).toBe("apagado");
   });
 
   it("si la base falla al reservar: no disponible, y el reporte no lleva datos del comprador", async () => {

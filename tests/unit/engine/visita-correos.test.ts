@@ -60,6 +60,24 @@ describe("planearCorreos: quién recibe qué", () => {
     ).toEqual(para);
   });
 
+  it("un recordatorio no sale si la visita se canceló entre el reclamo y el envío", () => {
+    const cancelada = datos({
+      estado: "cancelada",
+      visita: { inicio: MANANA, cancelada_por: "comprador" },
+    });
+    expect(planearCorreos("recordatorio", cancelada, ENLACES, AHORA)).toEqual(
+      [],
+    );
+    const sinVisita = datos({ visita: null });
+    expect(planearCorreos("recordatorio", sinVisita, ENLACES, AHORA)).toEqual(
+      [],
+    );
+    // La misma visita, vigente, sí avisa a los dos.
+    expect(
+      planearCorreos("recordatorio", datos(), ENLACES, AHORA),
+    ).toHaveLength(2);
+  });
+
   it("quien no dejó correo no recibe nada (el dueño puede no tenerlo)", () => {
     const sin = datos({ dueno: { nombre: "Ana", email: null, idioma: "es" } });
     expect(

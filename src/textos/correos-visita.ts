@@ -43,8 +43,8 @@ export const CORREOS_VISITA = {
         en: "You asked for a viewing: {inmueble}",
       },
       cuerpo: {
-        es: "<p>Le avisamos a {dueno}. Cuando proponga horarios te escribimos a este correo y eliges uno.</p><p>Guarda este correo: el botón abre tu solicitud desde cualquier teléfono o computador.</p>",
-        en: "<p>We let {dueno} know. When they offer times we'll write to this email and you pick one.</p><p>Keep this email: the button opens your request from any phone or computer.</p>",
+        es: "<p>Tu solicitud ya está con {dueno}. Cuando proponga horarios te escribimos a este correo y eliges uno.</p><p>Guarda este correo: el botón abre tu solicitud desde cualquier teléfono o computador.</p>",
+        en: "<p>Your request is now with {dueno}. When they offer times we'll write to this email and you pick one.</p><p>Keep this email: the button opens your request from any phone or computer.</p>",
       },
       enEspera: {
         es: "<p>{dueno} recibe primero a compradores identificados, así que tu solicitud quedó en espera. Si te identificas con tu cédula, lo verá en tu tarjeta.</p>",

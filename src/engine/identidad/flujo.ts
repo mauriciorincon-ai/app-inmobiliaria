@@ -29,10 +29,16 @@ export type RespuestaIdentidad =
 export type OperacionesIdentidad = {
   reservar: () => Promise<Reserva>;
   consultar: (datos: DatosIdentidad) => Promise<ResultadoProveedor>;
+  /**
+   * Cierra la reserva con el resultado. Recibe los datos para poder ligar la identificación al nombre que
+   * validó el registro. Si no puede dejarla completa, devuelve el resultado con el que la cerró (p. ej.
+   * `no_disponible`): nadie queda «identificado» a medias.
+   */
   registrar: (
     consultaId: string,
     resultado: ResultadoProveedor,
-  ) => Promise<void>;
+    datos: DatosIdentidad,
+  ) => Promise<ResultadoProveedor | void>;
 };
 
 export function respuestaSinReserva(
@@ -54,6 +60,6 @@ export async function identificar(
     // Una caída de red o del proveedor: no es culpa del comprador.
     resultado = "no_disponible";
   }
-  await op.registrar(reserva.consulta_id, resultado);
-  return resultado;
+  const cerrado = await op.registrar(reserva.consulta_id, resultado, datos);
+  return cerrado ?? resultado;
 }

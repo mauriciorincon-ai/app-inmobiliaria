@@ -21,8 +21,8 @@ export const IDENTIDAD = {
     en: "Check your ID with your cédula",
   },
   subtitulo: {
-    es: "Validamos que tu nombre y tu número de cédula coinciden en la Registraduría. Sube tu confianza para visitas y ofertas: algunos dueños solo reciben a compradores identificados.",
-    en: "We check that your name and cédula number (Colombia's national ID) match the Registraduría, the national registry. It raises your trust for viewings and offers: some owners only welcome ID-checked buyers.",
+    es: "Validamos que tu nombre y tu número de cédula coinciden en la Registraduría. Sube tu confianza para pedir visitas: algunos dueños solo reciben a compradores identificados.",
+    en: "We check that your name and cédula number (Colombia's national ID) match the Registraduría, the national registry. It raises your trust when you ask for viewings: some owners only welcome ID-checked buyers.",
   },
   limite: {
     es: "Por ahora, solo cédula de ciudadanía colombiana.",
@@ -113,6 +113,10 @@ export const IDENTIDAD = {
       texto: {
         es: "Los dueños verán «Comprador identificado» y tu nombre en tu tarjeta. Tu número de cédula no lo ve nadie.",
         en: "Owners will see «ID-checked buyer» and your name on your card. Nobody sees your cédula number.",
+      },
+      tituloSinNombre: {
+        es: "Tu identificación está validada",
+        en: "Your ID check is done",
       },
       seguir: { es: "Volver", en: "Go back" },
       buscar: { es: "Buscar inmuebles", en: "Search homes" },

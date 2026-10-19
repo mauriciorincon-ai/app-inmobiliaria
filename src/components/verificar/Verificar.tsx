@@ -4,9 +4,16 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Campo from "@/components/ui/Campo";
 import { normalizarWhatsapp } from "@/engine/format/whatsapp";
+import { unirFavoritos } from "@/engine/guardados/favoritos";
+import { extraerTokenDeHash } from "@/engine/token/token";
 import { MINUTOS_CODIGO } from "@/engine/verificacion/codigo";
 import type { Idioma } from "@/i18n/idiomas";
 import { rellenar, type Proyectado } from "@/i18n/textos";
+import {
+  favoritosLocales,
+  fusionarConCuenta,
+  guardarFavoritosLocales,
+} from "@/lib/favoritos-cliente";
 import type { VERIFICAR } from "@/textos/verificar";
 
 export type TextosVerificar = Proyectado<typeof VERIFICAR>;
@@ -89,6 +96,16 @@ export default function Verificar({
       vigente = false;
     };
   }, [leerEstado, aplicar]);
+
+  // Al quedar verificado, los favoritos de este teléfono pasan a la cuenta, sin duplicar (S9, ADR 017).
+  useEffect(() => {
+    if (estado.fase !== "listo") return;
+    const locales = favoritosLocales();
+    if (locales.length === 0) return;
+    void fusionarConCuenta(locales).then((cuenta) => {
+      if (cuenta) guardarFavoritosLocales(unirFavoritos(cuenta, locales));
+    });
+  }, [estado.fase]);
 
   // Mientras espera el mensaje: sondeo corto, y una consulta al volver a la pestaña desde WhatsApp.
   useEffect(() => {
@@ -175,6 +192,14 @@ export default function Verificar({
 
   const pasoActivo =
     estado.fase === "esperando" ? 2 : estado.fase === "listo" ? 3 : 1;
+
+  // A dónde vuelve «listo». Una lista compartida se abre con el token en el FRAGMENTO, que la ruta `?volver=`
+  // no lleva: se recompone aquí (esta rama solo se pinta en el navegador, tras leer el estado).
+  function destinoDeVuelta(): string | null {
+    if (volver !== "/lista") return volver;
+    const token = extraerTokenDeHash(window.location.hash);
+    return token ? `${volver}#t=${token}` : volver;
+  }
 
   return (
     <div className="mt-8">
@@ -379,7 +404,7 @@ export default function Verificar({
             <p className="mt-2 text-sm text-gray">{t.listo.texto}</p>
             <div className="mt-4">
               <Link
-                href={volver ?? "/buscar"}
+                href={destinoDeVuelta() ?? "/buscar"}
                 className="inline-flex items-center justify-center rounded-full bg-purple px-6 py-3 text-sm font-semibold text-white shadow-card transition-transform hover:bg-purple-600 hover:scale-[1.03]"
               >
                 {volver ? t.listo.volver : t.listo.buscar}

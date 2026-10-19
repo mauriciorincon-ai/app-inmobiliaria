@@ -39,6 +39,27 @@ const PUBLICAS = [
   "registrar_fundador(text,text,text,text,text,operacion,tipo_inmueble,text,text,integer,smallint,bigint,boolean,text,text,text)",
   "renovar_vigencia(text)",
   "solicitar_visita(text,text,text,bigint,bigint,text[],text,text)",
+  // S9: favoritos, listas con notas, alertas por correo y el precio del dueño (migración 12).
+  "agregar_a_lista(text,uuid,text)",
+  "baja_alerta(text)",
+  "borrar_lista(text,uuid)",
+  "borrar_nota(text,uuid)",
+  "compartir_lista(text,uuid)",
+  "confirmar_alerta(text)",
+  "crear_lista(text,text)",
+  "escribir_nota(text,uuid,text,text,text)",
+  "fusionar_favoritos(text,text[])",
+  "gestionar_alerta(text,text)",
+  "guardar_precio(text,bigint)",
+  "mis_favoritos(text)",
+  "mis_listas(text)",
+  "obtener_alertas(text[])",
+  "obtener_lista(text,text,uuid)",
+  "quitar_de_lista(text,uuid,text)",
+  "quitar_favorito(text,text)",
+  "renombrar_lista(text,uuid,text)",
+  "resumen_anuncios(text[])",
+  "revocar_lista(text,uuid)",
 ];
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
@@ -62,6 +83,19 @@ const SOLO_SERVIDOR = [
   "inmueble_de_token",
   "solicitud_de_token",
   "nuevo_enlace_visita",
+  // S9: crear la alerta (devuelve el token de confirmar), el resumen del cron, el cupo de correos y los
+  // ayudantes internos (los llaman solo funciones SECURITY DEFINER).
+  "crear_alerta",
+  "reclamar_resumenes",
+  "sumar_correos_dia",
+  "hash_token",
+  "generar_token",
+  "dia_bogota",
+  "validar_poligono",
+  "inmuebles_que_cumplen",
+  "fila_anuncio",
+  "lista_detalle",
+  "registrar_cambio_precio",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
@@ -152,6 +186,22 @@ test("las funciones del servidor del S8 las ejecuta service_role", async () => {
       `select has_function_privilege('service_role', 'public.${f}', 'execute')::text`,
     );
     expect(fila, f).toBe("true");
+  }
+});
+
+test("las funciones del servidor del S9 las ejecuta service_role y crear_alerta jamás anon (se llevaría el token de confirmar)", async () => {
+  const firmas = [
+    "crear_alerta(text,text,text,operacion,tipo_inmueble,text,bigint,bigint,smallint,text,boolean,boolean,boolean,text,integer)",
+    "reclamar_resumenes(integer,uuid)",
+    "sumar_correos_dia(text,integer)",
+  ];
+  for (const f of firmas) {
+    const [fila] = consultar(
+      `select has_function_privilege('service_role', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('anon', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('authenticated', 'public.${f}', 'execute')::text`,
+    );
+    expect(fila, f).toBe("true,false,false");
   }
 });
 

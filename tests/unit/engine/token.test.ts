@@ -60,6 +60,20 @@ describe("extraerTokenDeHash", () => {
   });
 });
 
+describe("extraerTokenDeHash con otra clave (S9)", () => {
+  it("lee `c` (confirmar una alerta) sin confundirla con `t`", () => {
+    expect(extraerTokenDeHash(`#c=${TOKEN}`, "c")).toBe(TOKEN);
+    expect(extraerTokenDeHash(`#c=${TOKEN}`)).toBeNull();
+    expect(extraerTokenDeHash(`#t=${TOKEN}`, "c")).toBeNull();
+    expect(extraerTokenDeHash(`#t=${TOKEN}&c=${TOKEN}`, "c")).toBe(TOKEN);
+  });
+
+  it("una clave rara no es una expresión regular", () => {
+    expect(extraerTokenDeHash(`#a=${TOKEN}`, ".*")).toBeNull();
+    expect(extraerTokenDeHash(`#a=${TOKEN}`, "")).toBeNull();
+  });
+});
+
 describe("CLAVE_LINK", () => {
   it("está versionada", () => {
     expect(CLAVE_LINK).toBe("publicar.link.v1");

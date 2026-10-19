@@ -9,6 +9,7 @@ import ScoreCompletitud from "@/components/mi-anuncio/ScoreCompletitud";
 import SubidorFotos from "@/components/mi-anuncio/SubidorFotos";
 import GaleriaEditable from "@/components/mi-anuncio/GaleriaEditable";
 import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
+import EditorPrecio from "@/components/mi-anuncio/EditorPrecio";
 import OptInContacto from "@/components/mi-anuncio/OptInContacto";
 import SolicitudesVisita, {
   type ContextoSolicitudes,
@@ -182,6 +183,19 @@ export default function MiAnuncio({
           valorInicial={anuncio.descripcion ?? ""}
           minimo={DESCRIPCION_MIN}
           onEscribir={setDescripcionLen}
+          onGuardado={recargar}
+        />
+      </section>
+
+      <section aria-labelledby="precio-titulo">
+        <h2 id="precio-titulo" className="text-xl font-bold text-ink">
+          {t.secciones.precio}
+        </h2>
+        <EditorPrecio
+          t={t.precio}
+          lang={lang}
+          token={token}
+          valorInicial={anuncio.precio_esperado}
           onGuardado={recargar}
         />
       </section>

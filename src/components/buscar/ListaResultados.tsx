@@ -63,6 +63,7 @@ export default async function ListaResultados({
   const dominio = enIdioma(COMUN.dominio, lang);
   const tipos: Record<string, string> = dominio.tipo;
   const tFicha = enIdioma(FICHA, lang);
+  const tFavorito = enIdioma(COMUN.favorito, lang);
 
   if (error) {
     return (
@@ -103,6 +104,15 @@ export default async function ListaResultados({
                 {t.lista.sinResultados.quitarZona}
               </Link>
             )}
+            {hayFiltros(filtros) && (
+              <Link
+                href={`/alertas/nueva?${aParams(filtros).toString()}`}
+                prefetch={false}
+                className="rounded-full bg-purple-tint px-5 py-2 text-sm font-semibold text-purple-600 hover:bg-purple-200"
+              >
+                {t.lista.sinResultados.avisame}
+              </Link>
+            )}
             {aParams({ ...filtros, zona: undefined, operacion: undefined })
               .size > 0 && (
               <Link
@@ -125,6 +135,7 @@ export default async function ListaResultados({
               t={t.tarjeta}
               tSello={tFicha.sello}
               tVivo={tFicha.vivo}
+              tFavorito={tFavorito}
               ahora={ahora}
             />
           ))}

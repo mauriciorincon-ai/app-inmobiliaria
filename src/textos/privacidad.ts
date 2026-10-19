@@ -121,6 +121,29 @@ export const PRIVACIDAD = {
     },
   },
 
+  // Guardar y avisar (S9, ADR 017). Dice solo lo que el código hace: la purga borra las alertas sin confirmar a
+  // los 7 días y las dadas de baja a los 30, y el historial de precios a los 90.
+  alertas: {
+    titulo: {
+      es: "Si creas una alerta por correo",
+      en: "If you create an email alert",
+    },
+    texto: {
+      es: "Para avisarte guardamos tu correo, el nombre que le pongas a la alerta, los criterios de la búsqueda (operación, tipo, localidad, precio, habitaciones y, si la dibujaste, la zona), el idioma, la fecha en que aceptaste y una huella irreversible de tu conexión para limitar abusos. No te avisamos nada hasta que confirmes el correo con un enlace: las alertas sin confirmar se borran a los 7 días. Recibes un resumen al día como máximo, y cada correo trae un enlace para dejar de recibirlo con un clic, sin iniciar sesión. Cuando te das de baja o borras la alerta, la conservamos 30 días solo para no volver a escribirte y luego la borramos. Los correos salen a través de un proveedor de correo que actúa por encargo nuestro. Innmobiliaria no te envía mensajes por WhatsApp.",
+      en: "To alert you we keep your email, the name you give the alert, the search criteria (deal type, property type, locality, price, bedrooms and, if you drew one, the area), your language, the date you consented and an irreversible fingerprint of your connection to limit abuse. We tell you nothing until you confirm your email with a link: unconfirmed alerts are deleted after 7 days. You get one digest a day at most, and every email carries a link to stop receiving it with one click, without signing in. When you unsubscribe or delete the alert, we keep it for 30 days only so we don't write to you again, and then delete it. The emails go out through an email provider that acts on our behalf. Innmobiliaria does not send you WhatsApp messages.",
+    },
+  },
+  guardados: {
+    titulo: {
+      es: "Si guardas anuncios, comparas o compartes listas",
+      en: "If you save listings, compare them or share lists",
+    },
+    texto: {
+      es: "Tus favoritos se guardan en tu teléfono, en el almacenamiento del navegador, y no los guardamos en nuestros servidores mientras no verifiques tu WhatsApp (solo consultamos los datos públicos de esos anuncios para mostrártelos); al verificarlo los asociamos a esa verificación para que los veas desde otro dispositivo. Una lista compartida se abre con un enlace: quien lo tenga ve los anuncios de la lista y las notas, con el primer nombre de quien las escribió; escribir una nota exige tener el WhatsApp verificado. Las notas se conservan mientras exista la lista: si quitas un anuncio o borras la lista, se borran también sus notas. Puedes dejar de compartir cuando quieras y el enlace deja de funcionar. Cuando un dueño cambia el precio de su anuncio guardamos el precio anterior y el nuevo para avisar las bajas, y lo borramos a los 90 días.",
+      en: "Your favorites are kept on your phone, in your browser's storage, and we don't store them on our servers until you verify your WhatsApp (we only look up the public data of those listings to show them to you); when you do, we tie them to that verification so you can see them from another device. A shared list opens with a link: whoever has it sees the list's listings and its notes, with the first name of whoever wrote them; writing a note requires a verified WhatsApp. Notes are kept as long as the list exists: if you remove a listing or delete the list, its notes are deleted too. You can stop sharing whenever you like and the link stops working. When an owner changes a listing's price we keep the old and new price so we can tell about drops, and we delete that history after 90 days.",
+    },
+  },
+
   // Verificación nivel 2 (regla de producto 3): el CTL se VE y nunca se almacena; persisten la
   // matrícula, el resultado y la fecha (`marcar_verificado`).
   verificacion: {

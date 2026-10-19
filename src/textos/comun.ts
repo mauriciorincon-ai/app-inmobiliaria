@@ -38,6 +38,12 @@ export const COMUN = {
     },
   },
 
+  // El corazón de la tarjeta de la búsqueda y de la ficha (S9): guardar el anuncio en este teléfono.
+  favorito: {
+    guardar: { es: "Guardar en favoritos", en: "Save to favorites" },
+    quitar: { es: "Quitar de favoritos", en: "Remove from favorites" },
+  },
+
   // Selector de idioma: solo la etiqueta del grupo; cada idioma se nombra en sí mismo.
   selector: { etiqueta: { es: "Idioma", en: "Language" } },
 

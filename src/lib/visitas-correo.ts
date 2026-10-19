@@ -66,6 +66,14 @@ export async function avisarVisita(
       if (r.ok) enviados++;
       else fallidos++;
     }
+    // S9 (ADR 017): el cupo diario de correos es uno para todo; los de la visita se CUENTAN (para que las
+    // alertas cedan el sitio), jamás se bloquean. Si contar falla, el correo ya salió: no pasa nada.
+    if (enviados > 0) {
+      await supabase.rpc("sumar_correos_dia", {
+        p_clase: "visita",
+        p_n: enviados,
+      });
+    }
     return { enviados, fallidos };
   } catch {
     // Un correo que falla no revierte la acción, pero tampoco puede pasar en silencio.

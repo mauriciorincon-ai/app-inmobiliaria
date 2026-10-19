@@ -87,7 +87,7 @@ pnpm exec supabase link --project-ref <ref>   # pide la Database password de 1.1
 pnpm exec supabase db push
 ```
 
-Esto aplica a la base cloud TODAS las migraciones de `supabase/migrations/` que aún no estén (desde el S4 son 5; la primera es `20260715000001_captacion_fundadores.sql`). Antes, `supabase db push --dry-run` lista lo pendiente, y después `supabase migration list --linked` debe salir sin diferencias. La primera migración crea:
+Esto aplica a la base cloud TODAS las migraciones de `supabase/migrations/` que aún no estén (hasta el S9 son 13; la primera es `20260715000001_captacion_fundadores.sql`). Antes, `supabase db push --dry-run` lista lo pendiente, y después `supabase migration list --linked` debe salir sin diferencias. La primera migración crea:
 crea tablas, enums, RLS, grants y las RPC `registrar_fundador`/`ping`. Verificación: en el
 dashboard → **Table Editor** deben aparecer `vendedores`, `inmuebles`, `registro_intentos`.
 
@@ -302,22 +302,31 @@ Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la 
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | Cuenta de Didit (validación de cédula contra la Registraduría) | **ensayo general** (hasta entonces, en producción «Identificarse» dice «no disponible»; el simulador es solo de desarrollo) | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key    |
 | `CRON_SECRET`                                                  | antes del deploy                                                                                                            | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
-| Brevo                                                          | ya existe (S3)                                                                                                              | el mismo remitente verificado sirve para los avisos de la visita               |
-| Migraciones 10 y 11                                            | ya aplicadas en la nube con tu «sí»                                                                                         | nada                                                                           |
+| Brevo                                                          | **antes del deploy** (la cuenta existe desde el S3; sus llaves **no** están en el Worker, ver 6.1)                          | el mismo remitente verificado sirve para los avisos de la visita y las alertas |
+| Migraciones 10, 11 y 12                                        | ya aplicadas en la nube con tu «sí»                                                                                         | nada                                                                           |
+| Migración 13 (S9, rechazo de una alerta que nadie pidió)       | **antes del merge**, con tu «sí» (aditiva)                                                                                  | `supabase db push` y `supabase migration list --linked` debe salir 13/13       |
 
 ### 6.1 [TÚ] Poner los secretos en el Worker
 
 ```bash
-pnpm exec wrangler secret put CRON_SECRET     # un texto largo que inventas; lo usa el cron y su respaldo
-pnpm exec wrangler secret put DIDIT_API_KEY   # solo en el ensayo general: la API key de Didit
+pnpm exec wrangler secret put CRON_SECRET               # un texto largo que inventas; lo usa el cron y su respaldo
+pnpm exec wrangler secret put SUPABASE_SERVICE_ROLE_KEY # la llave de servicio del proyecto (sale del panel de Supabase)
+pnpm exec wrangler secret put BREVO_API_KEY             # la llave del correo
+pnpm exec wrangler secret put BREVO_FROM_EMAIL          # el remitente verificado en Brevo
+pnpm exec wrangler secret put DIDIT_API_KEY             # solo en el ensayo general: la API key de Didit
+pnpm exec wrangler secret list                          # comprueba que los nombres quedaron (no muestra valores)
 ```
 
-Sin `DIDIT_API_KEY` (y sin el simulador) «Identificarse» responde «no disponible»: **nunca simula en
-silencio**. Sin `CRON_SECRET` el trabajo diario responde 503 y no manda nada. `BREVO_API_KEY`,
-`BREVO_FROM_EMAIL` y `SUPABASE_SERVICE_ROLE_KEY` ya están de antes. Después, `pnpm deploy:cf`: el Worker
-queda con el Cron Trigger `0 13 * * *` (las 8:00 de Bogotá).
+**Estos secretos NO estaban puestos en el Worker de producción** (el S8 afirmaba lo contrario; se comprobó
+con `wrangler secret list` al desplegarlo): sin ellos, en producción ni los recordatorios de visita ni los
+resúmenes de alertas salen. Sin `DIDIT_API_KEY` (y sin el simulador) «Identificarse» responde «no
+disponible»: **nunca simula en silencio**. Sin `CRON_SECRET` el trabajo diario responde 503 y no manda
+nada. Sin la llave de servicio, crear una alerta responde «no disponible» y el cron no reclama resúmenes.
+Los pone **la persona dueña de la cuenta**, a mano: la herramienta de construcción no escribe secretos en
+la nube. Después, `pnpm deploy:cf`: el Worker queda con el Cron Trigger `0 13 * * *` (las 8:00 de
+Bogotá).
 
-### 6.2 [TÚ] Comprobar el cron en producción
+### 6.2 [TÚ] Comprobar el cron en producción (recordatorios del S8 y resúmenes de alertas del S9)
 
 1. En el panel de Cloudflare → Workers → tu Worker → **Triggers**, debe aparecer el Cron `0 13 * * *`.
 2. El primer día con una visita confirmada para el día siguiente, mira **Logs**: una línea
@@ -325,6 +334,11 @@ queda con el Cron Trigger `0 13 * * *` (las 8:00 de Bogotá).
 3. Si el plan gratis no alcanza (10 ms de CPU) o el cron falla, activa el respaldo: en GitHub, el workflow
    «Recordatorios de visitas (respaldo)» (descomenta su `schedule`) con los secretos del repo `APP_URL` y
    `CRON_SECRET`. Correr los dos el mismo día no duplica nada.
+
+> **S9 (guardar y avisar):** no añade ningún servicio. El resumen diario de las alertas y su correo de
+> confirmación usan **los mismos cuatro secretos** de arriba y el mismo cron de las 8:00; el tope de correos
+> de alertas es de 250 al día, y los correos de visita pasan siempre primero. Las migraciones 12 y 13 se
+> aplican con `supabase db push` y se comprueban con `supabase migration list --linked`.
 
 ### 6.3 [TÚ] Probar la cédula con la cuenta real (ensayo general)
 

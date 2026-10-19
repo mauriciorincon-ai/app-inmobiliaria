@@ -257,6 +257,16 @@
           color: #fdba74;
         }
       }
+      .o-s9 {
+        background: #e0e7ff;
+        color: #3730a3;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s9 {
+          background: #1e1b4b;
+          color: #a5b4fc;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -305,23 +315,23 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 008 — La visita</h1>
+      <h1>Sprint 009 — Guardar y avisar</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s8">Nuevo · S8</span>. Este sprint lleva al
-        comprador de la ficha a la puerta del inmueble: se identifica con su
-        cédula (opcional), pide una visita, el dueño propone horarios, él
-        confirma, los dos reciben un recordatorio por correo el día antes y el
-        dueño marca si asistió (bloque L). Los avisos van por correo:
-        Innmobiliaria sigue sin enviar nada por WhatsApp.
+        <span class="origen o-s9">Nuevo · S9</span>. Este sprint hace que el
+        comprador vuelva solo: guarda anuncios con un corazón (sin cuenta), los
+        compara, arma listas para decidir en pareja y recibe por correo un
+        resumen diario de lo nuevo y de lo que bajó de precio (bloque M). Los
+        avisos van solo por correo: Innmobiliaria sigue sin enviar nada por
+        WhatsApp.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-008/la-visita</code>. En un teléfono real cuando el filtro
-        lo pida.
+        <code>sprint-009/guardar-y-avisar</code>. En un teléfono real cuando el
+        filtro lo pida.
       </div>
 
       <div class="barra">
@@ -335,9 +345,10 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
-          <button data-filtro="s8" aria-pressed="false">
-            Solo lo nuevo del S8
+          <button data-filtro="s9" aria-pressed="false">
+            Solo lo nuevo del S9
           </button>
+          <button data-filtro="s8" aria-pressed="false">Solo lo del S8</button>
           <button data-filtro="s7" aria-pressed="false">Solo lo del S7</button>
           <button data-filtro="s6" aria-pressed="false">Solo lo del S6</button>
           <button data-filtro="s5" aria-pressed="false">Solo lo del S5</button>
@@ -1551,8 +1562,212 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE M ================= -->
+      <section class="bloque">
+        <h2><span class="letra">M</span> Guardar y avisar</h2>
+        <p class="intro">
+          El comprador guarda anuncios con un corazón sin cuenta, compara hasta
+          4, comparte listas con notas y recibe un resumen diario por correo.
+          Las pruebas ⭐ que mandan correos de verdad necesitan el servidor
+          desplegado con las llaves del correo y del cron: son del ensayo
+          general. Las demás corren local, con el correo en prueba.
+        </p>
+        <ul>
+          <li data-origen="s9 clave">
+            <input type="checkbox" id="m1" />
+            <div>
+              <label for="m1" class="qué"
+                >Con las llaves de correo puestas en el servidor, desde un
+                anuncio de búsqueda toca <b>Guardar como alerta</b>, escribe
+                <b>tu correo real</b> y crea la alerta<span class="origen o-s9"
+                  >Nuevo · S9</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> te dice «Revisa tu correo». Llega un correo de
+                Innmobiliaria con un botón <b>Confirmar</b> y, abajo,
+                <b>«No la pedí: borrarla»</b>. El botón te lleva a Alertas, que
+                te pide tocar <b>«Confirmar mi correo»</b>:
+                <b
+                  >abrir el enlace no confirma, y hasta confirmar no te llega
+                  ningún aviso.</b
+                >
+                Al confirmar, Alertas te muestra la alerta como «Activa».
+              </p>
+              <p class="mal">
+                Si no llega en unos minutos, mira en spam; si tampoco, avisa:
+                puede faltar la llave del correo en el servidor.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9 clave">
+            <input type="checkbox" id="m2" />
+            <div>
+              <label for="m2" class="qué"
+                >En Gmail abre un correo de alerta y usa
+                <b>«Cancelar suscripción»</b> (arriba, junto al remitente), y
+                después prueba el enlace
+                <b>«Dejar de recibirla: un clic»</b> del cuerpo desde otro
+                navegador sin sesión<span class="origen o-s9">Nuevo · S9</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la baja se hace en un solo toque,
+                <b>sin pedir sesión ni contraseña</b>, y dice «Listo: no
+                recibirás más avisos». Repetir el enlace no rompe nada. La
+                alerta desaparece de Alertas.
+              </p>
+              <p class="mal">
+                Si Gmail no muestra «Cancelar suscripción», avisa con el
+                remitente: puede ser de reputación del dominio, no del código.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9 clave">
+            <input type="checkbox" id="m3" />
+            <div>
+              <label for="m3" class="qué"
+                >Con una alerta confirmada, <b>baja el precio</b> de un anuncio
+                que coincida (Mi anuncio → Precio) o publica uno nuevo, y espera
+                al resumen de las <b>8:00 a. m.</b> (hora de Bogotá)<span
+                  class="origen o-s9"
+                  >Nuevo · S9</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> llega <b>un solo correo</b> con el anuncio
+                nuevo y/o el que bajó de precio (precio anterior tachado). Si el
+                cron corre dos veces, no llega un segundo correo. Si
+                <b>subes</b> el precio, no llega nada. Necesita el servidor
+                desplegado con el cron y el secreto.
+              </p>
+              <p class="mal">
+                Si a las 9:00 no llegó nada, mira en Cloudflare → tu Worker →
+                Triggers que exista el cron y en sus registros la línea «cron»
+                con los conteos de resúmenes.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9">
+            <input type="checkbox" id="m4" />
+            <div>
+              <label for="m4" class="qué"
+                >Toca el <b>corazón</b> de una tarjeta de <b>Buscar</b> y el de
+                una ficha, y abre <b>Guardados</b
+                ><span class="origen o-s9">Nuevo · S9</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el corazón se llena y dice «Quitar de
+                favoritos»; Guardados los muestra y avisa «Tus favoritos viven
+                en este teléfono». Tocar el corazón de nuevo lo quita. Funciona
+                sin cuenta y sin verificar nada.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9">
+            <input type="checkbox" id="m5" />
+            <div>
+              <label for="m5" class="qué"
+                >Con favoritos guardados, <b>verifica tu WhatsApp</b> y abre
+                <b>Guardados</b> en <b>otro navegador</b> donde también
+                verificaste<span class="origen o-s9">Nuevo · S9</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> los favoritos del primer teléfono aparecen en
+                el otro, <b>sin repetirse</b>, y el aviso dice que están
+                guardados con tu WhatsApp verificado.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9">
+            <input type="checkbox" id="m6" />
+            <div>
+              <label for="m6" class="qué"
+                >En Guardados marca <b>«Comparar»</b> en 2 anuncios y toca
+                <b>Comparar</b>; luego marca un quinto<span class="origen o-s9"
+                  >Nuevo · S9</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la tabla muestra una columna por anuncio con
+                precio, área, precio por m², habitaciones, sello del dueño y
+                «vivo hace». En el teléfono se desliza de lado. El quinto
+                <b>no se marca</b> y dice que hay que quitar uno (máximo 4). No
+                hay fila «¿Está caro?» todavía: es de otro sprint.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9">
+            <input type="checkbox" id="m7" />
+            <div>
+              <label for="m7" class="qué"
+                >En <b>Guardados → Listas</b> crea una lista, agrégale dos
+                favoritos y toca <b>Compartir por WhatsApp</b
+                ><span class="origen o-s9">Nuevo · S9</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> se abre WhatsApp con un mensaje y el enlace ya
+                escritos y <b>sin número</b>: tú eliges a quién se lo mandas.
+                Innmobiliaria no envía nada. Quien abre el enlace ve la lista;
+                si <b>no</b> verificó su WhatsApp, ve «Para escribir notas,
+                verifica tu WhatsApp»; si lo verificó, puede escribir una nota y
+                se ve con su <b>primer nombre</b>.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9">
+            <input type="checkbox" id="m8" />
+            <div>
+              <label for="m8" class="qué"
+                >Toca <b>Dejar de compartir</b> en esa lista y abre el enlace
+                que mandaste<span class="origen o-s9">Nuevo · S9</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el enlace dice «Este enlace no funciona» para
+                todos. Si compartes de nuevo, el enlace nuevo funciona y
+                <b>el anterior sigue muerto</b>.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9">
+            <input type="checkbox" id="m9" />
+            <div>
+              <label for="m9" class="qué"
+                >Como dueño, en <b>Mi anuncio → Precio</b>, baja el precio y
+                guarda; luego escribe «12» y guarda<span class="origen o-s9"
+                  >Nuevo · S9</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> con el precio válido dice «Precio guardado ✓» y
+                la ficha pública muestra el precio nuevo. Con «12» dice «Escribe
+                un precio válido en pesos» y no cambia nada.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s9">
+            <input type="checkbox" id="m10" />
+            <div>
+              <label for="m10" class="qué"
+                >En el <b>teléfono</b>, recorre la barra de abajo
+                <b>Buscar · Guardados · Alertas</b> y abre el menú de filtros y
+                el teclado en Nueva alerta<span class="origen o-s9"
+                  >Nuevo · S9</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la barra queda fija abajo y marca la sección
+                actual; no tapa el final de la página ni el botón «Crear
+                alerta»; no hay «Herramientas» (llega en otro sprint).
+                <b>Es de FORMA: tu juicio de diseño.</b>
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–L), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–M), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -1580,6 +1795,18 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 009 (2026-10-18):</b><br />
+          <b>Nuevo:</b> bloque M (guardar y avisar: corazón, comparar, listas
+          con notas, alertas por correo, baja en un clic y precio del dueño): 10
+          pruebas nuevas, 3 del gate mínimo ⭐ (la confirmación y la baja con
+          correos reales y el resumen de las 8:00 en producción).<br />
+          <b>Mejorado:</b> —<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 75 pruebas, 25 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          7).
+        </p>
         <p>
           <b>Sprint 008 (2026-10-18):</b><br />
           <b>Nuevo:</b> bloque L (la visita: identificarse, pedir, proponer,
@@ -1650,7 +1877,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v6:";
+        var CLAVE = "guia-inmobiliaria-v7:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

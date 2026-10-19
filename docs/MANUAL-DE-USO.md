@@ -13,15 +13,17 @@ se pide el inmueble.
 Hay tres usos: el del **vendedor** (publica su inmueble), el del **comprador** (desde el Sprint 006
 busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verifica su WhatsApp, le
 escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
-visita) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un panel
-privado). El dueño decide si los compradores verificados pueden escribirle y recibir solicitudes de
-visita; favoritos y alertas todavía no están.
+visita; desde el Sprint 009 también guarda favoritos, compara, comparte listas con notas y recibe
+alertas por correo) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
+panel privado). El dueño decide si los compradores verificados pueden escribirle y recibir
+solicitudes de visita.
 
 ## Primeros pasos
 
 - **Vendedor:** entra a la página principal desde el teléfono, lee la propuesta y toca
   **"Publica tu inmueble como fundador"**. No necesitas crear cuenta ni contraseña.
-- **Comprador:** toca **"Buscar"** arriba (o ve a `/buscar`). No necesitas cuenta.
+- **Comprador:** toca **"Buscar"** arriba (o ve a `/buscar`). No necesitas cuenta. Desde ahí también
+  tienes **Guardados** y **Alertas** (en el teléfono, una barra abajo).
 - **Operador:** entra a `/operador`, inicia sesión con el correo y la contraseña del equipo.
 
 ## Español e inglés (toda la app) · desde Sprint 005
@@ -69,8 +71,9 @@ visita; favoritos y alertas todavía no están.
 - **Limitaciones conocidas:** se muestran los 60 anuncios confirmados más recientemente; afina los
   filtros para ver otros. Un anuncio publicado antes del catálogo de barrios aparece por filtros,
   pero no en una zona dibujada hasta que el operador le asigne su barrio. Si el mapa no carga, la
-  lista y los filtros siguen funcionando y puedes reintentar. Por ahora no hay alertas ni favoritos:
-  llegan en sprints posteriores. Para escribirle a un dueño, mira **«Escribirle a un dueño»** abajo. Los mapas usan datos de OpenStreetMap
+  lista y los filtros siguen funcionando y puedes reintentar. Para guardar un anuncio o recibir
+  avisos de tu búsqueda, mira **«Guardar y avisar»** abajo. Para escribirle a un dueño, mira
+  **«Escribirle a un dueño»** abajo. Los mapas usan datos de OpenStreetMap
   (calles) y de Catastro Bogotá (barrios, licencia CC BY 4.0).
 
 ## Escribirle a un dueño (el comprador verifica su WhatsApp) · desde Sprint 007
@@ -142,6 +145,52 @@ visita; favoritos y alertas todavía no están.
   en el ensayo general; hasta entonces, en producción, «Identificarse» responde que no pudo consultar la Registraduría (el simulador es solo de desarrollo y pruebas). No hay selector visual de
   calendario: el dueño escribe la fecha y elige la hora. Si no se identifica con una cédula
   colombiana, no puede identificarse. Un dueño sin correo no recibe avisos.
+
+## Guardar y avisar: favoritos, comparar, listas y alertas · desde Sprint 009
+
+- **Qué hace:** el comprador guarda anuncios con un corazón (sin cuenta), compara hasta 4, arma
+  **listas** para decidir con otra persona (con notas) y recibe por **correo** un resumen diario de
+  lo nuevo y de lo que bajó de precio en su búsqueda. **Innmobiliaria no envía nada por WhatsApp:**
+  los avisos van por correo y, para compartir una lista, tú eliges a quién se la mandas.
+- **Navegación:** **Buscar · Guardados · Alertas**, arriba en el computador y como barra de abajo en
+  el teléfono.
+- **Favoritos:** toca el **corazón** de una tarjeta o de la ficha; tócalo de nuevo para quitarlo. No
+  necesitas cuenta: se guardan **en este teléfono** (hasta 100). Al **verificar tu WhatsApp** pasan
+  a tu cuenta, sin repetirse, y los ves desde cualquier dispositivo donde lo verifiques. Los ves en
+  **Guardados → Favoritos**. Si un anuncio ya no está disponible, te lo decimos y puedes quitarlo.
+- **Comparar hasta 4:** en **Guardados → Favoritos** marca **«Comparar»** en los anuncios que quieras
+  (máximo 4; el quinto avisa que hay que quitar uno) y toca **«Comparar»**. La tabla muestra una
+  columna por anuncio con **precio, área, precio por m², habitaciones, el sello del dueño y cuánto
+  hace que está vivo**. En el teléfono se desliza de lado. La fila **«¿Está caro?»** llega más
+  adelante, con su propia función.
+- **Listas compartidas con notas:** en **Guardados → Listas** (pide el WhatsApp verificado) crea una
+  lista, agrégale anuncios de tus favoritos y toca **«Compartir por WhatsApp»**: se abre WhatsApp con
+  el enlace ya escrito, **sin número** (tú eliges a quién). **Quien abre el enlace ve la lista y las
+  notas;** para escribir una nota tiene que verificar su WhatsApp, y en las notas se ve solo su
+  **primer nombre**. Tú puedes **«Dejar de compartir»** cuando quieras y el enlace deja de funcionar
+  para todos; si compartes de nuevo, el enlace anterior también deja de funcionar. Hasta 10 listas de
+  hasta 30 anuncios cada una.
+- **Alertas por correo:** en **Buscar** pon tus filtros (o dibuja tu zona) y toca **«Guardar como
+  alerta»**. Elige el nombre, qué quieres que te avisemos (**anuncios nuevos** y/o **bajas de
+  precio**), escribe tu correo y acepta. **Te llega un correo con «Confirmar»: el enlace te lleva a
+  Alertas y ahí tocas «Confirmar mi correo»; hasta entonces no te avisamos de nada** (si nadie lo confirma, la alerta se borra a los 7 días). Después recibes **un
+  resumen al día, a las 8:00 de Bogotá, solo si hay algo**.
+- **Dejar de recibir, en un clic:** **cada correo** trae **«Dejar de recibirla: un clic»**. No pide
+  sesión ni contraseña: abres el enlace y listo. También puedes gestionar la alerta desde el enlace
+  del correo.
+- **Mis alertas:** en **Alertas** ves las alertas de este teléfono (y las que abras desde el enlace
+  «gestionar» de un correo): **pausar y reanudar**, encender o apagar **«anuncios nuevos»** y
+  **«bajas de precio»** (siempre queda al menos uno) y **borrar**. Hasta 3 alertas nuevas por correo
+  al día.
+- **Si eres dueño, el precio:** en **Mi anuncio → Precio** puedes cambiarlo. Si lo **bajas**, quienes
+  tienen una alerta que coincide lo reciben en su resumen; si lo subes, no avisamos a nadie. Hasta 5
+  cambios por día.
+- **Limitaciones conocidas:** el aviso es **un resumen al día**, no «en cuanto aparezca». Es **solo
+  por correo**. Las alertas no están en una cuenta: viven en el teléfono que las creó y en el enlace
+  «gestionar» de cada correo. Hay un tope diario de correos de alertas; los correos de las visitas
+  siempre salen primero. En producción las alertas funcionan cuando están puestas las llaves del servicio de correo y del
+  servidor (se prueba en el ensayo general); mientras no lo estén, crear una alerta responde que no está
+  disponible y no se guarda nada.
 
 ## Features
 
@@ -334,6 +383,10 @@ visita; favoritos y alertas todavía no están.
   **Mi anuncio** (nombre, últimos 4 dígitos y fecha).
 - **¿Innmobiliaria me escribe por WhatsApp para verificarme?** No: eres tú quien nos manda el código.
   Nosotros solo lo recibimos y nunca respondemos por ahí.
+- **¿Las alertas me escriben por WhatsApp?** No. Solo por correo, con un resumen al día. Innmobiliaria
+  nunca te escribe por WhatsApp.
+- **¿Cómo dejo de recibir una alerta?** Con el enlace **«Dejar de recibirla: un clic»** que trae cada
+  correo (no pide sesión) o desde **Alertas**, con **Borrar**.
 - **¿Se ve mi dirección en el mapa?** No. Tu anuncio aparece como el área de su barrio, nunca como un
   punto, y la dirección no se publica.
 - **¿Por qué mi sello dice «re-verificación pendiente»?** Fuiste verificado antes de que el sello
@@ -352,3 +405,4 @@ visita; favoritos y alertas todavía no están.
 | 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                     |
 | 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                |
 | 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió» |
+| 009    | Guardar y avisar: favoritos sin cuenta (pasan a tu cuenta al verificar), comparar hasta 4, listas compartidas con notas, alertas por correo con doble confirmación y baja en un clic, resumen diario, navegación Buscar · Guardados · Alertas y precio editable en Mi anuncio                                                        |

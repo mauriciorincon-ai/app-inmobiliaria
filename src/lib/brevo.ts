@@ -75,6 +75,8 @@ export type CorreoTransaccional = {
   para: { email: string; nombre: string };
   asunto: string;
   html: string;
+  // S9: cabeceras propias (la baja en un clic de las alertas, `List-Unsubscribe`, RFC 8058).
+  cabeceras?: Record<string, string>;
 };
 
 export async function enviarCorreo(
@@ -94,9 +96,15 @@ export async function enviarCorreo(
           email: process.env.BREVO_FROM_EMAIL ?? "",
           name: process.env.BREVO_FROM_NOMBRE ?? "Innmobiliaria",
         },
-        to: [{ email: correo.para.email, name: correo.para.nombre }],
+        // Sin nombre (las alertas no lo piden), solo el correo: Brevo no acepta un nombre vacío.
+        to: [
+          correo.para.nombre
+            ? { email: correo.para.email, name: correo.para.nombre }
+            : { email: correo.para.email },
+        ],
         subject: correo.asunto,
         htmlContent: correo.html,
+        ...(correo.cabeceras ? { headers: correo.cabeceras } : {}),
       }),
     });
     return { ok: res.ok, mock: false };

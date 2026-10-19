@@ -15,6 +15,7 @@ import SelloExplicado from "@/components/ficha/SelloExplicado";
 import VivoHace from "@/components/ficha/VivoHace";
 import ContactarDueno from "@/components/ficha/ContactarDueno";
 import CompartirCTA from "@/components/ficha/CompartirCTA";
+import CorazonFavorito from "@/components/guardados/CorazonFavorito";
 import { cookies } from "next/headers";
 import { mensajeContacto } from "@/engine/verificacion/mensajes";
 import {
@@ -120,8 +121,8 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
 
   return (
     <>
-      <EncabezadoInterior lang={lang} />
-      <main className="mx-auto max-w-3xl px-6 py-8">
+      <EncabezadoInterior lang={lang} seccion="buscar" />
+      <main className="mx-auto max-w-3xl px-6 py-8 pb-28 sm:pb-8">
         <Galeria fotos={f.fotos} t={t.galeria} />
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -208,7 +209,12 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
           )}
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <CorazonFavorito
+            slug={f.slug}
+            t={enIdioma(COMUN.favorito, lang)}
+            conTexto
+          />
           <CompartirCTA t={t.compartir} />
         </div>
       </main>

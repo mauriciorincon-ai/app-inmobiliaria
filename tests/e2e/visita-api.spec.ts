@@ -562,9 +562,14 @@ test.describe("POST /api/cron/diario", () => {
       `update public.compradores set created_at = now() - interval '31 days' where telefono = '${viejo}'`,
     );
 
+    // Esta prueba es de los recordatorios: con `x-alertas-solo` apuntando a una alerta que no existe, el paso de
+    // resúmenes no se lleva los de las pruebas de alertas que corren a la vez (S9).
     const correr = () =>
       request.post("/api/cron/diario", {
-        headers: { authorization: `Bearer ${CRON}` },
+        headers: {
+          authorization: `Bearer ${CRON}`,
+          "x-alertas-solo": "00000000-0000-0000-0000-000000000000",
+        },
       });
     const r = await correr();
     expect(r.status()).toBe(200);

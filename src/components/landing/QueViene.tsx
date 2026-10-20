@@ -3,11 +3,11 @@ import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma } from "@/i18n/textos";
 import { LANDING } from "@/textos/landing";
 
-// Las dos primeras tarjetas llevan la estrella de calidad; la tercera no.
-const CON_ESTRELLA = [true, true, false] as const;
+// Las tarjetas ya construidas llevan la estrella de calidad y «Ya disponible»; la que falta, «Próximamente».
+const YA_DISPONIBLE = [true, true, false] as const;
 
-// Teaser honesto: se COMUNICA lo que viene, no se construye en S1. Cualitativo, sin cifras
-// (las de fotos están prohibidas por evidencia débil — design-system.md).
+// Honesto: dice lo que ya funciona y lo que sigue. Cualitativo, sin cifras (las de fotos están
+// prohibidas por evidencia débil — design-system.md).
 export default function QueViene({ lang }: { lang: Idioma }) {
   const t = enIdioma(LANDING.queViene, lang);
   return (
@@ -26,7 +26,7 @@ export default function QueViene({ lang }: { lang: Idioma }) {
             className="rounded-[2rem] border border-purple-200 bg-white p-7"
           >
             <div className="flex items-center gap-2">
-              {CON_ESTRELLA[i] && (
+              {YA_DISPONIBLE[i] && (
                 <span aria-hidden="true" className="text-lg text-purple">
                   ★
                 </span>
@@ -35,7 +35,7 @@ export default function QueViene({ lang }: { lang: Idioma }) {
             </div>
             <p className="mt-2 text-sm leading-relaxed text-gray">{c.texto}</p>
             <p className="mt-4 inline-block rounded-full bg-purple-tint px-3 py-1 text-xs font-semibold text-purple-600">
-              {t.pronto}
+              {YA_DISPONIBLE[i] ? t.ya : t.pronto}
             </p>
           </div>
         ))}

@@ -2,6 +2,8 @@
 // El valor de referencia del terreno por barrio (S10, ADR 018): el convertidor sobre un fixture de juguete y el
 // resultado generado que se versiona. Los datos reales de Catastro (41 858 manzanas) no se versionan; la salida sí.
 import { describe, it, expect } from "vitest";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import path from "node:path";
 import {
   documento,
   mediana,
@@ -93,5 +95,30 @@ describe("valor-referencia.json generado", () => {
     const urbanos = SECTORES.filter((s) => s.tipo === "urbano");
     const cubiertos = urbanos.filter((s) => con.has(s.codigo)).length;
     expect(cubiertos / urbanos.length).toBeGreaterThanOrEqual(0.95);
+  });
+});
+
+describe("el archivo de Catastro no viaja al navegador", () => {
+  const RAIZ = path.resolve(__dirname, "../../src");
+  const archivos = (dir: string): string[] =>
+    readdirSync(dir).flatMap((nombre) => {
+      const ruta = path.join(dir, nombre);
+      if (statSync(ruta).isDirectory()) return archivos(ruta);
+      return /\.(ts|tsx)$/.test(nombre) ? [ruta] : [];
+    });
+  const IMPORTA = /from\s+["'][^"']*zonas\/valor-referencia(?:\.json)?["']/;
+
+  it('ningún módulo "use client" ni el motor puro de zona lo importan', () => {
+    const culpables = archivos(RAIZ)
+      .filter((ruta) => {
+        const texto = readFileSync(ruta, "utf8");
+        const esCliente = /^\s*["']use client["']/.test(texto);
+        const esMotorZona = ruta.endsWith(
+          path.join("engine", "precio", "zona.ts"),
+        );
+        return (esCliente || esMotorZona) && IMPORTA.test(texto);
+      })
+      .map((ruta) => path.relative(RAIZ, ruta));
+    expect(culpables).toEqual([]);
   });
 });

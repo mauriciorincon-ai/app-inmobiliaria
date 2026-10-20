@@ -98,6 +98,20 @@ export const GUARDADOS = {
       habitaciones: { es: "Habitaciones", en: "Bedrooms" },
       dueno: { es: "Dueño", en: "Owner" },
       vivo: { es: "Vivo", en: "Live" },
+      estaCaro: { es: "¿Está caro?", en: "Overpriced?" },
+    },
+    // La fila «¿Está caro?» (S10): el estado de cada anuncio frente a los comparables de su zona. Mismas etiquetas
+    // que la ficha; el rango y la fuente están en el detalle de cada anuncio.
+    estaCaro: {
+      cargando: { es: "Calculando…", en: "Calculating…" },
+      error: { es: "No disponible", en: "Not available" },
+      en_rango: { es: "En rango", en: "In range" },
+      caro: { es: "Por encima del rango", en: "Above the range" },
+      sospechoso: {
+        es: "Sospechosamente barato",
+        en: "Suspiciously cheap",
+      },
+      sin_datos: { es: "Sin datos suficientes", en: "Not enough data" },
     },
   },
 

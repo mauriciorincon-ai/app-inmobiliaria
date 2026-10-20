@@ -480,7 +480,7 @@ test.describe("el precio del dueño", () => {
 
 // La navegación del comprador y la accesibilidad de las pantallas nuevas, en el teléfono y en el escritorio.
 test.describe("navegación del comprador y accesibilidad", () => {
-  test("Buscar · Guardados · Alertas, y las pantallas nuevas sin violaciones de axe", async ({
+  test("Buscar · Guardados · Alertas · Herramientas, y las pantallas nuevas sin violaciones de axe", async ({
     page,
   }, info) => {
     const movil = info.project.name === "mobile-chromium";
@@ -490,12 +490,10 @@ test.describe("navegación del comprador y accesibilidad", () => {
 
     await page.goto("/guardados");
     await expect(nav).toBeVisible();
-    for (const seccion of ["Buscar", "Guardados", "Alertas"]) {
+    // Desde el S10 son cuatro: la cuarta, Herramientas, es el simulador.
+    for (const seccion of ["Buscar", "Guardados", "Alertas", "Herramientas"]) {
       await expect(nav.getByRole("link", { name: seccion })).toBeVisible();
     }
-    await expect(nav.getByRole("link", { name: "Herramientas" })).toHaveCount(
-      0,
-    );
     // En el teléfono es una barra inferior fija; en escritorio vive en la cabecera.
     const caja = await nav.boundingBox();
     const alto = page.viewportSize()?.height ?? 0;

@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { ESTILO_ESTADO } from "@/components/precio/estilos";
+import { useEstadosPrecio } from "@/components/guardados/use-estados-precio";
 import SelloNivel, { type TextosSello } from "@/components/ficha/SelloNivel";
 import type { TextosVivo } from "@/components/ficha/VivoHace";
 import { textoVivo } from "@/components/ficha/vivo-texto";
@@ -19,8 +21,9 @@ const SIN_DATO = "—";
 const UNIDAD_AREA = "m²";
 
 // La tabla de comparar (maqueta 07): una columna por anuncio, en el orden en que se marcaron, con precio, área,
-// precio por m², habitaciones, el sello del dueño y «vivo hace». La fila «¿Está caro?» de la maqueta llega con
-// su propio sprint. Se carga diferido: solo la abre quien pulsa «Comparar».
+// precio por m², habitaciones, el sello del dueño, «vivo hace» y «¿Está caro?» (S10: el estado de cada uno frente a los
+// anuncios parecidos de su zona; el rango y la fuente están en su detalle). Se carga diferido: solo la abre quien
+// pulsa «Comparar».
 export default function TablaComparar({
   anuncios,
   seleccion,
@@ -41,6 +44,13 @@ export default function TablaComparar({
   const ahora = new Date();
   const columnas = columnasComparar(anuncios, seleccion, ahora);
   const porSlug = new Map(anuncios.map((a) => [a.slug, a]));
+  // El hook va ANTES de cualquier retorno: se evalúan los anuncios que están en la tabla.
+  const precios = useEstadosPrecio(
+    columnas.flatMap((c) => {
+      const a = porSlug.get(c.slug);
+      return a ? [a] : [];
+    }),
+  );
 
   if (columnas.length < 2) {
     return (
@@ -163,6 +173,36 @@ export default function TablaComparar({
                   {textoVivo(c.vivoDias, tVivo) ?? SIN_DATO}
                 </td>
               ))}
+            </tr>
+            <tr className={fila}>
+              <th scope="row" className={etiquetaFila}>
+                {t.filas.estaCaro}
+              </th>
+              {columnas.map((c) => {
+                const rango = precios.porSlug.get(c.slug);
+                return (
+                  <td key={c.slug} className={celda}>
+                    {rango ? (
+                      <Link
+                        href={`/i/${c.slug}/esta-caro`}
+                        prefetch={false}
+                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${ESTILO_ESTADO[rango.estado].clase}`}
+                      >
+                        <span aria-hidden="true">
+                          {ESTILO_ESTADO[rango.estado].simbolo}
+                        </span>
+                        {t.estaCaro[rango.estado]}
+                      </Link>
+                    ) : (
+                      <span className="text-mute">
+                        {precios.carga === "error"
+                          ? t.estaCaro.error
+                          : t.estaCaro.cargando}
+                      </span>
+                    )}
+                  </td>
+                );
+              })}
             </tr>
           </tbody>
         </table>

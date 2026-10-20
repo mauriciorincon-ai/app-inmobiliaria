@@ -1,6 +1,6 @@
 // Comparar hasta 4 anuncios guardados (S9, maqueta 07). Puro: la selección y los valores de cada fila
 // (precio, área, precio por m², habitaciones, sello y «vivo hace»). Los textos los pone la interfaz. La fila
-// «¿Está caro?» de la maqueta no está aquí: llega con su propio sprint (S10–S11).
+// «¿Está caro?» (S10) no se calcula aquí: la interfaz la evalúa con `@/engine/precio/presentacion`.
 import { estadoSello, type EstadoSello } from "@/engine/sello/sello";
 import { diasVivo } from "@/engine/vigencia/vigencia";
 

@@ -364,6 +364,22 @@ export type ResultadoBusqueda = {
 export type AnuncioGuardado = ResultadoBusqueda;
 export type BajaDePrecio = ResultadoBusqueda & { precio_anterior: number };
 
+// ── S10 — decidir con números (migración 14) ───────────────────────────────────────
+// La tasa de vivienda con su fecha (conjunto abierto de la Superfinanciera) y un anuncio comparable de precio.
+export type TasaVivienda = {
+  fecha_corte: string;
+  tasa_ea: number;
+  creditos: number;
+  entidades: number;
+  fuente: string;
+};
+export type ComparablePrecio = {
+  slug: string;
+  sector_codigo: string | null;
+  area_m2: number;
+  precio_esperado: number;
+};
+
 // De la gente solo sale el PRIMER nombre.
 export type NotaDeLista = {
   id: string;
@@ -662,6 +678,12 @@ export type Database = {
       };
       correos_dia: {
         Row: { dia: string; visita: number; alerta: number };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      tasas_vivienda: {
+        Row: TasaVivienda & { leida_at: string };
         Insert: never;
         Update: never;
         Relationships: [];
@@ -966,6 +988,29 @@ export type Database = {
       };
       sumar_correos_dia: {
         Args: { p_clase: "visita" | "alerta"; p_n: number };
+        Returns: undefined;
+      };
+      // S10 — decidir con números. Públicas: la última tasa y los comparables. Solo servidor: guardar la tasa.
+      tasa_vivienda: {
+        Args: Record<string, never>;
+        Returns: TasaVivienda | null;
+      };
+      comparables_precio: {
+        Args: {
+          p_operacion: Operacion;
+          p_tipo: TipoInmueble;
+          p_localidad: string;
+        };
+        Returns: ComparablePrecio[];
+      };
+      guardar_tasa_vivienda: {
+        Args: {
+          p_fecha_corte: string;
+          p_tasa_ea: number;
+          p_creditos: number;
+          p_entidades: number;
+          p_fuente: string;
+        };
         Returns: undefined;
       };
       generar_link_anuncio: {

@@ -60,6 +60,9 @@ const PUBLICAS = [
   "renombrar_lista(text,uuid,text)",
   "resumen_anuncios(text[])",
   "revocar_lista(text,uuid)",
+  // S10: la última tasa de vivienda y los comparables de precio (solo lo que `/buscar` ya muestra).
+  "tasa_vivienda()",
+  "comparables_precio(operacion,tipo_inmueble,text)",
 ];
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
@@ -96,6 +99,8 @@ const SOLO_SERVIDOR = [
   "fila_anuncio",
   "lista_detalle",
   "registrar_cambio_precio",
+  // S10: guardar la tasa que lee el cron (solo el servidor).
+  "guardar_tasa_vivienda",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers

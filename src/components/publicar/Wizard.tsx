@@ -12,6 +12,7 @@ import Paso2Inmueble, {
   type Dominio,
 } from "@/components/publicar/Paso2Inmueble";
 import Paso3Revision from "@/components/publicar/Paso3Revision";
+import type { TextosRangoDueno } from "@/components/precio/RangoDueno";
 import type { Idioma } from "@/i18n/idiomas";
 import type { Proyectado } from "@/i18n/textos";
 import type { PUBLICAR } from "@/textos/publicar";
@@ -75,10 +76,12 @@ export default function Wizard({
   lang,
   t,
   dominio,
+  precio,
 }: {
   lang: Idioma;
   t: TextosWizard;
   dominio: Dominio;
+  precio: TextosRangoDueno;
 }) {
   const router = useRouter();
   const [paso, setPaso] = useState<Paso>(1);
@@ -222,7 +225,9 @@ export default function Wizard({
         )}
         {paso === 2 && (
           <Paso2Inmueble
+            lang={lang}
             t={t.paso2}
+            precio={precio}
             dominio={dominio}
             datos={datos}
             errores={errores}

@@ -3,19 +3,21 @@ import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma } from "@/i18n/textos";
 import { NAV_COMPRADOR } from "@/textos/nav-comprador";
 
-export type SeccionComprador = "buscar" | "guardados" | "alertas";
+export type SeccionComprador =
+  "buscar" | "guardados" | "alertas" | "herramientas";
 
 const SECCIONES: { clave: SeccionComprador; ruta: string }[] = [
   { clave: "buscar", ruta: "/buscar" },
   { clave: "guardados", ruta: "/guardados" },
   { clave: "alertas", ruta: "/alertas" },
+  { clave: "herramientas", ruta: "/herramientas" },
 ];
 
-// La navegación del comprador (S9, maqueta 07/08): Buscar · Guardados · Alertas. Sin JavaScript. En
-// escritorio vive en la cabecera; en el teléfono es una barra inferior fija. Las páginas que la llevan dejan
-// espacio abajo (`pb-28`) para que la barra no tape el final. «Herramientas», la cuarta sección de la
-// maqueta, llega con su sprint. Los enlaces NO se precargan (`prefetch={false}`): precargar Guardados y Alertas
-// desde la búsqueda y la ficha les sumaba ~15 KB de script a cada una (S9: el presupuesto no sube).
+// La navegación del comprador (S9–S10, maqueta 07/08/10): Buscar · Guardados · Alertas · Herramientas. Sin
+// JavaScript. En escritorio vive en la cabecera; en el teléfono es una barra inferior fija. Las páginas que la llevan
+// dejan espacio abajo (`pb-28`) para que la barra no tape el final. Los enlaces NO se precargan (`prefetch={false}`):
+// precargar Guardados, Alertas y Herramientas desde la búsqueda y la ficha les sumaba script a cada una (el presupuesto
+// no sube).
 export default function NavComprador({
   lang,
   seccion,
@@ -36,7 +38,7 @@ export default function NavComprador({
           : "hidden items-center gap-6 sm:flex"
       }
     >
-      <ul className={enBarra ? "grid grid-cols-3" : "flex items-center gap-6"}>
+      <ul className={enBarra ? "grid grid-cols-4" : "flex items-center gap-6"}>
         {SECCIONES.map(({ clave, ruta }) => {
           const activa = clave === seccion;
           return (
@@ -47,7 +49,7 @@ export default function NavComprador({
                 aria-current={activa ? "page" : undefined}
                 className={
                   enBarra
-                    ? `flex min-h-14 items-center justify-center px-2 text-sm font-semibold ${
+                    ? `flex min-h-14 items-center justify-center px-1 text-xs font-semibold ${
                         activa
                           ? "bg-purple-tint text-purple-600"
                           : "text-gray hover:bg-purple-tint"

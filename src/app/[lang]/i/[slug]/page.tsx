@@ -8,6 +8,7 @@ import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
+import { PRECIO } from "@/textos/precio";
 import { VISITA } from "@/textos/visita";
 import Galeria from "@/components/ficha/Galeria";
 import SelloNivel from "@/components/ficha/SelloNivel";
@@ -16,6 +17,8 @@ import VivoHace from "@/components/ficha/VivoHace";
 import ContactarDueno from "@/components/ficha/ContactarDueno";
 import CompartirCTA from "@/components/ficha/CompartirCTA";
 import CorazonFavorito from "@/components/guardados/CorazonFavorito";
+import CuotaEnFicha from "@/components/ficha/CuotaEnFicha";
+import TarjetaEstaCaro from "@/components/ficha/TarjetaEstaCaro";
 import { cookies } from "next/headers";
 import { mensajeContacto } from "@/engine/verificacion/mensajes";
 import {
@@ -24,6 +27,13 @@ import {
   hashSesion,
 } from "@/engine/verificacion/sesion";
 import { crearClienteAnon } from "@/lib/supabase/server";
+import { cargarFicha } from "@/lib/ficha-datos";
+import {
+  cargarComparables,
+  cargarTasa,
+  fuenteAnuncios,
+} from "@/lib/precio-datos";
+import { rangoDePrecio } from "@/engine/precio/comparables";
 import { formatearCOP } from "@/engine/format/cop";
 import { urlPublicaFoto } from "@/lib/fotos-url";
 import type { FichaData } from "@/lib/supabase/types";
@@ -36,12 +46,6 @@ export const dynamic = "force-dynamic";
 const UNIDAD_AREA = "m²";
 
 type ParamsFicha = Promise<{ lang: string; slug: string }>;
-
-async function cargarFicha(slug: string): Promise<FichaData | null> {
-  const supabase = crearClienteAnon();
-  const { data } = await supabase.rpc("obtener_ficha", { p_slug: slug });
-  return data;
-}
 
 // ¿Este navegador ya verificó su WhatsApp? Solo se pregunta a la base si trae la cookie de comprador.
 async function sesionVerificada(): Promise<boolean> {
@@ -114,7 +118,23 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
 
   const t = enIdioma(FICHA, lang);
   const visita = enIdioma(VISITA, lang);
-  const verificado = f.contacto_publico ? await sesionVerificada() : false;
+  const precio = enIdioma(PRECIO, lang);
+  // Las tres lecturas son independientes: van juntas para que la ficha no espere una detrás de otra. La tasa solo
+  // importa en una venta (la cuota de un arriendo no es un crédito).
+  const [verificado, comparables, tasa] = await Promise.all([
+    f.contacto_publico ? sesionVerificada() : Promise.resolve(false),
+    f.localidad
+      ? cargarComparables({
+          operacion: f.operacion,
+          tipo: f.tipo,
+          localidad: f.localidad,
+        })
+      : Promise.resolve([]),
+    f.operacion === "venta" ? cargarTasa() : Promise.resolve(null),
+  ]);
+  const rango = comparables
+    ? rangoDePrecio(f, comparables, fuenteAnuncios(precio.fuente))
+    : null;
   const dominio = enIdioma(COMUN.dominio, lang);
   const operaciones: Record<string, string> = dominio.operacion;
   const tipo = tipoDe(f, lang);
@@ -151,6 +171,28 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
                 n: f.habitaciones,
               })}
         </p>
+
+        {(rango || tasa) && (
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {rango && (
+              <TarjetaEstaCaro
+                rango={rango}
+                slug={f.slug}
+                lang={lang}
+                t={precio}
+              />
+            )}
+            {tasa && (
+              <CuotaEnFicha
+                precio={f.precio_esperado}
+                tasaEA={tasa.tasaEA}
+                fechaCorte={tasa.fechaCorte}
+                lang={lang}
+                t={precio.cuota}
+              />
+            )}
+          </div>
+        )}
 
         <VivoHace vigenteHasta={f.vigente_hasta} t={t.vivo} />
         <SelloExplicado

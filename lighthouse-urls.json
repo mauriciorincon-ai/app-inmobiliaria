@@ -11,5 +11,7 @@
   "/conoce",
   "/guardados",
   "/alertas",
-  "/alertas/nueva?op=venta"
+  "/alertas/nueva?op=venta",
+  "/herramientas",
+  "/i/demo-apartamento-chapinero/esta-caro"
 ]

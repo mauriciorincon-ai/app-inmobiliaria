@@ -157,39 +157,43 @@ export const LANDING = {
 
   queViene: {
     titulo: {
-      es: "Lo que estamos construyendo para ti",
-      en: "What we're building for you",
+      es: "Lo que ya funciona y lo que sigue",
+      en: "What already works and what's next",
     },
     subtitulo: {
-      es: "Publicas hoy; esto llega en las próximas etapas, antes de abrir a los compradores.",
-      en: "You list today; this arrives in the coming stages, before we open to buyers.",
+      es: "Del lado de quien compra ya hay búsqueda, verificación y visitas; lo que falta, te lo decimos claro.",
+      en: "On the buyer's side there is already search, verification and visits; what's still missing, we tell you plainly.",
     },
-    pronto: { es: "Muy pronto", en: "Coming soon" },
-    // Teaser honesto: se COMUNICA lo que viene; cualitativo y sin cifras (las de fotos están
-    // prohibidas por evidencia débil — design-system.md). `estrella` la pone el componente.
+    ya: { es: "Ya disponible", en: "Available now" },
+    pronto: { es: "Próximamente", en: "Coming soon" },
+    // Cada tarjeta dice la verdad de HOY. Cualitativo y sin cifras (las de fotos están prohibidas por
+    // evidencia débil — design-system.md). `estrella` y «ya / próximamente» los pone el componente.
     tarjetas: [
-      {
-        titulo: { es: "Fotos que venden", en: "Photos that sell" },
-        texto: {
-          es: "Te ayudaremos a que tu inmueble se vea espectacular. Una buena foto es lo que más mira quien compra.",
-          en: "We'll help your property look its best. A good photo is the first thing buyers look at.",
-        },
-      },
       {
         titulo: {
           es: "Compradores verificados",
           en: "Verified buyers",
         },
         texto: {
-          es: "Menos curiosos y menos riesgos: gente seria y verificada del otro lado.",
-          en: "Fewer window-shoppers and fewer risks: serious, verified people on the other side.",
+          es: "Quien quiere contactarte verifica antes su WhatsApp: menos curiosos y menos riesgos. Si lo prefieres, solo te escriben quienes se identifican con su cédula.",
+          en: "Anyone who wants to contact you verifies their WhatsApp first: fewer window-shoppers and fewer risks. If you prefer, only people who identify themselves with their ID can write to you.",
         },
       },
       {
-        titulo: { es: "Avalúo de referencia", en: "A reference valuation" },
+        titulo: {
+          es: "Visitas sin vueltas",
+          en: "Visits without the back-and-forth",
+        },
         texto: {
-          es: "Una idea clara de cuánto podría valer tu inmueble para que pongas un precio con confianza.",
-          en: "A clear idea of what your property could be worth (what Colombians call an avalúo), so you can set a price with confidence.",
+          es: "El comprador te propone cuándo y tú eliges la hora. A los dos les llega un recordatorio por correo el día antes.",
+          en: "The buyer suggests times and you pick one. Both of you get an email reminder the day before.",
+        },
+      },
+      {
+        titulo: { es: "Fotos que venden", en: "Photos that sell" },
+        texto: {
+          es: "Te ayudaremos a que tu inmueble se vea espectacular. Una buena foto es lo que más mira quien compra.",
+          en: "We'll help your property look its best. A good photo is the first thing buyers look at.",
         },
       },
     ],

@@ -14,7 +14,8 @@ Hay tres usos: el del **vendedor** (publica su inmueble), el del **comprador** (
 busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verifica su WhatsApp, le
 escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
 visita; desde el Sprint 009 también guarda favoritos, compara, comparte listas con notas y recibe
-alertas por correo) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
+alertas por correo; desde el Sprint 010 también decide con números: ve si un precio está en línea con
+su zona y calcula cuánto puede pagar) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
 panel privado). El dueño decide si los compradores verificados pueden escribirle y recibir
 solicitudes de visita.
 
@@ -23,7 +24,7 @@ solicitudes de visita.
 - **Vendedor:** entra a la página principal desde el teléfono, lee la propuesta y toca
   **"Publica tu inmueble como fundador"**. No necesitas crear cuenta ni contraseña.
 - **Comprador:** toca **"Buscar"** arriba (o ve a `/buscar`). No necesitas cuenta. Desde ahí también
-  tienes **Guardados** y **Alertas** (en el teléfono, una barra abajo).
+  tienes **Guardados**, **Alertas** y **Herramientas** (en el teléfono, una barra abajo).
 - **Operador:** entra a `/operador`, inicia sesión con el correo y la contraseña del equipo.
 
 ## Español e inglés (toda la app) · desde Sprint 005
@@ -152,8 +153,8 @@ solicitudes de visita.
   **listas** para decidir con otra persona (con notas) y recibe por **correo** un resumen diario de
   lo nuevo y de lo que bajó de precio en su búsqueda. **Innmobiliaria no envía nada por WhatsApp:**
   los avisos van por correo y, para compartir una lista, tú eliges a quién se la mandas.
-- **Navegación:** **Buscar · Guardados · Alertas**, arriba en el computador y como barra de abajo en
-  el teléfono.
+- **Navegación:** **Buscar · Guardados · Alertas** (y, desde el Sprint 010, **Herramientas**), arriba
+  en el computador y como barra de abajo en el teléfono.
 - **Favoritos:** toca el **corazón** de una tarjeta o de la ficha; tócalo de nuevo para quitarlo. No
   necesitas cuenta: se guardan **en este teléfono** (hasta 100). Al **verificar tu WhatsApp** pasan
   a tu cuenta, sin repetirse, y los ves desde cualquier dispositivo donde lo verifiques. Los ves en
@@ -192,13 +193,64 @@ solicitudes de visita.
   servidor (se prueba en el ensayo general); mientras no lo estén, crear una alerta responde que no está
   disponible y no se guarda nada.
 
+## Decidir con números: ¿está caro?, datos de la zona y simulador · desde Sprint 010
+
+- **Qué hace:** te ayuda a decidir con números y no con corazonadas. En cada ficha ves **si el precio
+  está en línea con los anuncios parecidos de su zona** y los **datos de la zona**; en
+  **Herramientas** calculas **cuánto pagarías al mes** y **hasta qué precio puedes comprar**. Es **un
+  rango, no un avalúo**, y **un cálculo, no una aprobación de crédito**.
+- **¿Está caro? (en la ficha):** debajo del precio y del área hay una tarjeta con una de cuatro
+  respuestas, siempre con símbolo y texto (nunca solo color): **En rango**, **Por encima del rango**,
+  **Sospechosamente barato** o **Sin datos suficientes**. Toca **«Ver el detalle»** para ver la barra
+  del rango, cuántos anuncios entraron, la fecha y la fuente, y **«Cómo lo calculamos»**.
+- **Cómo se calcula:** se compara el precio por m² del anuncio con el de los anuncios parecidos
+  (mismo tipo y operación, área dentro de ±30 %, vivos hoy). Se quitan los precios que se salen de
+  lo normal y el rango va del **percentil 25 al 75**: la mitad central de lo que piden los dueños.
+  Primero cuenta los de su **barrio**; si no alcanzan, los de toda la **localidad** y te lo dice.
+  **Con menos de 5 anuncios parecidos no damos rango:** te decimos cuántos hay. **Es el precio que
+  piden los dueños, no el de cierre, y no es un avalúo.**
+- **Sospechosamente barato:** es un precio 30 % o más por debajo de la mediana de su zona. Te lo
+  avisamos con el consejo de siempre: visita antes de pagar, pide el CTL y nunca des anticipos.
+- **Datos de la zona:** el **m² mediano de oferta** (de los anuncios de Innmobiliaria), la **oferta
+  activa** (cuántos anuncios vivos hay) y el **valor de referencia del m² de terreno** de Catastro
+  Bogotá (mediana de las manzanas del barrio, vigencia 2026). **El de Catastro es solo del terreno:**
+  sirve de referencia, no es el precio de un apartamento ni de una casa. Cada cifra trae su fuente,
+  su fecha y su licencia.
+- **Herramientas → simulador de cuota:** escribe el **precio**, la **cuota inicial** (%), el **plazo**
+  (5 a 30 años), la **tasa** (déjala vacía para usar la de referencia, o escribe la que te ofrece tu
+  banco) y los **ingresos del hogar**. Te dice la **cuota mensual**, el crédito, cuánto pagas en total
+  y si la cuota **cabe** o **pasa** del **40 % de tus ingresos**, el tope que fija el Decreto 583 de 2025. También avisa si con tu cuota inicial el crédito pasaría del **70 %** del valor (el máximo para
+  vivienda que no es de interés social; en VIS la norma permite hasta 80 %, pero el simulador no
+  decide si un inmueble es VIS). Cada norma está citada en la pantalla.
+- **La tasa de referencia:** es el promedio de lo que cobraron los bancos por créditos de vivienda
+  (no VIS, en pesos, tasa fija) según los datos abiertos de la Superintendencia Financiera. **Siempre
+  se muestra con su fecha de corte** (suele ir una o dos semanas atrás); si tiene más de 30 días te
+  avisa que puede estar desactualizada. Tu banco fija la tasa real.
+- **Lo que puedes pagar:** con tus ingresos, el simulador calcula el precio máximo (redondeado hacia
+  abajo al millón). **«Ver lo que puedo pagar»** abre **Buscar** ya filtrado por ese precio, con el
+  rótulo «Hasta $X · lo que puedes pagar»; **«Avísame de lo que puedo pagar»** abre una **alerta
+  nueva** con ese precio.
+- **Tus ingresos no salen de tu teléfono:** se guardan solo en este teléfono y ninguna petición los
+  lleva; en los enlaces viaja únicamente el **precio máximo**. **«Borrar mis números de este
+  teléfono»** los quita cuando quieras.
+- **En la ficha de una venta:** la tarjeta **«Tu cuota»** usa ese cálculo guardado y dice cuánto sería
+  la cuota de ese anuncio y si **cabe** o **pasa** de lo que puedes pagar. Si aún no has calculado,
+  **«Calcula tu cuota»** te lleva a Herramientas con el precio ya puesto.
+- **Si eres dueño:** al **publicar** (paso 2) y en **Mi anuncio → Precio** ves el mismo rango de tu
+  zona y si tu precio queda dentro, por encima o muy por debajo, para poner un precio con datos. No
+  es un avalúo.
+- **Limitaciones conocidas:** el rango sale **solo de los anuncios de Innmobiliaria**, no de todo el
+  mercado, y mejora con la cantidad de anuncios: al comienzo muchas zonas dirán «sin datos
+  suficientes». El simulador no incluye subsidios, UVR ni leasing, y no es una oferta ni una
+  aprobación. Las normas se verificaron en octubre de 2026; si cambian, el simulador se actualiza.
+
 ## Features
 
 ### Landing de expectativa (seller-first) · desde Sprint 001
 
 - **Qué hace:** presenta la propuesta a vendedores directos de Bogotá (vender sin comisión), con
-  los dolores reales del mercado, cómo funciona el registro, lo que viene (fotos, compradores
-  verificados, avalúo) y preguntas frecuentes.
+  los dolores reales del mercado, cómo funciona el registro, lo que ya funciona y lo que sigue
+  (compradores verificados, visitas, fotos) y preguntas frecuentes.
 - **Cómo se usa:** es la página principal (`/`). Desplázate para conocer la propuesta; los botones
   **"Publica tu inmueble como fundador"** (arriba y al final) llevan al registro.
 - **Limitaciones conocidas:** solo Bogotá en esta etapa. Está en español y en inglés (ver «Español e inglés (toda la app)»).
@@ -253,7 +305,9 @@ solicitudes de visita.
 - **Qué hace:** cada inmueble tiene una página propia (`/i/…`) que puedes compartir por WhatsApp;
   al pegar el enlace se ve una vista previa con la foto de portada, el barrio y el precio. **Desde el
   Sprint 006** muestra además **cuánto hace que el dueño lo confirmó** («Vivo: el dueño confirmó
-  hace 2 días»), el **sello** con su explicación y **dónde queda** (barrio y localidad).
+  hace 2 días»), el **sello** con su explicación y **dónde queda** (barrio y localidad). **Desde el
+  Sprint 010** trae también **«¿Está caro?»** y, en una venta, **«Tu cuota»** (ver «Decidir con
+  números»).
 - **El sello (un solo sello, tres estados):**
   - **⭐ Propietario verificado:** el equipo vio el Certificado de Tradición y Libertad (CTL) y la
     ficha dice **la fecha en que se expidió** (máximo 30 días cuando se vio).
@@ -387,6 +441,11 @@ solicitudes de visita.
   nunca te escribe por WhatsApp.
 - **¿Cómo dejo de recibir una alerta?** Con el enlace **«Dejar de recibirla: un clic»** que trae cada
   correo (no pide sesión) o desde **Alertas**, con **Borrar**.
+- **¿«¿Está caro?» es un avalúo?** No. Es un rango de lo que piden otros dueños por anuncios
+  parecidos, con cuántos son, de qué fecha y de dónde salen. Con menos de 5 anuncios parecidos no da
+  rango.
+- **¿Dónde quedan mis ingresos cuando uso el simulador?** Solo en tu teléfono. Ninguna petición los
+  lleva; al buscar o crear una alerta solo viaja el precio máximo. Puedes borrarlos desde Herramientas.
 - **¿Se ve mi dirección en el mapa?** No. Tu anuncio aparece como el área de su barrio, nunca como un
   punto, y la dirección no se publica.
 - **¿Por qué mi sello dice «re-verificación pendiente»?** Fuiste verificado antes de que el sello
@@ -396,13 +455,14 @@ solicitudes de visita.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                                                                      |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                                                                  |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                                                                            |
-| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                                                                       |
-| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                                                                    |
-| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                     |
-| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                |
-| 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió» |
-| 009    | Guardar y avisar: favoritos sin cuenta (pasan a tu cuenta al verificar), comparar hasta 4, listas compartidas con notas, alertas por correo con doble confirmación y baja en un clic, resumen diario, navegación Buscar · Guardados · Alertas y precio editable en Mi anuncio                                                        |
+| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                                                                             |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                                                                         |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                                                                                   |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                                                                              |
+| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                                                                           |
+| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                            |
+| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                       |
+| 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió»        |
+| 009    | Guardar y avisar: favoritos sin cuenta (pasan a tu cuenta al verificar), comparar hasta 4, listas compartidas con notas, alertas por correo con doble confirmación y baja en un clic, resumen diario, navegación Buscar · Guardados · Alertas y precio editable en Mi anuncio                                                               |
+| 010    | Decidir con números: «¿Está caro?» como rango P25–P75 con su N, fecha y fuente (nunca un avalúo), datos de la zona, simulador de cuota con el tope del 40 % del Decreto 583 de 2025 y la tasa con su fecha, «lo que puedes pagar» en Buscar y en las alertas, el rango del dueño al publicar, la fila de Comparar y la sección Herramientas |

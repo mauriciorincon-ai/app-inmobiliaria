@@ -16,3 +16,11 @@ export function escribirLocal(clave: string, valor: string): void {
     // sin almacenamiento: la pantalla sigue funcionando con lo que tiene en memoria
   }
 }
+
+export function borrarLocal(clave: string): void {
+  try {
+    window.localStorage.removeItem(clave);
+  } catch {
+    // sin almacenamiento: no hay nada que borrar
+  }
+}

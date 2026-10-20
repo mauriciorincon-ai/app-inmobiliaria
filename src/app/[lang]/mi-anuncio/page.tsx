@@ -6,6 +6,7 @@ import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
 import { LANDING } from "@/textos/landing";
 import { MI_ANUNCIO, VIGENCIA } from "@/textos/mi-anuncio";
+import { PRECIO } from "@/textos/precio";
 import { REFERIDO } from "@/textos/referido";
 import { SOLICITUDES } from "@/textos/solicitudes";
 import { VISITA } from "@/textos/visita";
@@ -41,6 +42,10 @@ export default async function MiAnuncioPage({ params }: PropsLang) {
           vigencia={enIdioma(VIGENCIA.tarjeta, lang)}
           referido={enIdioma(REFERIDO, lang)}
           paquete={enIdioma(LANDING.paquete, lang)}
+          precio={{
+            dueno: enIdioma(PRECIO.dueno, lang),
+            fuente: enIdioma(PRECIO.fuente, lang),
+          }}
           solicitudes={{
             t: enIdioma(SOLICITUDES, lang),
             intenciones: enIdioma(VISITA.intencion, lang),

@@ -1,9 +1,13 @@
+import { lazy, Suspense } from "react";
+import type { TextosRangoDueno } from "@/components/precio/RangoDueno";
 import Campo from "@/components/ui/Campo";
+import { esEnteroEscrito, parsearCOP } from "@/engine/format/cop";
 import { OPERACIONES, TIPOS } from "@/engine/registro/schema";
 import { LOCALIDADES } from "@/engine/zonas/localidades";
 import { sectorPorNombre, sectoresDeLocalidad } from "@/engine/zonas/sectores";
 import type { EstadoFormulario } from "@/engine/registro/wizard";
 import type { Errores } from "@/components/publicar/Paso1Contacto";
+import type { Idioma } from "@/i18n/idiomas";
 import type { Proyectado } from "@/i18n/textos";
 import type { COMUN } from "@/textos/comun";
 import type { PUBLICAR } from "@/textos/publicar";
@@ -11,8 +15,14 @@ import type { PUBLICAR } from "@/textos/publicar";
 export type TextosPaso2 = Proyectado<typeof PUBLICAR.paso2>;
 export type Dominio = Proyectado<typeof COMUN.dominio>;
 
+// El rango de la zona pesa (consulta la base y corre el motor): solo se descarga al llegar a este paso. `lazy` y no
+// `next/dynamic`: el cargador de `next/dynamic` le sumaba ~1,6 KB de script al primer paso, que no lo necesita.
+const RangoDueno = lazy(() => import("@/components/precio/RangoDueno"));
+
 type Props = {
+  lang: Idioma;
   t: TextosPaso2;
+  precio: TextosRangoDueno;
   dominio: Dominio;
   datos: EstadoFormulario;
   errores: Errores;
@@ -25,12 +35,20 @@ const EJEMPLO_HABITACIONES = "3";
 
 // Paso 2 — Datos del inmueble. Lo mínimo indispensable; sin fotos ni documentos.
 export default function Paso2Inmueble({
+  lang,
   t,
+  precio,
   dominio,
   datos,
   errores,
   set,
 }: Props) {
+  const area = /^\d{1,5}$/.test(datos.area_m2.trim())
+    ? Number(datos.area_m2.trim())
+    : null;
+  const valorPrecio = esEnteroEscrito(datos.precio_esperado)
+    ? parsearCOP(datos.precio_esperado)
+    : null;
   return (
     <div className="space-y-5">
       <div>
@@ -172,6 +190,20 @@ export default function Paso2Inmueble({
         hint={t.precio.ayuda}
         placeholder={t.precio.ejemplo}
       />
+      <Suspense fallback={null}>
+        <RangoDueno
+          lang={lang}
+          t={precio}
+          operacion={OPERACIONES.find((o) => o === datos.operacion) ?? ""}
+          tipo={TIPOS.find((v) => v === datos.tipo) ?? ""}
+          localidad={datos.localidad || null}
+          sectorCodigo={
+            sectorPorNombre(datos.localidad, datos.barrio)?.codigo ?? null
+          }
+          area={area}
+          precio={valorPrecio}
+        />
+      </Suspense>
     </div>
   );
 }

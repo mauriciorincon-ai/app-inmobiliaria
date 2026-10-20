@@ -12,6 +12,7 @@ const rutas = [
   "/operador/login",
   "/mi-anuncio",
   "/buscar",
+  "/herramientas",
 ];
 
 for (const ruta of rutas) {

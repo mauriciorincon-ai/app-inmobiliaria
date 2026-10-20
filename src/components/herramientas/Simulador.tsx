@@ -232,7 +232,6 @@ export default function Simulador({
 
       <div className="space-y-4">
         <section
-          aria-live="polite"
           aria-label={t.salidas.grupo}
           className="space-y-3 rounded-2xl border border-purple-200 bg-white p-5"
         >
@@ -276,43 +275,46 @@ export default function Simulador({
               />
             </tbody>
           </table>
-          {r.estado === "cabe" && (
-            <Aviso clase="bg-mint text-ok" simbolo="✓">
-              {t.avisos.cabe}
-            </Aviso>
-          )}
-          {r.estado === "no_cabe" && (
-            <Aviso
-              clase="border border-aviso-borde bg-aviso-tint text-aviso"
-              simbolo="▲"
-              titulo={t.avisos.noCabeTitulo}
-            >
-              {t.avisos.noCabeTexto}
-            </Aviso>
-          )}
-          {r.estado === "sin_ingresos" && (
-            <Aviso clase="bg-sky text-ink" simbolo="i">
-              {t.avisos.sinIngresos}
-            </Aviso>
-          )}
-          {r.estado === "sin_tasa" && (
-            <Aviso clase="bg-sky text-ink" simbolo="i">
-              {t.avisos.sinTasa}
-            </Aviso>
-          )}
-          {r.estado === "invalido" && (
-            <Aviso clase="bg-sky text-ink" simbolo="i">
-              {t.avisos.invalido}
-            </Aviso>
-          )}
-          {conResultado && r.excedeFinanciable && (
-            <Aviso
-              clase="border border-aviso-borde bg-aviso-tint text-aviso"
-              simbolo="▲"
-            >
-              {t.avisos.excede}
-            </Aviso>
-          )}
+          {/* Solo los avisos se anuncian al cambiar: la tabla entera, en cada tecla, abrumaría a un lector de pantalla. */}
+          <div aria-live="polite" className="space-y-3">
+            {r.estado === "cabe" && (
+              <Aviso clase="bg-mint text-ok" simbolo="✓">
+                {t.avisos.cabe}
+              </Aviso>
+            )}
+            {r.estado === "no_cabe" && (
+              <Aviso
+                clase="border border-aviso-borde bg-aviso-tint text-aviso"
+                simbolo="▲"
+                titulo={t.avisos.noCabeTitulo}
+              >
+                {t.avisos.noCabeTexto}
+              </Aviso>
+            )}
+            {r.estado === "sin_ingresos" && (
+              <Aviso clase="bg-sky text-ink" simbolo="i">
+                {t.avisos.sinIngresos}
+              </Aviso>
+            )}
+            {r.estado === "sin_tasa" && (
+              <Aviso clase="bg-sky text-ink" simbolo="i">
+                {t.avisos.sinTasa}
+              </Aviso>
+            )}
+            {r.estado === "invalido" && (
+              <Aviso clase="bg-sky text-ink" simbolo="i">
+                {t.avisos.invalido}
+              </Aviso>
+            )}
+            {conResultado && r.excedeFinanciable && (
+              <Aviso
+                clase="border border-aviso-borde bg-aviso-tint text-aviso"
+                simbolo="▲"
+              >
+                {t.avisos.excede}
+              </Aviso>
+            )}
+          </div>
         </section>
 
         <section

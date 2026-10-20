@@ -160,8 +160,8 @@ export const SIMULADOR = {
   capacidad: {
     titulo: { es: "Lo que puedes pagar", en: "What you can afford" },
     hasta: {
-      es: "Con esos ingresos, esa cuota inicial, ese plazo y esa tasa, puedes pagar hasta {precio}.",
-      en: "With that income, down payment, term and rate, you can afford up to {precio}.",
+      es: "Con esos ingresos, ese plazo, esa tasa y tu cuota inicial (de al menos 30 %), puedes pagar hasta {precio}.",
+      en: "With that income, term, rate and your down payment (at least 30%), you can afford up to {precio}.",
     },
     ver: { es: "Ver lo que puedo pagar", en: "See what I can afford" },
     avisame: {

@@ -84,6 +84,9 @@ export default function CuotaEnFicha({
               )}
             </span>
           </p>
+          {r.excedeFinanciable && (
+            <p className="mt-2 text-sm font-semibold text-aviso">{t.excede}</p>
+          )}
           <Link
             href={enlaceCalculo(precio)}
             prefetch={false}

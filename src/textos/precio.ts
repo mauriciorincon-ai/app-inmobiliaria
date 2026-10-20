@@ -104,8 +104,8 @@ export const PRECIO = {
           en: "Far below its area: check carefully",
         },
         texto: {
-          es: "Pide {pct} % menos que la mediana ({mediana} por m²). Un precio así es una señal frecuente de estafa. Visita antes de pagar, pide el CTL y nunca des anticipos.",
-          en: "It asks {pct}% less than the median ({mediana} per m²). A price like this is a common sign of a scam. View it before you pay, ask for the title record (CTL) and never pay a deposit up front.",
+          es: "Pide {pct} % menos que la mediana ({mediana} por m²). Un precio así puede ser señal de estafa. Visita antes de pagar, pide el CTL y nunca des anticipos.",
+          en: "It asks {pct}% less than the median ({mediana} per m²). A price like this can be a sign of a scam. View it before you pay, ask for the title record (CTL) and never pay a deposit up front.",
         },
       },
       sin_datos: {
@@ -256,6 +256,10 @@ export const PRECIO = {
     sinTasa: {
       es: "Escribe una tasa para ver tu cuota.",
       en: "Enter a rate to see your payment.",
+    },
+    excede: {
+      es: "Ojo: con esa cuota inicial el crédito pasaría del 70 % del valor, el máximo que permite la norma. Sube la cuota inicial al 30 % o más.",
+      en: "Heads up: with that down payment the loan would go over 70% of the value, the maximum the rule allows. Raise the down payment to 30% or more.",
     },
     ajustar: { es: "Ajustar mi cálculo", en: "Adjust my numbers" },
     privado: {

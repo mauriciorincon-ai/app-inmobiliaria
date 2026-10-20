@@ -405,6 +405,16 @@ test.describe("el simulador, la ficha y la alerta", () => {
     // El cálculo de la ficha es el del motor: 429 M ⇒ cuota ≈ $3,8 millones.
     await expect(cuota).toContainText(/≈ \$3\.8\d\d\.\d{3} al mes/);
     await sinViolaciones(page);
+
+    // Con menos de 30 % de cuota inicial el crédito pasa del 70 % que permite la norma: la ficha no lo calla.
+    await sembrarLocal(page, CLAVE_CAPACIDAD, {
+      ingresos: 40_000_000,
+      inicial: 0.1,
+      plazoAnos: 20,
+      tasaEA: null,
+    });
+    await page.goto(ficha);
+    await expect(cuota).toContainText("pasaría del 70 % del valor");
     await page.evaluate((k) => localStorage.removeItem(k), CLAVE_CAPACIDAD);
   });
 });

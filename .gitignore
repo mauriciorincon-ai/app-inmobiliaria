@@ -37,3 +37,6 @@ public/maplibre/
 
 # S6 — datos crudos de Catastro Bogotá (18 MB): se descargan, no se versionan. Ver scripts/sectores/README.md.
 scripts/sectores/crudo/
+
+# S10 — manzanas crudas del valor de referencia (Catastro Bogotá): se descargan, no se versionan. Ver scripts/valor-referencia/README.md.
+scripts/valor-referencia/crudo/

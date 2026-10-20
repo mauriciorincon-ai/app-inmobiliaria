@@ -249,8 +249,8 @@ solicitudes de visita.
 ### Landing de expectativa (seller-first) · desde Sprint 001
 
 - **Qué hace:** presenta la propuesta a vendedores directos de Bogotá (vender sin comisión), con
-  los dolores reales del mercado, cómo funciona el registro, lo que viene (fotos, compradores
-  verificados, avalúo) y preguntas frecuentes.
+  los dolores reales del mercado, cómo funciona el registro, lo que ya funciona y lo que sigue
+  (compradores verificados, visitas, fotos) y preguntas frecuentes.
 - **Cómo se usa:** es la página principal (`/`). Desplázate para conocer la propuesta; los botones
   **"Publica tu inmueble como fundador"** (arriba y al final) llevan al registro.
 - **Limitaciones conocidas:** solo Bogotá en esta etapa. Está en español y en inglés (ver «Español e inglés (toda la app)»).

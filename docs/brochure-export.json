@@ -208,7 +208,7 @@
       "valor": 0,
       "unidad": "USD",
       "fuente": "calculada",
-      "detalle": "Suma de los planes contratados: Cloudflare Workers, Cloudflare R2, Supabase, Brevo y PostHog, todos en su capa gratuita a este volumen. No incluye el dominio propio, que aún no se ha comprado."
+      "detalle": "Suma de los planes contratados: Cloudflare Workers, Cloudflare R2, Supabase, Brevo y PostHog, todos en su capa gratuita a este volumen. No incluye el dominio propio, que se paga aparte."
     },
     {
       "clave": "peso_brochure",

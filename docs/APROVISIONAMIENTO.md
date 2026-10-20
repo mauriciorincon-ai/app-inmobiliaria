@@ -87,7 +87,7 @@ pnpm exec supabase link --project-ref <ref>   # pide la Database password de 1.1
 pnpm exec supabase db push
 ```
 
-Esto aplica a la base cloud TODAS las migraciones de `supabase/migrations/` que aún no estén (hasta el S9 son 13; la primera es `20260715000001_captacion_fundadores.sql`). Antes, `supabase db push --dry-run` lista lo pendiente, y después `supabase migration list --linked` debe salir sin diferencias. La primera migración crea:
+Esto aplica a la base cloud TODAS las migraciones de `supabase/migrations/` que aún no estén (hasta el S10 son 14; la primera es `20260715000001_captacion_fundadores.sql`). Antes, `supabase db push --dry-run` lista lo pendiente, y después `supabase migration list --linked` debe salir sin diferencias. La primera migración crea:
 crea tablas, enums, RLS, grants y las RPC `registrar_fundador`/`ping`. Verificación: en el
 dashboard → **Table Editor** deben aparecer `vendedores`, `inmuebles`, `registro_intentos`.
 
@@ -304,7 +304,12 @@ Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la 
 | `CRON_SECRET`                                                  | antes del deploy                                                                                                                         | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
 | Brevo                                                          | **hecho el 2026-10-19 (S9)**: cuenta, dominio autenticado, remitente verificado y llave; los secretos están en el Worker (ver 6.1 y 6.4) | el mismo remitente verificado sirve para los avisos de la visita y las alertas |
 | Migraciones 10, 11 y 12                                        | ya aplicadas en la nube con tu «sí»                                                                                                      | nada                                                                           |
+| Migración 14 (S10, tasa de vivienda y comparables de precio)   | **ya aplicada en la nube el 2026-10-19** con tu «sí» (14/14, `migration list --linked`)                                                  | nada                                                                           |
 | Migración 13 (S9, rechazo de una alerta que nadie pidió)       | **ya aplicada en la nube** con tu «sí» (13/13)                                                                                           | nada                                                                           |
+
+**La tasa de vivienda (S10) no pide nada tuyo:** el cron diario la lee de un conjunto abierto de la Superintendencia
+Financiera y la guarda con su fecha; no hay llave ni cuenta. `TASA_SIMULACRO` es solo de la CI y las pruebas: **en
+producción NO se define** (con ella el cron no sale a la red y guardaría una tasa fija de prueba).
 
 ### 6.1 [TÚ] Poner los secretos en el Worker
 

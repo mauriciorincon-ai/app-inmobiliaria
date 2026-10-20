@@ -23,11 +23,11 @@ El operador tiene dos identidades que terminan en el mismo lugar: el Gmail perso
 de GitHub dueña del repo (que a su vez se autentica con ese Gmail). Recomendación por
 servicio:
 
-| Servicio               | Entra con                                              | Por qué                                                                                                                                                                                                                                                                               |
-| ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Supabase**           | **"Continue with GitHub"** (la cuenta dueña del repo)  | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                       |
-| **Cloudflare**         | **El Gmail directo (email + contraseña propia + 2FA)** | Cloudflare será la casa de la infraestructura (Workers hoy, R2 en S2, dominio y DNS en H2a). Para la cuenta que sostendrá el dominio conviene una credencial de primera mano, no una cadena de SSO: si un día GitHub/Google fallan o se bloquean, el acceso a tu DNS no cae con ellos |
-| **GitHub** (ya existe) | —                                                      | Sigue como está                                                                                                                                                                                                                                                                       |
+| Servicio               | Entra con                                              | Por qué                                                                                                                                                                                                                                                                                   |
+| ---------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Supabase**           | **"Continue with GitHub"** (la cuenta dueña del repo)  | Es lo más conveniente: cero contraseñas nuevas, el proyecto queda atado a la misma identidad dueña del repo, y las integraciones GitHub↔Supabase futuras (previews por rama, etc.) piden justamente ese vínculo                                                                           |
+| **Cloudflare**         | **El Gmail directo (email + contraseña propia + 2FA)** | Cloudflare será la casa de la infraestructura (Workers, R2 y, desde el S9, el dominio y su DNS). Para la cuenta que sostendrá el dominio conviene una credencial de primera mano, no una cadena de SSO: si un día GitHub/Google fallan o se bloquean, el acceso a tu DNS no cae con ellos |
+| **GitHub** (ya existe) | —                                                      | Sigue como está                                                                                                                                                                                                                                                                           |
 
 **Regla raíz:** como TODO (GitHub → Supabase, y la recuperación de Cloudflare) desemboca en el
 Gmail, ese correo es el punto único de falla — **activa 2FA en el Gmail** si no lo tiene, y
@@ -139,7 +139,7 @@ gh workflow run supabase-ping.yml   # disparo manual para verificar que queda ve
 
 1. Crea la cuenta en <https://dash.cloudflare.com/sign-up> con **el Gmail directo (email +
    contraseña propia) y activa 2FA de una vez** — no uses SSO aquí: esta cuenta sostendrá la
-   infraestructura (Workers hoy, **R2/fotos en S2, dominio y DNS en H2a**) y conviene que no
+   infraestructura (Workers, **R2/fotos y, desde el S9, el dominio y su DNS**) y conviene que no
    dependa de otra sesión para entrar (ver la tabla de cuentas al inicio). Plan free.
 2. En la terminal integrada:
 
@@ -298,13 +298,13 @@ Dos servicios nuevos, los dos **opcionales hasta el ensayo general**: el proveed
 Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la app: 40 consultas al mes,
 5 al día, 3 intentos por comprador; Brevo y Cloudflare, dentro de lo gratis).
 
-| Qué                                                            | Cuándo                                                                                                                      | Qué haces tú                                                                   |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Cuenta de Didit (validación de cédula contra la Registraduría) | **ensayo general** (hasta entonces, en producción «Identificarse» dice «no disponible»; el simulador es solo de desarrollo) | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key    |
-| `CRON_SECRET`                                                  | antes del deploy                                                                                                            | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
-| Brevo                                                          | **antes del deploy** (la cuenta existe desde el S3; sus llaves **no** están en el Worker, ver 6.1)                          | el mismo remitente verificado sirve para los avisos de la visita y las alertas |
-| Migraciones 10, 11 y 12                                        | ya aplicadas en la nube con tu «sí»                                                                                         | nada                                                                           |
-| Migración 13 (S9, rechazo de una alerta que nadie pidió)       | **antes del merge**, con tu «sí» (aditiva)                                                                                  | `supabase db push` y `supabase migration list --linked` debe salir 13/13       |
+| Qué                                                            | Cuándo                                                                                                                                   | Qué haces tú                                                                   |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Cuenta de Didit (validación de cédula contra la Registraduría) | **ensayo general** (hasta entonces, en producción «Identificarse» dice «no disponible»; el simulador es solo de desarrollo)              | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key    |
+| `CRON_SECRET`                                                  | antes del deploy                                                                                                                         | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
+| Brevo                                                          | **hecho el 2026-10-19 (S9)**: cuenta, dominio autenticado, remitente verificado y llave; los secretos están en el Worker (ver 6.1 y 6.4) | el mismo remitente verificado sirve para los avisos de la visita y las alertas |
+| Migraciones 10, 11 y 12                                        | ya aplicadas en la nube con tu «sí»                                                                                                      | nada                                                                           |
+| Migración 13 (S9, rechazo de una alerta que nadie pidió)       | **ya aplicada en la nube** con tu «sí» (13/13)                                                                                           | nada                                                                           |
 
 ### 6.1 [TÚ] Poner los secretos en el Worker
 
@@ -317,8 +317,8 @@ pnpm exec wrangler secret put DIDIT_API_KEY             # solo en el ensayo gene
 pnpm exec wrangler secret list                          # comprueba que los nombres quedaron (no muestra valores)
 ```
 
-**Estos secretos NO estaban puestos en el Worker de producción** (el S8 afirmaba lo contrario; se comprobó
-con `wrangler secret list` al desplegarlo): sin ellos, en producción ni los recordatorios de visita ni los
+**Estado (2026-10-19): los cuatro están puestos** (se subieron con `wrangler secret bulk` desde un archivo temporal;
+`wrangler secret list` muestra los nombres). Antes no estaban, aunque el S8 afirmaba lo contrario. Sin ellos, en producción ni los recordatorios de visita ni los
 resúmenes de alertas salen. Sin `DIDIT_API_KEY` (y sin el simulador) «Identificarse» responde «no
 disponible»: **nunca simula en silencio**. Sin `CRON_SECRET` el trabajo diario responde 503 y no manda
 nada. Sin la llave de servicio, crear una alerta responde «no disponible» y el cron no reclama resúmenes.
@@ -339,6 +339,37 @@ Bogotá).
 > confirmación usan **los mismos cuatro secretos** de arriba y el mismo cron de las 8:00; el tope de correos
 > de alertas es de 250 al día, y los correos de visita pasan siempre primero. Las migraciones 12 y 13 se
 > aplican con `supabase db push` y se comprueban con `supabase migration list --linked`.
+
+### 6.4 [TÚ] Dominio propio y correo real (hecho el 2026-10-19; para repetirlo en otra cuenta o entorno)
+
+Orden que funcionó. Lo que sigue usa `<tu-dominio>` como marcador: el dominio real **no** se escribe en el
+repo (regla 9); vive en el panel de Cloudflare, en Brevo y en `.env.local`.
+
+1. **Dominio al Worker.** Cloudflare → Workers y Pages → tu Worker → pestaña **Domains** → **Add Domain**:
+   la raíz y `www`, con _Production_. Cloudflare crea el DNS y el certificado en 1–5 minutos. No va en
+   `wrangler.jsonc` (la regla de cero enlaces lo prohíbe). Compruébalo: la portada y `/buscar` responden 200 por https.
+2. **Buzón.** Cloudflare → tu dominio → **Email** → **Email Routing**: activa, crea la dirección que será el
+   remitente (p. ej. `alertas@<tu-dominio>`) y apúntala a tu correo personal (verifica ese destino una vez).
+   Compruébalo con `dig MX <tu-dominio>` (tres `route*.mx.cloudflare.net`) y el SPF en TXT.
+3. **Brevo.** Crea la cuenta con el sitio real, verifica el teléfono (sin eso no deja enviar), y en
+   **Settings → Senders, domains, IPs → Domains → Add a domain** elige **Automatic** (conecta con Cloudflare y
+   pone DKIM, DMARC y el código de verificación). Añade el remitente (`alertas@<tu-dominio>`).
+4. **Llave de Brevo.** **SMTP & API → API keys → Generate**: acceso **Restricted** y solo **Transactional
+   email = All**; caduca al año o a los **90 días sin uso** (si el ensayo general pasa de eso sin enviar,
+   genera otra). **No actives** «Activate for API keys» (bloqueo por IP): el Worker no tiene IP fija.
+5. **Secretos.** Los cuatro de 6.1 con `wrangler secret bulk` desde un archivo temporal que se borra.
+6. **URL de la app.** `NEXT_PUBLIC_APP_URL=https://<tu-dominio>` en `.env.local` **antes** de `pnpm deploy:cf`
+   (la lee `next build`: de ahí salen `og:image`, los enlaces de los correos y las campañas). Tras el deploy,
+   comprueba que ninguna página nombra la dirección de pruebas de Cloudflare (la del subdominio gratuito del Worker).
+7. **Prueba real.** Crea una alerta con tu correo, confírmala y comprueba que el correo llega (en la primera
+   semana puede caer en _Promociones_: es normal en un dominio nuevo).
+
+**Aviso conocido (Brevo, 2026-10):** el _subdominio de marca_ que Brevo propone (`mail`) reescribe los enlaces
+por un host de rastreo (`r.<subdominio>`) cuyo certificado tarda hasta 24 h en emitirse; mientras tanto el
+botón del correo muestra «Tu conexión no es privada». Brevo **no permite apagar el rastreo de clics** en
+correos transaccionales (solo Enterprise, por petición) ni quitar el subdominio sin borrar el dominio. Si a las
+24 h sigue roto: borra el dominio en Brevo y vuélvelo a añadir **sin** subdominio de marca (los registros de
+autenticación se conservan). Deuda H-3: el token del enlace (`#c=`/`#t=`) transita por el host de rastreo.
 
 ### 6.3 [TÚ] Probar la cédula con la cuenta real (ensayo general)
 
@@ -367,7 +398,7 @@ Alternativa si no quieres runtime local: un proyecto Supabase cloud "dev" (~5 mi
 - [ ] Registro de prueba visible en el panel.
 - [ ] Ping y vigencia en verde en Actions (disparo manual con `gh workflow run`).
 - [ ] `supabase migration list --linked` sin diferencias.
-- Pendiente para H-4 (publicar de verdad): dominio propio, quitar el `noindex` y el texto legal definitivo
+- Hecho en el S9: el dominio propio, conectado al Worker (ver 6.4). Pendiente para H-4 (publicar de verdad): quitar el `noindex` y el texto legal definitivo
   de `/privacidad` (el correo del responsable ya entra por `NEXT_PUBLIC_RESPONSABLE_CORREO`).
 
 ## Problemas conocidos y su solución

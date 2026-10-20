@@ -11,7 +11,8 @@ import {
 // entonces la otra versión de la MISMA URL. Se recarga en vez de navegar porque (1) la URL no
 // cambia y (2) el fragmento `#t=` de /mi-anuncio y /renovar sobrevive a una recarga, y un redirect
 // de servidor lo perdería. Cada idioma se nombra en sí mismo (`lang` en el botón) para que se
-// reconozca sin leer el idioma actual. Vive en la cabecera de la portada y de las pantallas
+// reconozca sin leer el idioma actual; el nombre accesible empieza por el texto visible («ES, Español»)
+// porque axe 4.14 (WCAG 2.5.3, etiqueta en el nombre) lo exige. Vive en la cabecera de la portada y de las pantallas
 // interiores; el pie no lo repite.
 export default function SelectorIdioma({
   idioma,
@@ -39,7 +40,7 @@ export default function SelectorIdioma({
             type="button"
             lang={i}
             aria-pressed={i === idioma}
-            aria-label={NOMBRE_PROPIO[i].completo}
+            aria-label={`${NOMBRE_PROPIO[i].corto}, ${NOMBRE_PROPIO[i].completo}`}
             onClick={() => elegir(i)}
             className="rounded px-1.5 py-1 text-sm font-semibold text-gray underline-offset-4 aria-pressed:text-ink aria-pressed:underline"
           >

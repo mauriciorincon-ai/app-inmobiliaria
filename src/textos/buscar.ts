@@ -189,5 +189,17 @@ export const BUSCAR = {
     sinFoto: { es: "Sin fotos todavía", en: "No photos yet" },
   },
 
+  // «Lo que puedes pagar» (S10): la búsqueda llega del simulador con el precio máximo; los ingresos nunca viajan.
+  pago: {
+    etiqueta: {
+      es: "Hasta {precio} · lo que puedes pagar",
+      en: "Up to {precio} · what you can afford",
+    },
+    nota: {
+      es: "Según tu cálculo, que vive en tu teléfono: aquí solo llega este precio máximo.",
+      en: "Based on your calculation, which lives on your phone: only this maximum price reaches us.",
+    },
+    ajustar: { es: "Ajustar mi cálculo", en: "Adjust my numbers" },
+  },
   cargando: { es: "Buscando…", en: "Searching…" },
 } as const satisfies Arbol;

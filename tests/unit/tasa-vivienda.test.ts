@@ -79,6 +79,22 @@ describe("actualizarTasa", () => {
   });
 });
 
+describe("actualizarTasa: la RPC que rechaza la promesa", () => {
+  it("se vuelve fallo_base y no lanza (la corrida del cron sigue)", async () => {
+    const c = {
+      rpc: vi.fn(async () => {
+        throw new Error("red caída");
+      }),
+    };
+    expect(
+      await actualizarTasa(
+        c as never,
+        responde(RESPUESTA_SIMULACRO) as unknown as typeof fetch,
+      ),
+    ).toBe("fallo_base");
+  });
+});
+
 describe("fetchDeTasa (el simulacro solo con TASA_SIMULACRO=1)", () => {
   it("sin la variable usa el fetch real, aunque llegue la cabecera de prueba", () => {
     vi.stubEnv("TASA_SIMULACRO", "");

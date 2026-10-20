@@ -60,12 +60,17 @@ export async function actualizarTasa(
   }
   const tasa = parsearTasa(cuerpo);
   if (!tasa) return "sin_datos";
-  const { error } = await supabase.rpc("guardar_tasa_vivienda", {
-    p_fecha_corte: tasa.fechaCorte,
-    p_tasa_ea: tasa.tasaEA,
-    p_creditos: tasa.creditos,
-    p_entidades: tasa.entidades,
-    p_fuente: tasa.fuente,
-  });
-  return error ? "fallo_base" : "guardada";
+  try {
+    const { error } = await supabase.rpc("guardar_tasa_vivienda", {
+      p_fecha_corte: tasa.fechaCorte,
+      p_tasa_ea: tasa.tasaEA,
+      p_creditos: tasa.creditos,
+      p_entidades: tasa.entidades,
+      p_fuente: tasa.fuente,
+    });
+    return error ? "fallo_base" : "guardada";
+  } catch {
+    // La promesa de la RPC puede rechazarse (red caída): el paso «tasa» jamás tumba la corrida.
+    return "fallo_base";
+  }
 }

@@ -9,7 +9,15 @@ import {
   type AnuncioPorEvaluar,
   type RangoConDatos,
 } from "@/engine/precio/presentacion";
-import { rangoDePrecio, type Comparable } from "@/engine/precio/comparables";
+import {
+  FACTOR_TUKEY,
+  MARGEN_AREA,
+  MINIMO_COMPARABLES,
+  UMBRAL_SOSPECHOSO,
+  rangoDePrecio,
+  type Comparable,
+} from "@/engine/precio/comparables";
+import { PRECIO } from "@/textos/precio";
 
 // Lo que la interfaz de «¿Está caro?» pinta (S10): la escala de la barra, las cifras en millones y el reparto de los
 // anuncios de Comparar en grupos de comparables.
@@ -153,5 +161,25 @@ describe("grupos de comparables para Comparar", () => {
     const casa = salida.get("casa");
     expect(casa?.estado).toBe("sin_datos");
     expect(casa && casa.estado === "sin_datos" ? casa.n : -1).toBe(0);
+  });
+});
+
+describe("los textos de «¿Está caro?» dicen lo mismo que las constantes del método", () => {
+  const pct = (f: number) => String(Math.round(f * 100));
+  const num = (n: number, idioma: "es" | "en") =>
+    String(n).replace(".", idioma === "es" ? "," : ".");
+
+  it("±30 % de área, vallas de 1,5 veces y el mínimo de comparables", () => {
+    for (const idioma of ["es", "en"] as const) {
+      const pasos = PRECIO.detalle.como.pasos.map((p) => p[idioma]);
+      expect(pasos[0]).toContain(`±${pct(MARGEN_AREA)}`);
+      expect(pasos[1]).toContain(num(FACTOR_TUKEY, idioma));
+      expect(pasos[1]).toContain("{minimo}");
+    }
+    expect(MINIMO_COMPARABLES).toBe(5);
+  });
+
+  it("«sospechosamente barato» es 30 % bajo la mediana: lo dice el manual y lo implementa la constante", () => {
+    expect(UMBRAL_SOSPECHOSO).toBe(0.3);
   });
 });

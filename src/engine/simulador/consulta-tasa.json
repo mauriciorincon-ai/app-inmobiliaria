@@ -1,0 +1,6 @@
+{
+  "conjunto": "https://www.datos.gov.co/resource/qzsc-9esp.json",
+  "producto": "Adquisición de vivienda no vis (colocación en pesos)",
+  "tipoTasa": "FS",
+  "select": "fecha_corte, sum(tasa_efectiva_promedio * montos_desembolsados) / sum(montos_desembolsados) as tasa, sum(numero_de_creditos) as creditos, count(distinct nombre_entidad) as entidades"
+}

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Innmobiliaria — Guía de prueba (Sprint 005)</title>
+    <title>Innmobiliaria — Guía de prueba (Sprint 010)</title>
     <style>
       :root {
         --bg: #fbf9f6;
@@ -267,6 +267,16 @@
           color: #a5b4fc;
         }
       }
+      .o-s10 {
+        background: #fce7f3;
+        color: #9d174d;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s10 {
+          background: #500724;
+          color: #f9a8d4;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -315,23 +325,22 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 009 — Guardar y avisar</h1>
+      <h1>Sprint 010 — Decidir con números</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s9">Nuevo · S9</span>. Este sprint hace que el
-        comprador vuelva solo: guarda anuncios con un corazón (sin cuenta), los
-        compara, arma listas para decidir en pareja y recibe por correo un
-        resumen diario de lo nuevo y de lo que bajó de precio (bloque M). Los
-        avisos van solo por correo: Innmobiliaria sigue sin enviar nada por
-        WhatsApp.
+        <span class="origen o-s10">Nuevo · S10</span>. Este sprint ayuda al
+        comprador a decidir con números: ve si un precio está en línea con su
+        zona (un rango con su N, su fecha y su fuente, nunca un avalúo), los
+        datos de la zona y un simulador de cuota que filtra la búsqueda y llena
+        una alerta, sin que sus ingresos salgan del teléfono (bloque N).
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-009/guardar-y-avisar</code>. En un teléfono real cuando el
-        filtro lo pida.
+        <code>sprint-010/decidir-con-numeros</code>. En un teléfono real cuando
+        el filtro lo pida.
       </div>
 
       <div class="barra">
@@ -345,9 +354,10 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
-          <button data-filtro="s9" aria-pressed="false">
-            Solo lo nuevo del S9
+          <button data-filtro="s10" aria-pressed="false">
+            Solo lo nuevo del S10
           </button>
+          <button data-filtro="s9" aria-pressed="false">Solo lo del S9</button>
           <button data-filtro="s8" aria-pressed="false">Solo lo del S8</button>
           <button data-filtro="s7" aria-pressed="false">Solo lo del S7</button>
           <button data-filtro="s6" aria-pressed="false">Solo lo del S6</button>
@@ -1693,7 +1703,8 @@
                 precio, área, precio por m², habitaciones, sello del dueño y
                 «vivo hace». En el teléfono se desliza de lado. El quinto
                 <b>no se marca</b> y dice que hay que quitar uno (máximo 4). No
-                hay fila «¿Está caro?» todavía: es de otro sprint.
+                La fila <b>«¿Está caro?»</b> (Sprint 010) se prueba en el bloque
+                N.
               </p>
             </div>
           </li>
@@ -1750,15 +1761,212 @@
             <div>
               <label for="m10" class="qué"
                 >En el <b>teléfono</b>, recorre la barra de abajo
-                <b>Buscar · Guardados · Alertas</b> y abre el menú de filtros y
-                el teclado en Nueva alerta<span class="origen o-s9"
+                <b>Buscar · Guardados · Alertas · Herramientas</b> y abre el
+                menú de filtros y el teclado en Nueva alerta<span
+                  class="origen o-s9"
                   >Nuevo · S9</span
                 ></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la barra queda fija abajo y marca la sección
                 actual; no tapa el final de la página ni el botón «Crear
-                alerta»; no hay «Herramientas» (llega en otro sprint).
+                alerta». Desde el Sprint 010 son cuatro (la cuarta,
+                «Herramientas», se prueba en el bloque N).
+                <b>Es de FORMA: tu juicio de diseño.</b>
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ================= BLOQUE N ================= -->
+      <section class="bloque">
+        <h2><span class="letra">N</span> Decidir con números</h2>
+        <p class="intro">
+          El comprador ve si un precio está en línea con su zona y calcula
+          cuánto puede pagar. Todo es un <b>rango</b> y <b>un cálculo</b>: nunca
+          un avalúo ni una aprobación de crédito. Si en tu zona hay menos de 5
+          anuncios parecidos, la respuesta honesta es «Sin datos suficientes».
+          La tasa de referencia se guarda con el cron: las pruebas marcadas
+          necesitan el servidor desplegado.
+        </p>
+        <ul>
+          <li data-origen="s10 clave">
+            <input type="checkbox" id="n1" />
+            <div>
+              <label for="n1" class="qué"
+                >En tu <b>teléfono</b>, abre la ficha de un anuncio en venta,
+                lee la tarjeta <b>«¿Está caro?»</b> y toca
+                <b>«Ver el detalle»</b
+                ><span class="origen o-s10">Nuevo · S10</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> una de cuatro respuestas, siempre con símbolo y
+                texto: <b>En rango</b>, <b>Por encima del rango</b>,
+                <b>Sospechosamente barato</b> o <b>Sin datos suficientes</b>. El
+                detalle muestra una barra con el rango (P25–P75), con
+                <b>cuántos anuncios entraron, la fecha y la fuente</b>, y «Cómo
+                lo calculamos» dice que es el precio que piden los dueños, no el
+                de cierre, y <b>no un avalúo</b>. «Datos de la zona» trae tres
+                cifras, cada una con su fuente, y la de Catastro dice que es
+                solo del terreno. <b>Es tu juicio del copy y de las cifras.</b>
+              </p>
+              <p class="mal">
+                Mala señal: la palabra «avalúo» como si lo fuera, un solo valor
+                sin rango, un número sin fecha o sin fuente, o un rango con
+                menos de 5 anuncios.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10 clave">
+            <input type="checkbox" id="n2" />
+            <div>
+              <label for="n2" class="qué"
+                >En <b>Herramientas</b>, escribe un precio, una cuota inicial,
+                un plazo y <b>tus ingresos reales</b>; compara la cuota con la
+                de un simulador de tu banco<span class="origen o-s10"
+                  >Nuevo · S10</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la cuota es parecida a la del banco (puede
+                diferir por seguros y comisiones). Dice si <b>cabe</b> o
+                <b>pasa</b> del <b>40 %</b> de tus ingresos, cita el
+                <b>Decreto 583 de 2025</b>, y muestra el aviso «Un cálculo, no
+                una aprobación». La tasa de referencia trae su
+                <b>fecha de corte</b> y su fuente; si escribes la tuya, el
+                simulador la usa y lo dice.
+              </p>
+              <p class="mal">
+                Si ves un tope del 30 % (norma derogada), una tasa sin fecha o
+                una frase que suene a «te aprobamos», avisa.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10 clave">
+            <input type="checkbox" id="n3" />
+            <div>
+              <label for="n3" class="qué"
+                >Con el servidor desplegado, abre <b>Herramientas</b> al día
+                siguiente del despliegue (después del cron de las 8:00 a. m. de
+                Bogotá)<span class="origen o-s10">Nuevo · S10</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la tasa de referencia lleva una fecha de corte
+                reciente de la Superintendencia Financiera (suele ir una o dos
+                semanas atrás) y <b>no</b> dice «Aún no hemos guardado una tasa
+                propia». Si la fecha tiene más de 30 días, avisa que puede estar
+                desactualizada.
+              </p>
+              <p class="mal">
+                Si sigue diciendo «la última que leímos», el cron no está
+                guardando la tasa: mira en los registros del Worker la línea
+                «cron» y su campo «tasa».
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10">
+            <input type="checkbox" id="n4" />
+            <div>
+              <label for="n4" class="qué"
+                >Con tus ingresos puestos, toca
+                <b>«Ver lo que puedo pagar»</b> y, desde Herramientas,
+                <b>«Avísame de lo que puedo pagar»</b
+                ><span class="origen o-s10">Nuevo · S10</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> Buscar se abre ya filtrado por ese precio
+                máximo, con el rótulo «Hasta $X · lo que puedes pagar». La
+                alerta nueva trae ese mismo precio. El precio máximo está
+                redondeado hacia abajo al millón.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10">
+            <input type="checkbox" id="n5" />
+            <div>
+              <label for="n5" class="qué"
+                >Abre las herramientas del navegador (pestaña <b>Red</b>),
+                escribe tus ingresos y toca los botones; luego mira
+                «Almacenamiento local» y toca
+                <b>«Borrar mis números de este teléfono»</b
+                ><span class="origen o-s10">Nuevo · S10</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> <b>ninguna petición</b> lleva tus ingresos (en
+                el enlace solo viaja el precio máximo). Los ingresos viven en el
+                almacenamiento de este teléfono (clave
+                <code>inn:capacidad:v1</code>) y desaparecen al borrarlos.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10">
+            <input type="checkbox" id="n6" />
+            <div>
+              <label for="n6" class="qué"
+                >Con tu cálculo hecho, abre la ficha de una venta; luego borra
+                tus números y vuelve a abrirla<span class="origen o-s10"
+                  >Nuevo · S10</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Tu cuota» dice cuánto sería la cuota de ese
+                anuncio y si <b>cabe</b> o <b>pasa</b> de lo que puedes pagar.
+                Sin cálculo guardado dice «Calcula tu cuota» y te lleva a
+                Herramientas con el precio puesto.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10">
+            <input type="checkbox" id="n7" />
+            <div>
+              <label for="n7" class="qué"
+                >Como dueño, en <b>Publicar</b> (paso 2) elige operación, tipo,
+                localidad, barrio y área, y luego escribe un precio; después
+                abre <b>Mi anuncio → Precio</b
+                ><span class="origen o-s10">Nuevo · S10</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> aparece «Lo que piden por anuncios parecidos»
+                con el rango de tu zona para tu área, cuántos anuncios entraron
+                y de qué fecha. Con el precio puesto dice si queda dentro, por
+                encima o muy por debajo («revisa que no falte un cero»). En Mi
+                anuncio es el mismo rango y tu anuncio no se cuenta a sí mismo.
+                Sin datos suficientes lo dice con cuántos hay.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10">
+            <input type="checkbox" id="n8" />
+            <div>
+              <label for="n8" class="qué"
+                >En Guardados, marca 2 o 3 anuncios en <b>Comparar</b> y mira la
+                fila <b>«¿Está caro?»</b
+                ><span class="origen o-s10">Nuevo · S10</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cada columna muestra el estado de su anuncio
+                (con símbolo y texto) y lleva a su detalle. Mientras llegan los
+                datos dice «Calculando…».
+              </p>
+            </div>
+          </li>
+          <li data-origen="s10">
+            <input type="checkbox" id="n9" />
+            <div>
+              <label for="n9" class="qué"
+                >En el <b>teléfono</b>, mira la barra de abajo con
+                <b>Herramientas</b> y la pantalla del simulador<span
+                  class="origen o-s10"
+                  >Nuevo · S10</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cuatro secciones que caben sin cortarse, el
+                simulador sin desbordar de lado y el teclado numérico al
+                escribir precio e ingresos.
                 <b>Es de FORMA: tu juicio de diseño.</b>
               </p>
             </div>
@@ -1767,7 +1975,7 @@
       </section>
 
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–M), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–N), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -1795,6 +2003,19 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 010 (2026-10-19):</b><br />
+          <b>Nuevo:</b> bloque N (decidir con números: «¿Está caro?» como rango,
+          datos de la zona, simulador de cuota con la tasa y su fecha, lo que
+          puedes pagar en Buscar y en las alertas, el rango del dueño y la fila
+          de Comparar): 9 pruebas nuevas, 3 del gate mínimo ⭐.<br />
+          <b>Mejorado:</b> M6 y M10 (Comparar ya trae «¿Está caro?» y la barra
+          del teléfono tiene cuatro secciones).<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 84 pruebas, 28 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          8).
+        </p>
         <p>
           <b>Sprint 009 (2026-10-18):</b><br />
           <b>Nuevo:</b> bloque M (guardar y avisar: corazón, comparar, listas
@@ -1877,7 +2098,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v7:";
+        var CLAVE = "guia-inmobiliaria-v8:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

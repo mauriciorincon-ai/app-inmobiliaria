@@ -5,7 +5,7 @@ hito: H-2
 opened: 2026-10-19
 closed: 2026-10-19
 branch: sprint-010/decidir-con-numeros
-pr: "pendiente"
+pr: "#35"
 ---
 
 # Sprint 010 «Decidir con números» — cierre ejecutivo

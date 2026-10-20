@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import { extraerTokenDeHash } from "@/engine/token/token";
 import { calcularScore, DESCRIPCION_MIN } from "@/engine/score/score";
@@ -10,6 +11,7 @@ import SubidorFotos from "@/components/mi-anuncio/SubidorFotos";
 import GaleriaEditable from "@/components/mi-anuncio/GaleriaEditable";
 import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
 import EditorPrecio from "@/components/mi-anuncio/EditorPrecio";
+import type { TextosRangoDueno } from "@/components/precio/RangoDueno";
 import OptInContacto from "@/components/mi-anuncio/OptInContacto";
 import SolicitudesVisita, {
   type ContextoSolicitudes,
@@ -33,6 +35,11 @@ import type { MI_ANUNCIO } from "@/textos/mi-anuncio";
 
 export type TextosMiAnuncio = Proyectado<typeof MI_ANUNCIO>;
 
+// El rango de la zona pesa (consulta la base y corre el motor): se descarga cuando la pantalla ya está lista.
+const RangoDueno = dynamic(() => import("@/components/precio/RangoDueno"), {
+  loading: () => null,
+});
+
 // Prefijo del enlace privado que se muestra de ejemplo; es parte de la URL, no se traduce.
 const PREFIJO_ENLACE = "mi-anuncio#t=";
 
@@ -47,6 +54,7 @@ export default function MiAnuncio({
   referido,
   paquete,
   solicitudes,
+  precio,
 }: {
   lang: Idioma;
   t: TextosMiAnuncio;
@@ -55,6 +63,7 @@ export default function MiAnuncio({
   referido: TextosReferido;
   paquete: TextosPaquete;
   solicitudes: ContextoSolicitudes;
+  precio: TextosRangoDueno;
 }) {
   const [estado, setEstado] = useState<Estado>("cargando");
   const [anuncio, setAnuncio] = useState<MiAnuncioData | null>(null);
@@ -198,6 +207,20 @@ export default function MiAnuncio({
           valorInicial={anuncio.precio_esperado}
           onGuardado={recargar}
         />
+        <div className="mt-3">
+          <RangoDueno
+            lang={lang}
+            t={precio}
+            operacion={anuncio.operacion}
+            tipo={anuncio.tipo}
+            localidad={null}
+            sectorCodigo={anuncio.sector_codigo}
+            area={anuncio.area_m2}
+            precio={anuncio.precio_esperado}
+            slug={anuncio.slug}
+            sinGuia
+          />
+        </div>
       </section>
 
       <section aria-labelledby="contacto-titulo">

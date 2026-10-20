@@ -17,8 +17,9 @@ import {
   leerFiltros,
   type Filtros,
 } from "@/engine/busqueda/filtros";
+import { formatearCOP } from "@/engine/format/cop";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
-import { enIdioma } from "@/i18n/textos";
+import { enIdioma, rellenar } from "@/i18n/textos";
 import { crearClienteAnon } from "@/lib/supabase/server";
 import { BUSCAR } from "@/textos/buscar";
 import { COMUN } from "@/textos/comun";
@@ -61,9 +62,13 @@ export default async function BuscarPage({
   searchParams,
 }: PropsLang & { searchParams: Parametros }) {
   const lang = await leerIdioma(params);
-  const filtros = leerFiltros(await searchParams);
+  const parametros = await searchParams;
+  const filtros = leerFiltros(parametros);
   const t = enIdioma(BUSCAR, lang);
   const promesa = buscar(filtros);
+  // El simulador manda aquí con `pago=1` y el precio máximo (`max`): la página dice de dónde sale ese tope. Sin
+  // `max` válido no hay nada que rotular.
+  const conPago = parametros.pago === "1" && filtros.precioMax !== undefined;
 
   return (
     <>
@@ -100,6 +105,24 @@ export default async function BuscarPage({
               <p className="mt-1 text-sm text-gray">
                 {t.lista.primeraVez.detalle}
               </p>
+            </div>
+          )}
+          {conPago && filtros.precioMax !== undefined && (
+            <div className="mb-4 rounded-2xl bg-mint p-4">
+              <p className="font-semibold text-ok">
+                <span aria-hidden="true">✓ </span>
+                {rellenar(t.pago.etiqueta, {
+                  precio: formatearCOP(filtros.precioMax, lang),
+                })}
+              </p>
+              <p className="mt-1 text-sm text-gray">{t.pago.nota}</p>
+              <Link
+                href="/herramientas"
+                prefetch={false}
+                className="mt-1 inline-block text-sm font-semibold text-purple-600 underline underline-offset-4"
+              >
+                {t.pago.ajustar}
+              </Link>
             </div>
           )}
           <div className="flex flex-wrap items-baseline justify-between gap-2">

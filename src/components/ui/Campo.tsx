@@ -20,7 +20,7 @@ type Props = Base &
     | {
         control?: "text";
         type?: string;
-        inputMode?: "text" | "numeric" | "tel";
+        inputMode?: "text" | "numeric" | "decimal" | "tel";
         autoComplete?: string;
       }
     | { control: "textarea" }

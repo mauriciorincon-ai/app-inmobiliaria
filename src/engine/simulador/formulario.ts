@@ -2,7 +2,6 @@
 // entran a `simular`, y de vuelta. Puro. Los ingresos solo existen en el teléfono; lo que sale de aquí hacia un enlace
 // es un PRECIO MÁXIMO, nunca los ingresos.
 import { esEnteroEscrito, parsearCOP } from "@/engine/format/cop";
-import { aParams, PRECIO_MAX } from "@/engine/busqueda/filtros";
 import type { Capacidad } from "./capacidad-local";
 import {
   PLAZO_MAX_ANOS,
@@ -30,6 +29,12 @@ export const CAMPOS_INICIALES: CamposSimulador = {
   tasa: "",
   ingresos: "",
 };
+
+/**
+ * El precio más alto que acepta la búsqueda (el mismo `PRECIO_MAX` de `@/engine/busqueda/filtros`, que una prueba compara).
+ * No se importa de allí: `filtros` arrastra zod y esta pieza viaja en la ficha pública.
+ */
+export const TOPE_PRECIO = 900_000_000_000;
 
 /** Los plazos que ofrece la lista: de 5 a 30 años, de 5 en 5 (la norma da el mínimo y el máximo). */
 export const PLAZOS: readonly number[] = Array.from(
@@ -167,19 +172,20 @@ export function precioMaximoDe(
   );
   if (max === null) return null;
   const redondeado = Math.floor(max / 1_000_000) * 1_000_000;
-  return redondeado > 0 ? Math.min(redondeado, PRECIO_MAX) : null;
+  return redondeado > 0 ? Math.min(redondeado, TOPE_PRECIO) : null;
 }
+
+// Los enlaces se arman a mano, en el mismo orden fijo que `aParams` (op, max): una prueba comprueba que la búsqueda los
+// lee como filtros. Solo llevan el precio máximo, jamás los ingresos.
 
 /** `/buscar` con el precio máximo; `pago=1` hace que la página diga de dónde sale ese tope. */
 export function enlaceBuscar(precioMax: number): string {
-  const p = aParams({ operacion: "venta", precioMax });
-  p.set("pago", "1");
-  return `/buscar?${p.toString()}`;
+  return `/buscar?op=venta&max=${Math.round(precioMax)}&pago=1`;
 }
 
 /** La alerta nueva ya llena con el precio máximo. */
 export function enlaceAlerta(precioMax: number): string {
-  return `/alertas/nueva?${aParams({ operacion: "venta", precioMax }).toString()}`;
+  return `/alertas/nueva?op=venta&max=${Math.round(precioMax)}`;
 }
 
 /** La ficha manda a `/herramientas` con el precio del anuncio. */

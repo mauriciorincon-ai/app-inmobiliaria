@@ -1,7 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { extraerTokenDeHash } from "@/engine/token/token";
 import { calcularScore, DESCRIPCION_MIN } from "@/engine/score/score";
 import { crearClienteNavegador } from "@/lib/supabase/client";
@@ -36,9 +35,7 @@ import type { MI_ANUNCIO } from "@/textos/mi-anuncio";
 export type TextosMiAnuncio = Proyectado<typeof MI_ANUNCIO>;
 
 // El rango de la zona pesa (consulta la base y corre el motor): se descarga cuando la pantalla ya está lista.
-const RangoDueno = dynamic(() => import("@/components/precio/RangoDueno"), {
-  loading: () => null,
-});
+const RangoDueno = lazy(() => import("@/components/precio/RangoDueno"));
 
 // Prefijo del enlace privado que se muestra de ejemplo; es parte de la URL, no se traduce.
 const PREFIJO_ENLACE = "mi-anuncio#t=";
@@ -208,18 +205,20 @@ export default function MiAnuncio({
           onGuardado={recargar}
         />
         <div className="mt-3">
-          <RangoDueno
-            lang={lang}
-            t={precio}
-            operacion={anuncio.operacion}
-            tipo={anuncio.tipo}
-            localidad={null}
-            sectorCodigo={anuncio.sector_codigo}
-            area={anuncio.area_m2}
-            precio={anuncio.precio_esperado}
-            slug={anuncio.slug}
-            sinGuia
-          />
+          <Suspense fallback={null}>
+            <RangoDueno
+              lang={lang}
+              t={precio}
+              operacion={anuncio.operacion}
+              tipo={anuncio.tipo}
+              localidad={null}
+              sectorCodigo={anuncio.sector_codigo}
+              area={anuncio.area_m2}
+              precio={anuncio.precio_esperado}
+              slug={anuncio.slug}
+              sinGuia
+            />
+          </Suspense>
         </div>
       </section>
 

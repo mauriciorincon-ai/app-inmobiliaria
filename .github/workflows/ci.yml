@@ -75,6 +75,8 @@ jobs:
       # del mes solo se pueden ampliar con el simulador: una corrida larga no se queda sin cupo.
       IDENTIDAD_MOCK: "1"
       BREVO_MOCK: "1"
+      # S10: el paso «tasa» del cron no sale a la red en la CI (respuesta fija; ADR 018).
+      TASA_SIMULACRO: "1"
       IDENTIDAD_TOPE_DIA: "100000"
       IDENTIDAD_TOPE_MES: "100000"
       # S9: el tope diario de correos de alerta (solo se respeta con Brevo en simulacro).

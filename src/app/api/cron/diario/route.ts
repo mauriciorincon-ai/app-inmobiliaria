@@ -9,6 +9,7 @@ import {
   topeHoy,
 } from "@/lib/alertas-correo";
 import { avisarVisita } from "@/lib/visitas-correo";
+import { actualizarTasa, fetchDeTasa } from "@/lib/tasa-vivienda";
 import { json } from "@/lib/visitas-http";
 
 // El trabajo diario (S8, ADR 016): a las 8:00 de Bogotá lo dispara el Cron Trigger del Worker (su
@@ -20,6 +21,9 @@ import { json } from "@/lib/visitas-http";
 //      sitio en el cupo diario de correos. La base reclama a lo sumo un resumen por alerta y día.
 //   3. Purga Ley 1581: compradores sin verificar de 30 días y códigos vencidos de 7; alertas sin confirmar de 7
 //      y dadas de baja de 30; enlaces, historial de precios y cupos viejos.
+//   4. La tasa de vivienda (S10, ADR 018): una lectura agregada del conjunto abierto de la Superfinanciera, guardada con
+//      su fecha de corte. Si falla, se registra y la corrida sigue: la interfaz usa la última guardada. No cambia el
+//      200/500 de la corrida. Con `TASA_SIMULACRO=1`, `x-tasa-simulacro: fallo` simula la caída del conjunto.
 // Correr dos veces el mismo día no repite nada. Responde los conteos, sin datos de nadie. Con Brevo en
 // simulacro (CI y pruebas), la cabecera `x-alertas-tope` cambia el tope del día para ESTA corrida y
 // `x-alertas-solo` la limita a una alerta (las pruebas del cron no se llevan los resúmenes de otras pruebas).
@@ -80,11 +84,20 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  const tasa = await actualizarTasa(
+    supabase,
+    fetchDeTasa(req.headers.get("x-tasa-simulacro")),
+  );
+  if (tasa !== "guardada") {
+    log.warn({ evento: "tasa", resultado: tasa }, "la tasa no se actualizó");
+  }
+
   const salida = {
     recordatorios: (ids ?? []).length,
     correos: { enviados, fallidos },
     resumenes,
     purga: purga ?? null,
+    tasa,
   };
   log.info(
     {
@@ -92,6 +105,7 @@ export async function POST(req: NextRequest) {
       ...salida.correos,
       recordatorios: salida.recordatorios,
       resumenes,
+      tasa,
       ms: Date.now() - t0,
     },
     "ok",

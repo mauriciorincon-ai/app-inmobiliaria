@@ -119,6 +119,10 @@ export default function Simulador({
   const numero = new Intl.NumberFormat(localeIntl(lang), {
     maximumFractionDigits: 1,
   });
+  // La tasa se muestra con los dos decimales con que se calcula (15,48 %), no redondeada a 15,5.
+  const numeroTasa = new Intl.NumberFormat(localeIntl(lang), {
+    maximumFractionDigits: 2,
+  });
   const error = (campo: keyof CamposSimulador) =>
     lectura.invalidos.has(campo) ? t.campos.invalido : undefined;
   const conResultado =
@@ -180,13 +184,15 @@ export default function Simulador({
         <div className="space-y-1 text-xs text-mute">
           {lectura.origenTasa === "escrita" ? (
             <p>
-              {rellenar(t.tasa.tuya, { tasa: numero.format(lectura.tasaEA!) })}
+              {rellenar(t.tasa.tuya, {
+                tasa: numeroTasa.format(lectura.tasaEA!),
+              })}
             </p>
           ) : (
             <>
               <p>
                 {rellenar(t.tasa.referencia, {
-                  tasa: numero.format(tasa.tasaEA),
+                  tasa: numeroTasa.format(tasa.tasaEA),
                   fecha,
                   fuente: t.fuenteTasa,
                 })}

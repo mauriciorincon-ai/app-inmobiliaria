@@ -9638,10 +9638,6 @@ window.DATOS_187 = {
       "id": "parqueadero_no_lo_dice"
      },
      {
-      "id": "derechos_notariales",
-      "monto": 0
-     },
-     {
       "id": "impuesto_registro"
      },
      {
@@ -12756,8 +12752,8 @@ window.DATOS_187 = {
    "precioVerdadero": {
     "estado": "calculado",
     "desde": 259950000,
-    "alMenos": 262948800,
-    "clase": "general",
+    "alMenos": 261449400,
+    "clase": "vis",
     "partidas": [
      {
       "id": "precio_desde",
@@ -12765,19 +12761,16 @@ window.DATOS_187 = {
      },
      {
       "id": "derechos_registro",
-      "monto": 2998800
+      "monto": 1499400
      }
     ],
     "faltantes": [
-     {
-      "id": "supera_tope_vis"
-     },
      {
       "id": "parqueadero_no_lo_dice"
      },
      {
       "id": "derechos_notariales",
-      "monto": 810000
+      "monto": 405000
      },
      {
       "id": "impuesto_registro"
@@ -13132,8 +13125,8 @@ window.DATOS_187 = {
    "precioVerdadero": {
     "estado": "calculado",
     "desde": 260000000,
-    "alMenos": 262999400,
-    "clase": "general",
+    "alMenos": 261499700,
+    "clase": "vis",
     "partidas": [
      {
       "id": "precio_desde",
@@ -13141,16 +13134,19 @@ window.DATOS_187 = {
      },
      {
       "id": "derechos_registro",
-      "monto": 2999400
+      "monto": 1499700
      }
     ],
     "faltantes": [
+     {
+      "id": "segmento_no_lo_dice"
+     },
      {
       "id": "parqueadero_no_lo_dice"
      },
      {
       "id": "derechos_notariales",
-      "monto": 810100
+      "monto": 405100
      },
      {
       "id": "impuesto_registro"

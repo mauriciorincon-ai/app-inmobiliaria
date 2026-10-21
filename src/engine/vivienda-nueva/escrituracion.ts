@@ -30,7 +30,8 @@ export type ConceptoNotarial = Concepto & {
     sobre_exceso_por_mil: number;
   };
   vis: { factor: number };
-  vip: { exento: boolean };
+  /** `verificado: false` ⇒ la exención no se leyó en la norma notarial: no se calcula ni se afirma. */
+  vip: { exento: boolean; verificado?: boolean };
 };
 
 export type TarifasEscrituracion = {
@@ -39,6 +40,8 @@ export type TarifasEscrituracion = {
     smmlv: number;
     smmlv_aglomeraciones: number;
     municipios_aglomeracion_bogota: readonly string[];
+    /** Ciudades principales de las otras aglomeraciones con tope de 150 salarios (Medellín, Cali, Barranquilla…). */
+    otras_aglomeraciones: readonly string[];
   };
   conceptos: readonly Concepto[];
 };
@@ -56,11 +59,16 @@ function vigente<T extends Concepto>(
 
 const aCentena = (n: number) => Math.round(n / 100) * 100;
 
-/** El tope de precio de la VIS en pesos de este año: 150 salarios en la aglomeración de Bogotá, 135 en el resto. */
+/**
+ * El tope de precio de la VIS en pesos de este año: 150 salarios en las aglomeraciones urbanas del decreto (Bogotá y sus
+ * municipios; la ciudad principal de Medellín, Cali, Barranquilla, Cartagena, Bucaramanga y Cúcuta) y 135 en el resto.
+ */
 export function topeVis(ciudad: string, t: TarifasEscrituracion): number {
-  const enAglomeracion = t.topes_vis.municipios_aglomeracion_bogota.some(
-    (m) => normalizarClave(m) === normalizarClave(ciudad),
-  );
+  const clave = normalizarClave(ciudad);
+  const enAglomeracion = [
+    ...t.topes_vis.municipios_aglomeracion_bogota,
+    ...t.topes_vis.otras_aglomeraciones,
+  ].some((m) => normalizarClave(m) === clave);
   const salarios = enAglomeracion
     ? t.topes_vis.smmlv_aglomeraciones
     : t.topes_vis.smmlv;
@@ -89,7 +97,10 @@ export function derechosRegistro(
   return aCentena(base * (1 + c.recargo_sistematizacion));
 }
 
-/** Derechos notariales de la compraventa (sin IVA ni hojas: no verificados), o `null` si no están vigentes. */
+/**
+ * Derechos notariales de la compraventa (sin IVA ni hojas: no verificados), o `null` si no están vigentes o si el caso no
+ * está verificado en la norma notarial (hoy, la VIP: su exención viene de otra norma que la resolución notarial no se releyó).
+ */
 export function derechosNotariales(
   valor: number,
   clase: ClaseVivienda,
@@ -97,7 +108,10 @@ export function derechosNotariales(
 ): number | null {
   const c = vigente<ConceptoNotarial>(t, "derechos_notariales");
   if (!c) return null;
-  if (clase === "vip" && c.vip.exento) return 0;
+  if (clase === "vip") {
+    if (c.vip.verificado === false) return null;
+    if (c.vip.exento) return 0;
+  }
   const a = c.actos_con_cuantia;
   let base =
     valor <= a.hasta_pesos

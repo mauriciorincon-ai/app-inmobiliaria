@@ -255,8 +255,8 @@
         );
       case "exencion_vip_con_subsidio":
         return par(
-          "VIP: notaría y registro quedan exentos solo si recibes subsidio.",
-          "VIP: notary and registration are exempt only if you get a subsidy.",
+          "VIP: el registro queda exento solo si recibes subsidio. Los derechos notariales de una VIP no los pudimos verificar: no se suman.",
+          "VIP: registration is exempt only if you get a subsidy. We could not verify the notary fees of a VIP, so they are not added.",
         );
       case "supera_tope_vis":
         return par(

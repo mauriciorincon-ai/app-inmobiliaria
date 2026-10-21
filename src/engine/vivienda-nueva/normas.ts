@@ -99,6 +99,7 @@ export const TarifasSchema = z
         smmlv: z.number().positive(),
         smmlv_aglomeraciones: z.number().positive(),
         municipios_aglomeracion_bogota: z.array(z.string()).min(1),
+        otras_aglomeraciones: z.array(z.string()).min(1),
         norma: z.string().min(1),
         anio: z.number().int(),
         consultado: fecha,

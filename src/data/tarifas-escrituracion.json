@@ -45,7 +45,17 @@
       "Tocancipá",
       "Zipaquirá"
     ],
-    "norma": "Decreto 1077 de 2015, artículo 2.1.9.1, modificado por el Decreto 1607 de 2022 (citado en el artículo 17 de la Resolución 2026-001726-6 de la SNR)",
+    "otras_aglomeraciones": [
+      "Medellín",
+      "Cali",
+      "Santiago de Cali",
+      "Barranquilla",
+      "Cartagena",
+      "Cartagena de Indias",
+      "Bucaramanga",
+      "Cúcuta"
+    ],
+    "norma": "Decreto 1077 de 2015, artículo 2.1.9.1, modificado por el Decreto 1607 de 2022 (citado en el artículo 17 de la Resolución 2026-001726-6 de la SNR); las aglomeraciones con tope de 150 salarios son las de Bogotá, Medellín, Cali, Barranquilla, Cartagena y Bucaramanga (Decreto 1467 de 2019) y Cúcuta (Decreto 1607 de 2022). De las otras seis solo se listan sus ciudades principales: los municipios vecinos no se leyeron en el decreto y quedan con el tope de 135.",
     "anio": 2026,
     "consultado": "2026-10-20",
     "estado": "vigente"
@@ -122,6 +132,7 @@
       },
       "vip": {
         "exento": true,
+        "verificado": false,
         "articulo": null,
         "condicion": {
           "es": "La exención de derechos notariales de la VIP con subsidio la dice el artículo 2.1.8.3 del Decreto 1895 de 2016, que cita el artículo 23 de la resolución de registro; el texto de la resolución notarial no se releyó para ese caso.",

@@ -45,7 +45,7 @@ pagar.
 2. **El número que manda es «pagas al menos»**, no el «desde». Suma el precio, los derechos de registro (Resolución
    2026-001726-6, a cargo de quien registra) y el parqueadero que se paga aparte si el aviso da su precio. Lo que no se
    puede saber se **nombra** y no se suma:
-   - los derechos notariales, que se reparten según la promesa (se da su total);
+   - los derechos notariales, que se reparten según la promesa (se da su total; en una VIP no se verificaron y no se dan);
    - el impuesto de registro y la beneficencia, y el IVA notarial (no verificados);
    - lo que puede subir durante la obra si el precio no es fijo;
    - la hipoteca.
@@ -74,8 +74,8 @@ pagar.
   (`maqueta.mjs --comprobar`). «Fuente: Estrenar Vivienda, edición 187.»
 - **Pintado:** `assets/vivienda-nueva.js` solo formatea lo que trae `datos-187.js`; no calcula nada.
 - **Script compartido:** `../comprador/assets/maqueta.js` con la configuración de `assets/config.js` (pantallas, nota de
-  datos, secciones y almacén). Sin configuración, la maqueta del comprador se ve igual: 26 de 26 capturas idénticas
-  byte a byte antes y después de la enmienda.
+  datos, secciones y almacén). Sin configuración, la maqueta del comprador se ve igual: en el sprint se comparó byte a byte
+  una pasada de capturas (26 de 26) antes y después de la enmienda; las capturas no se versionan.
 
 ## G-Diseño del módulo
 

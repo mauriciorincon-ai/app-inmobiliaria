@@ -10,6 +10,7 @@ import {
   datosMaqueta,
   type EntradaMaqueta,
 } from "../../../src/engine/vivienda-nueva/maqueta-datos";
+import { precioVerdadero } from "../../../src/engine/vivienda-nueva/precio-verdadero";
 import { TASA_RESPALDO } from "../../../src/engine/simulador/tasa";
 
 // El constructor de los datos de la maqueta (S11, F2): determinista, con lista blanca de campos y con la tasa del
@@ -237,5 +238,29 @@ describe("el archivo generado (docs/diseno/vivienda-nueva/assets/datos-187.js)",
   it("cada proyecto lleva solo los campos de la lista blanca", () => {
     expect(d.proyectos.length).toBeGreaterThan(100);
     for (const p of d.proyectos) expect(Object.keys(p).sort()).toEqual(CAMPOS);
+  });
+
+  it("el precio verdadero publicado es el que dan HOY el motor y las tarifas (si una tarifa cambia y nadie regenera, cae)", () => {
+    // Con el crudo ignorado, la CI no puede regenerar el archivo; esto ata lo publicado al motor y a `src/data`.
+    let comprobados = 0;
+    for (const p of d.proyectos) {
+      const hoy = precioVerdadero(
+        {
+          precio_desde: p.precioDesde,
+          segmento: p.segmento,
+          ciudad: p.ciudad,
+          area_privada_desde: p.areaPrivada[0],
+          area_construida_desde: p.areaConstruida[0],
+          parqueadero: p.parqueadero,
+          parqueadero_precio: p.parqueaderoPrecio,
+          precio_fijo: p.precioFijo,
+          etapa: p.etapa,
+        },
+        tarifas,
+      );
+      expect(p.precioVerdadero, p.id).toEqual(JSON.parse(JSON.stringify(hoy)));
+      comprobados++;
+    }
+    expect(comprobados).toBe(d.proyectos.length);
   });
 });

@@ -46,10 +46,13 @@ const subsidios = JSON.parse(
 const TOPE_BOGOTA = 262_635_750; // 150 × 1.750.905
 
 describe("escrituración (Resoluciones 2026-001726-6 y 2026-000964-6 de la SNR)", () => {
-  it("tope VIS: 150 salarios en la aglomeración de Bogotá, 135 en el resto", () => {
+  it("tope VIS: 150 salarios en la aglomeración de Bogotá y en la ciudad principal de las otras seis, 135 en el resto", () => {
     expect(topeVis("Bogotá", tarifas)).toBe(TOPE_BOGOTA);
     expect(topeVis("Chía", tarifas)).toBe(TOPE_BOGOTA);
-    expect(topeVis("Cartagena", tarifas)).toBe(236_372_175); // 135 × 1.750.905
+    expect(topeVis("Cartagena", tarifas)).toBe(TOPE_BOGOTA); // 150 × 1.750.905
+    expect(topeVis("Medellín", tarifas)).toBe(TOPE_BOGOTA);
+    expect(topeVis("Ibagué", tarifas)).toBe(236_372_175); // 135 × 1.750.905
+    expect(topeVis("", tarifas)).toBe(236_372_175);
   });
 
   it.each([
@@ -74,7 +77,6 @@ describe("escrituración (Resoluciones 2026-001726-6 y 2026-000964-6 de la SNR)"
     // (30.900 + (250.000.000 − 259.300) × 3 ‰) / 2 = 390.061,05 → 390.100
     [250_000_000, "vis", 390_100],
     [200_000, "general", 30_900],
-    [150_000_000, "vip", 0],
   ] as const)("notariales de %d (%s) = %d", (valor, clase, esperado) => {
     expect(derechosNotariales(valor, clase, tarifas)).toBe(esperado);
   });
@@ -187,7 +189,7 @@ describe("precio verdadero", () => {
     expect(ids(r.faltantes)).toContain("segmento_no_lo_dice");
   });
 
-  it("VIP: registro y notaría exentos con subsidio; se nombra la condición", () => {
+  it("VIP: el registro queda exento con subsidio y se nombra; los derechos notariales de VIP no se verifican y no se suman", () => {
     const r = precioVerdadero(
       entrada({ precio_desde: 150_000_000, segmento: "VIP" }),
       tarifas,
@@ -195,9 +197,8 @@ describe("precio verdadero", () => {
     if (r.estado !== "calculado") throw new Error("debía calcular");
     expect(ids(r.partidas)).toEqual(["precio_desde", "parqueadero"]);
     expect(ids(r.faltantes)).toContain("exencion_vip_con_subsidio");
-    expect(r.faltantes.find((f) => f.id === "derechos_notariales")?.monto).toBe(
-      0,
-    );
+    expect(ids(r.faltantes)).not.toContain("derechos_notariales");
+    expect(derechosNotariales(150_000_000, "vip", tarifas)).toBeNull();
   });
 
   it("parqueadero adicional sin precio, parqueadero «hay» y parqueadero incluido", () => {

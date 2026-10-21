@@ -1,0 +1,109 @@
+// Escrituración estimada de una vivienda nueva (S11, F2). Puro: recibe las tarifas de
+// `src/data/tarifas-escrituracion.json` como dato y SOLO usa los conceptos `vigente`; lo no verificado no se calcula.
+//   · Derechos de registro (Resolución 2026-001726-6 de la SNR): la tarifa del tramo de la cuantía en UVB se aplica a
+//     TODA la cuantía; VIS a la mitad (art. 17) hasta su tope; VIP exenta con subsidio (art. 23); +2 % de
+//     sistematización (parágrafo 8). Se paga a cargo del solicitante: el comprador que registra.
+//   · Derechos notariales de la compraventa (Resolución 2026-000964-6): tarifa fija hasta $259.300 y 3 por mil sobre lo que
+//     exceda (art. 2 lit. b); VIS a la mitad (art. 31). Quién paga qué parte se pacta en la promesa.
+// Todo se aproxima a la centena, como lo liquidan la notaría y la oficina de registro.
+import { normalizarClave } from "./lectura.ts";
+
+export type TramoRegistro = {
+  hasta_uvb?: number;
+  por_mil?: number;
+  tarifa_fija?: number;
+};
+
+type Concepto = { id: string; estado: string };
+
+export type ConceptoRegistro = Concepto & {
+  actos_con_cuantia: { tramos_uvb: TramoRegistro[] };
+  recargo_sistematizacion: number;
+  vis: { factor: number };
+  vip: { exento: boolean };
+};
+
+export type ConceptoNotarial = Concepto & {
+  actos_con_cuantia: {
+    hasta_pesos: number;
+    tarifa_fija: number;
+    sobre_exceso_por_mil: number;
+  };
+  vis: { factor: number };
+  vip: { exento: boolean };
+};
+
+export type TarifasEscrituracion = {
+  unidades: { uvb: { valor: number }; smmlv: { valor: number } };
+  topes_vis: {
+    smmlv: number;
+    smmlv_aglomeraciones: number;
+    municipios_aglomeracion_bogota: readonly string[];
+  };
+  conceptos: readonly Concepto[];
+};
+
+/** Cómo liquida la norma: tarifa ordinaria, la mitad de VIS o la exención de VIP. */
+export type ClaseVivienda = "general" | "vis" | "vip";
+
+function vigente<T extends Concepto>(
+  t: TarifasEscrituracion,
+  id: string,
+): T | null {
+  const c = t.conceptos.find((x) => x.id === id);
+  return c && c.estado === "vigente" ? (c as T) : null;
+}
+
+const aCentena = (n: number) => Math.round(n / 100) * 100;
+
+/** El tope de precio de la VIS en pesos de este año: 150 salarios en la aglomeración de Bogotá, 135 en el resto. */
+export function topeVis(ciudad: string, t: TarifasEscrituracion): number {
+  const enAglomeracion = t.topes_vis.municipios_aglomeracion_bogota.some(
+    (m) => normalizarClave(m) === normalizarClave(ciudad),
+  );
+  const salarios = enAglomeracion
+    ? t.topes_vis.smmlv_aglomeraciones
+    : t.topes_vis.smmlv;
+  return Math.round(salarios * t.unidades.smmlv.valor);
+}
+
+/** Derechos de registro de la compraventa, o `null` si la tarifa no está vigente en el archivo. */
+export function derechosRegistro(
+  valor: number,
+  clase: ClaseVivienda,
+  t: TarifasEscrituracion,
+): number | null {
+  const c = vigente<ConceptoRegistro>(t, "derechos_registro");
+  if (!c) return null;
+  if (clase === "vip" && c.vip.exento) return 0;
+  const enUvb = valor / t.unidades.uvb.valor;
+  const tramos = c.actos_con_cuantia.tramos_uvb;
+  const tramo =
+    tramos.find((x) => x.hasta_uvb !== undefined && enUvb <= x.hasta_uvb) ??
+    tramos[tramos.length - 1];
+  let base =
+    tramo.tarifa_fija !== undefined
+      ? tramo.tarifa_fija
+      : (valor * (tramo.por_mil ?? 0)) / 1000;
+  if (clase === "vis") base *= c.vis.factor;
+  return aCentena(base * (1 + c.recargo_sistematizacion));
+}
+
+/** Derechos notariales de la compraventa (sin IVA ni hojas: no verificados), o `null` si no están vigentes. */
+export function derechosNotariales(
+  valor: number,
+  clase: ClaseVivienda,
+  t: TarifasEscrituracion,
+): number | null {
+  const c = vigente<ConceptoNotarial>(t, "derechos_notariales");
+  if (!c) return null;
+  if (clase === "vip" && c.vip.exento) return 0;
+  const a = c.actos_con_cuantia;
+  let base =
+    valor <= a.hasta_pesos
+      ? a.tarifa_fija
+      : a.tarifa_fija +
+        ((valor - a.hasta_pesos) * a.sobre_exceso_por_mil) / 1000;
+  if (clase === "vis") base *= c.vis.factor;
+  return aCentena(base);
+}

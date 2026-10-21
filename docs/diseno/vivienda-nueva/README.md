@@ -79,4 +79,5 @@ pagar.
 
 ## G-Diseño del módulo
 
-Pendiente de la frase del usuario.
+**Aprobada el 2026-10-20**, sin cambios, con la frase del usuario: «Sonnet listo construye», dicha tras ver las cinco
+pantallas con sus estados y las ocho decisiones de arriba. Con ella se abrió la F3.

@@ -1,9 +1,10 @@
 // Informe de cobertura de la edición unida (S11, F1): por campo, por región y contra el índice impreso de la revista.
 //   node scripts/vivienda-nueva/cobertura.mjs          → imprime el informe
-//   node scripts/vivienda-nueva/cobertura.mjs --md     → además lo escribe en scripts/vivienda-nueva/INFORME-187.md
+//   node scripts/vivienda-nueva/cobertura.mjs --md     → además lo escribe en scripts/vivienda-nueva/INFORME-<N>.md
 //                                                        (solo agregados: ningún nombre, cifra de proyecto ni texto de aviso)
-// Lee `crudo/edicion-187.json` (de validar.mjs --unir) y, si existe, `crudo/indice-p24-p25.json` (control, no fuente).
+// Lee `crudo/unida-<N>.json` (de validar.mjs --unir) y, si existe, `crudo/indice-p24-p25.json` (control, no fuente).
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { EDICION } from "../../src/engine/vivienda-nueva/edicion.ts";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -13,12 +14,14 @@ import {
 } from "../../src/engine/vivienda-nueva/lectura.ts";
 
 const CRUDO = join(dirname(fileURLToPath(import.meta.url)), "crudo");
-const e = JSON.parse(readFileSync(join(CRUDO, "edicion-187.json"), "utf8"));
+const e = JSON.parse(
+  readFileSync(join(CRUDO, `unida-${EDICION.numero}.json`), "utf8"),
+);
 const proyectos = e.proyectos;
 const apariciones = e.paginas.reduce((s, p) => s + p.proyectos.length, 0);
 
 console.log(
-  `Edición 187 · ${e.paginas.length} páginas · ${apariciones} apariciones · ${proyectos.length} proyectos únicos\n`,
+  `Edición ${EDICION.numero} · ${e.paginas.length} páginas · ${apariciones} apariciones · ${proyectos.length} proyectos únicos\n`,
 );
 
 console.log("Por tipo de página (páginas · apariciones):");
@@ -164,7 +167,7 @@ if (process.argv.includes("--md")) {
     ].join("\n");
   const campos = cobertura(proyectos);
   const md = [
-    "# Cobertura de la edición 187 (agregados)",
+    `# Cobertura de la edición ${EDICION.numero} (agregados)`,
     "",
     "Informe generado por `cobertura.mjs` a partir de la transcripción procesada. Solo trae conteos y porcentajes: ningún nombre, cifra de proyecto ni texto de aviso. «Dice» = el aviso trae el dato; lo demás es «no lo dice» (no está impreso) o «ilegible».",
     "",
@@ -195,8 +198,11 @@ if (process.argv.includes("--md")) {
     "",
   ].join("\n");
   writeFileSync(
-    join(dirname(fileURLToPath(import.meta.url)), "INFORME-187.md"),
+    join(
+      dirname(fileURLToPath(import.meta.url)),
+      `INFORME-${EDICION.numero}.md`,
+    ),
     md,
   );
-  console.log("\nEscrito scripts/vivienda-nueva/INFORME-187.md");
+  console.log(`\nEscrito scripts/vivienda-nueva/INFORME-${EDICION.numero}.md`);
 }

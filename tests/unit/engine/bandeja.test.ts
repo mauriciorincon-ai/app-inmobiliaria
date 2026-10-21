@@ -36,6 +36,14 @@ const sha256 = (s: string) => createHash("sha256").update(s).digest("hex");
 // El motor no toca el disco: aquí "git ignora" solo el crudo, como en el repo.
 const estaIgnorada = (ruta: string) =>
   ruta.startsWith("scripts/vivienda-nueva/crudo/");
+// Y «git ls-files» solo ve versionado lo que cuelga de src/ o docs/.
+const estaVersionada = (ruta: string) =>
+  ruta.startsWith("src/") || ruta.startsWith("docs/");
+const opciones = { estaIgnorada, estaVersionada };
+
+const TOMADO = { estado: "tomado", id: "edicion-del-mes-187" } as const;
+const LISTO = { estado: "listo", id: "edicion-del-mes-187" } as const;
+const PENDIENTE = { estado: "pendiente", id: "edicion-del-mes-187" } as const;
 
 const trabajo = (extra: Partial<Trabajo> = {}): Trabajo => ({
   id: "edicion-del-mes-188",
@@ -50,9 +58,11 @@ const trabajo = (extra: Partial<Trabajo> = {}): Trabajo => ({
 });
 
 const registrado = (): TipoRegistrado => {
-  const r = registrarTipo(DEFINICION_EDICION_DEL_MES, validarEdicionDelMes, {
-    estaIgnorada,
-  });
+  const r = registrarTipo(
+    DEFINICION_EDICION_DEL_MES,
+    validarEdicionDelMes,
+    opciones,
+  );
   if (!r.ok) throw new Error(`registro falló: ${r.razon}`);
   return r.tipo;
 };
@@ -105,7 +115,7 @@ describe("carnadas del contrato (§ 6): todas rechazadas", () => {
 
   it("C02 · una salida que no cumple el esquema se rechaza y nada se entrega", () => {
     const rota = { ...edicionValida(), paginasSinLeer: [12] };
-    const e = entregar({ estado: "tomado" }, registrado(), rota);
+    const e = entregar(TOMADO, registrado(), rota);
     expect(e.estado).toBe("rechazado");
     if (e.estado === "rechazado") {
       expect(e.razon).toBe("salida_fuera_de_esquema");
@@ -116,15 +126,13 @@ describe("carnadas del contrato (§ 6): todas rechazadas", () => {
     (
       conTelefono.paginas[0] as { avisos_al_agente: string[] }
     ).avisos_al_agente = Array(6).fill("x");
-    expect(
-      entregar({ estado: "tomado" }, registrado(), conTelefono).estado,
-    ).toBe("rechazado");
+    expect(entregar(TOMADO, registrado(), conTelefono).estado).toBe(
+      "rechazado",
+    );
     // Una salida a medias (menos páginas que la edición) tampoco.
     const corta = edicionValida();
     corta.paginas = corta.paginas.slice(0, 10);
-    expect(entregar({ estado: "tomado" }, registrado(), corta).estado).toBe(
-      "rechazado",
-    );
+    expect(entregar(TOMADO, registrado(), corta).estado).toBe("rechazado");
   });
 
   it("C03 · la entrada con «ignora tus instrucciones» se anota y la salida no cambia de destino ni de esquema", () => {
@@ -134,16 +142,14 @@ describe("carnadas del contrato (§ 6): todas rechazadas", () => {
     expect(notas.length).toBeGreaterThanOrEqual(2);
     expect(notas.every((n) => n.codigo === "instruccion_dirigida")).toBe(true);
     // El destino lo fija el TIPO: una salida válida vuelve a su destino, sea lo que sea que diga la entrada…
-    const e = entregar({ estado: "tomado" }, registrado(), edicionValida());
+    const e = entregar(TOMADO, registrado(), edicionValida());
     expect(e).toEqual({
       estado: "entregado",
       destino: DEFINICION_EDICION_DEL_MES.destino,
     });
     // …y una salida que intenta imponer su propio destino cae por el esquema estricto.
     const impuesta = { ...edicionValida(), destino: "otro" };
-    expect(entregar({ estado: "tomado" }, registrado(), impuesta).estado).toBe(
-      "rechazado",
-    );
+    expect(entregar(TOMADO, registrado(), impuesta).estado).toBe("rechazado");
     // Un trabajo con un campo `destino` impuesto no se admite.
     const t = { ...trabajo(), destino: "otro" };
     expect(admitir(t, registrado().def, HOY)).toEqual({
@@ -172,30 +178,75 @@ describe("carnadas del contrato (§ 6): todas rechazadas", () => {
       ...DEFINICION_EDICION_DEL_MES,
       destino: { clase: "archivo_versionado", ruta: "docs/edicion.json" },
     };
-    expect(
-      registrarTipo(versionado, validarEdicionDelMes, { estaIgnorada }),
-    ).toEqual({ ok: false, razon: "destino_versionado" });
+    expect(registrarTipo(versionado, validarEdicionDelMes, opciones)).toEqual({
+      ok: false,
+      razon: "destino_versionado",
+    });
     // Un destino que dice ser ignorado pero git no ignora, tampoco.
     const noIgnorado = {
       ...DEFINICION_EDICION_DEL_MES,
-      destino: { clase: "archivo_ignorado", ruta: "docs/edicion.json" },
+      destino: { clase: "archivo_ignorado", ruta: "salidas/edicion.json" },
     };
-    expect(
-      registrarTipo(noIgnorado, validarEdicionDelMes, { estaIgnorada }),
-    ).toEqual({ ok: false, razon: "destino_no_ignorado" });
+    expect(registrarTipo(noIgnorado, validarEdicionDelMes, opciones)).toEqual({
+      ok: false,
+      razon: "destino_no_ignorado",
+    });
+  });
+
+  it("C05 · declarar «fila» o «tarea» para escribir en un archivo del repo tampoco lo salva", () => {
+    for (const clase of ["fila", "tarea"] as const) {
+      const disfrazado = {
+        ...DEFINICION_EDICION_DEL_MES,
+        destino: { clase, ruta: "src/data/tarifas-escrituracion.json" },
+      };
+      expect(registrarTipo(disfrazado, validarEdicionDelMes, opciones)).toEqual(
+        {
+          ok: false,
+          razon: "destino_versionado",
+        },
+      );
+    }
+  });
+
+  it("C06 · otras llaves con forma de secreto (GitHub, Slack, Google) tampoco pasan", () => {
+    const formas = [
+      ["ghp", "b".repeat(36)].join("_"),
+      ["xoxb", "1234567890-abcdefghij"].join("-"),
+      ["AIza", "c".repeat(35)].join(""),
+    ];
+    for (const llave of formas) {
+      const tipo = { ...DEFINICION_EDICION_DEL_MES, entrada: llave };
+      expect(registrarTipo(tipo, validarEdicionDelMes, opciones)).toEqual({
+        ok: false,
+        razon: "llave_de_api",
+      });
+    }
+  });
+
+  it("la salida es de SU trabajo: la transcripción de la 187 no cierra el trabajo de la 188", () => {
+    const e = entregar(
+      { estado: "tomado", id: "edicion-del-mes-188" },
+      registrado(),
+      edicionValida(),
+    );
+    expect(e).toMatchObject({ estado: "rechazado" });
+    if (e.estado === "rechazado")
+      expect(e.razones).toContain("edicion_distinta");
   });
 
   it("C06 · un tipo que declara una llave de API se rechaza al registrarlo", () => {
     const porNombre = { ...DEFINICION_EDICION_DEL_MES, llave_api: "ANTHROPIC" };
-    expect(
-      registrarTipo(porNombre, validarEdicionDelMes, { estaIgnorada }),
-    ).toEqual({ ok: false, razon: "llave_de_api" });
+    expect(registrarTipo(porNombre, validarEdicionDelMes, opciones)).toEqual({
+      ok: false,
+      razon: "llave_de_api",
+    });
     // Con forma de llave, armada al correr: ningún literal con forma de secreto en el repo.
     const falsa = ["sk", "a".repeat(32)].join("-");
     const porValor = { ...DEFINICION_EDICION_DEL_MES, entrada: falsa };
-    expect(
-      registrarTipo(porValor, validarEdicionDelMes, { estaIgnorada }),
-    ).toEqual({ ok: false, razon: "llave_de_api" });
+    expect(registrarTipo(porValor, validarEdicionDelMes, opciones)).toEqual({
+      ok: false,
+      razon: "llave_de_api",
+    });
   });
 
   it("G5 · un tipo que saca datos de la casa sin muestra de revisión se rechaza", () => {
@@ -203,9 +254,10 @@ describe("carnadas del contrato (§ 6): todas rechazadas", () => {
       ...DEFINICION_EDICION_DEL_MES,
       revision: { publica: true, muestra: 0, criterio: "doble_lectura" },
     };
-    expect(
-      registrarTipo(sinMuestra, validarEdicionDelMes, { estaIgnorada }),
-    ).toEqual({ ok: false, razon: "sin_revision" });
+    expect(registrarTipo(sinMuestra, validarEdicionDelMes, opciones)).toEqual({
+      ok: false,
+      razon: "sin_revision",
+    });
   });
 });
 
@@ -228,7 +280,7 @@ describe("admisión y entrega: lo demás que el código decide", () => {
   });
 
   it("no se entrega lo que no se tomó", () => {
-    const e = entregar({ estado: "pendiente" }, registrado(), edicionValida());
+    const e = entregar(PENDIENTE, registrado(), edicionValida());
     expect(e).toEqual({
       estado: "rechazado",
       razon: "trabajo_no_tomado",
@@ -237,9 +289,9 @@ describe("admisión y entrega: lo demás que el código decide", () => {
   });
 
   it("una salida completa y válida se entrega al destino del tipo", () => {
-    expect(
-      entregar({ estado: "listo" }, registrado(), edicionValida()).estado,
-    ).toBe("entregado");
+    expect(entregar(LISTO, registrado(), edicionValida()).estado).toBe(
+      "entregado",
+    );
   });
 });
 
@@ -427,19 +479,42 @@ describe("el repo real: el destino del tipo lo ignora git", () => {
         return false;
       }
     };
+    const versionadaPorGit = (ruta: string) =>
+      execFileSync("git", ["ls-files", "--", ruta], {
+        cwd: process.cwd(),
+        encoding: "utf8",
+      }).trim().length > 0;
+    const git = { estaIgnorada: ignoraGit, estaVersionada: versionadaPorGit };
     expect(
-      registrarTipo(DEFINICION_EDICION_DEL_MES, validarEdicionDelMes, {
-        estaIgnorada: ignoraGit,
-      }).ok,
+      registrarTipo(DEFINICION_EDICION_DEL_MES, validarEdicionDelMes, git).ok,
     ).toBe(true);
+    // Una «fila» que en verdad apunta a un archivo del repo no es una fila: git lo ve versionado.
+    expect(
+      registrarTipo(
+        {
+          ...DEFINICION_EDICION_DEL_MES,
+          destino: { clase: "fila", ruta: "src/data/subsidios-vivienda.json" },
+        },
+        validarEdicionDelMes,
+        git,
+      ),
+    ).toEqual({ ok: false, razon: "destino_versionado" });
     const versionado = {
       ...DEFINICION_EDICION_DEL_MES,
       destino: { clase: "archivo_ignorado", ruta: "src/engine/" },
     };
-    expect(
-      registrarTipo(versionado, validarEdicionDelMes, {
-        estaIgnorada: ignoraGit,
-      }),
-    ).toEqual({ ok: false, razon: "destino_no_ignorado" });
+    expect(registrarTipo(versionado, validarEdicionDelMes, git)).toEqual({
+      ok: false,
+      razon: "destino_versionado",
+    });
+    // Y una carpeta que ni git versiona ni ignora no sirve de destino «ignorado».
+    const suelto = {
+      ...DEFINICION_EDICION_DEL_MES,
+      destino: { clase: "archivo_ignorado", ruta: "salidas-sueltas/" },
+    };
+    expect(registrarTipo(suelto, validarEdicionDelMes, git)).toEqual({
+      ok: false,
+      razon: "destino_no_ignorado",
+    });
   });
 });

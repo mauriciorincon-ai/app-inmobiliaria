@@ -1,12 +1,15 @@
 // Valida las lecturas de la revista contra el esquema y, con --unir, las junta en UNA edición (S11, F1).
 //   node scripts/vivienda-nueva/validar.mjs crudo/lectura-L1.json …   → solo valida (código de salida 1 si falla)
-//   node scripts/vivienda-nueva/validar.mjs --unir                    → valida todas las lecturas L*, las une y escribe
-//                                                                       crudo/edicion-187.json
-// Todo lo que lee y escribe vive en `crudo/` (ignorado por git).
+//   node scripts/vivienda-nueva/validar.mjs --unir                    → valida las lecturas L* de la edición vigente
+//                                                                       (`EDICION.numero`; las de otra edición se
+//                                                                       ignoran), las une y escribe crudo/unida-<N>.json
+// `unida-<N>.json` NO es el entregable: la bandeja (`/bandeja`) lo valida contra el tipo `edicion-del-mes` y lo entrega como
+// `crudo/edicion-<N>.json`; hasta entonces el trabajo sigue pendiente. Todo vive en `crudo/` (ignorado por git).
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  EDICION,
   PAGINAS_EDICION,
   validarLectura,
 } from "../../src/engine/vivienda-nueva/edicion.ts";
@@ -36,16 +39,27 @@ if (args.length === 0) {
 }
 
 if (args[0] === "--unir") {
-  const archivos = readdirSync(CRUDO)
+  const todas = readdirSync(CRUDO)
     .filter((f) => /^lectura-L[A-Za-z0-9_-]*\.json$/.test(f))
     .sort();
+  // Las lecturas de otra edición conviven en `crudo/` y no se mezclan: se miran por su campo `edicion`.
+  const archivos = todas.filter(
+    (f) =>
+      JSON.parse(readFileSync(join(CRUDO, f), "utf8")).edicion ===
+      EDICION.numero,
+  );
+  if (archivos.length < todas.length) {
+    console.log(
+      `Se ignoran ${todas.length - archivos.length} lecturas de otra edición (la vigente es la ${EDICION.numero}).`,
+    );
+  }
   const lecturas = archivos.map((f) => cargar(join(CRUDO, f)));
   if (lecturas.some((l) => l === null) || lecturas.length === 0)
     process.exit(1);
   const e = unirLecturas(lecturas, PAGINAS_EDICION);
   writeFileSync(
-    join(CRUDO, "edicion-187.json"),
-    JSON.stringify({ edicion: 187, ...e }, null, 2),
+    join(CRUDO, `unida-${EDICION.numero}.json`),
+    JSON.stringify({ edicion: EDICION.numero, ...e }, null, 2),
   );
   const pr = e.paginas.reduce((s, p) => s + p.proyectos.length, 0);
   console.log(

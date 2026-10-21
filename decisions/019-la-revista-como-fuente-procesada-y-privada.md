@@ -44,7 +44,9 @@ Constraints that cannot be undone once crossed:
 4. **The AI transcribes; pure engines compute.** Every figure shown (true price, wait, subsidy, index, new-or-used,
    affordability) comes from `src/engine/vivienda-nueva/*`, never from a model. A sample of at least 10 % of the
    projects is read twice, by a second reader that does not see the first reading, with **zero discrepancies in prices
-   and areas** required; a discrepancy re-reads the whole page and is reported.
+   and areas** required; any discrepancy re-reads the whole page and is reported (edition 187: one area, a card cut by
+   the page edge and completed from another page of the same project, and one city, where a sales-room address named a
+   neighbouring town as a landmark and the project's own ad tag gave the real one; both declared in the sprint's closing note).
 5. **A gate keeps it so.** `tests/unit/vivienda-nueva-privado.test.ts` runs in CI: the raw folder is ignored by git, no
    tracked path is a PDF, a raw file or an image of the module, the generated data carries only whitelisted keys and
    closed-list tags, no phone, address, web or email appears in the data, and the module's files carry no web or
@@ -66,7 +68,9 @@ Constraints that cannot be undone once crossed:
 - The publisher could object to a public list of names with figures. The fallback is already designed: the aggregated
   index, with no per-project data. Withdrawing a project from `datos-187.js` is one regeneration.
 - The raw material exists only on the user's Mac. Losing it means re-reading the magazine; the processed data is in git.
-- A new edition changes `EDICION` and `PAGINAS_EDICION` in `src/engine/vivienda-nueva/edicion.ts`; those limits are
-  what the bandeja's validator enforces.
+- A new edition changes `EDICION` (number, validity) and `PAGINAS_EDICION` in `src/engine/vivienda-nueva/edicion.ts`; the
+  scripts follow `EDICION.numero`, readings of another edition in the raw folder are ignored by their `edicion` field, and the
+  bandeja delivers `edicion-N.json` only after validating `unida-N.json`. The mockup generator is specific to edition 187;
+  reading later editions in the product arrives with Sprint 012.
 - **Out of scope:** database, migration and cloud (S12–S13); contacting builders or sales rooms; any runtime LLM feature
   (that would need its own «code first» ADR); scheduled cloud runs of the bandeja (they need a sprint that proves them).

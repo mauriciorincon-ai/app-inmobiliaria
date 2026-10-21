@@ -101,7 +101,7 @@ const SalidaSchema = z
   })
   .strict();
 
-export const validarEdicionDelMes: ValidadorDeSalida = (salida) => {
+export const validarEdicionDelMes: ValidadorDeSalida = (salida, trabajo) => {
   const r = SalidaSchema.safeParse(salida);
   if (!r.success) {
     return {
@@ -112,6 +112,10 @@ export const validarEdicionDelMes: ValidadorDeSalida = (salida) => {
     };
   }
   const razones: string[] = [];
+  // La salida es de SU trabajo: `edicion-del-mes-188` no se cierra con la transcripción de la 187.
+  if (r.data.edicion !== Number(trabajo.id.split("-").pop())) {
+    razones.push("edicion_distinta");
+  }
   if (r.data.paginasSinLeer.length > 0) razones.push("paginas_sin_leer");
   if (r.data.paginas.length !== PAGINAS_EDICION)
     razones.push("paginas_incompletas");

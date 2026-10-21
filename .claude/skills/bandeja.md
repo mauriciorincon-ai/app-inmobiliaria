@@ -41,14 +41,18 @@ sesión de Claude Code y nada más. Las credenciales son las de la app (`.env.lo
 - **Origen:** `archivo`. Un PDF `AAAA-MM-edicion-N.pdf` en la carpeta de fuentes privadas de la planeadora
   (`~/Code/hr01-develop-ai-apps/portafolio/inmobiliaria/fuentes/estrenar-vivienda/`, `BANDEJA_FUENTES` para apuntar a otra) sin su
   `edicion-N.json` en el destino es un trabajo pendiente. Vence el día 15 del mes siguiente.
-- **Antes de leer:** la nueva edición cambia `EDICION` y `PAGINAS_EDICION` en `src/engine/vivienda-nueva/edicion.ts`
-  (número, vigencia, páginas): ahí viven los límites que el validador exige.
+- **Antes de leer:** la edición nueva cambia `EDICION` (número y vigencia) y `PAGINAS_EDICION` en
+  `src/engine/vivienda-nueva/edicion.ts`. Los scripts de `scripts/vivienda-nueva/` siguen a `EDICION.numero` (semilla de la
+  doble lectura, `unida-N.json`, informe); las lecturas de otra edición que haya en `crudo/` se ignoran por su campo `edicion`.
+  El generador de la maqueta (`maqueta.mjs`, `datos-187.js`) es de la edición 187: la lectura de las ediciones siguientes en
+  el producto llega con el S12.
 - **Cómo se procesa:** el flujo de `scripts/vivienda-nueva/README.md` (render con `pdftoppm`, lectores en Sonnet con las
   reglas de `scripts/vivienda-nueva/LECTOR.md`, `validar.mjs --unir`, doble lectura con `muestra.mjs`, `cobertura.mjs`).
   El PDF se lee en la planeadora y jamás se copia al repo; sus metadatos no se leen; nadie visita URLs ni QR de la revista
   ni contacta a nadie; lo ilegible es `ilegible` y lo que el aviso no dice es `no_lo_dice`.
-- **Salida:** `crudo/edicion-N.json` (la edición unida). El destino es `scripts/vivienda-nueva/crudo/` (ignorado por git):
-  un archivo versionado solo cambia por PR.
+- **Salida:** `validar.mjs --unir` deja `crudo/unida-N.json`; **no es el entregable** y el trabajo sigue pendiente. `bandeja.mjs
+entregar` lo valida contra el tipo (edición del trabajo, 68 páginas, ninguna sin leer, esquema estricto) y lo deja como
+  `crudo/edicion-N.json`. El destino es `scripts/vivienda-nueva/crudo/` (ignorado por git): un archivo versionado solo cambia por PR.
 - **Revisión (G5):** doble lectura de al menos el 10 % de los proyectos, con cero discrepancias en precio y áreas, antes de
   generar la maqueta con `scripts/vivienda-nueva/maqueta.mjs`. Los números los hacen los motores; la IA solo transcribe.
 - **Al repo** llega solo lo procesado, con «Fuente: Estrenar Vivienda, edición N»: sin fotos, logos, textos de avisos,

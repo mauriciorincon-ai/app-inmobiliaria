@@ -78,7 +78,11 @@ export type Tipo = z.infer<typeof TipoSchema>;
 
 export type ResultadoSalida =
   { ok: true } | { ok: false; razones: readonly string[] };
-export type ValidadorDeSalida = (salida: unknown) => ResultadoSalida;
+/** Valida la salida contra el esquema del tipo; recibe el trabajo para atar la salida a SU trabajo (p. ej. el número de edición). */
+export type ValidadorDeSalida = (
+  salida: unknown,
+  trabajo: Pick<Trabajo, "id">,
+) => ResultadoSalida;
 export type TipoRegistrado = { def: Tipo; validar: ValidadorDeSalida };
 
 // --- el ciclo de estados ---------------------------------------------------------------------------------------------
@@ -112,11 +116,14 @@ export type ResultadoRegistro =
 export type OpcionesRegistro = {
   /** ¿Git ignora esta ruta? La CLI lo responde con `git check-ignore`; el motor no toca el disco. */
   estaIgnorada: (ruta: string) => boolean;
+  /** ¿Hay archivos versionados en esta ruta? La CLI lo responde con `git ls-files`. Vale para CUALQUIER clase de destino. */
+  estaVersionada: (ruta: string) => boolean;
 };
 
 // Nombres de campo que delatan una credencial de proveedor y valores con forma de llave.
 const NOMBRE_DE_LLAVE = /(api[_-]?key|llave|secret|token|proveedor|provider)/i;
-const FORMA_DE_LLAVE = /\b(sk-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16})\b/;
+const FORMA_DE_LLAVE =
+  /\b(sk-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|xox[abprs]-[A-Za-z0-9-]{10,}|AIza[0-9A-Za-z_-]{30,})\b/;
 
 function declaraLlave(valor: unknown): boolean {
   if (typeof valor === "string") return FORMA_DE_LLAVE.test(valor);
@@ -142,7 +149,12 @@ export function registrarTipo(
   const r = TipoSchema.safeParse(definicion);
   if (!r.success) return { ok: false, razon: "tipo_invalido" };
   const def = r.data;
-  if (def.destino.clase === "archivo_versionado") {
+  // Un destino versionado se rechaza se llame como se llame su clase: declarar «fila» para escribir en un archivo del repo
+  // no lo vuelve una fila.
+  if (
+    def.destino.clase === "archivo_versionado" ||
+    opciones.estaVersionada(def.destino.ruta)
+  ) {
     return { ok: false, razon: "destino_versionado" };
   }
   if (
@@ -245,14 +257,14 @@ export type Entrega =
  * diga la entrada, el trabajo o la propia salida puede cambiar el destino.
  */
 export function entregar(
-  trabajo: Pick<Trabajo, "estado">,
+  trabajo: Pick<Trabajo, "estado" | "id">,
   tipo: TipoRegistrado,
   salida: unknown,
 ): Entrega {
   if (trabajo.estado !== "tomado" && trabajo.estado !== "listo") {
     return { estado: "rechazado", razon: "trabajo_no_tomado", razones: [] };
   }
-  const v = tipo.validar(salida);
+  const v = tipo.validar(salida, trabajo);
   if (!v.ok) {
     return {
       estado: "rechazado",

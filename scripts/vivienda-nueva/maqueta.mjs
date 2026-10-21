@@ -67,10 +67,11 @@ function construir() {
   const lecturas = readdirSync(CRUDO)
     .filter((f) => /^lectura-L[A-Za-z0-9_-]*\.json$/.test(f))
     .sort()
-    .map((f) => {
-      const r = validarLectura(
-        JSON.parse(readFileSync(join(CRUDO, f), "utf8")),
-      );
+    .map((f) => [f, JSON.parse(readFileSync(join(CRUDO, f), "utf8"))])
+    // Las lecturas de otra edición conviven en `crudo/` y no se mezclan.
+    .filter(([, crudo]) => crudo.edicion === EDICION.numero)
+    .map(([f, crudo]) => {
+      const r = validarLectura(crudo);
       if (!r.ok) throw new Error(`${f} no pasa el esquema: ${r.errores[0]}`);
       return r.lectura;
     });

@@ -34,7 +34,10 @@ import {
 } from "../../src/engine/bandeja/tipos/edicion-del-mes.ts";
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const REGISTRO = join(RAIZ, "scripts/bandeja/registro/corridas.jsonl");
+// Dónde se leen las transcripciones entregadas y se escribe el registro: por omisión, esta app. `BANDEJA_SALIDA` lo desvía a
+// otra carpeta (las pruebas de la CLI, para no tocar el crudo real). El TIPO sigue declarando el destino relativo.
+const BASE = process.env.BANDEJA_SALIDA ?? RAIZ;
+const REGISTRO = join(BASE, "scripts/bandeja/registro/corridas.jsonl");
 
 const args = process.argv.slice(2);
 const orden = args[0];
@@ -62,6 +65,14 @@ function estaIgnorada(ruta) {
   }
 }
 
+function estaVersionada(ruta) {
+  const salida = execFileSync("git", ["ls-files", "--", ruta], {
+    cwd: RAIZ,
+    encoding: "utf8",
+  });
+  return salida.trim().length > 0;
+}
+
 function verificarContrato() {
   const lock = readFileSync(
     join(RAIZ, "src/engine/bandeja/CONTRATO.lock"),
@@ -82,6 +93,7 @@ function verificarContrato() {
 function registrarTipos() {
   const r = registrarTipo(DEFINICION_EDICION_DEL_MES, validarEdicionDelMes, {
     estaIgnorada,
+    estaVersionada,
   });
   if (!r.ok) {
     console.error(`✗ tipo edicion-del-mes rechazado: ${r.razon}`);
@@ -96,7 +108,7 @@ function pendientes() {
   const archivos = readdirSync(FUENTES)
     .filter((f) => f.toLowerCase().endsWith(".pdf"))
     .map((nombre) => ({ nombre }));
-  const destino = join(RAIZ, DEFINICION_EDICION_DEL_MES.destino.ruta);
+  const destino = join(BASE, DEFINICION_EDICION_DEL_MES.destino.ruta);
   const transcritas = existsSync(destino)
     ? readdirSync(destino)
         .map((f) => f.match(/^edicion-(\d+)\.json$/)?.[1])
@@ -159,14 +171,14 @@ if (orden === "verificar") {
     process.exit(1);
   }
   const salida = JSON.parse(readFileSync(resolve(archivoSalida), "utf8"));
-  const e = entregar({ estado: "tomado" }, tipo, salida);
+  const e = entregar({ estado: "tomado", id }, tipo, salida);
   if (e.estado !== "entregado") {
     console.error(`✗ ${id}: rechazado (${e.razon})`);
     for (const r of e.razones.slice(0, 20)) console.error(`  · ${r}`);
     process.exit(1);
   }
   const numero = numeroDeEdicion(`${t.entrada.split("/").pop()}`);
-  const destino = join(RAIZ, e.destino.ruta, archivoDeEdicion(numero));
+  const destino = join(BASE, e.destino.ruta, archivoDeEdicion(numero));
   mkdirSync(dirname(destino), { recursive: true });
   if (resolve(archivoSalida) !== destino)
     copyFileSync(resolve(archivoSalida), destino);
@@ -183,7 +195,8 @@ if (orden === "verificar") {
     fecha: hoy,
     duracion_s: Number(bandera("duracion-s") ?? 0),
     procesados: 1,
-    muestra_revisada: tipo.def.revision.criterio,
+    // Nadie ha revisado nada todavía: la muestra queda PENDIENTE hasta que el usuario la revise (G5).
+    muestra_revisada: `pendiente:${tipo.def.revision.criterio}`,
     anotaciones,
   });
   mkdirSync(dirname(REGISTRO), { recursive: true });

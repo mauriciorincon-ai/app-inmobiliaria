@@ -197,6 +197,19 @@
         "es": "No se buscó en fuente primaria en este sprint.",
         "en": "It was not looked up in a primary source this sprint."
       }
+    },
+    {
+      "id": "fondo_nacional_del_ahorro",
+      "nombre": {
+        "es": "Crédito y ahorro del Fondo Nacional del Ahorro",
+        "en": "Credit and savings of the National Savings Fund"
+      },
+      "estado": "no_verificado",
+      "consultado": "2026-10-20",
+      "motivo": {
+        "es": "No se buscó en fuente primaria en este sprint.",
+        "en": "It was not looked up in a primary source this sprint."
+      }
     }
   ]
 }

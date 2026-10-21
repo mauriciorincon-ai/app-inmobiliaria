@@ -69,6 +69,14 @@ describe("subsidios-vivienda.json", () => {
       expect(idsVerificados).not.toContain(n.id);
   });
 
+  it("lo que la plataforma aún no verificó queda nombrado como no verificado: cajas, cobertura de tasa y FNA", () => {
+    expect(subsidios.no_verificados.map((n) => n.id).sort()).toEqual([
+      "cobertura_tasa_frech",
+      "fondo_nacional_del_ahorro",
+      "subsidio_cajas_compensacion",
+    ]);
+  });
+
   it("el programa de arriendo no es de compra", () => {
     expect(
       subsidios.programas.find((p) => p.id === "ahorro_para_mi_casa")?.destino,

@@ -45,6 +45,9 @@ overrides:
   proxy-addr@2: 2.0.8
   # glob CLI (alto, inyección de comandos con -c/--cmd; transitivo de @opennextjs/aws > @node-minify/core). Parche en la misma línea 10.
   glob@10: 10.5.0
+  # vite 8.0.0–8.1.5 (alto, `fs.existsSync()` se puede eludir en Windows; GHSA-587h-7wmj-h5pm; transitivo de vitest y su cobertura,
+  # solo desarrollo). Aviso publicado el 2026-10-20, el mismo día del S11. Parche en la misma línea 8.1.
+  vite@8: 8.1.6
 
 # Excepción de audit (regla 18: un advisory SIN parche es excepción con ADR, nunca silencio). Ver decisions/011.
 # braces <=3.0.3 (alto, agotamiento de pila con patrones anidados): la última publicada es 3.0.3, no existe 3.0.4.

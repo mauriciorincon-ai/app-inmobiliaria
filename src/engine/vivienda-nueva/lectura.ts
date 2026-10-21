@@ -84,6 +84,8 @@ export type ProyectoUnico = Omit<
   /** Las páginas donde aparece, en orden. */
   apariciones: number[];
   region: Region;
+  /** La clave con que la unión lo identifica (la de su primera aparición); los conflictos la citan. */
+  clave: string;
 };
 
 export type Conflicto = {
@@ -323,6 +325,7 @@ export function unirLecturas(
             ...resto,
             apariciones: [],
             region: regionDe(String(pr.ciudad)),
+            clave: "",
           },
           apariciones: [],
         };
@@ -338,6 +341,7 @@ export function unirLecturas(
 
   for (const e of entradas) {
     const u = e.unico;
+    u.clave = e.base;
     u.apariciones = e.apariciones.map((a) => a.pagina);
     u.rotulos = [...new Set(e.apariciones.flatMap((a) => a.p.rotulos))];
 

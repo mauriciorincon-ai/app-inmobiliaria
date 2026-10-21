@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Project page">
+      Innmobiliaria · Ficha del proyecto
+    </title>
+    <link rel="stylesheet" href="../comprador/assets/maqueta.css" />
+    <link rel="stylesheet" href="assets/vivienda-nueva.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-estados='[["completo","Con más datos","Most facts"],["faltante","El que más calla","Most left out"],["fuera","Fuera de lo que puedes pagar","Beyond what you can afford"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 960px">
+        <a class="btn btn--txt btn--peq" href="01-indice.html"
+          ><svg class="ico ico--s"><use href="#i-atras" /></svg
+          ><t-es>Volver al índice</t-es><t-en>Back to the index</t-en></a
+        >
+        <div data-para-estado="completo">
+          <div data-vn="ficha" data-vn-proyecto="completo"></div>
+        </div>
+        <div data-para-estado="faltante">
+          <div data-vn="ficha" data-vn-proyecto="faltante"></div>
+        </div>
+        <div data-para-estado="fuera">
+          <div data-vn="ficha" data-vn-proyecto="fuera"></div>
+        </div>
+
+        <section class="card caja pila" style="margin-top: 16px">
+          <h2 class="h2" style="margin: 0">
+            <t-es>¿Quieres verlo?</t-es><t-en>Want to see it?</t-en>
+          </h2>
+          <p class="mute" style="margin: 0">
+            <t-es
+              >Te coordinamos la visita a la sala de ventas por WhatsApp. No
+              publicamos teléfonos ni direcciones de la revista.</t-es
+            ><t-en
+              >We set up the sales-room visit with you over WhatsApp. We never
+              publish the magazine's phones or addresses.</t-en
+            >
+          </p>
+          <a class="btn" href="05-visita.html"
+            ><t-es>Pedir visita a la sala de ventas</t-es
+            ><t-en>Request a sales-room visit</t-en></a
+          >
+        </section>
+      </main>
+    </div>
+    <script src="assets/config.js"></script>
+    <script src="assets/datos-187.js"></script>
+    <script src="assets/vivienda-nueva.js"></script>
+    <script src="../comprador/assets/maqueta.js"></script>
+  </body>
+</html>

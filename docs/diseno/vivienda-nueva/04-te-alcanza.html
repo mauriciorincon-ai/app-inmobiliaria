@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Can a subsidy get you there?">
+      Innmobiliaria · ¿Te alcanza con subsidio?
+    </title>
+    <link rel="stylesheet" href="../comprador/assets/maqueta.css" />
+    <link rel="stylesheet" href="assets/vivienda-nueva.css" />
+  </head>
+  <body
+    data-nav="herramientas"
+    data-estados='[["hogar-4m","Hogar de $4 M","COP 4M household"],["hogar-6m","Hogar de $6 M","COP 6M household"],["hogar-8m","Hogar de $8 M (pasa el tope)","COP 8M household (over the cap)"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 960px">
+        <h1>
+          <t-es>¿Te alcanza con subsidio?</t-es
+          ><t-en>Can a subsidy get you there?</t-en>
+        </h1>
+        <p class="bajada">
+          <t-es
+            >Solo programas verificados en su norma, con su fecha. Un programa
+            sin cupos se dice; uno que no pudimos verificar no se muestra.</t-es
+          ><t-en
+            >Only programs verified in their rule, with their date. A program
+            with no places is shown as such; one we could not verify is not
+            shown.</t-en
+          >
+        </p>
+        <div data-para-estado="hogar-4m">
+          <div data-vn="subsidio" data-vn-hogar="hogar-4m"></div>
+        </div>
+        <div data-para-estado="hogar-6m">
+          <div data-vn="subsidio" data-vn-hogar="hogar-6m"></div>
+        </div>
+        <div data-para-estado="hogar-8m">
+          <div data-vn="subsidio" data-vn-hogar="hogar-8m"></div>
+        </div>
+        <div class="aviso aviso--info" style="margin-top: 16px">
+          <svg class="ico"><use href="#i-info" /></svg>
+          <div>
+            <strong
+              ><t-es>Lo que no mostramos</t-es
+              ><t-en>What we do not show</t-en></strong
+            ><t-es
+              >El subsidio de las cajas de compensación de 2026 y la cobertura
+              de tasa: no los pudimos verificar en la fuente primaria. Tus
+              ingresos se quedan en tu teléfono.</t-es
+            ><t-en
+              >The 2026 family compensation fund subsidy and the interest rate
+              coverage: we could not verify them in the primary source. Your
+              income stays on your phone.</t-en
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="assets/config.js"></script>
+    <script src="assets/datos-187.js"></script>
+    <script src="assets/vivienda-nueva.js"></script>
+    <script src="../comprador/assets/maqueta.js"></script>
+  </body>
+</html>

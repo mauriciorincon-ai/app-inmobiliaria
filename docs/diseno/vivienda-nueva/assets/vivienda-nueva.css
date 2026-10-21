@@ -1,0 +1,78 @@
+/* Lo poco que la maqueta de vivienda nueva añade a ../comprador/assets/maqueta.css (S11). Mismos tokens. */
+.vn-tarjeta {
+  color: inherit;
+  text-decoration: none;
+  gap: 2px;
+}
+.vn-tarjeta:hover,
+.vn-tarjeta:focus-visible {
+  border-color: var(--purple);
+}
+.vn-tarjeta--fuera {
+  opacity: 0.62;
+}
+.vn-cifra {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.vn-sindatos {
+  color: var(--aviso);
+  font-weight: 600;
+}
+.vn-lista,
+.vn-faltan {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.vn-lista li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--borde);
+}
+.vn-faltan li {
+  padding: 3px 0 3px 18px;
+  position: relative;
+}
+.vn-faltan li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--aviso);
+}
+.vn-clase--verificable {
+  color: var(--ok);
+}
+.vn-clase--no_lo_dice {
+  color: var(--aviso);
+}
+.vn-clase--ilegible {
+  color: var(--mute);
+}
+.vn-programa--aplica {
+  color: var(--ok);
+  font-weight: 600;
+}
+.vn-programa--por_confirmar {
+  color: var(--aviso);
+  font-weight: 600;
+}
+.vn-programa--no_aplica,
+.vn-programa--sin_cupos {
+  color: var(--gray);
+  font-weight: 600;
+}
+
+/* Aire entre bloques de la página (los títulos dentro de una tarjeta llevan su margen en línea). */
+.app__main h2.h2,
+.app__main h3.h2 {
+  margin-top: 28px;
+}
+.app__main .aviso,
+.app__main details,
+.vn-mas {
+  margin-top: 12px;
+}

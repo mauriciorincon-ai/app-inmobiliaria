@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · Sales-room visit">
+      Innmobiliaria · Visita a la sala de ventas
+    </title>
+    <link rel="stylesheet" href="../comprador/assets/maqueta.css" />
+    <link rel="stylesheet" href="assets/vivienda-nueva.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-comprador-inicial="c1"
+    data-estados='[["pedir","Pedir","Request"],["solicitada","Solicitada","Requested"],["confirmada","Confirmada","Confirmed"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 720px">
+        <a class="btn btn--txt btn--peq" href="02-proyecto.html"
+          ><svg class="ico ico--s"><use href="#i-atras" /></svg
+          ><t-es>Volver a la ficha</t-es><t-en>Back to the project</t-en></a
+        >
+        <h1>
+          <t-es>Visitar la sala de ventas</t-es
+          ><t-en>Visit the sales room</t-en>
+        </h1>
+        <p class="bajada" data-vn="visita-proyecto"></p>
+
+        <div class="aviso aviso--aviso" data-para-comprador="c0">
+          <svg class="ico"><use href="#i-escudo" /></svg>
+          <div>
+            <strong
+              ><t-es>Primero, tu WhatsApp</t-es
+              ><t-en>First, your WhatsApp</t-en></strong
+            ><t-es
+              >Pedir una visita exige tu WhatsApp verificado, como en los
+              usados.</t-es
+            ><t-en
+              >Requesting a visit needs your verified WhatsApp, as with resale
+              homes.</t-en
+            >
+            <a
+              class="btn btn--peq"
+              href="../comprador/03-verificar-whatsapp.html"
+              ><t-es>Verificar mi WhatsApp</t-es
+              ><t-en>Verify my WhatsApp</t-en></a
+            >
+          </div>
+        </div>
+
+        <div data-para-comprador="c1 c2">
+          <section class="card caja pila" data-para-estado="pedir">
+            <p style="margin: 0">
+              <t-es
+                >Mientras la constructora no esté en Innmobiliaria, coordinamos
+                nosotros: le escribimos a la sala de ventas y te confirmamos por
+                WhatsApp. Ninguno de tus datos va a la constructora sin que lo
+                aceptes.</t-es
+              ><t-en
+                >Until the builder is on Innmobiliaria, we coordinate: we
+                contact the sales room and confirm with you over WhatsApp. None
+                of your details go to the builder unless you accept.</t-en
+              >
+            </p>
+            <p class="campo__label" style="margin: 8px 0 0">
+              <t-es>¿Cuándo te sirve?</t-es><t-en>When suits you?</t-en>
+            </p>
+            <div
+              class="chips"
+              role="group"
+              aria-label="Franja"
+              data-aria-es="Franja"
+              data-aria-en="Time slot"
+            >
+              <button
+                type="button"
+                class="chip"
+                data-elegir="franja"
+                aria-pressed="true"
+              >
+                <t-es>Entre semana</t-es><t-en>Weekdays</t-en>
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-elegir="franja"
+                aria-pressed="false"
+              >
+                <t-es>Sábado</t-es><t-en>Saturday</t-en>
+              </button>
+              <button
+                type="button"
+                class="chip"
+                data-elegir="franja"
+                aria-pressed="false"
+              >
+                <t-es>Domingo</t-es><t-en>Sunday</t-en>
+              </button>
+            </div>
+            <button type="button" class="btn" data-ir-estado="solicitada">
+              <t-es>Pedir la visita</t-es><t-en>Request the visit</t-en>
+            </button>
+          </section>
+
+          <div
+            class="aviso aviso--ok"
+            data-para-estado="solicitada"
+            data-enfocar
+          >
+            <svg class="ico"><use href="#i-check" /></svg>
+            <div>
+              <strong
+                ><t-es>Recibimos tu solicitud</t-es
+                ><t-en>We got your request</t-en></strong
+              ><t-es
+                >Le escribimos a la sala de ventas y te confirmamos el día por
+                WhatsApp. Si en dos días hábiles no responden, te lo
+                decimos.</t-es
+              ><t-en
+                >We will contact the sales room and confirm the day with you
+                over WhatsApp. If they do not answer within two business days,
+                we will tell you.</t-en
+              >
+              <button
+                type="button"
+                class="btn btn--sec btn--peq"
+                data-ir-estado="confirmada"
+              >
+                <t-es>Ver cuando confirman</t-es><t-en>See it confirmed</t-en>
+              </button>
+            </div>
+          </div>
+
+          <section class="card caja pila" data-para-estado="confirmada">
+            <p class="eyebrow" style="margin: 0">
+              <t-es>Visita confirmada</t-es><t-en>Visit confirmed</t-en>
+            </p>
+            <p style="margin: 0">
+              <strong
+                ><t-es>Sábado 10:00 a. m.</t-es
+                ><t-en>Saturday 10:00 a.m.</t-en></strong
+              >
+            </p>
+            <p class="mute" style="margin: 0">
+              <t-es
+                >La dirección de la sala te llega por WhatsApp con la
+                confirmación. Lleva la ficha honesta: pregunta lo que el aviso
+                no dice.</t-es
+              ><t-en
+                >The sales-room address reaches you over WhatsApp with the
+                confirmation. Bring the honest sheet: ask what the ad does not
+                say.</t-en
+              >
+            </p>
+            <a class="btn btn--sec" href="02-proyecto.html"
+              ><t-es>Ver la ficha honesta</t-es
+              ><t-en>See the honest sheet</t-en></a
+            >
+          </section>
+        </div>
+      </main>
+    </div>
+    <script src="assets/config.js"></script>
+    <script src="assets/datos-187.js"></script>
+    <script src="assets/vivienda-nueva.js"></script>
+    <script src="../comprador/assets/maqueta.js"></script>
+  </body>
+</html>

@@ -1,0 +1,202 @@
+{
+  "version": 1,
+  "vigencia": 2026,
+  "consultado": "2026-10-20",
+  "descripcion": {
+    "es": "Subsidios para comprar vivienda nueva en Bogotá, de fuente primaria: cada fila con su norma, su año, la fecha en que se consultó y su estado. La revista es una pista, jamás la fuente. Lo no verificado no se muestra.",
+    "en": "Subsidies to buy a new home in Bogotá, from primary sources: each row with its rule, year, the date it was consulted and its status. The magazine is a lead, never the source. What is unverified is not shown."
+  },
+  "salario_minimo_2026": 1750905,
+  "programas": [
+    {
+      "id": "oferta_preferente",
+      "nombre": { "es": "Oferta Preferente", "en": "Preferred Offer" },
+      "entidad": "Secretaría Distrital del Hábitat de Bogotá",
+      "ambito": "bogota",
+      "destino": "compra",
+      "monto": {
+        "minimo_smmlv": 10,
+        "maximo_smmlv": 30,
+        "pesos_2026": { "minimo": 17509050, "maximo": 52527150 },
+        "regla": {
+          "es": "30 salarios sin concurrencia con la caja de compensación y con una condición de prioridad (víctima, discapacidad, minoría étnica, reincorporado, mujer cabeza de familia, reasentamiento); 20 con concurrencia y una condición de prioridad; 10 sin esas condiciones.",
+          "en": "30 wages without family-compensation-fund concurrence and with a priority condition (victim, disability, ethnic minority, reincorporated, woman head of household, resettlement); 20 with concurrence and a priority condition; 10 without those conditions."
+        }
+      },
+      "ingreso_maximo_smmlv": 4,
+      "ingreso_maximo_pesos_2026": 7003620,
+      "vivienda": "VIS o VIP nueva, en proyectos con unidades separadas para el programa",
+      "normas": [
+        "Decreto Distrital 653 de 2025",
+        "Resolución 836 de 2025 (Secretaría Distrital del Hábitat), artículos 23 y 25"
+      ],
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "vigente",
+      "estado_al": "2026-06-01",
+      "estado_segun": "Oficio de la Dirección de Financiación de Vivienda de la Secretaría del Hábitat del 2026-06-01 y la página del programa, consultada el 2026-10-20",
+      "nota": {
+        "es": "Se asigna en ferias o convocatorias y en las salas de ventas con unidades separadas; está sujeto a disponibilidad presupuestal. Se puede sumar con el subsidio de la caja de compensación y el nacional.",
+        "en": "It is granted at fairs or calls and at sales rooms with reserved units; it depends on budget availability. It can be added to the family compensation fund subsidy and the national one."
+      }
+    },
+    {
+      "id": "reactiva_tu_compra",
+      "nombre": {
+        "es": "Reactiva tu Compra, Reactiva tu Hogar",
+        "en": "Reactivate your Purchase, Reactivate your Home"
+      },
+      "entidad": "Secretaría Distrital del Hábitat de Bogotá",
+      "ambito": "bogota",
+      "destino": "compra",
+      "monto": {
+        "minimo_smmlv": null,
+        "maximo_smmlv": 10,
+        "pesos_2026": { "minimo": null, "maximo": 17509050 },
+        "regla": {
+          "es": "Hasta 10 salarios mínimos para cerrar la financiación de una vivienda VIS o VIP en un proyecto aprobado por la Secretaría.",
+          "en": "Up to 10 minimum wages to close the financing of a VIS or VIP home in a project approved by the Secretariat."
+        }
+      },
+      "ingreso_maximo_smmlv": 4,
+      "ingreso_maximo_pesos_2026": 7003620,
+      "vivienda": "VIS o VIP nueva, en proyectos aprobados por la Secretaría para el programa",
+      "normas": ["Resolución 293 de 2026 (Secretaría Distrital del Hábitat)"],
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "vigente",
+      "estado_al": "2026-06-01",
+      "estado_segun": "Oficio de la Dirección de Financiación de Vivienda de la Secretaría del Hábitat del 2026-06-01 y la página del programa, consultada el 2026-10-20",
+      "nota": {
+        "es": "La postulación la hace la constructora con el hogar, en cualquier momento y hasta agotar los recursos asignados. El folleto de febrero de 2025 decía hasta 12 salarios: la norma de 2026 dice 10.",
+        "en": "The builder files the application with the household, at any time and until the assigned funds run out. The February 2025 leaflet said up to 12 wages: the 2026 rule says 10."
+      }
+    },
+    {
+      "id": "reduce_tu_cuota",
+      "nombre": { "es": "Reduce tu Cuota", "en": "Reduce your Payment" },
+      "entidad": "Secretaría Distrital del Hábitat de Bogotá",
+      "ambito": "bogota",
+      "destino": "cuota",
+      "monto": {
+        "minimo_smmlv": null,
+        "maximo_smmlv": 12,
+        "pesos_2026": { "minimo": null, "maximo": 21010860 },
+        "regla": {
+          "es": "Hasta 12 salarios mínimos en 2026, pagados en hasta 48 cuotas mensuales de un crédito hipotecario o leasing para una VIS o VIP nueva.",
+          "en": "Up to 12 minimum wages in 2026, paid over up to 48 monthly installments of a mortgage or leasing for a new VIS or VIP home."
+        }
+      },
+      "ingreso_maximo_smmlv": 4,
+      "ingreso_maximo_pesos_2026": 7003620,
+      "vivienda": "VIS o VIP nueva, con crédito hipotecario o leasing aprobado",
+      "normas": [
+        "Decreto Distrital 653 de 2025, artículo 159",
+        "Resolución 676 de 2024 (Secretaría Distrital del Hábitat)"
+      ],
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "sin_cupos",
+      "estado_al": "2026-06-01",
+      "estado_segun": "Oficio de la Dirección de Financiación de Vivienda de la Secretaría del Hábitat del 2026-06-01: los cupos de 2026 se agotaron y se cerró la postulación; la página del programa, consultada el 2026-10-20, no dice si hay cupos nuevos",
+      "nota": {
+        "es": "Se pide a la entidad que da el crédito antes del desembolso. A la fecha del oficio no admite postulaciones; hay que consultar si abren cupos nuevos.",
+        "en": "It is requested from the lender before the loan is disbursed. As of the date of the official letter it accepts no applications; check whether new places open."
+      }
+    },
+    {
+      "id": "ahorro_para_mi_casa",
+      "nombre": { "es": "Ahorro para mi Casa", "en": "Savings for my Home" },
+      "entidad": "Secretaría Distrital del Hábitat de Bogotá",
+      "ambito": "bogota",
+      "destino": "arriendo",
+      "monto": {
+        "minimo_smmlv": null,
+        "maximo_smmlv": 7.44,
+        "pesos_2026": { "minimo": null, "maximo": 13026733 },
+        "regla": {
+          "es": "Hasta 7,44 salarios mínimos, en 12 cuotas de hasta 0,62 salarios (hasta $1.085.561 en 2026) para pagar el arriendo mientras el hogar ahorra 0,27 salarios al mes ($472.744 en 2026).",
+          "en": "Up to 7.44 minimum wages, in 12 installments of up to 0.62 wages (up to $1,085,561 in 2026) to pay rent while the household saves 0.27 wages a month ($472,744 in 2026)."
+        }
+      },
+      "ingreso_maximo_smmlv": 2,
+      "ingreso_maximo_pesos_2026": 3501810,
+      "vivienda": "No compra: paga arriendo en Bogotá mientras se ahorra para la cuota inicial",
+      "normas": [
+        "Decreto Distrital 653 de 2025",
+        "Resolución 456 del 7 de mayo de 2026 (Secretaría Distrital del Hábitat), que modifica parcialmente la Resolución 224 de 2025"
+      ],
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "vigente",
+      "estado_al": "2026-06-01",
+      "estado_segun": "Oficio de la Dirección de Financiación de Vivienda de la Secretaría del Hábitat del 2026-06-01",
+      "nota": {
+        "es": "Es un apoyo de arriendo, no un subsidio de compra: no entra al cálculo de «te alcanza». Se pide en convocatorias.",
+        "en": "It is rent support, not a purchase subsidy: it does not enter the «can you afford it» computation. It is requested in calls."
+      }
+    },
+    {
+      "id": "subsidio_vivienda_nueva_nacional",
+      "nombre": {
+        "es": "Subsidio familiar de vivienda nueva (Mi Casa Ya)",
+        "en": "New-home family subsidy (Mi Casa Ya)"
+      },
+      "entidad": "Ministerio de Vivienda, Ciudad y Territorio / Fonvivienda",
+      "ambito": "nacional",
+      "destino": "compra",
+      "monto": {
+        "minimo_smmlv": 20,
+        "maximo_smmlv": 30,
+        "pesos_2026": { "minimo": 35018100, "maximo": 52527150 },
+        "regla": {
+          "es": "30 salarios mínimos para hogares con Sisbén IV entre A1 y C8; 20 entre C9 y D20 y para los hogares con concurrencia de subsidios.",
+          "en": "30 minimum wages for households with Sisbén IV between A1 and C8; 20 between C9 and D20 and for households with concurrent subsidies."
+        }
+      },
+      "ingreso_maximo_smmlv": null,
+      "ingreso_maximo_pesos_2026": null,
+      "vivienda": "VIS nueva",
+      "normas": [
+        "Decreto 1077 de 2015 (Decreto Único Reglamentario del Sector Vivienda)"
+      ],
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "sin_cupos",
+      "estado_al": "2026-01-27",
+      "estado_segun": "Página del Ministerio de Vivienda actualizada el 2026-01-27: cupos de 2025, 8.672 de 8.672 asignados; 2026, 762 preasignados; las postulaciones «son permanentes» pero no hay cupos libres",
+      "nota": {
+        "es": "El ingreso máximo general no está en la página; para la concurrencia con la caja la página pide hasta 2 salarios y Sisbén IV entre A1 y D20. Los montos en pesos son aproximados al salario de 2026.",
+        "en": "The general income cap is not on the page; for concurrence with the compensation fund the page asks for up to 2 wages and Sisbén IV between A1 and D20. The peso amounts are approximate at the 2026 wage."
+      }
+    }
+  ],
+  "no_verificados": [
+    {
+      "id": "subsidio_cajas_compensacion",
+      "nombre": {
+        "es": "Subsidio de las cajas de compensación",
+        "en": "Family compensation fund subsidy"
+      },
+      "estado": "no_verificado",
+      "consultado": "2026-10-20",
+      "motivo": {
+        "es": "Los montos de 2026 por caja y por tramo de ingresos solo salieron en prensa; no se leyeron en la norma ni en la caja.",
+        "en": "The 2026 amounts by fund and income bracket appeared only in the press; they were not read in the rule or at the fund."
+      }
+    },
+    {
+      "id": "cobertura_tasa_frech",
+      "nombre": {
+        "es": "Cobertura de tasa de interés",
+        "en": "Interest rate coverage"
+      },
+      "estado": "no_verificado",
+      "consultado": "2026-10-20",
+      "motivo": {
+        "es": "No se buscó en fuente primaria en este sprint.",
+        "en": "It was not looked up in a primary source this sprint."
+      }
+    }
+  ]
+}

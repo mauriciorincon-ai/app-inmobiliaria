@@ -40,3 +40,6 @@ scripts/sectores/crudo/
 
 # S10 — manzanas crudas del valor de referencia (Catastro Bogotá): se descargan, no se versionan. Ver scripts/valor-referencia/README.md.
 scripts/valor-referencia/crudo/
+
+# S11 — la revista (páginas renderizadas, transcripción cruda y contactos) vive solo aquí, jamás versionada. Ver scripts/vivienda-nueva/README.md.
+scripts/vivienda-nueva/crudo/

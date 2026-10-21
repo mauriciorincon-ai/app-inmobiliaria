@@ -111,7 +111,7 @@ describe("validarLectura — lo que JAMÁS pasa", () => {
     ],
     [
       "un teléfono en una nota",
-      { notas_crudo: "llamar al 311 580 1161" },
+      { notas_crudo: "llamar al 300 000 0000" },
       "lleva_telefono",
     ],
     [
@@ -130,7 +130,7 @@ describe("validarLectura — lo que JAMÁS pasa", () => {
 
   it("rechaza un campo que el esquema no conoce (un contacto no cabe)", () => {
     expect(
-      errores(lectura(proyecto({ telefono: "3115801161" }))).join("|"),
+      errores(lectura(proyecto({ telefono: "3000000000" }))).join("|"),
     ).toContain("Unrecognized key");
     expect(
       errores(lectura(proyecto({ sala_de_ventas: "Km. 1 Vía Bagazal" }))).join(

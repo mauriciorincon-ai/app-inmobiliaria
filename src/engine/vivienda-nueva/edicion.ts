@@ -67,8 +67,8 @@ export type Rotulo = (typeof ROTULOS)[number];
 
 // --- guardas de texto: lo que jamás entra --------------------------------------------------------------------------
 const RE_WEB = /(https?:|www\.|\.com\b|\.co\b|\.net\b|@)/i;
-const RE_TELEFONO = /\d[\d\s().+-]{6,}\d/;
-const RE_DIRECCION =
+export const RE_TELEFONO = /\d[\d\s().+-]{6,}\d/;
+export const RE_DIRECCION =
   /\b(calle|cll?|carrera|cra?|kr|avenida|av|diagonal|dg|transversal|tv|autopista|km|kil[oó]metro)\b\.?\s*(n[o°º]?\.?\s*)?\d/i;
 
 /** Texto corto sin web, correo, teléfono ni dirección. */

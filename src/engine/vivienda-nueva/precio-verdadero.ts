@@ -10,6 +10,7 @@
 //
 // El m² es «aproximado»: el precio «desde» y el área «desde» no siempre son de la misma unidad.
 import type { Proyecto } from "./edicion.ts";
+import { enConflicto } from "./lectura.ts";
 import {
   derechosNotariales,
   derechosRegistro,
@@ -29,7 +30,10 @@ export type EntradaPrecio = Pick<
   | "parqueadero_precio"
   | "precio_fijo"
   | "etapa"
->;
+> & {
+  /** Campos en que dos páginas de la revista imprimen cifras distintas (ver `ProyectoUnico`). */
+  en_conflicto?: readonly string[];
+};
 
 export type Partida = {
   id: "precio_desde" | "derechos_registro" | "parqueadero";
@@ -52,10 +56,12 @@ export type Faltante = { id: IdFaltante; monto?: number };
 
 export type M2Aproximado =
   | { base: "privada" | "construida"; valor: number; area: number }
-  | { base: null };
+  | { base: null; razon?: "en_conflicto" };
 
 export type PrecioVerdadero =
   | { estado: "sin_precio"; m2: M2Aproximado }
+  // Dos páginas de la revista imprimen precios distintos: no se elige uno, se nombra y no se suma nada.
+  | { estado: "en_conflicto"; m2: M2Aproximado }
   | {
       estado: "calculado";
       desde: number;
@@ -66,24 +72,38 @@ export type PrecioVerdadero =
       m2: M2Aproximado;
     };
 
-/** El m² aproximado: sobre el área privada si el aviso la da; si no, sobre la construida (incluye muros y ductos). */
+/**
+ * El m² aproximado: sobre el área privada si el aviso la da; si no, sobre la construida (incluye muros y ductos). Un
+ * campo que dos páginas de la revista contradicen no se usa: si el precio o el área que serviría está en conflicto, no
+ * hay m² y se dice por qué.
+ */
 export function m2Aproximado(p: EntradaPrecio): M2Aproximado {
   if (typeof p.precio_desde !== "number") return { base: null };
-  if (typeof p.area_privada_desde === "number") {
+  if (enConflicto(p, "precio_desde")) {
+    return { base: null, razon: "en_conflicto" };
+  }
+  const privadaEnConflicto = enConflicto(p, "area_privada_desde");
+  const construidaEnConflicto = enConflicto(p, "area_construida_desde");
+  if (typeof p.area_privada_desde === "number" && !privadaEnConflicto) {
     return {
       base: "privada",
       area: p.area_privada_desde,
       valor: Math.round(p.precio_desde / p.area_privada_desde),
     };
   }
-  if (typeof p.area_construida_desde === "number") {
+  if (typeof p.area_construida_desde === "number" && !construidaEnConflicto) {
     return {
       base: "construida",
       area: p.area_construida_desde,
       valor: Math.round(p.precio_desde / p.area_construida_desde),
     };
   }
-  return { base: null };
+  const hayAreaContradicha =
+    (typeof p.area_privada_desde === "number" && privadaEnConflicto) ||
+    (typeof p.area_construida_desde === "number" && construidaEnConflicto);
+  return hayAreaContradicha
+    ? { base: null, razon: "en_conflicto" }
+    : { base: null };
 }
 
 /**
@@ -125,6 +145,7 @@ export function precioVerdadero(
 ): PrecioVerdadero {
   const m2 = m2Aproximado(p);
   if (typeof p.precio_desde !== "number") return { estado: "sin_precio", m2 };
+  if (enConflicto(p, "precio_desde")) return { estado: "en_conflicto", m2 };
   const desde = p.precio_desde;
   const ciudad = typeof p.ciudad === "string" ? p.ciudad : "";
   const tope = topeVis(ciudad, tarifas);

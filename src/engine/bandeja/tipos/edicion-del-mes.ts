@@ -6,6 +6,7 @@
 // fuente. La revisión (G5): doble lectura de al menos el 10 % de los proyectos, con cero discrepancias en precio y áreas.
 import { z } from "zod";
 import { PAGINAS_EDICION, PaginaSchema } from "../../vivienda-nueva/edicion.ts";
+import { ProyectoUnicoSchema } from "../../vivienda-nueva/lectura.ts";
 import { type Tipo, type Trabajo, type ValidadorDeSalida } from "../bandeja.ts";
 
 export const ID_EDICION_DEL_MES = "edicion-del-mes";
@@ -93,7 +94,7 @@ const SalidaSchema = z
   .object({
     edicion: z.number().int().positive(),
     paginas: z.array(PaginaSchema).min(1),
-    proyectos: z.array(z.record(z.string(), z.unknown())).min(1),
+    proyectos: z.array(ProyectoUnicoSchema).min(1),
     conflictos: z.array(z.unknown()),
     reconciliados: z.array(z.unknown()),
     paginasSinLeer: z.array(z.number().int()),

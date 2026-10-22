@@ -1,8 +1,12 @@
 // Del montón de lecturas por página a UNA edición: une sin duplicar, compara la doble lectura, elige la muestra con
 // semilla declarada y mide la cobertura por campo (S11, F1). Puro: recibe lecturas ya validadas y devuelve datos.
+import { z } from "zod";
 import {
   ILEGIBLE,
   NO_LO_DICE,
+  PAGINAS_EDICION,
+  ProyectoBase,
+  revisarProyecto,
   type PaginaLeida,
   type Proyecto,
   type TipoPagina,
@@ -36,7 +40,8 @@ export const SABANA = [
   "sibate",
 ] as const;
 
-export type Region = "bogota" | "sabana" | "otra" | "sin_ciudad";
+export const REGIONES = ["bogota", "sabana", "otra", "sin_ciudad"] as const;
+export type Region = (typeof REGIONES)[number];
 
 /** Minúsculas, sin tildes ni signos, espacios simples. La base de toda comparación de nombres. */
 export function normalizarClave(s: string): string {
@@ -86,7 +91,44 @@ export type ProyectoUnico = Omit<
   region: Region;
   /** La clave con que la unión lo identifica (la de su primera aparición); los conflictos la citan. */
   clave: string;
+  /**
+   * Los campos en que dos páginas de la revista imprimen cifras DISTINTAS. Un campo en conflicto no se usa para calcular
+   * (ni el m², ni el índice, ni el «al menos»): se nombra. Ausente = ninguno.
+   */
+  en_conflicto?: Conflicto["campo"][];
 };
+
+/** ¿Alguno de estos campos del proyecto lo contradicen dos páginas de la revista? */
+export function enConflicto(
+  p: { en_conflicto?: readonly string[] },
+  ...campos: string[]
+): boolean {
+  return campos.some((c) => p.en_conflicto?.includes(c) ?? false);
+}
+
+/**
+ * El proyecto UNIDO, con el mismo esquema estricto que la lectura (sin teléfonos, direcciones, webs ni texto libre; un campo
+ * de más lo rechaza) menos lo que solo vive en el crudo (`pagina`, `posicion`, `notas_crudo`). Es lo que entra a la base.
+ */
+export const ProyectoUnicoSchema = ProyectoBase.omit({
+  pagina: true,
+  posicion: true,
+  notas_crudo: true,
+})
+  .extend({
+    apariciones: z
+      .array(z.number().int().min(1).max(PAGINAS_EDICION))
+      .min(1)
+      .max(PAGINAS_EDICION),
+    region: z.enum(REGIONES),
+    clave: z.string().min(1).max(200),
+    en_conflicto: z
+      .array(z.enum([...CAMPOS_UNIBLES, "constructora"]))
+      .max(CAMPOS_UNIBLES.length + 1)
+      .optional(),
+  })
+  .strict()
+  .superRefine(revisarProyecto);
 
 export type Conflicto = {
   proyecto: string;
@@ -326,6 +368,7 @@ export function unirLecturas(
             apariciones: [],
             region: regionDe(String(pr.ciudad)),
             clave: "",
+            en_conflicto: [],
           },
           apariciones: [],
         };
@@ -360,6 +403,7 @@ export function unirLecturas(
     if (constructoras.length > 0) {
       u.constructora = masFrecuente(constructoras);
       if (constructoras.some((c) => !marcasCompatibles(c, u.constructora))) {
+        u.en_conflicto = [...(u.en_conflicto ?? []), "constructora"];
         conflictos.push({
           proyecto: e.base,
           campo: "constructora",
@@ -413,8 +457,10 @@ export function unirLecturas(
       }
       (u as Record<string, unknown>)[campo] = elegido;
       const registro = { proyecto: e.base, campo, valores: reales };
-      if (hayConflicto) conflictos.push(registro);
-      else if (hayRedondeo) reconciliados.push(registro);
+      if (hayConflicto) {
+        u.en_conflicto = [...(u.en_conflicto ?? []), campo];
+        conflictos.push(registro);
+      } else if (hayRedondeo) reconciliados.push(registro);
     }
     u.region = regionDe(String(u.ciudad));
     proyectos.push(u);

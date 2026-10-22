@@ -152,6 +152,10 @@
       verificable: ["Lo dice", "Stated"],
       no_lo_dice: ["No lo dice", "Not stated"],
       ilegible: ["Ilegible en la revista", "Illegible in the magazine"],
+      en_conflicto: [
+        "Dos páginas imprimen cifras distintas",
+        "Two pages print different figures",
+      ],
     },
     rotulo: {
       lanzamiento: ["Lanzamiento", "Launch"],
@@ -342,12 +346,22 @@
               : par("de área construida", "of built area")) +
             "</p>"
           : '<p class="mute" style="margin:0">' +
-            par("Sin área: no hay m²", "No area: no price per m²") +
+            (pv.m2.razon === "en_conflicto"
+              ? par(
+                  "Cifras en conflicto: no hay m²",
+                  "Conflicting figures: no price per m²",
+                )
+              : par("Sin área: no hay m²", "No area: no price per m²")) +
             "</p>");
     } else {
       cuerpo +=
         '<p style="margin:0"><strong>' +
-        par("El aviso no da precio", "The ad gives no price") +
+        (pv.estado === "en_conflicto"
+          ? par(
+              "Las páginas imprimen precios distintos",
+              "The pages print different prices",
+            )
+          : par("El aviso no da precio", "The ad gives no price")) +
         "</strong></p>";
     }
     var clase =
@@ -781,10 +795,15 @@
       } else {
         html +=
           "<p>" +
-          par(
-            "El aviso no da precio: no hay cuenta que hacer.",
-            "The ad gives no price: there is nothing to compute.",
-          ) +
+          (pv.estado === "en_conflicto"
+            ? par(
+                "Dos páginas de la revista imprimen precios distintos: no elegimos uno, así que no hay cuenta que hacer.",
+                "Two pages of the magazine print different prices: we do not pick one, so there is nothing to compute.",
+              )
+            : par(
+                "El aviso no da precio: no hay cuenta que hacer.",
+                "The ad gives no price: there is nothing to compute.",
+              )) +
           "</p>";
       }
       html += "</section>";
@@ -874,7 +893,9 @@
                 ? "✓"
                 : d.clase === "ilegible"
                   ? "?"
-                  : "—";
+                  : d.clase === "en_conflicto"
+                    ? "≠"
+                    : "—";
             return (
               "<tr><th scope=row>" +
               tr("campo", d.campo) +

@@ -255,6 +255,7 @@ describe("el archivo generado (docs/diseno/vivienda-nueva/assets/datos-187.js)",
           parqueadero_precio: p.parqueaderoPrecio,
           precio_fijo: p.precioFijo,
           etapa: p.etapa,
+          en_conflicto: p.discrepancias,
         },
         tarifas,
       );

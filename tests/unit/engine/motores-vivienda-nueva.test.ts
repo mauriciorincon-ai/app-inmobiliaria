@@ -269,6 +269,89 @@ describe("precio verdadero", () => {
   });
 });
 
+describe("un campo que dos páginas de la revista contradicen no se usa para calcular", () => {
+  it("área privada contradicha: el m² cae a la construida; si las dos se contradicen, no hay m² y se dice por qué", () => {
+    const privada = entrada({
+      precio_desde: 270_000_000,
+      area_privada_desde: 24,
+      area_construida_desde: 54,
+      en_conflicto: ["area_privada_desde"],
+    });
+    expect(m2Aproximado(privada)).toEqual({
+      base: "construida",
+      area: 54,
+      valor: 5_000_000,
+    });
+    const ambas = {
+      ...privada,
+      en_conflicto: ["area_privada_desde", "area_construida_desde"],
+    };
+    expect(m2Aproximado(ambas)).toEqual({ base: null, razon: "en_conflicto" });
+    // Sin ninguna área impresa no hay conflicto que decir: solo «no hay m²».
+    expect(
+      m2Aproximado(
+        entrada({
+          area_privada_desde: NO_LO_DICE,
+          area_construida_desde: NO_LO_DICE,
+        }),
+      ),
+    ).toEqual({ base: null });
+  });
+
+  it("precio contradicho: no hay «al menos» ni m², y no se elige uno de los dos", () => {
+    const r = precioVerdadero(
+      entrada({ en_conflicto: ["precio_desde"] }),
+      tarifas,
+    );
+    expect(r).toEqual({
+      estado: "en_conflicto",
+      m2: { base: null, razon: "en_conflicto" },
+    });
+  });
+
+  it("el índice deja fuera de la mediana al proyecto contradicho y lo cuenta aparte; con él dentro habría 5 y habría mediana", () => {
+    const cinco = [5.0, 5.2, 5.4, 5.6, 5.8].map((m) =>
+      pi({ precio_desde: m * 1_000_000 * 50 }),
+    );
+    expect(indice(cinco).porZona[0]).toMatchObject({
+      estado: "mediana",
+      n: 5,
+      enConflicto: 0,
+    });
+    const conUnoContradicho = [
+      ...cinco.slice(0, 4),
+      { ...cinco[4], en_conflicto: ["area_privada_desde"] },
+    ];
+    expect(indice(conUnoContradicho).porZona[0]).toMatchObject({
+      estado: "sin_datos",
+      n: 5,
+      conArea: 4,
+      enConflicto: 1,
+    });
+  });
+
+  it("la ficha honesta nombra el campo en conflicto y no lo cuenta como verificable", () => {
+    const f = fichaHonesta({
+      precio_desde: 250_000_000,
+      area_privada_desde: 30,
+      area_construida_desde: 56,
+      segmento: "VIS",
+      etapa: NO_LO_DICE,
+      entrega: NO_LO_DICE,
+      parqueadero: "incluido",
+      precio_fijo: "si",
+      subsidio_anunciado: NO_LO_DICE,
+      rotulos: [],
+      en_conflicto: ["area_privada_desde"],
+    });
+    expect(f.datos.find((d) => d.campo === "area_privada_desde")?.clase).toBe(
+      "en_conflicto",
+    );
+    expect(f.verificables).toBe(5);
+    expect(f.faltan).toBe(4);
+  });
+});
+
 describe("la espera", () => {
   it("cuenta los meses hasta el final del mes de entrega y nunca en negativo", () => {
     expect(mesesHasta("2026-10-20", "2028-12")).toBe(26); // (2028 − 2026) × 12 + (12 − 10)

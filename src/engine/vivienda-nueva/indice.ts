@@ -9,7 +9,7 @@ import {
 } from "../precio/comparables.ts";
 import { LOCALIDADES } from "../zonas/localidades.ts";
 import type { Proyecto } from "./edicion.ts";
-import { normalizarClave, type Region } from "./lectura.ts";
+import { enConflicto, normalizarClave, type Region } from "./lectura.ts";
 
 export type ProyectoIndice = Pick<
   Proyecto,
@@ -21,7 +21,11 @@ export type ProyectoIndice = Pick<
   | "segmento"
   | "precio_desde"
   | "area_privada_desde"
-> & { region: Region };
+> & {
+  region: Region;
+  /** Campos que dos páginas de la revista contradicen: el proyecto no entra a la mediana (ver `ProyectoUnico`). */
+  en_conflicto?: readonly string[];
+};
 
 /** El índice es de VIVIENDA: locales, oficinas y lotes no entran (su m² no se compara con el de un apartamento). */
 export function esVivienda(p: Pick<Proyecto, "tipo">): boolean {
@@ -33,6 +37,8 @@ export type Grupo =
       clave: string;
       n: number;
       conArea: number;
+      /** Proyectos que no entran al m² porque dos páginas de la revista contradicen su precio o su área privada. */
+      enConflicto: number;
       estado: "sin_datos";
       minimo: number;
     }
@@ -40,6 +46,7 @@ export type Grupo =
       clave: string;
       n: number;
       conArea: number;
+      enConflicto: number;
       estado: "mediana";
       /** Cuántos quedaron tras el recorte de atípicos. */
       usados: number;
@@ -64,11 +71,15 @@ export function zonaDe(p: ProyectoIndice): string {
 }
 
 function grupo(clave: string, lista: readonly ProyectoIndice[]): Grupo {
+  const contradichos = lista.filter((p) =>
+    enConflicto(p, "precio_desde", "area_privada_desde"),
+  ).length;
   const m2 = lista
     .filter(
       (p) =>
         typeof p.precio_desde === "number" &&
-        typeof p.area_privada_desde === "number",
+        typeof p.area_privada_desde === "number" &&
+        !enConflicto(p, "precio_desde", "area_privada_desde"),
     )
     .map((p) => (p.precio_desde as number) / (p.area_privada_desde as number));
   const recortados = recortarAtipicos(m2);
@@ -77,6 +88,7 @@ function grupo(clave: string, lista: readonly ProyectoIndice[]): Grupo {
       clave,
       n: lista.length,
       conArea: m2.length,
+      enConflicto: contradichos,
       estado: "sin_datos",
       minimo: MINIMO_COMPARABLES,
     };
@@ -85,6 +97,7 @@ function grupo(clave: string, lista: readonly ProyectoIndice[]): Grupo {
     clave,
     n: lista.length,
     conArea: m2.length,
+    enConflicto: contradichos,
     estado: "mediana",
     usados: recortados.length,
     medianaM2: Math.round(percentil(recortados, 0.5)),

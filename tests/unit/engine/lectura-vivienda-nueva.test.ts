@@ -16,6 +16,7 @@ import {
   mismoDatoRedondeado,
   muestraDobleLectura,
   normalizarClave,
+  ProyectoUnicoSchema,
   regionDe,
   unirLecturas,
 } from "../../../src/engine/vivienda-nueva/lectura";
@@ -142,6 +143,24 @@ describe("unirLecturas", () => {
     expect(e.conflictos).toHaveLength(1);
     expect(e.conflictos[0].campo).toBe("ciudad");
     expect(e.proyectos[0].ciudad).toBe("Tocancipá");
+    // Y el proyecto lo sabe: el campo contradicho queda marcado para que ningún cálculo lo use.
+    expect(e.proyectos[0].en_conflicto).toEqual(["ciudad"]);
+  });
+
+  it("un proyecto sin contradicciones trae `en_conflicto` vacío; una diferencia de redondeo no cuenta", () => {
+    const e = unirLecturas(
+      [
+        {
+          paginas: [
+            pag(2, [{ precio_desde: 238_000_000 }]),
+            pag(9, [{ precio_desde: 237_999_000 }]),
+          ],
+        },
+      ],
+      9,
+    );
+    expect(e.reconciliados).toHaveLength(1);
+    expect(e.proyectos[0].en_conflicto).toEqual([]);
   });
 
   it("entre «Bosa» y «Bosa El Recreo» deja el sector más específico y no lo cuenta como conflicto", () => {
@@ -717,5 +736,85 @@ describe("cobertura y cruce con el índice", () => {
     ]);
     expect(x.precioDifiere).toEqual([]);
     expect(x.sinIndice).toBe(1);
+  });
+});
+
+describe("ProyectoUnicoSchema: el proyecto unido, con el esquema estricto de la lectura", () => {
+  const bueno = () => ({
+    nombre: "Proyecto de Prueba",
+    constructora: "Constructora de Prueba",
+    tipo: "apartamento",
+    ciudad: "Bogotá",
+    sector: "Suba",
+    segmento: "VIS",
+    precio_desde: 250_000_000,
+    area_construida_desde: 56,
+    area_construida_hasta: null,
+    area_privada_desde: 50,
+    area_privada_hasta: null,
+    etapa: "no_lo_dice",
+    entrega: "2028-12",
+    entrega_precision: "semestre",
+    parqueadero: "no_lo_dice",
+    parqueadero_precio: null,
+    precio_fijo: "no_lo_dice",
+    subsidio_anunciado: "no_lo_dice",
+    rotulos: ["lanzamiento"],
+    apariciones: [4, 12],
+    region: "bogota",
+    clave: "constructora de prueba|proyecto de prueba",
+    en_conflicto: [],
+  });
+
+  it("acepta un proyecto limpio", () => {
+    expect(ProyectoUnicoSchema.safeParse(bueno()).success).toBe(true);
+  });
+
+  it.each([
+    ["un teléfono", { telefono: "3000000000" }],
+    ["una nota del lector", { notas_crudo: "texto" }],
+    ["la página de una sola aparición", { pagina: 3 }],
+    ["una web en el nombre", { nombre: "proyecto.com" }],
+    ["una dirección en el sector", { sector: "Calle 18 No. 12 - 27" }],
+    ["una región inventada", { region: "luna" }],
+    ["un rótulo fuera de la lista", { rotulos: ["gran oferta"] }],
+    ["un campo en conflicto que no existe", { en_conflicto: ["telefono"] }],
+    ["sin ninguna aparición", { apariciones: [] }],
+  ])("rechaza %s", (_c, extra) => {
+    expect(
+      ProyectoUnicoSchema.safeParse({ ...bueno(), ...extra }).success,
+    ).toBe(false);
+  });
+
+  it("un área contradicha no se revisa contra su vecina: dos páginas pueden traer privada > construida", () => {
+    const incoherente = {
+      ...bueno(),
+      area_privada_desde: 60,
+      area_construida_desde: 56,
+    };
+    expect(ProyectoUnicoSchema.safeParse(incoherente).success).toBe(false);
+    expect(
+      ProyectoUnicoSchema.safeParse({
+        ...incoherente,
+        en_conflicto: ["area_privada_desde"],
+      }).success,
+    ).toBe(true);
+  });
+
+  it("lo que produce `unirLecturas` pasa el esquema (ida y vuelta con el esquema de la lectura)", () => {
+    const e = unirLecturas(
+      [
+        {
+          paginas: [
+            pag(2, [{ ciudad: "Tocancipá" }]),
+            pag(9, [{ ciudad: "Zipaquirá" }]),
+          ],
+        },
+      ],
+      9,
+    );
+    for (const p of e.proyectos) {
+      expect(ProyectoUnicoSchema.safeParse(p).success).toBe(true);
+    }
   });
 });

@@ -125,9 +125,11 @@ export default async function BuscarPage({
         <PestanasMercado
           activo="usados"
           hrefUsados="/buscar"
+          // El tope de un arriendo es una renta mensual, no un precio de compra: no viaja a «Nuevos».
           hrefNuevos={`/buscar?${paramsNuevos({
-            pago: conPago,
-            max: filtros.precioMax,
+            pago: conPago && filtros.operacion !== "arriendo",
+            max:
+              filtros.operacion === "arriendo" ? undefined : filtros.precioMax,
           })}`}
           t={enIdioma(VIVIENDA_NUEVA, lang).mercado}
         />

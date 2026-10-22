@@ -91,6 +91,11 @@ test.beforeEach(() => {
   test.skip(test.info().project.name !== "desktop-chromium", "una sola vez");
 });
 test.beforeAll(() => {
+  // La cabecera `x-hoy-simulado` solo se honra con NUEVOS_SIMULACRO=1 en el servidor (y aquí, para que no se olvide).
+  expect(
+    process.env.NUEVOS_SIMULACRO,
+    "esta spec necesita NUEVOS_SIMULACRO=1 en el entorno del servidor y de las pruebas",
+  ).toBe("1");
   limpiar();
   cargarYPublicar();
 });
@@ -131,7 +136,21 @@ test("«Usados | Nuevos» vive dentro de Buscar y la barra del comprador sigue e
     "aria-current",
     "page",
   );
+  // El tope de un arriendo es una renta mensual: no viaja a «Nuevos» como si fuera un precio de compra.
+  await page.goto("/buscar?op=arriendo&max=3000000");
+  await expect(
+    page
+      .getByRole("navigation", { name: "Usados o nuevos" })
+      .getByRole("link", { name: "Nuevos" }),
+  ).toHaveAttribute("href", "/buscar?v=nuevos");
+  await page.goto("/buscar?op=venta&max=300000000&pago=1");
+  await expect(
+    page
+      .getByRole("navigation", { name: "Usados o nuevos" })
+      .getByRole("link", { name: "Nuevos" }),
+  ).toHaveAttribute("href", "/buscar?v=nuevos&max=300000000&pago=1");
   // De vuelta a los usados.
+  await page.goto("/buscar?v=nuevos");
   await page
     .getByRole("navigation", { name: "Usados o nuevos" })
     .getByRole("link", { name: "Usados" })

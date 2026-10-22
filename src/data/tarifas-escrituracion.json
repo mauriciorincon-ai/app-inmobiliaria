@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "vigencia": 2026,
+  "consultado": "2026-10-20",
+  "descripcion": {
+    "es": "Lo que cuesta escriturar y registrar una vivienda, de las normas primarias de 2026. Solo lo verificado se muestra; lo demás queda como «no verificado» y el precio verdadero lo nombra como faltante.",
+    "en": "What it costs to deed and register a home, from the 2026 primary rules. Only what was verified is shown; the rest stays «unverified» and the true price names it as missing."
+  },
+  "unidades": {
+    "uvb": {
+      "valor": 12110,
+      "norma": "Resolución 3488 de 2025 (Ministerio de Hacienda y Crédito Público); artículo 313 de la Ley 2294 de 2023",
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "vigente"
+    },
+    "smmlv": {
+      "valor": 1750905,
+      "norma": "Decreto 1469 de 2025 (Ministerio del Trabajo), fijación transitoria por el Decreto 159 de 2026",
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "vigente",
+      "nota": {
+        "es": "El Decreto 159 de 2026 lo fija de forma transitoria por una orden judicial. El monto coincide con el tope de 4 salarios que publica el Hábitat de Bogotá ($7.003.620).",
+        "en": "Decree 159 of 2026 sets it on a transitional basis by court order. The amount matches the 4-wage cap the Bogotá Habitat office publishes ($7,003,620)."
+      }
+    }
+  },
+  "topes_vis": {
+    "smmlv": 135,
+    "smmlv_aglomeraciones": 150,
+    "municipios_aglomeracion_bogota": [
+      "Bogotá",
+      "Cajicá",
+      "Chía",
+      "Cota",
+      "Facatativá",
+      "Funza",
+      "La Calera",
+      "Madrid",
+      "Mosquera",
+      "Sibaté",
+      "Soacha",
+      "Tabio",
+      "Tocancipá",
+      "Zipaquirá"
+    ],
+    "otras_aglomeraciones": [
+      "Medellín",
+      "Cali",
+      "Santiago de Cali",
+      "Barranquilla",
+      "Cartagena",
+      "Cartagena de Indias",
+      "Bucaramanga",
+      "Cúcuta"
+    ],
+    "norma": "Decreto 1077 de 2015, artículo 2.1.9.1, modificado por el Decreto 1607 de 2022 (citado en el artículo 17 de la Resolución 2026-001726-6 de la SNR); las aglomeraciones con tope de 150 salarios son las de Bogotá, Medellín, Cali, Barranquilla, Cartagena y Bucaramanga (Decreto 1467 de 2019) y Cúcuta (Decreto 1607 de 2022). De las otras seis solo se listan sus ciudades principales: los municipios vecinos no se leyeron en el decreto y quedan con el tope de 135.",
+    "anio": 2026,
+    "consultado": "2026-10-20",
+    "estado": "vigente"
+  },
+  "conceptos": [
+    {
+      "id": "derechos_registro",
+      "nombre": {
+        "es": "Derechos de registro",
+        "en": "Registration fees"
+      },
+      "entidad": "Superintendencia de Notariado y Registro",
+      "norma": "Resolución 2026-001726-6 de 2026 (SNR), artículos 1 literal b, 17, 20, 23 y parágrafo 8",
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "vigente",
+      "vigente_desde": "2026-02-02",
+      "actos_con_cuantia": {
+        "tramos_uvb": [
+          { "hasta_uvb": 1061.28, "tarifa_fija": 53100 },
+          { "hasta_uvb": 15918.96, "por_mil": 9.11 },
+          { "hasta_uvb": 27592.87, "por_mil": 11.31 },
+          { "hasta_uvb": 40858.7, "por_mil": 12.6 },
+          { "por_mil": 13.33 }
+        ],
+        "aplicacion": {
+          "es": "La tarifa del tramo se aplica a toda la cuantía. Si el precio de la escritura es menor que el avalúo catastral, se liquida sobre el avalúo catastral.",
+          "en": "The bracket rate applies to the whole amount. If the deed price is below the cadastral appraisal, it is computed on the cadastral appraisal."
+        }
+      },
+      "recargo_sistematizacion": 0.02,
+      "vis": {
+        "factor": 0.5,
+        "articulo": 17,
+        "tope_smmlv": 135,
+        "tope_smmlv_aglomeraciones": 150
+      },
+      "vip": {
+        "exento": true,
+        "articulo": 23,
+        "condicion": {
+          "es": "Cuando el Estado, directamente o por una caja de compensación, otorga el subsidio, y se acredita la calidad de VIP.",
+          "en": "When the State, directly or through a family compensation fund, grants the subsidy, and VIP status is proven."
+        }
+      },
+      "hipoteca": {
+        "articulo": 20,
+        "vivienda_individual": 0.7,
+        "vis_no_subsidiable": 0.4,
+        "vis_subsidiable": 0.1
+      }
+    },
+    {
+      "id": "derechos_notariales",
+      "nombre": {
+        "es": "Derechos notariales",
+        "en": "Notary fees"
+      },
+      "entidad": "Superintendencia de Notariado y Registro",
+      "norma": "Resolución 2026-000964-6 de 2026 (SNR), artículos 2 literal b, 31, 32 y 33",
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "vigente",
+      "vigente_desde": "2026-02-01",
+      "actos_con_cuantia": {
+        "hasta_pesos": 259300,
+        "tarifa_fija": 30900,
+        "sobre_exceso_por_mil": 3,
+        "hoja_adicional": 5600
+      },
+      "vis": {
+        "factor": 0.5,
+        "articulo": 31
+      },
+      "vip": {
+        "exento": true,
+        "verificado": false,
+        "articulo": null,
+        "condicion": {
+          "es": "La exención de derechos notariales de la VIP con subsidio la dice el artículo 2.1.8.3 del Decreto 1895 de 2016, que cita el artículo 23 de la resolución de registro; el texto de la resolución notarial no se releyó para ese caso.",
+          "en": "The notary-fee exemption for subsidized VIP comes from article 2.1.8.3 of Decree 1895 of 2016, quoted in article 23 of the registration resolution; the notary resolution's own text was not re-read for that case."
+        }
+      },
+      "hipoteca": {
+        "articulo": 32,
+        "vivienda_individual": 0.7,
+        "vis_no_subsidiable": 0.4,
+        "vis_subsidiable": 0.1
+      },
+      "iva": {
+        "estado": "no_verificado",
+        "nota": {
+          "es": "La SNR dice que al derecho notarial se suman el IVA y el papel notarial; el porcentaje no se leyó en la norma.",
+          "en": "The SNR says VAT and notarial paper are added to the notary fee; the rate was not read in the rule."
+        }
+      }
+    },
+    {
+      "id": "impuesto_registro_y_beneficencia",
+      "nombre": {
+        "es": "Impuesto de registro y beneficencia",
+        "en": "Registration tax and charity levy"
+      },
+      "entidad": "Distrito Capital / Departamento",
+      "norma": null,
+      "anio": 2026,
+      "consultado": "2026-10-20",
+      "estado": "no_verificado",
+      "nota": {
+        "es": "No se encontró la norma distrital o departamental vigente con su tarifa; las notarías y la prensa difieren. No se muestra ni se suma.",
+        "en": "The current district or departmental rule with its rate was not found; notaries and the press differ. It is neither shown nor added."
+      }
+    }
+  ]
+}

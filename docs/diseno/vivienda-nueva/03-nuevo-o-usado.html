@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · New or resale?">
+      Innmobiliaria · ¿Nuevo o usado?
+    </title>
+    <link rel="stylesheet" href="../comprador/assets/maqueta.css" />
+    <link rel="stylesheet" href="assets/vivienda-nueva.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-estados='[["bogota","Bogotá: hay usados","Bogotá: resale data"],["sabana","Sabana: sin usados suficientes","Savanna: not enough resale data"]]'
+  >
+    <div class="app">
+      <main class="app__main" style="max-width: 960px">
+        <h1><t-es>¿Nuevo o usado?</t-es><t-en>New or resale?</t-en></h1>
+        <p class="bajada">
+          <t-es
+            >Con lo que puedes pagar y en la misma zona: lo nuevo por su precio
+            verdadero frente a lo usado verificado, con la misma regla de 5
+            comparables.</t-es
+          ><t-en
+            >With what you can afford and in the same area: new homes by their
+            true price against verified resale homes, with the same 5-comparable
+            rule.</t-en
+          >
+        </p>
+        <div
+          class="chips"
+          role="group"
+          aria-label="Zona"
+          data-aria-es="Zona"
+          data-aria-en="Area"
+        >
+          <button
+            type="button"
+            class="chip"
+            data-ir-estado="bogota"
+            aria-pressed="true"
+          >
+            <t-es>Bogotá</t-es><t-en>Bogotá city</t-en>
+          </button>
+          <button
+            type="button"
+            class="chip"
+            data-ir-estado="sabana"
+            aria-pressed="false"
+          >
+            <t-es>Sabana</t-es><t-en>Savanna</t-en>
+          </button>
+        </div>
+        <p class="mute" data-vn="tope"></p>
+        <div data-para-estado="bogota">
+          <div data-vn="nuevo-usado" data-vn-zona="bogota"></div>
+        </div>
+        <div data-para-estado="sabana">
+          <div data-vn="nuevo-usado" data-vn-zona="sabana"></div>
+        </div>
+      </main>
+    </div>
+    <script src="assets/config.js"></script>
+    <script src="assets/datos-187.js"></script>
+    <script src="assets/vivienda-nueva.js"></script>
+    <script src="../comprador/assets/maqueta.js"></script>
+  </body>
+</html>

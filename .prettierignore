@@ -4,3 +4,6 @@ docs/diseno/comprador/assets/mapa-datos.js
 
 # Worker de MapLibre copiado de node_modules (build:maplibre).
 public/maplibre/
+
+# S11 — generado por scripts/vivienda-nueva/maqueta.mjs: su forma la fija el generador (mismos bytes al regenerar).
+docs/diseno/vivienda-nueva/assets/datos-187.js

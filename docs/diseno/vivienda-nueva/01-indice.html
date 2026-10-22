@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es-CO" data-idioma="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-titulo-en="Innmobiliaria · New-home index">
+      Innmobiliaria · Índice de vivienda nueva
+    </title>
+    <link rel="stylesheet" href="../comprador/assets/maqueta.css" />
+    <link rel="stylesheet" href="assets/vivienda-nueva.css" />
+  </head>
+  <body
+    data-nav="buscar"
+    data-estados='[["vigente","Edición vigente","Current edition"],["tope","Lo que puedes pagar","What you can afford"],["sin-edicion","Mes sin edición","Month without an edition"]]'
+  >
+    <div class="app">
+      <main class="app__main">
+        <div
+          class="seg"
+          role="group"
+          aria-label="Usados o nuevos"
+          data-aria-es="Usados o nuevos"
+          data-aria-en="Resale or new"
+        >
+          <a class="btn btn--sec btn--peq" href="../comprador/01-buscar.html"
+            ><t-es>Usados</t-es><t-en>Resale</t-en></a
+          >
+          <a class="btn btn--peq" href="01-indice.html" aria-current="page"
+            ><t-es>Nuevos</t-es><t-en>New</t-en></a
+          >
+        </div>
+        <h1>
+          <t-es>Vivienda nueva en Bogotá y la Sabana</t-es
+          ><t-en>New homes in Bogotá and the savanna</t-en>
+        </h1>
+        <p class="bajada" data-vn="fuente"></p>
+
+        <div
+          class="aviso aviso--aviso"
+          data-para-estado="sin-edicion"
+          role="status"
+          data-enfocar
+        >
+          <svg class="ico"><use href="#i-alerta" /></svg>
+          <div>
+            <strong
+              ><t-es>Mes sin edición</t-es
+              ><t-en>Month without an edition</t-en></strong
+            ><span data-vn="sin-edicion"></span>
+          </div>
+        </div>
+
+        <div class="aviso aviso--info" data-para-estado="tope" data-enfocar>
+          <svg class="ico"><use href="#i-info" /></svg>
+          <div><span data-vn="tope"></span></div>
+        </div>
+
+        <h2 class="h2">
+          <t-es>El índice: cuánto piden por m² privado</t-es
+          ><t-en>The index: asking price per private m²</t-en>
+        </h2>
+        <p class="mute">
+          <t-es
+            >Mediana del m² «desde» sobre el área privada, con el recorte de
+            atípicos y el mínimo de 5 proyectos del «¿Está caro?». Sin 5, no hay
+            mediana.</t-es
+          ><t-en
+            >Median «from» price per private m², with the same outlier trimming
+            and 5-project minimum as «Is it overpriced?». Without 5, there is no
+            median.</t-en
+          >
+        </p>
+        <div data-vn="indice-resumen"></div>
+        <details style="margin-top: 12px">
+          <summary>
+            <t-es>Por zona, franja de precio y segmento</t-es
+            ><t-en>By area, price band and segment</t-en>
+          </summary>
+          <div data-vn="indice-zonas"></div>
+          <div data-vn="indice-franjas" style="margin-top: 12px"></div>
+          <div data-vn="indice-segmentos" style="margin-top: 12px"></div>
+        </details>
+
+        <h2 class="h2"><t-es>Los proyectos</t-es><t-en>The projects</t-en></h2>
+        <p class="mute">
+          <t-es
+            >«Pagas al menos» suma al «desde» lo que la norma cobra por
+            registrar y el parqueadero que se paga aparte. Lo que el aviso calla
+            se cuenta en cada tarjeta.</t-es
+          ><t-en
+            >«You pay at least» adds to the «from» price what the rules charge
+            to register and any parking paid separately. What the ad leaves out
+            is counted on each card.</t-en
+          >
+        </p>
+        <div data-vn="lista"></div>
+      </main>
+    </div>
+    <script src="assets/config.js"></script>
+    <script src="assets/datos-187.js"></script>
+    <script src="assets/vivienda-nueva.js"></script>
+    <script src="../comprador/assets/maqueta.js"></script>
+  </body>
+</html>

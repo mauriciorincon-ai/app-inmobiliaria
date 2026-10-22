@@ -1,5 +1,8 @@
 /* =============================================================================
    Maqueta del lado comprador — script compartido por las 13 páginas (S6)
+   y por la maqueta de vivienda nueva (S11), que lo configura con
+   window.MAQUETA_CONFIG (pantallas, nota, secciones, almacén). Sin esa
+   configuración se comporta exactamente como antes.
    =============================================================================
    Script clásico a propósito (no módulo): los módulos ES no cargan desde file://
    y esta maqueta se abre con doble clic. Construye la barra de la maqueta (pantalla,
@@ -10,7 +13,8 @@
 (function () {
   "use strict";
 
-  var PANTALLAS = [
+  var CFG = window.MAQUETA_CONFIG || {};
+  var PANTALLAS = CFG.pantallas || [
     { a: "index.html", n: "00", es: "Recorrido", en: "Overview" },
     { a: "01-buscar.html", n: "01", es: "Buscar en el mapa", en: "Map search" },
     {
@@ -86,14 +90,16 @@
   var q = new URLSearchParams(location.search);
   function recordado(k) {
     try {
-      return localStorage.getItem("maqueta-comprador:" + k);
+      return localStorage.getItem(
+        (CFG.almacen || "maqueta-comprador") + ":" + k,
+      );
     } catch {
       return null;
     }
   }
   function recordar(k, v) {
     try {
-      localStorage.setItem("maqueta-comprador:" + k, v);
+      localStorage.setItem((CFG.almacen || "maqueta-comprador") + ":" + k, v);
     } catch {
       /* sin almacenamiento: la URL lleva el estado */
     }
@@ -302,10 +308,12 @@
       ) +
       "</span>" +
       '<span class="maq__nota">' +
-      t(
-        "Anuncios, precios y personas: datos de ejemplo. Barrios: reales (Catastro Bogotá).",
-        "Listings, prices and people: sample data. Neighborhoods: real (Bogotá cadastre).",
-      ) +
+      (CFG.nota
+        ? t(CFG.nota.es, CFG.nota.en)
+        : t(
+            "Anuncios, precios y personas: datos de ejemplo. Barrios: reales (Catastro Bogotá).",
+            "Listings, prices and people: sample data. Neighborhoods: real (Bogotá cadastre).",
+          )) +
       "</span>" +
       "</div>";
   }
@@ -341,6 +349,13 @@
       en: "Tools",
     },
   ];
+  if (CFG.secciones) {
+    SECCIONES = SECCIONES.map(function (s) {
+      return CFG.secciones[s.k]
+        ? { k: s.k, a: CFG.secciones[s.k], i: s.i, es: s.es, en: s.en }
+        : s;
+    });
+  }
   function pintarCabecera() {
     var app = document.querySelector(".app");
     if (!app) return;

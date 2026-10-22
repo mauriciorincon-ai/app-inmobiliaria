@@ -130,6 +130,9 @@ export default function VisitaComprador({
   }
 
   const v = carga.visita;
+  // Una solicitud de sala (`proyecto`, sin `inmueble`) la pinta la F3 del S13; ningún enlace de sala existe antes.
+  if (v.inmueble === null) return null;
+  const slugInmueble = v.inmueble.slug;
   const dueno = v.inmueble.nombre_publicador;
   const nombreTipo = tipos[v.inmueble.tipo] ?? tipos.inmueble;
   const inmueble = rellenar(t.inmueble, {
@@ -151,7 +154,7 @@ export default function VisitaComprador({
     if (!inicio || !token) return;
     const ics = generarIcs(
       {
-        uid: `visita-${v.inmueble.slug}-${inicio.replace(/\D/g, "")}@innmobiliaria`,
+        uid: `visita-${slugInmueble}-${inicio.replace(/\D/g, "")}@innmobiliaria`,
         inicio,
         titulo: rellenar(t.ics.titulo, { inmueble }),
         descripcion: rellenar(t.ics.descripcion, { dueno }),
@@ -400,7 +403,7 @@ export default function VisitaComprador({
             )}
           </p>
           <div className="mt-4">
-            <Link href={`/i/${v.inmueble.slug}`} className={BOTON}>
+            <Link href={`/i/${slugInmueble}`} className={BOTON}>
               {t.estados.cancelada.otros}
             </Link>
           </div>

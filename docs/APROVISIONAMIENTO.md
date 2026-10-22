@@ -125,8 +125,8 @@ NEXT_PUBLIC_SUPABASE_URL=… NEXT_PUBLIC_SUPABASE_ANON_KEY=… \
 
 `--espera ausente` antes de aplicar la migración 15 (la RPC pública aún no existe), `vacia` después de aplicarla y antes de
 publicar (la RPC responde `null`), `publicada` con una edición publicada (cada proyecto trae exactamente las 25 claves de la
-lista blanca). En los tres casos comprueba que `ping()` responde, que el anónimo no lee las tablas y que no puede cargar, publicar ni
-retirar una edición. Sale con código 1 si algo no es lo esperado y jamás imprime la URL ni la llave.
+lista blanca). Siempre comprueba que `ping()` responde; con `vacia` y `publicada` comprueba además que el anónimo no lee las tablas y que
+no puede cargar, publicar ni retirar una edición (con `ausente` esas funciones aún no existen). Sale con código 1 si algo no es lo esperado y jamás imprime la URL ni la llave.
 
 ---
 

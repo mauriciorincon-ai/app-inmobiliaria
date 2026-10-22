@@ -282,7 +282,7 @@ solicitudes de visita.
   **«Mes sin edición»**, cuántos días lleva vencida y que los precios pueden haber cambiado; el índice no se presenta como de hoy.
 - **Limitaciones conocidas:** solo la revista de un mes, solo Bogotá y la Sabana en el índice, y los proyectos que la revista no
   imprime no existen aquí. Las cifras son un **estimado**: la escritura real la liquidan la notaría y la oficina de registro. Si la
-  editorial pide retirar los nombres, la pantalla pasa a un índice agregado. Pedir una visita a la sala de ventas, comparar con
+  editorial pide retirar los nombres, la edición se retira de inmediato (un índice sin nombres está pensado, pero no construido). Pedir una visita a la sala de ventas, comparar con
   un usado y los subsidios no están en esta versión.
 
 ## Features

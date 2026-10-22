@@ -450,6 +450,10 @@ export const VIVIENDA_NUEVA = {
         es: "El aviso no dice cuándo entregan: la espera no se puede calcular. Pregúntalo antes de firmar.",
         en: "The ad does not say when it is handed over: the wait cannot be computed. Ask before you sign.",
       },
+      enConflicto: {
+        es: "Dos páginas de la revista imprimen una entrega distinta para este proyecto: no la usamos para calcular la espera. Pregúntala en la sala de ventas antes de firmar.",
+        en: "Two pages of the magazine print different handover dates for this project: we do not use either to compute the wait. Ask at the sales room before you sign.",
+      },
       arriendo: {
         etiqueta: {
           es: "Tu arriendo mensual (COP)",

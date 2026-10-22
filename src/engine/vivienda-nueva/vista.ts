@@ -17,7 +17,7 @@ import {
   type Franja,
   type Indice,
 } from "./indice.ts";
-import type { ProyectoUnico, Region } from "./lectura.ts";
+import { enConflicto, type ProyectoUnico, type Region } from "./lectura.ts";
 import { precioVerdadero, type PrecioVerdadero } from "./precio-verdadero.ts";
 
 // --- la edición --------------------------------------------------------------------------------------------------------
@@ -201,7 +201,10 @@ export function franjasNuevos(tarifas: TarifasEscrituracion): Franja[] {
 }
 
 function franjaDe(p: ProyectoUnico, franjas: readonly Franja[]): ClaveFranja {
-  if (typeof p.precio_desde !== "number") return "sin_precio";
+  // Un precio que dos páginas imprimen distinto no ubica al proyecto en ninguna franja (S13, como el «al menos»).
+  if (typeof p.precio_desde !== "number" || enConflicto(p, "precio_desde")) {
+    return "sin_precio";
+  }
   const precio = p.precio_desde;
   return (franjas.find((x) => x.hasta === null || precio <= x.hasta) as Franja)
     .clave as ClaveFranja;
@@ -317,6 +320,8 @@ function entregaCumple(
   p: ProyectoUnico,
   filtro: number | "inmediata",
 ): boolean {
+  // Una entrega o una etapa en conflicto no puede dar por cumplido ningún filtro de entrega (S13).
+  if (enConflicto(p, "entrega", "entrega_precision", "etapa")) return false;
   const inmediata =
     p.entrega === "inmediata" || p.etapa === "entrega_inmediata";
   if (filtro === "inmediata") return inmediata;
@@ -350,7 +355,9 @@ export function vistaLista(
   const anios = [
     ...new Set(
       cerca.flatMap((p) => {
-        const m = /^(\d{4})-\d{2}$/.exec(String(p.entrega));
+        const m = enConflicto(p, "entrega")
+          ? null
+          : /^(\d{4})-\d{2}$/.exec(String(p.entrega));
         return m ? [Number(m[1])] : [];
       }),
     ),

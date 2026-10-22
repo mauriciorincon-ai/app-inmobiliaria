@@ -223,6 +223,13 @@ export default function FichaNuevo({
               </Aviso>
             </div>
           )}
+          {v.espera.estado === "en_conflicto" && (
+            <div className="mt-2">
+              <Aviso tono="info">
+                <p>{tf.espera.enConflicto}</p>
+              </Aviso>
+            </div>
+          )}
           {v.espera.estado === "calculada" && entrega && (
             <>
               <p className="mt-2 text-gray">{tf.espera.intro}</p>

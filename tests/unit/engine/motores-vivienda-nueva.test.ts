@@ -476,6 +476,36 @@ describe("la espera", () => {
     });
   });
 
+  it("con la entrega, su precisión o la etapa en conflicto no se cuenta: se nombra (S13)", () => {
+    for (const campo of ["entrega", "entrega_precision", "etapa"]) {
+      expect(
+        espera(
+          {
+            entrega: "2028-12",
+            entrega_precision: "mes",
+            etapa: NO_LO_DICE,
+            en_conflicto: [campo],
+          },
+          "2026-10-20",
+          1_800_000,
+        ),
+      ).toEqual({ estado: "en_conflicto" });
+    }
+    // El conflicto de un campo que no es de la entrega no la toca.
+    expect(
+      espera(
+        {
+          entrega: "2028-12",
+          entrega_precision: "mes",
+          etapa: NO_LO_DICE,
+          en_conflicto: ["precio_desde"],
+        },
+        "2026-10-20",
+        1_800_000,
+      ).estado,
+    ).toBe("calculada");
+  });
+
   it("una fecha impresa que ya pasó se dice como vencida", () => {
     const r = espera(
       { entrega: "2026-06", entrega_precision: "mes", etapa: NO_LO_DICE },

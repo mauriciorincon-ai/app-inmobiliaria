@@ -15,7 +15,7 @@ busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verif
 escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
 visita; desde el Sprint 009 también guarda favoritos, compara, comparte listas con notas y recibe
 alertas por correo; desde el Sprint 010 también decide con números: ve si un precio está en línea con
-su zona y calcula cuánto puede pagar) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
+su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
 panel privado). El dueño decide si los compradores verificados pueden escribirle y recibir
 solicitudes de visita.
 
@@ -53,7 +53,8 @@ solicitudes de visita.
 
 - **Qué hace:** deja buscar los anuncios **vivos** de dueños directos en Bogotá, por filtros o
   dibujando tu zona en un mapa. No pide cuenta ni datos.
-- **Cómo se usa:** toca **"Buscar"** (arriba) →
+- **Cómo se usa:** toca **"Buscar"** (arriba). Encima de los filtros hay dos pestañas, **Usados** (esta
+  búsqueda) y **Nuevos** (vivienda nueva; ver más abajo) →
   1. **Venta / Arriendo:** los dos botones de arriba; volver a tocar el activo lo suelta.
   2. **Filtros:** ábrelos con **"Filtros"** y elige tipo, localidad, precio mínimo y máximo (puedes
      escribirlo con puntos: 300.000.000) y habitaciones. **"Ver resultados"** aplica; cada filtro
@@ -243,6 +244,46 @@ solicitudes de visita.
   mercado, y mejora con la cantidad de anuncios: al comienzo muchas zonas dirán «sin datos
   suficientes». El simulador no incluye subsidios, UVR ni leasing, y no es una oferta ni una
   aprobación. Las normas se verificaron en octubre de 2026; si cambian, el simulador se actualiza.
+
+## Vivienda nueva: lo que pagas de verdad · desde Sprint 012
+
+- **Qué hace:** en **Buscar** hay dos pestañas, **Usados** y **Nuevos**. «Nuevos» muestra los proyectos de vivienda
+  nueva de Bogotá y la Sabana de la edición vigente de la revista Estrenar Vivienda, con **lo que pagas de verdad**: el
+  aviso dice «desde $X», pero comprar cuesta más. No necesitas cuenta. La barra de abajo sigue con sus cuatro secciones.
+- **Siempre con su fuente:** cada pantalla dice «Fuente: Estrenar Vivienda, edición N» y, en la ficha, las páginas de la
+  revista de donde sale el proyecto. Solo mostramos lo que la revista **imprime** (nombre, constructora, zona y cifras): no
+  hay fotos, logos, textos de avisos, teléfonos ni direcciones. Una edición se publica solo cuando una persona del equipo
+  revisó una muestra de cinco proyectos contra sus páginas.
+- **El índice:** arriba, la **mediana del m² privado** de Bogotá y de la Sabana, y en «Por zona, franja de precio y
+  segmento» el detalle. **Con menos de 5 proyectos no damos mediana** y te decimos cuántos hay: hoy casi ninguna localidad los
+  tiene porque los avisos rara vez imprimen el barrio. Un proyecto cuyas páginas imprimen cifras distintas no entra al m².
+- **La lista:** cada tarjeta trae el **«desde»** del aviso y, más grande, **«Pagas al menos»**. Filtra por zona, franja de
+  precio, VIS o No VIS, etapa y año de entrega; «Ver más proyectos» es un enlace y los filtros funcionan sin JavaScript.
+- **La ficha del proyecto** (toca una tarjeta):
+  - **El precio verdadero.** «Pagas al menos» suma el precio «desde», los **derechos de registro** (Resolución 2026-001726-6 de la
+    Superintendencia de Notariado y Registro, a cargo de quien registra) y el **parqueadero que se paga aparte** si el aviso da su
+    precio. Cada peso trae su norma y la fecha en que la consultamos. **Es un mínimo, no un total:** lo que falta se **nombra y no
+    se suma** (los derechos notariales, que se reparten como diga la promesa de compraventa; el impuesto de registro y la
+    beneficencia y el IVA de la notaría, que no pudimos verificar; el parqueadero sin precio; que el precio puede subir mientras
+    se construye si el aviso no dice que es fijo; la hipoteca si compras con crédito).
+  - **El m² es «aproximado»** y lo dice: el precio «desde» y el área «desde» no siempre son de la misma unidad. Sin área privada se
+    usa la construida y también se dice.
+  - **La espera.** Mientras construyen sigues pagando arriendo: te decimos los **meses hasta la entrega** y, si escribes tu
+    arriendo, cuánto cuesta esa espera. **Tu arriendo se guarda solo en este teléfono** y ninguna petición lo lleva; «Borrar mi
+    arriendo de este teléfono» lo quita cuando quieras.
+  - **La ficha honesta.** Cada dato que necesitas para decidir (precio, áreas, VIS o No VIS, etapa, entrega, parqueadero, precio
+    fijo, subsidio) aparece como **«Lo dice»**, **«No lo dice»**, **«Ilegible en la revista»** o **«Dos páginas imprimen cifras
+    distintas»**. Lo que el aviso no dice **no se adivina**. Los mensajes de venta («Lanzamiento», «Últimas unidades»…) van aparte
+    porque no son datos.
+- **Lo que puedes pagar también filtra los nuevos:** en **Herramientas** calculas tu precio máximo y, con la pestaña «Nuevos», la
+  lista se separa en lo que **cabe**, lo que **no cabe** y lo que **no trae precio**. Se compara con «pagas al menos», no con el
+  «desde». Tus ingresos no salen de tu teléfono: solo viaja el tope.
+- **Mes sin edición:** las ediciones tienen vigencia (la del 15 de un mes al 15 del siguiente). Pasada la fecha, la pantalla dice
+  **«Mes sin edición»**, cuántos días lleva vencida y que los precios pueden haber cambiado; el índice no se presenta como de hoy.
+- **Limitaciones conocidas:** solo la revista de un mes, solo Bogotá y la Sabana en el índice, y los proyectos que la revista no
+  imprime no existen aquí. Las cifras son un **estimado**: la escritura real la liquidan la notaría y la oficina de registro. Si la
+  editorial pide retirar los nombres, la edición se retira de inmediato (un índice sin nombres está pensado, pero no construido). Pedir una visita a la sala de ventas, comparar con
+  un usado y los subsidios no están en esta versión.
 
 ## Features
 
@@ -455,14 +496,15 @@ solicitudes de visita.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                                                                             |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                                                                         |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                                                                                   |
-| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                                                                              |
-| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                                                                           |
-| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                            |
-| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                       |
-| 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió»        |
-| 009    | Guardar y avisar: favoritos sin cuenta (pasan a tu cuenta al verificar), comparar hasta 4, listas compartidas con notas, alertas por correo con doble confirmación y baja en un clic, resumen diario, navegación Buscar · Guardados · Alertas y precio editable en Mi anuncio                                                               |
-| 010    | Decidir con números: «¿Está caro?» como rango P25–P75 con su N, fecha y fuente (nunca un avalúo), datos de la zona, simulador de cuota con el tope del 40 % del Decreto 583 de 2025 y la tasa con su fecha, «lo que puedes pagar» en Buscar y en las alertas, el rango del dueño al publicar, la fila de Comparar y la sección Herramientas |
+| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                                                                                                         |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                                                                                                     |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                                                                                                               |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                                                                                                          |
+| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                                                                                                       |
+| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                                                        |
+| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                                                   |
+| 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió»                                    |
+| 009    | Guardar y avisar: favoritos sin cuenta (pasan a tu cuenta al verificar), comparar hasta 4, listas compartidas con notas, alertas por correo con doble confirmación y baja en un clic, resumen diario, navegación Buscar · Guardados · Alertas y precio editable en Mi anuncio                                                                                           |
+| 010    | Decidir con números: «¿Está caro?» como rango P25–P75 con su N, fecha y fuente (nunca un avalúo), datos de la zona, simulador de cuota con el tope del 40 % del Decreto 583 de 2025 y la tasa con su fecha, «lo que puedes pagar» en Buscar y en las alertas, el rango del dueño al publicar, la fila de Comparar y la sección Herramientas                             |
+| 012    | Vivienda nueva: pestaña «Nuevos» en Buscar con el índice de la edición vigente (mediana del m² privado, solo con 5 o más proyectos), la lista con «pagas al menos» y filtros, la ficha del proyecto con cada peso y su norma, lo que falta sumar nombrado, «la espera» con tu arriendo solo en el teléfono, la ficha honesta, «lo que puedes pagar» y «mes sin edición» |

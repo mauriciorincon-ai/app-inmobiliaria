@@ -63,6 +63,8 @@ const PUBLICAS = [
   // S10: la última tasa de vivienda y los comparables de precio (solo lo que `/buscar` ya muestra).
   "tasa_vivienda()",
   "comparables_precio(operacion,tipo_inmueble,text)",
+  // S12: la edición vigente de la vivienda nueva (solo ediciones PUBLICADAS, lista blanca de columnas).
+  "nuevos_publicados(date)",
 ];
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
@@ -101,6 +103,10 @@ const SOLO_SERVIDOR = [
   "registrar_cambio_precio",
   // S10: guardar la tasa que lee el cron (solo el servidor).
   "guardar_tasa_vivienda",
+  // S12: cargar, publicar y retirar una edición de vivienda nueva (la bandeja, con la llave de servicio).
+  "cargar_edicion",
+  "publicar_edicion",
+  "retirar_edicion",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
@@ -199,6 +205,22 @@ test("las funciones del servidor del S9 las ejecuta service_role y crear_alerta 
     "crear_alerta(text,text,text,operacion,tipo_inmueble,text,bigint,bigint,smallint,text,boolean,boolean,boolean,text,integer)",
     "reclamar_resumenes(integer,uuid)",
     "sumar_correos_dia(text,integer)",
+  ];
+  for (const f of firmas) {
+    const [fila] = consultar(
+      `select has_function_privilege('service_role', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('anon', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('authenticated', 'public.${f}', 'execute')::text`,
+    );
+    expect(fila, f).toBe("true,false,false");
+  }
+});
+
+test("las funciones del servidor del S12 las ejecuta service_role y jamás anon ni authenticated", async () => {
+  const firmas = [
+    "cargar_edicion(jsonb)",
+    "publicar_edicion(integer,text[])",
+    "retirar_edicion(integer)",
   ];
   for (const f of firmas) {
     const [fila] = consultar(

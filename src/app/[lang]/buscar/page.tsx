@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { Suspense } from "react";
 import BuscarLayout from "@/components/buscar/BuscarLayout";
@@ -9,6 +10,8 @@ import ListaResultados, {
   type Busqueda,
 } from "@/components/buscar/ListaResultados";
 import MapaConResultados from "@/components/buscar/MapaConResultados";
+import BuscarNuevos from "@/components/nuevos/BuscarNuevos";
+import PestanasMercado from "@/components/nuevos/PestanasMercado";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import {
   aArgsBuscar,
@@ -18,22 +21,33 @@ import {
   type Filtros,
 } from "@/engine/busqueda/filtros";
 import { formatearCOP } from "@/engine/format/cop";
+import { leerFiltrosNuevos, paramsNuevos } from "@/engine/vivienda-nueva/vista";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { crearClienteAnon } from "@/lib/supabase/server";
+import { cargarNuevos, hoyNuevos } from "@/lib/vivienda-nueva/datos";
 import { BUSCAR } from "@/textos/buscar";
 import { COMUN } from "@/textos/comun";
+import { VIVIENDA_NUEVA } from "@/textos/vivienda-nueva";
 
 // La búsqueda vive en la URL y lee la BD por la RPC pública (lista blanca de campos): dinámica.
 export const dynamic = "force-dynamic";
 
 type Parametros = Promise<Record<string, string | string[] | undefined>>;
 
+// «Usados | Nuevos» (S12): `?v=nuevos` es la pestaña de vivienda nueva. Vive FUERA de `aParams`/`hayFiltros` de los usados
+// (las alertas y los conteos los reusan): un parámetro más ahí rompería «primera vez», alertas y conteos.
+const esNuevos = (p: Record<string, string | string[] | undefined>) =>
+  (Array.isArray(p.v) ? p.v[0] : p.v) === "nuevos";
+
 export async function generateMetadata({
   params,
-}: PropsLang): Promise<Metadata> {
+  searchParams,
+}: PropsLang & { searchParams: Parametros }): Promise<Metadata> {
   const lang = await leerIdioma(params);
-  const t = enIdioma(BUSCAR.meta, lang);
+  const t = esNuevos(await searchParams)
+    ? enIdioma(VIVIENDA_NUEVA.meta, lang)
+    : enIdioma(BUSCAR.meta, lang);
   // noindex hasta H-4 (como el resto de la app): la apertura al buscador llega con el dominio.
   return {
     title: t.titulo,
@@ -65,6 +79,40 @@ export default async function BuscarPage({
   const parametros = await searchParams;
   const filtros = leerFiltros(parametros);
   const t = enIdioma(BUSCAR, lang);
+
+  // La pestaña de vivienda nueva: se calcula entera en el servidor (motores del S11) y no toca la búsqueda de usados.
+  if (esNuevos(parametros)) {
+    const tn = enIdioma(VIVIENDA_NUEVA, lang);
+    const filtrosNuevos = leerFiltrosNuevos(parametros);
+    const hoy = hoyNuevos(await headers());
+    const lectura = await cargarNuevos(hoy);
+    const usados = new URLSearchParams();
+    if (filtrosNuevos.max !== undefined) {
+      usados.set("max", String(filtrosNuevos.max));
+      if (filtrosNuevos.pago) usados.set("pago", "1");
+    }
+    return (
+      <>
+        <EncabezadoInterior lang={lang} seccion="buscar" />
+        <main className="mx-auto max-w-6xl px-6 py-6 pb-28 sm:pb-6">
+          <PestanasMercado
+            activo="nuevos"
+            hrefUsados={usados.size ? `/buscar?${usados}` : "/buscar"}
+            hrefNuevos="/buscar?v=nuevos"
+            t={tn.mercado}
+          />
+          <BuscarNuevos
+            lectura={lectura}
+            hoy={hoy}
+            filtros={filtrosNuevos}
+            entrada={parametros}
+            t={tn}
+            lang={lang}
+          />
+        </main>
+      </>
+    );
+  }
   const promesa = buscar(filtros);
   // El simulador manda aquí con `pago=1` y el precio máximo (`max`): la página dice de dónde sale ese tope. Sin
   // `max` válido no hay nada que rotular.
@@ -74,6 +122,17 @@ export default async function BuscarPage({
     <>
       <EncabezadoInterior lang={lang} seccion="buscar" />
       <main className="mx-auto max-w-6xl px-6 py-6 pb-28 sm:pb-6">
+        <PestanasMercado
+          activo="usados"
+          hrefUsados="/buscar"
+          // El tope de un arriendo es una renta mensual, no un precio de compra: no viaja a «Nuevos».
+          hrefNuevos={`/buscar?${paramsNuevos({
+            pago: conPago && filtros.operacion !== "arriendo",
+            max:
+              filtros.operacion === "arriendo" ? undefined : filtros.precioMax,
+          })}`}
+          t={enIdioma(VIVIENDA_NUEVA, lang).mercado}
+        />
         <FiltrosBusqueda
           filtros={filtros}
           t={t.filtros}

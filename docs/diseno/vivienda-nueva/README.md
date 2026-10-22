@@ -1,8 +1,10 @@
 # Maqueta de vivienda nueva — Innmobiliaria (S11)
 
 Maqueta navegable del módulo de vivienda nueva, con las cifras **reales** de la edición 187 de la revista (procesada) y
-calculadas por los motores de `src/engine/vivienda-nueva/`. Es la base de los sprints S12 y S13. **No es código de
-producto:** HTML autocontenido que se abre con doble clic en `index.html`.
+calculadas por los motores de `src/engine/vivienda-nueva/`. Es la maqueta aprobada de la que salen el índice y la ficha del
+producto (S12: pestaña «Nuevos» de Buscar y `/nuevos/[slug]`) y, en el S13, nuevo o usado, subsidio y la visita. **La maqueta
+no es código de producto:** HTML autocontenido que se abre con doble clic en `index.html`; los textos del producto viven en
+`src/textos/vivienda-nueva.ts`.
 
 ## Cómo abrirla
 
@@ -21,7 +23,9 @@ y el **marco**.
   fecha.
 - **De ejemplo:** el hogar (ingresos de $8 M, 30 % de cuota inicial, 20 años), el arriendo de $1.800.000, los hogares de
   «te alcanza» y los usados de «nuevo o usado». En el producto, el ingreso y el arriendo los escribe el comprador y no
-  salen de su teléfono; los usados son los anuncios verificados de la búsqueda.
+  salen de su teléfono; los usados son los anuncios verificados de la búsqueda. También son de ejemplo, en `05-visita.html`,
+  el plazo de «dos días hábiles» y la hora de la visita confirmada: el S13 los define de verdad, y los teléfonos y
+  direcciones de las salas de ventas los ve solo el operador.
 - **Fecha de corte:** 20 de octubre de 2026 (perilla del generador, nunca el reloj). El estado «mes sin edición» usa el
   20 de noviembre.
 
@@ -60,8 +64,8 @@ pagar.
    de ventas y confirma por WhatsApp; la dirección llega con la confirmación. Nunca se publican los teléfonos ni las
    direcciones de la revista. Pedir la visita exige el WhatsApp verificado, como en los usados.
 7. **Subsidios:**
-   - Solo programas verificados en su norma, con la fecha de su estado. «Sin cupos» se dice; lo no verificado (cajas de
-     compensación de 2026, cobertura de tasa) no se muestra.
+   - Solo programas verificados en dos fuentes, con la fecha de su estado. «Sin cupos» se dice; lo no verificado (cajas de
+     compensación de 2026, cobertura de tasa, Fondo Nacional del Ahorro y, desde el S12, Reactiva tu Compra) no se muestra.
    - No se suman programas entre sí; el «mejor caso» es el mayor y queda «por confirmar» si el proyecto debe estar inscrito.
 8. **Los nombres de proyectos y constructoras salen con sus cifras** (decisión del 2026-10-20). Si la editorial objeta,
    se pasa al índice agregado.

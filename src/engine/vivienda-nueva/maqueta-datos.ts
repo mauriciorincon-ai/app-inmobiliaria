@@ -255,7 +255,7 @@ export function datosMaqueta(e: EntradaMaqueta): DatosMaqueta {
       ingresos: h.ingresos,
       tope: topeHogar,
       porProyecto: cerca
-        .filter((p) => typeof p.precioDesde === "number")
+        .filter((p) => alMenosDe(p) !== null)
         .map((p) => {
           const resultados = subsidiosPara(
             h.ingresos,
@@ -346,6 +346,7 @@ export function datosMaqueta(e: EntradaMaqueta): DatosMaqueta {
         segmento: p.segmento,
         precio_desde: p.precioDesde,
         area_privada_desde: p.areaPrivada[0],
+        en_conflicto: p.discrepancias,
       })),
       [
         { clave: "hasta_150", hasta: 150_000_000 },

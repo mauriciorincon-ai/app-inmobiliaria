@@ -7,9 +7,14 @@
 // Lo que queda nombrado y sin sumar: los derechos notariales (se reparten según la promesa: se da su total), el impuesto
 // de registro y la beneficencia y el IVA notarial (no verificados), el parqueadero sin precio, lo que puede subir durante
 // la obra si el precio no es fijo, la hipoteca si compras con crédito y, en VIP, que la exención exige subsidio.
+// Un campo que dos páginas de la revista contradicen jamás entra a la cuenta (ni el precio ni el parqueadero), ni decide la
+// clase de registro (VIS o general) ni «precio fijo»: se usa el caso MÁS BARATO posible para la cota inferior y se nombra.
+// Una tarifa que no está `vigente` en `src/data` (o un caso que su norma no verifica) se nombra SIN monto: jamás se omite
+// en silencio ni se suma (decisión 4 del S12).
 //
 // El m² es «aproximado»: el precio «desde» y el área «desde» no siempre son de la misma unidad.
-import type { Proyecto } from "./edicion.ts";
+import { NO_LO_DICE, type Proyecto } from "./edicion.ts";
+import { enConflicto } from "./lectura.ts";
 import {
   derechosNotariales,
   derechosRegistro,
@@ -29,7 +34,10 @@ export type EntradaPrecio = Pick<
   | "parqueadero_precio"
   | "precio_fijo"
   | "etapa"
->;
+> & {
+  /** Campos en que dos páginas de la revista imprimen cifras distintas (ver `ProyectoUnico`). */
+  en_conflicto?: readonly string[];
+};
 
 export type Partida = {
   id: "precio_desde" | "derechos_registro" | "parqueadero";
@@ -37,25 +45,31 @@ export type Partida = {
 };
 
 export type IdFaltante =
+  | "derechos_registro"
   | "derechos_notariales"
   | "impuesto_registro"
   | "iva_notarial"
   | "parqueadero_sin_precio"
   | "parqueadero_no_lo_dice"
+  | "parqueadero_en_conflicto"
+  | "clase_en_conflicto"
   | "subidas_en_obra"
   | "hipoteca"
   | "segmento_no_lo_dice"
   | "exencion_vip_con_subsidio"
   | "supera_tope_vis";
 
+/** Sin `monto`: se nombra y no se puede dar la cifra (la tarifa no está verificada para este caso). */
 export type Faltante = { id: IdFaltante; monto?: number };
 
 export type M2Aproximado =
   | { base: "privada" | "construida"; valor: number; area: number }
-  | { base: null };
+  | { base: null; razon?: "en_conflicto" };
 
 export type PrecioVerdadero =
   | { estado: "sin_precio"; m2: M2Aproximado }
+  // Dos páginas de la revista imprimen precios distintos: no se elige uno, se nombra y no se suma nada.
+  | { estado: "en_conflicto"; m2: M2Aproximado }
   | {
       estado: "calculado";
       desde: number;
@@ -66,24 +80,38 @@ export type PrecioVerdadero =
       m2: M2Aproximado;
     };
 
-/** El m² aproximado: sobre el área privada si el aviso la da; si no, sobre la construida (incluye muros y ductos). */
+/**
+ * El m² aproximado: sobre el área privada si el aviso la da; si no, sobre la construida (incluye muros y ductos). Un
+ * campo que dos páginas de la revista contradicen no se usa: si el precio o el área que serviría está en conflicto, no
+ * hay m² y se dice por qué.
+ */
 export function m2Aproximado(p: EntradaPrecio): M2Aproximado {
   if (typeof p.precio_desde !== "number") return { base: null };
-  if (typeof p.area_privada_desde === "number") {
+  if (enConflicto(p, "precio_desde")) {
+    return { base: null, razon: "en_conflicto" };
+  }
+  const privadaEnConflicto = enConflicto(p, "area_privada_desde");
+  const construidaEnConflicto = enConflicto(p, "area_construida_desde");
+  if (typeof p.area_privada_desde === "number" && !privadaEnConflicto) {
     return {
       base: "privada",
       area: p.area_privada_desde,
       valor: Math.round(p.precio_desde / p.area_privada_desde),
     };
   }
-  if (typeof p.area_construida_desde === "number") {
+  if (typeof p.area_construida_desde === "number" && !construidaEnConflicto) {
     return {
       base: "construida",
       area: p.area_construida_desde,
       valor: Math.round(p.precio_desde / p.area_construida_desde),
     };
   }
-  return { base: null };
+  const hayAreaContradicha =
+    (typeof p.area_privada_desde === "number" && privadaEnConflicto) ||
+    (typeof p.area_construida_desde === "number" && construidaEnConflicto);
+  return hayAreaContradicha
+    ? { base: null, razon: "en_conflicto" }
+    : { base: null };
 }
 
 /**
@@ -125,20 +153,38 @@ export function precioVerdadero(
 ): PrecioVerdadero {
   const m2 = m2Aproximado(p);
   if (typeof p.precio_desde !== "number") return { estado: "sin_precio", m2 };
+  if (enConflicto(p, "precio_desde")) return { estado: "en_conflicto", m2 };
   const desde = p.precio_desde;
   const ciudad = typeof p.ciudad === "string" ? p.ciudad : "";
-  const tope = topeVis(ciudad, tarifas);
-  const { clase, faltantes: porClase } = claseDe(p, tope, desde);
+  // Si el segmento o la ciudad se contradicen no se elige: segmento «no lo dice» y el tope VIS más alto (el caso más barato).
+  const claseDudosa = enConflicto(p, "segmento", "ciudad");
+  const tope = enConflicto(p, "ciudad")
+    ? topeVis("Bogotá", tarifas)
+    : topeVis(ciudad, tarifas);
+  const { clase, faltantes: porClase } = claseDe(
+    enConflicto(p, "segmento") ? { ...p, segmento: NO_LO_DICE } : p,
+    tope,
+    desde,
+  );
 
   const partidas: Partida[] = [{ id: "precio_desde", monto: desde }];
-  const faltantes: Faltante[] = [...porClase];
+  const faltantes: Faltante[] = claseDudosa
+    ? [
+        ...porClase.filter((f) => f.id !== "segmento_no_lo_dice"),
+        { id: "clase_en_conflicto" },
+      ]
+    : [...porClase];
 
   const registro = derechosRegistro(desde, clase, tarifas);
-  if (registro !== null && registro > 0) {
+  if (registro === null) {
+    faltantes.push({ id: "derechos_registro" });
+  } else if (registro > 0) {
     partidas.push({ id: "derechos_registro", monto: registro });
   }
 
-  if (p.parqueadero === "adicional") {
+  if (enConflicto(p, "parqueadero", "parqueadero_precio")) {
+    faltantes.push({ id: "parqueadero_en_conflicto" });
+  } else if (p.parqueadero === "adicional") {
     if (typeof p.parqueadero_precio === "number") {
       partidas.push({ id: "parqueadero", monto: p.parqueadero_precio });
     } else {
@@ -151,11 +197,16 @@ export function precioVerdadero(
   }
 
   const notariales = derechosNotariales(desde, clase, tarifas);
-  if (notariales !== null) {
-    faltantes.push({ id: "derechos_notariales", monto: notariales });
-  }
+  faltantes.push(
+    notariales === null
+      ? { id: "derechos_notariales" }
+      : { id: "derechos_notariales", monto: notariales },
+  );
   faltantes.push({ id: "impuesto_registro" }, { id: "iva_notarial" });
-  if (p.precio_fijo !== "si" && p.etapa !== "entrega_inmediata") {
+  const precioFijo = p.precio_fijo === "si" && !enConflicto(p, "precio_fijo");
+  const yaEntregado =
+    p.etapa === "entrega_inmediata" && !enConflicto(p, "etapa");
+  if (!precioFijo && !yaEntregado) {
     faltantes.push({ id: "subidas_en_obra" });
   }
   faltantes.push({ id: "hipoteca" });

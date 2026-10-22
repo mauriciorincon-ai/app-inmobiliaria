@@ -36,9 +36,10 @@ revista ni de la prensa. Cada fila trae su norma, su año, la fecha en que se co
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------- |
 | `LECTOR.md`                                                                                     | Las instrucciones del lector de páginas.                                                               | Sí                        |
 | `validar.mjs` · `muestra.mjs` · `cobertura.mjs`                                                 | Valida y une, elige y compara la doble lectura, mide la cobertura.                                     | Sí                        |
-| `src/engine/vivienda-nueva/{edicion,lectura,normas}.ts`                                         | El esquema, la unión, la comparación, la muestra con semilla, la cobertura y el esquema de las normas. | Sí (probado, ≥ 99 %)      |
+| `src/engine/vivienda-nueva/{edicion,lectura,filas,normas}.ts`                                   | El esquema, la unión, la comparación, la muestra con semilla, la cobertura y el esquema de las normas. | Sí (probado, ≥ 99 %)      |
 | `crudo/paginas/` · `crudo/paginas300/` · `crudo/recortes/`                                      | Las páginas renderizadas y sus recortes.                                                               | No (`.gitignore`, ~40 MB) |
 | `crudo/lectura-L*.json` · `crudo/doble-D*.json` · `crudo/unida-N.json` · `crudo/edicion-N.json` | La transcripción de cada lector, la doble lectura, la edición unida y la entregada por la bandeja.     | No (`.gitignore`)         |
+| `crudo/revision-N.html`                                                                         | La revisión de la muestra: lo procesado al lado de la página de la revista.                            | No (`.gitignore`)         |
 
 ## Cómo se repite cada mes
 
@@ -50,7 +51,10 @@ bandeja de IA (tipo `edicion-del-mes`, `/bandeja`). Para la edición N:
 2. Correr 1 → 5 con el PDF nuevo. Las lecturas de otra edición que sigan en `crudo/` se ignoran por su campo `edicion`.
 3. `validar.mjs --unir` deja `crudo/unida-N.json`; el trabajo **sigue pendiente**. Lo cierra
    `node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/bandeja/bandeja.mjs entregar edicion-del-mes-N crudo/unida-N.json --modelo <m> --duracion-s <s>`,
-   que valida y deja `crudo/edicion-N.json`. Después, la revisión de la muestra (doble lectura) antes de publicar nada.
+   que valida y deja `crudo/edicion-N.json` (el trabajo queda `listo`).
+4. `bandeja.mjs cargar edicion-del-mes-N` la lleva a la base **sin publicar** y escribe `crudo/revision-N.html`: 5 proyectos al
+   azar (semilla = N) con lo procesado al lado de su página de la revista. Se compara con los ojos.
+5. Solo con esa revisión hecha, `bandeja.mjs publicar edicion-del-mes-N --revisada`. `estado N` dice dónde está y `retirar N` la
+   quita de inmediato. Contra una base que no es local hace falta `--nube` (y el «sí» del usuario).
 
-El generador de la maqueta (`maqueta.mjs`) es de la edición 187; la lectura de las ediciones siguientes en el producto llega
-con el S12.
+El generador de la maqueta (`maqueta.mjs`) es de la edición 187; el producto lee las ediciones de la base.

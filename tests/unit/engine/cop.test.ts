@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { esEnteroEscrito, formatearCOP, parsearCOP } from "@/engine/format/cop";
+import {
+  esEnteroEscrito,
+  formatearCOP,
+  formatearM2,
+  formatearMillones,
+  parsearCOP,
+} from "@/engine/format/cop";
 
 describe("formatearCOP", () => {
   it("formatea con separador de miles y sin decimales", () => {
@@ -70,5 +76,20 @@ describe("esEnteroEscrito (un decimal no se lee como miles)", () => {
     "1.20",
   ])("rechaza «%s»", (texto) => {
     expect(esEnteroEscrito(texto)).toBe(false);
+  });
+});
+
+describe("formatearMillones y formatearM2", () => {
+  it("en millones, con coma en español y punto en inglés", () => {
+    expect(formatearMillones(250_000_000, "es")).toBe("$250,0 M");
+    expect(formatearMillones(250_000_000, "en")).toBe("COP 250.0M");
+    expect(formatearMillones(262_635_750, "es", 2)).toBe("$262,64 M");
+    expect(formatearMillones(Number.NaN)).toBe("");
+  });
+
+  it("el m² en millones", () => {
+    expect(formatearM2(9_970_674, "es")).toBe("$9,97 M/m²");
+    expect(formatearM2(9_970_674, "en")).toBe("COP 9.97M/m²");
+    expect(formatearM2(Number.POSITIVE_INFINITY)).toBe("");
   });
 });

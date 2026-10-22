@@ -94,7 +94,8 @@ const entrega = z.union([
 ]);
 
 // --- proyecto ------------------------------------------------------------------------------------------------------
-export const ProyectoSchema = z
+/** Los campos de un proyecto, sin las revisiones cruzadas: el de la lectura y el del proyecto unido los comparten. */
+export const ProyectoBase = z
   .object({
     pagina: z.number().int().min(1).max(PAGINAS_EDICION),
     /** Orden de lectura en la página: de izquierda a derecha y de arriba abajo. */
@@ -134,8 +135,28 @@ export const ProyectoSchema = z
     /** Solo para la transcripción cruda (carpeta ignorada). Jamás pasa a un archivo del repo. */
     notas_crudo: texto(300).optional(),
   })
-  .strict()
-  .superRefine((p, ctx) => {
+  .strict();
+
+/**
+ * Las revisiones cruzadas de un proyecto. En el proyecto UNIDO, un campo que dos páginas contradicen (`en_conflicto`) no
+ * se revisa contra otro: lo que se contradice no puede ser incoherente a la vez con su vecino.
+ */
+export function revisarProyecto(
+  p: Pick<
+    z.infer<typeof ProyectoBase>,
+    | "area_construida_desde"
+    | "area_construida_hasta"
+    | "area_privada_desde"
+    | "area_privada_hasta"
+    | "entrega"
+    | "entrega_precision"
+    | "parqueadero"
+    | "parqueadero_precio"
+  > & { en_conflicto?: readonly string[] },
+  ctx: z.RefinementCtx,
+) {
+  {
+    const contradicho = (campo: string) => p.en_conflicto?.includes(campo);
     const par = (
       desde: unknown,
       hasta: unknown,
@@ -153,15 +174,27 @@ export const ProyectoSchema = z
         });
       }
     };
-    par(
-      p.area_construida_desde,
-      p.area_construida_hasta,
-      "area_construida_hasta",
-    );
-    par(p.area_privada_desde, p.area_privada_hasta, "area_privada_hasta");
+    if (
+      !contradicho("area_construida_desde") &&
+      !contradicho("area_construida_hasta")
+    ) {
+      par(
+        p.area_construida_desde,
+        p.area_construida_hasta,
+        "area_construida_hasta",
+      );
+    }
+    if (
+      !contradicho("area_privada_desde") &&
+      !contradicho("area_privada_hasta")
+    ) {
+      par(p.area_privada_desde, p.area_privada_hasta, "area_privada_hasta");
+    }
     if (
       typeof p.area_privada_desde === "number" &&
       typeof p.area_construida_desde === "number" &&
+      !contradicho("area_privada_desde") &&
+      !contradicho("area_construida_desde") &&
       p.area_privada_desde > p.area_construida_desde
     ) {
       ctx.addIssue({
@@ -192,7 +225,10 @@ export const ProyectoSchema = z
         message: "precio_parqueadero_sin_adicional",
       });
     }
-  });
+  }
+}
+
+export const ProyectoSchema = ProyectoBase.superRefine(revisarProyecto);
 
 export type Proyecto = z.infer<typeof ProyectoSchema>;
 

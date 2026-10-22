@@ -52,6 +52,9 @@
 .vn-clase--ilegible {
   color: var(--mute);
 }
+.vn-clase--en_conflicto {
+  color: var(--aviso);
+}
 .vn-programa--aplica {
   color: var(--ok);
   font-weight: 600;

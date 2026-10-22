@@ -189,7 +189,7 @@ describe("precio verdadero", () => {
     expect(ids(r.faltantes)).toContain("segmento_no_lo_dice");
   });
 
-  it("VIP: el registro queda exento con subsidio y se nombra; los derechos notariales de VIP no se verifican y no se suman", () => {
+  it("VIP: el registro queda exento con subsidio y se nombra; los derechos notariales de VIP no se verifican: se nombran SIN monto", () => {
     const r = precioVerdadero(
       entrada({ precio_desde: 150_000_000, segmento: "VIP" }),
       tarifas,
@@ -197,7 +197,9 @@ describe("precio verdadero", () => {
     if (r.estado !== "calculado") throw new Error("debía calcular");
     expect(ids(r.partidas)).toEqual(["precio_desde", "parqueadero"]);
     expect(ids(r.faltantes)).toContain("exencion_vip_con_subsidio");
-    expect(ids(r.faltantes)).not.toContain("derechos_notariales");
+    expect(r.faltantes.find((f) => f.id === "derechos_notariales")).toEqual({
+      id: "derechos_notariales",
+    });
     expect(derechosNotariales(150_000_000, "vip", tarifas)).toBeNull();
   });
 
@@ -254,7 +256,7 @@ describe("precio verdadero", () => {
     expect(ids(r.faltantes)).toContain("supera_tope_vis");
   });
 
-  it("si las tarifas no están vigentes, el «al menos» es el precio y el parqueadero, sin inventar registro", () => {
+  it("si las tarifas no están vigentes, el «al menos» es el precio y el parqueadero; registro y notaría se NOMBRAN sin monto", () => {
     const sinVerificar = {
       ...tarifas,
       conceptos: tarifas.conceptos.map((c) => ({
@@ -265,7 +267,173 @@ describe("precio verdadero", () => {
     const r = precioVerdadero(entrada(), sinVerificar);
     if (r.estado !== "calculado") throw new Error("debía calcular");
     expect(r.alMenos).toBe(270_000_000);
-    expect(ids(r.faltantes)).not.toContain("derechos_notariales");
+    expect(ids(r.partidas)).toEqual(["precio_desde", "parqueadero"]);
+    for (const id of ["derechos_registro", "derechos_notariales"]) {
+      expect(r.faltantes.find((f) => f.id === id)).toEqual({ id });
+    }
+  });
+});
+
+describe("un campo en conflicto que no es el precio ni las áreas tampoco entra a la cuenta (auditoría S12, M2)", () => {
+  it("parqueadero contradicho: ni se suma ni se elige, se nombra", () => {
+    const r = precioVerdadero(
+      entrada({ en_conflicto: ["parqueadero_precio"] }),
+      tarifas,
+    );
+    if (r.estado !== "calculado") throw new Error("debía calcular");
+    expect(ids(r.partidas)).toEqual(["precio_desde", "derechos_registro"]);
+    expect(ids(r.faltantes)).toContain("parqueadero_en_conflicto");
+    expect(ids(r.faltantes)).not.toContain("parqueadero_sin_precio");
+    // Sin el conflicto el parqueadero sí se sumaría (la demo en rojo de la regla).
+    const sin = precioVerdadero(entrada(), tarifas);
+    if (sin.estado !== "calculado") throw new Error("debía calcular");
+    expect(ids(sin.partidas)).toContain("parqueadero");
+    expect(r.alMenos).toBe(sin.alMenos - 20_000_000);
+  });
+
+  it("segmento contradicho: el registro se calcula con el caso más barato y se nombra, no con el de la primera página", () => {
+    // 250 M cabe en el tope VIS de Bogotá: «No VIS» liquidaría como general; en conflicto se toma VIS (el más barato).
+    const general = precioVerdadero(entrada({ segmento: "No VIS" }), tarifas);
+    const dudoso = precioVerdadero(
+      entrada({ segmento: "No VIS", en_conflicto: ["segmento"] }),
+      tarifas,
+    );
+    if (general.estado !== "calculado" || dudoso.estado !== "calculado") {
+      throw new Error("debía calcular");
+    }
+    expect(general.clase).toBe("general");
+    expect(dudoso.clase).toBe("vis");
+    expect(dudoso.alMenos).toBeLessThan(general.alMenos);
+    expect(ids(dudoso.faltantes)).toContain("clase_en_conflicto");
+    expect(ids(dudoso.faltantes)).not.toContain("segmento_no_lo_dice");
+  });
+
+  it("ciudad contradicha: se usa el tope VIS más alto (el caso más barato) y se nombra", () => {
+    // 250 M en Ibagué (tope 135 salarios = 236,4 M) pasa el tope: general. En conflicto se toma el tope de 150 (262,6 M): VIS.
+    const ibague = precioVerdadero(entrada({ ciudad: "Ibagué" }), tarifas);
+    const dudosa = precioVerdadero(
+      entrada({ ciudad: "Ibagué", en_conflicto: ["ciudad"] }),
+      tarifas,
+    );
+    if (ibague.estado !== "calculado" || dudosa.estado !== "calculado") {
+      throw new Error("debía calcular");
+    }
+    expect(ibague.clase).toBe("general");
+    expect(ids(ibague.faltantes)).toContain("supera_tope_vis");
+    expect(dudosa.clase).toBe("vis");
+    expect(ids(dudosa.faltantes)).toContain("clase_en_conflicto");
+  });
+
+  it("precio fijo o etapa contradichos: no se puede afirmar que el precio no sube", () => {
+    const fijo = precioVerdadero(entrada(), tarifas);
+    const dudoso = precioVerdadero(
+      entrada({ en_conflicto: ["precio_fijo"] }),
+      tarifas,
+    );
+    const inmediata = precioVerdadero(
+      entrada({ etapa: "entrega_inmediata", precio_fijo: NO_LO_DICE }),
+      tarifas,
+    );
+    const inmediataDudosa = precioVerdadero(
+      entrada({
+        etapa: "entrega_inmediata",
+        precio_fijo: NO_LO_DICE,
+        en_conflicto: ["etapa"],
+      }),
+      tarifas,
+    );
+    for (const [r, esperado] of [
+      [fijo, false],
+      [dudoso, true],
+      [inmediata, false],
+      [inmediataDudosa, true],
+    ] as const) {
+      if (r.estado !== "calculado") throw new Error("debía calcular");
+      expect(ids(r.faltantes).includes("subidas_en_obra")).toBe(esperado);
+    }
+  });
+});
+
+describe("un campo que dos páginas de la revista contradicen no se usa para calcular", () => {
+  it("área privada contradicha: el m² cae a la construida; si las dos se contradicen, no hay m² y se dice por qué", () => {
+    const privada = entrada({
+      precio_desde: 270_000_000,
+      area_privada_desde: 24,
+      area_construida_desde: 54,
+      en_conflicto: ["area_privada_desde"],
+    });
+    expect(m2Aproximado(privada)).toEqual({
+      base: "construida",
+      area: 54,
+      valor: 5_000_000,
+    });
+    const ambas = {
+      ...privada,
+      en_conflicto: ["area_privada_desde", "area_construida_desde"],
+    };
+    expect(m2Aproximado(ambas)).toEqual({ base: null, razon: "en_conflicto" });
+    // Sin ninguna área impresa no hay conflicto que decir: solo «no hay m²».
+    expect(
+      m2Aproximado(
+        entrada({
+          area_privada_desde: NO_LO_DICE,
+          area_construida_desde: NO_LO_DICE,
+        }),
+      ),
+    ).toEqual({ base: null });
+  });
+
+  it("precio contradicho: no hay «al menos» ni m², y no se elige uno de los dos", () => {
+    const r = precioVerdadero(
+      entrada({ en_conflicto: ["precio_desde"] }),
+      tarifas,
+    );
+    expect(r).toEqual({
+      estado: "en_conflicto",
+      m2: { base: null, razon: "en_conflicto" },
+    });
+  });
+
+  it("el índice deja fuera de la mediana al proyecto contradicho y lo cuenta aparte; con él dentro habría 5 y habría mediana", () => {
+    const cinco = [5.0, 5.2, 5.4, 5.6, 5.8].map((m) =>
+      pi({ precio_desde: m * 1_000_000 * 50 }),
+    );
+    expect(indice(cinco).porZona[0]).toMatchObject({
+      estado: "mediana",
+      n: 5,
+      enConflicto: 0,
+    });
+    const conUnoContradicho = [
+      ...cinco.slice(0, 4),
+      { ...cinco[4], en_conflicto: ["area_privada_desde"] },
+    ];
+    expect(indice(conUnoContradicho).porZona[0]).toMatchObject({
+      estado: "sin_datos",
+      n: 5,
+      conArea: 4,
+      enConflicto: 1,
+    });
+  });
+
+  it("la ficha honesta nombra el campo en conflicto y no lo cuenta como verificable", () => {
+    const f = fichaHonesta({
+      precio_desde: 250_000_000,
+      area_privada_desde: 30,
+      area_construida_desde: 56,
+      segmento: "VIS",
+      etapa: NO_LO_DICE,
+      entrega: NO_LO_DICE,
+      parqueadero: "incluido",
+      precio_fijo: "si",
+      subsidio_anunciado: NO_LO_DICE,
+      rotulos: [],
+      en_conflicto: ["area_privada_desde"],
+    });
+    expect(f.datos.find((d) => d.campo === "area_privada_desde")?.clase).toBe(
+      "en_conflicto",
+    );
+    expect(f.verificables).toBe(5);
+    expect(f.faltan).toBe(4);
   });
 });
 
@@ -363,12 +531,11 @@ describe("¿te alcanza con subsidio?", () => {
       motivos: ["proyecto_inscrito"],
       maximo: 52_527_150,
     });
-    expect(r.reactiva_tu_compra).toMatchObject({
-      estado: "por_confirmar",
-      maximo: 17_509_050,
-    });
+    // Reactiva tu Compra bajó a «no verificado» (sin segunda fuente): ya no es un programa que se calcule.
+    expect(r.reactiva_tu_compra).toBeUndefined();
+    // Reduce tu Cuota: la Alcaldía reabrió postulaciones el 11 de agosto de 2026; se le da el estado de esa fecha.
     expect(r.reduce_tu_cuota).toMatchObject({
-      estado: "sin_cupos",
+      estado: "aplica",
       restaAlPrecio: false,
     });
     expect(r.subsidio_vivienda_nueva_nacional.estado).toBe("sin_cupos");
@@ -392,7 +559,7 @@ describe("¿te alcanza con subsidio?", () => {
           programas,
           TOPE_BOGOTA,
         ),
-      ).reactiva_tu_compra.motivos,
+      ).reduce_tu_cuota.motivos,
     ).toEqual(["fuera_de_bogota"]);
     expect(
       porId(

@@ -76,7 +76,33 @@ const edicionValida = () => ({
     proyectos: [],
     avisos_al_agente: [],
   })),
-  proyectos: [{ nombre: "Proyecto de Prueba" }],
+  proyectos: [
+    {
+      nombre: "Proyecto de Prueba",
+      constructora: "Constructora de Prueba",
+      tipo: "apartamento",
+      ciudad: "Bogotá",
+      sector: "no_lo_dice",
+      segmento: "VIS",
+      precio_desde: 250_000_000,
+      area_construida_desde: 56,
+      area_construida_hasta: null,
+      area_privada_desde: 50,
+      area_privada_hasta: null,
+      etapa: "no_lo_dice",
+      entrega: "no_lo_dice",
+      entrega_precision: null,
+      parqueadero: "no_lo_dice",
+      parqueadero_precio: null,
+      precio_fijo: "no_lo_dice",
+      subsidio_anunciado: "no_lo_dice",
+      rotulos: [],
+      apariciones: [1],
+      region: "bogota",
+      clave: "constructora de prueba|proyecto de prueba",
+      en_conflicto: [],
+    },
+  ],
   conflictos: [],
   reconciliados: [],
   paginasSinLeer: [],
@@ -84,9 +110,9 @@ const edicionValida = () => ({
 });
 
 describe("el tipo edicion-del-mes se registra", () => {
-  it("con su destino ignorado y su revisión declarada", () => {
+  it("con su destino (una fila de la base) y su revisión declarada", () => {
     const t = registrado();
-    expect(t.def.destino.clase).toBe("archivo_ignorado");
+    expect(t.def.destino).toEqual({ clase: "fila", ruta: "ediciones" });
     expect(t.def.revision).toEqual({
       publica: true,
       muestra: 0.1,
@@ -359,7 +385,7 @@ describe("edicion-del-mes: el PDF sin transcripción es trabajo pendiente", () =
   });
 
   it("solo quedan pendientes las ediciones sin su transcripción; lo que no sigue el nombre se dice", () => {
-    const { trabajos, ignorados } = trabajosDeEdicion(
+    const { trabajos, listos, ignorados } = trabajosDeEdicion(
       [
         { nombre: "2026-10-edicion-187.pdf" },
         { nombre: "2026-11-edicion-188.pdf" },
@@ -368,6 +394,10 @@ describe("edicion-del-mes: el PDF sin transcripción es trabajo pendiente", () =
       [187],
     );
     expect(ignorados).toEqual(["notas.txt"]);
+    // La 187 ya tiene su transcripción entregada: está «lista» (falta cargarla y publicarla), no pendiente.
+    expect(listos.map((t) => [t.id, t.estado])).toEqual([
+      ["edicion-del-mes-187", "listo"],
+    ]);
     expect(trabajos).toHaveLength(1);
     expect(trabajos[0]).toMatchObject({
       id: "edicion-del-mes-188",

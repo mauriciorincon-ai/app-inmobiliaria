@@ -71,6 +71,28 @@ Constraints that cannot be undone once crossed:
 - A new edition changes `EDICION` (number, validity) and `PAGINAS_EDICION` in `src/engine/vivienda-nueva/edicion.ts`; the
   scripts follow `EDICION.numero`, readings of another edition in the raw folder are ignored by their `edicion` field, and the
   bandeja delivers `edicion-N.json` only after validating `unida-N.json`. The mockup generator is specific to edition 187;
-  reading later editions in the product arrives with Sprint 012.
-- **Out of scope:** database, migration and cloud (S12–S13); contacting builders or sales rooms; any runtime LLM feature
+  the product reads later editions from the database (addendum, Sprint 012).
+- **Out of scope:** contacting builders or sales rooms; any runtime LLM feature
   (that would need its own «code first» ADR); scheduled cloud runs of the bandeja (they need a sprint that proves them).
+
+## Addendum — Sprint 012: the edition moves to the database
+
+Migration 15 puts the processed edition in two tables, `ediciones` and `proyectos_nuevos`, and nothing else of the magazine.
+
+- **Same wall, one more door.** The tables carry the same whitelist as decision 3 (typed columns, closed lists, no phone,
+  address, web or ad text) and `CHECK`s that reject a web, an email or a phone in the short text columns. Row-level security is
+  on with **no policy for the anonymous role**: the anonymous reads through one `security definer` function,
+  `nuevos_publicados(date)`, which returns only **published** editions and only whitelisted columns. A direct `select`
+  on either table returns nothing.
+- **Load is not publish.** The bandeja type `edicion-del-mes` now ends in a database row. `entregar` leaves the validated
+  `crudo/edicion-N.json` (job `listo`); `cargar` writes the edition **unpublished** and fixes a review sample of five projects
+  (random with a declared seed, by default the edition number); `publicar --revisada` is the `entregado` state and the
+  database accepts it only if the sample the CLI recomputes from the delivered file matches the one the load fixed, so the review
+  belongs to **this** edition (the real barrier remains the user's review, `--revisada`). `retirar` takes a published edition down at once
+  (the fallback if the publisher objects) and leaves its data for review. The review page `crudo/revision-N.html` shows the five
+  rows next to their magazine pages and lives in the ignored folder like the pages themselves.
+- **Writes need a decision.** The loader uses the service key from the environment, prints which database it talks to
+  (masked) and **refuses a non-local database without `--nube`**; touching the cloud is a deliberate act with the user's «yes».
+- **Validity, not freshness by clock.** The function picks the published edition whose window contains the given day (highest
+  number if several); if none does it returns the last published one so the product can say «month without an edition» with
+  its date, instead of showing stale figures as current.

@@ -152,6 +152,10 @@
       verificable: ["Lo dice", "Stated"],
       no_lo_dice: ["No lo dice", "Not stated"],
       ilegible: ["Ilegible en la revista", "Illegible in the magazine"],
+      en_conflicto: [
+        "Dos páginas imprimen cifras distintas",
+        "Two pages print different figures",
+      ],
     },
     rotulo: {
       lanzamiento: ["Lanzamiento", "Launch"],
@@ -208,7 +212,17 @@
 
   function faltante(f, p) {
     switch (f.id) {
+      case "derechos_registro":
+        return par(
+          "Derechos de registro: no pudimos verificar la tarifa en la norma, no se suman.",
+          "Registration fees: we could not verify the rate in the rule, so they are not added.",
+        );
       case "derechos_notariales":
+        if (f.monto === undefined)
+          return par(
+            "Derechos notariales: no los pudimos verificar en la norma para este caso, no se suman.",
+            "Notary fees: we could not verify them in the rule for this case, so they are not added.",
+          );
         return par(
           "Derechos notariales de la compraventa: " +
             "<span class=num>$" +
@@ -238,6 +252,16 @@
           "Parqueadero: el aviso no dice si va incluido.",
           "Parking: the ad does not say whether it is included.",
         );
+      case "parqueadero_en_conflicto":
+        return par(
+          "Parqueadero: dos páginas de la revista imprimen datos distintos, no se suma.",
+          "Parking: two pages of the magazine print different figures, so it is not added.",
+        );
+      case "clase_en_conflicto":
+        return par(
+          "Dos páginas de la revista imprimen datos distintos sobre si es VIS o sobre la ciudad: el registro se calculó con el caso más barato y puede costar más.",
+          "Two pages of the magazine print different figures on whether it is VIS or on the city: registration was computed with the cheapest case and may cost more.",
+        );
       case "subidas_en_obra":
         return par(
           "El aviso no dice que el precio sea fijo: puede subir mientras se construye.",
@@ -255,8 +279,8 @@
         );
       case "exencion_vip_con_subsidio":
         return par(
-          "VIP: el registro queda exento solo si recibes subsidio. Los derechos notariales de una VIP no los pudimos verificar: no se suman.",
-          "VIP: registration is exempt only if you get a subsidy. We could not verify the notary fees of a VIP, so they are not added.",
+          "VIP: el registro queda exento solo si recibes subsidio.",
+          "VIP: registration is exempt only if you get a subsidy.",
         );
       case "supera_tope_vis":
         return par(
@@ -342,12 +366,22 @@
               : par("de área construida", "of built area")) +
             "</p>"
           : '<p class="mute" style="margin:0">' +
-            par("Sin área: no hay m²", "No area: no price per m²") +
+            (pv.m2.razon === "en_conflicto"
+              ? par(
+                  "Cifras en conflicto: no hay m²",
+                  "Conflicting figures: no price per m²",
+                )
+              : par("Sin área: no hay m²", "No area: no price per m²")) +
             "</p>");
     } else {
       cuerpo +=
         '<p style="margin:0"><strong>' +
-        par("El aviso no da precio", "The ad gives no price") +
+        (pv.estado === "en_conflicto"
+          ? par(
+              "Las páginas imprimen precios distintos",
+              "The pages print different prices",
+            )
+          : par("El aviso no da precio", "The ad gives no price")) +
         "</strong></p>";
     }
     var clase =
@@ -781,10 +815,15 @@
       } else {
         html +=
           "<p>" +
-          par(
-            "El aviso no da precio: no hay cuenta que hacer.",
-            "The ad gives no price: there is nothing to compute.",
-          ) +
+          (pv.estado === "en_conflicto"
+            ? par(
+                "Dos páginas de la revista imprimen precios distintos: no elegimos uno, así que no hay cuenta que hacer.",
+                "Two pages of the magazine print different prices: we do not pick one, so there is nothing to compute.",
+              )
+            : par(
+                "El aviso no da precio: no hay cuenta que hacer.",
+                "The ad gives no price: there is nothing to compute.",
+              )) +
           "</p>";
       }
       html += "</section>";
@@ -874,7 +913,9 @@
                 ? "✓"
                 : d.clase === "ilegible"
                   ? "?"
-                  : "—";
+                  : d.clase === "en_conflicto"
+                    ? "≠"
+                    : "—";
             return (
               "<tr><th scope=row>" +
               tr("campo", d.campo) +

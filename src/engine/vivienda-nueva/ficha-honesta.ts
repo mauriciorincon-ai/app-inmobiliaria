@@ -2,6 +2,7 @@
 // el aviso no dice (o no se alcanza a leer) y el mensaje de venta. Nombra lo que falta; no acusa a nadie.
 import type { Proyecto, Rotulo } from "./edicion.ts";
 import { ILEGIBLE, NO_LO_DICE } from "./edicion.ts";
+import { enConflicto } from "./lectura.ts";
 
 export const CAMPOS_FICHA = [
   "precio_desde",
@@ -16,7 +17,9 @@ export const CAMPOS_FICHA = [
 ] as const satisfies readonly (keyof Proyecto)[];
 
 export type CampoFicha = (typeof CAMPOS_FICHA)[number];
-export type ClaseDato = "verificable" | "no_lo_dice" | "ilegible";
+/** `en_conflicto`: dos páginas de la revista imprimen cifras distintas; no se elige una, se nombra. */
+export type ClaseDato =
+  "verificable" | "no_lo_dice" | "ilegible" | "en_conflicto";
 
 export type FichaHonesta = {
   datos: { campo: CampoFicha; clase: ClaseDato }[];
@@ -28,12 +31,15 @@ export type FichaHonesta = {
 };
 
 export function fichaHonesta(
-  p: Pick<Proyecto, CampoFicha | "rotulos">,
+  p: Pick<Proyecto, CampoFicha | "rotulos"> & {
+    en_conflicto?: readonly string[];
+  },
 ): FichaHonesta {
   const datos = CAMPOS_FICHA.map((campo) => {
     const v = p[campo];
-    const clase: ClaseDato =
-      v === NO_LO_DICE
+    const clase: ClaseDato = enConflicto(p, campo)
+      ? "en_conflicto"
+      : v === NO_LO_DICE
         ? "no_lo_dice"
         : v === ILEGIBLE
           ? "ilegible"

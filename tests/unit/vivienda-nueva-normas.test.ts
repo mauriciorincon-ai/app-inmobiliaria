@@ -22,7 +22,11 @@ describe("subsidios-vivienda.json", () => {
     for (const p of subsidios.programas) {
       expect(p.normas.length, p.id).toBeGreaterThan(0);
       expect(p.anio, p.id).toBe(2026);
-      expect(p.consultado, p.id).toBe("2026-10-20");
+      expect(p.consultado, p.id).toBe("2026-10-21");
+      // Cada programa que se muestra se comprobó en al menos dos fuentes (entidad y documento, sin enlaces).
+      expect(p.verificada_en.length, p.id).toBeGreaterThanOrEqual(2);
+      for (const f of p.verificada_en)
+        expect(f, p.id).not.toMatch(/https?:|www\./);
     }
   });
 
@@ -47,14 +51,24 @@ describe("subsidios-vivienda.json", () => {
   });
 
   it("ningún programa sin cupos o suspendido se presenta como vigente, y los no verificados no traen cifras", () => {
-    expect(
-      subsidios.programas.find((p) => p.id === "reduce_tu_cuota")?.estado,
-    ).toBe("sin_cupos");
+    const reduce = subsidios.programas.find((p) => p.id === "reduce_tu_cuota");
+    // Reabierto el 11 de agosto de 2026 según la Alcaldía: el estado lleva SU fecha, no la del oficio de junio.
+    expect(reduce).toMatchObject({
+      estado: "vigente",
+      estado_al: "2026-08-11",
+    });
     expect(
       subsidios.programas.find(
         (p) => p.id === "subsidio_vivienda_nueva_nacional",
       )?.estado,
     ).toBe("sin_cupos");
+    // Reactiva tu Compra no tiene segunda fuente: no es un programa que se muestre.
+    expect(subsidios.programas.map((p) => p.id)).not.toContain(
+      "reactiva_tu_compra",
+    );
+    expect(subsidios.no_verificados.map((n) => n.id)).toContain(
+      "reactiva_tu_compra",
+    );
     for (const n of subsidios.no_verificados) {
       expect(Object.keys(n).sort(), n.id).toEqual([
         "consultado",
@@ -73,6 +87,7 @@ describe("subsidios-vivienda.json", () => {
     expect(subsidios.no_verificados.map((n) => n.id).sort()).toEqual([
       "cobertura_tasa_frech",
       "fondo_nacional_del_ahorro",
+      "reactiva_tu_compra",
       "subsidio_cajas_compensacion",
     ]);
   });
@@ -88,9 +103,17 @@ describe("tarifas-escrituracion.json", () => {
   it("cada concepto trae norma (o dice por qué no), año, consulta y estado", () => {
     for (const c of tarifas.conceptos) {
       expect(c.anio, c.id).toBe(2026);
-      expect(c.consultado, c.id).toBe("2026-10-20");
-      if (c.estado === "no_verificado") expect(c.norma, c.id).toBeNull();
-      else expect(c.norma, c.id).toEqual(expect.stringContaining("de 2026"));
+      if (c.estado === "no_verificado") {
+        expect(c.consultado, c.id).toBe("2026-10-20");
+        expect(c.norma, c.id).toBeNull();
+      } else {
+        expect(c.consultado, c.id).toBe("2026-10-21");
+        expect(c.norma, c.id).toEqual(expect.stringContaining("de 2026"));
+        // Lo que se muestra y se suma se comprobó en al menos dos fuentes.
+        const fuentes = (c as unknown as { verificada_en?: string[] })
+          .verificada_en;
+        expect(fuentes?.length ?? 0, c.id).toBeGreaterThanOrEqual(2);
+      }
     }
     expect(
       tarifas.conceptos.find((c) => c.id === "impuesto_registro_y_beneficencia")

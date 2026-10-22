@@ -4,6 +4,10 @@
 
 import type { Operacion, TipoInmueble } from "@/engine/registro/schema";
 import type { ArgsBuscar } from "@/engine/busqueda/filtros";
+import type {
+  EdicionParaCargar,
+  FilaProyecto,
+} from "@/engine/vivienda-nueva/filas";
 
 export type EstadoInmueble = "borrador" | "publicado_fundador";
 export type NivelVerificacion = "fundador" | "verificado";
@@ -380,6 +384,32 @@ export type ComparablePrecio = {
   precio_esperado: number;
 };
 
+// ── S12 — vivienda nueva (migración 15) ──────────────────────────────────────────────
+// La edición de la revista ya procesada. El anónimo solo lee ediciones PUBLICADAS, por `nuevos_publicados`.
+export type EdicionPublicada = {
+  numero: number;
+  nombre: string;
+  desde: string;
+  hasta: string;
+  paginas: number;
+};
+export type NuevosPublicados = {
+  edicion: EdicionPublicada;
+  proyectos: FilaProyecto[];
+};
+export type EdicionFila = {
+  numero: number;
+  nombre: string;
+  vigente_desde: string;
+  vigente_hasta: string;
+  paginas: number;
+  publicada: boolean;
+  cargada_at: string;
+  revisada_at: string | null;
+  muestra_claves: string[];
+  muestra_semilla: number | null;
+};
+
 // De la gente solo sale el PRIMER nombre.
 export type NotaDeLista = {
   id: string;
@@ -684,6 +714,18 @@ export type Database = {
       };
       tasas_vivienda: {
         Row: TasaVivienda & { leida_at: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      ediciones: {
+        Row: EdicionFila;
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      proyectos_nuevos: {
+        Row: FilaProyecto & { edicion: number };
         Insert: never;
         Update: never;
         Relationships: [];
@@ -1013,6 +1055,20 @@ export type Database = {
         };
         Returns: undefined;
       };
+      // S12 — vivienda nueva. Pública: la edición vigente (solo publicadas). Solo servidor: cargar, publicar y retirar.
+      nuevos_publicados: {
+        Args: { p_hoy: string };
+        Returns: NuevosPublicados | null;
+      };
+      cargar_edicion: {
+        Args: { p_edicion: EdicionParaCargar };
+        Returns: { numero: number; proyectos: number; publicada: false };
+      };
+      publicar_edicion: {
+        Args: { p_numero: number; p_muestra: string[] };
+        Returns: boolean;
+      };
+      retirar_edicion: { Args: { p_numero: number }; Returns: boolean };
       generar_link_anuncio: {
         Args: { p_inmueble_id: string };
         Returns: string;

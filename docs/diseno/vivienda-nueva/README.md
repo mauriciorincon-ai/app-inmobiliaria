@@ -1,8 +1,10 @@
 # Maqueta de vivienda nueva — Innmobiliaria (S11)
 
 Maqueta navegable del módulo de vivienda nueva, con las cifras **reales** de la edición 187 de la revista (procesada) y
-calculadas por los motores de `src/engine/vivienda-nueva/`. Es la base de los sprints S12 y S13. **No es código de
-producto:** HTML autocontenido que se abre con doble clic en `index.html`.
+calculadas por los motores de `src/engine/vivienda-nueva/`. Es la maqueta aprobada de la que salen el índice y la ficha del
+producto (S12: pestaña «Nuevos» de Buscar y `/nuevos/[slug]`) y, en el S13, nuevo o usado, subsidio y la visita. **La maqueta
+no es código de producto:** HTML autocontenido que se abre con doble clic en `index.html`; los textos del producto viven en
+`src/textos/vivienda-nueva.ts`.
 
 ## Cómo abrirla
 

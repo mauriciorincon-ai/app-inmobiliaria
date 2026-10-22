@@ -277,6 +277,16 @@
           color: #f9a8d4;
         }
       }
+      .o-s12 {
+        background: #dcfce7;
+        color: #166534;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s12 {
+          background: #052e16;
+          color: #86efac;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -325,22 +335,21 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 010 — Decidir con números</h1>
+      <h1>Sprint 012 — Nuevos, con lo que pagas de verdad</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s10">Nuevo · S10</span>. Este sprint ayuda al
-        comprador a decidir con números: ve si un precio está en línea con su
-        zona (un rango con su N, su fecha y su fuente, nunca un avalúo), los
-        datos de la zona y un simulador de cuota que filtra la búsqueda y llena
-        una alerta, sin que sus ingresos salgan del teléfono (bloque N).
+        <span class="origen o-s12">Nuevo · S12</span>. Este sprint mete la
+        vivienda nueva en Buscar: la pestaña «Nuevos» con el índice, «pagas al
+        menos», la espera con tu arriendo (solo en tu teléfono) y la ficha
+        honesta (bloque O). Los bloques A a N siguen igual.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-010/decidir-con-numeros</code>. En un teléfono real cuando
-        el filtro lo pida.
+        <code>sprint-012/nuevos-con-lo-que-pagas</code>. En un teléfono real
+        cuando el filtro lo pida.
       </div>
 
       <div class="barra">
@@ -354,8 +363,11 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
+          <button data-filtro="s12" aria-pressed="false">
+            Solo lo nuevo del S12
+          </button>
           <button data-filtro="s10" aria-pressed="false">
-            Solo lo nuevo del S10
+            Solo lo del S10
           </button>
           <button data-filtro="s9" aria-pressed="false">Solo lo del S9</button>
           <button data-filtro="s8" aria-pressed="false">Solo lo del S8</button>
@@ -1974,8 +1986,202 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE O ================= -->
+      <section class="bloque">
+        <h2>
+          <span class="letra">O</span> Vivienda nueva: lo que pagas de verdad
+        </h2>
+        <p class="intro">
+          En Buscar hay dos pestañas, <b>Usados</b> y <b>Nuevos</b>. «Nuevos»
+          muestra los proyectos de la revista Estrenar Vivienda (edición
+          vigente) con <b>«pagas al menos»</b>, que suma al «desde» del aviso lo
+          que la norma cobra por registrar y el parqueadero que se paga aparte.
+          Lo que el aviso calla <b>se nombra y no se suma</b>. Para estas
+          pruebas necesitas la edición publicada en la nube y la app desplegada;
+          ten a mano el PDF de la revista (solo tú lo tienes) para comparar un
+          proyecto con su página.
+        </p>
+        <ul>
+          <li data-origen="s12 clave">
+            <input type="checkbox" id="o1" />
+            <div>
+              <label for="o1" class="qué"
+                >En tu <b>teléfono</b>, entra a <b>Buscar</b>, toca la pestaña
+                <b>«Nuevos»</b> y recorre el índice y las primeras tarjetas<span
+                  class="origen o-s12"
+                  >Nuevo · S12</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la fuente
+                <b>«Fuente: Estrenar Vivienda, edición N»</b> y la ventana de la
+                edición a la vista; el índice con la mediana del m² privado de
+                Bogotá y de la Sabana (o «Sin datos suficientes» si hay menos de
+                5 proyectos); cada tarjeta con el <b>«Desde»</b> y, más grande,
+                <b>«Pagas al menos»</b>, y el m² con la palabra
+                <b>aproximado</b> o su razón. La barra de abajo sigue con cuatro
+                secciones y Buscar activa.
+                <b>Es tu juicio del copy y de las cifras.</b>
+              </p>
+              <p class="mal">
+                Mala señal: un «desde» presentado como el precio final, una
+                mediana con menos de 5 proyectos, un teléfono, una dirección o
+                una foto de la revista, o la fuente sin el número de la edición.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s12 clave">
+            <input type="checkbox" id="o2" />
+            <div>
+              <label for="o2" class="qué"
+                >Abre la ficha de <b>un proyecto</b> y compárala con
+                <b>su página de la revista</b>: nombre, constructora, precio
+                «desde», áreas y fecha de entrega<span class="origen o-s12"
+                  >Nuevo · S12</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cada cifra de la ficha coincide con la página
+                (o dice <b>«No lo dice»</b> si la revista no la imprime); «Pagas
+                al menos» es el «desde» más los <b>derechos de registro</b> (con
+                la Resolución 2026-001726-6 y la fecha de consulta) y el
+                parqueadero que se paga aparte
+                <b>solo si el aviso da su precio</b>; abajo,
+                <b>«Lo que falta sumar»</b> nombra los derechos notariales, el
+                impuesto de registro, el IVA de la notaría, la hipoteca y lo que
+                el aviso calle, <b>sin sumarlos</b>; y la fuente dice «p.» con
+                las páginas del proyecto.
+                <b>Es tu juicio de las cifras: cada peso con su norma.</b>
+              </p>
+              <p class="mal">
+                Mala señal: un número que no está en la revista, un peso sin
+                norma ni fecha, algo no verificado sumado al total, o una página
+                de la fuente que no es la del proyecto.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s12">
+            <input type="checkbox" id="o3" />
+            <div>
+              <label for="o3" class="qué"
+                >Abre la ficha de un proyecto que <b>casi no dice nada</b> (el
+                que más «No lo dice» tiene) y la de uno donde
+                <b>dos páginas imprimen precios distintos</b>, si la edición
+                trae alguno<span class="origen o-s12">Nuevo · S12</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> en <b>«La ficha honesta»</b> cada dato aparece
+                como «Lo dice», «No lo dice», «Ilegible en la revista» o «Dos
+                páginas imprimen cifras distintas», con un símbolo además del
+                color; <b>no se adivina nada</b>; los mensajes de venta
+                («Lanzamiento», «Últimas unidades»…) van aparte porque no son
+                datos; con precios que se contradicen no hay «Pagas al menos» ni
+                m² y la ficha lo explica; y si el aviso no da la fecha de
+                entrega, la espera dice que <b>no se puede calcular</b>.
+              </p>
+              <p class="mal">
+                Mala señal: un dato inventado o completado, un precio elegido
+                entre dos que se contradicen, o un mensaje de venta contado como
+                dato.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s12">
+            <input type="checkbox" id="o4" />
+            <div>
+              <label for="o4" class="qué"
+                >En <b>«La espera»</b> de un proyecto en construcción, escribe
+                tu arriendo mensual; recarga la página; luego abre las
+                herramientas del navegador (pestaña <b>Red</b> y «Almacenamiento
+                local») y toca <b>«Borrar mi arriendo de este teléfono»</b
+                ><span class="origen o-s12">Nuevo · S12</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> ves los <b>meses hasta la entrega</b> (con
+                «Aproximado» si la revista imprime la entrega sin el mes) y, al
+                escribir, cuánto cuesta la espera; el arriendo vuelve al
+                recargar; <b>ninguna petición</b> lo lleva ni lleva el total (el
+                servidor solo da los meses); vive en la clave
+                <code>inn:arriendo:v1</code> de este teléfono y desaparece al
+                borrarlo. Un valor que no sirve («mucho») no se guarda y se
+                dice.
+              </p>
+              <p class="mal">
+                Mala señal: el arriendo o el total en la URL, el cuerpo o las
+                cabeceras de una petición, o un arriendo que sigue guardado
+                después de borrarlo.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s12 clave">
+            <input type="checkbox" id="o5" />
+            <div>
+              <label for="o5" class="qué"
+                >En <b>Herramientas</b> calcula lo que puedes pagar con tus
+                ingresos y toca <b>«Ver lo que puedo pagar»</b>; luego toca la
+                pestaña <b>«Nuevos»</b
+                ><span class="origen o-s12">Nuevo · S12</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Nuevos» conserva el tope y dice
+                <b>«Lo que puedes pagar: $X»</b> con la nota de que se compara
+                con «pagas al menos», no con el «desde», y de que tus ingresos
+                no salen de tu teléfono; la lista separa <b>caben</b>,
+                <b>fuera de lo que puedes pagar</b> y
+                <b>sin precio en el aviso</b>, con sus cuentas; en la ficha de
+                uno que no cabe, el aviso dice cuánto falta.
+                <b>Es tu juicio de si el tope tiene sentido.</b>
+              </p>
+              <p class="mal">
+                Mala señal: comparar con el «desde», perder el tope al cambiar
+                de pestaña, o ver tus ingresos en el enlace.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s12">
+            <input type="checkbox" id="o6" />
+            <div>
+              <label for="o6" class="qué"
+                >En <b>«Nuevos»</b> abre <b>«Filtros»</b>, elige una zona, una
+                franja de precio, VIS o No VIS, una etapa y un año de entrega, y
+                toca <b>«Aplicar»</b>; baja hasta <b>«Ver más proyectos»</b> y
+                tócalo<span class="origen o-s12">Nuevo · S12</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la lista se recorta con la cuenta de proyectos,
+                «Quitar filtros» los suelta, y «Ver más proyectos» trae el resto
+                con un enlace (funciona sin JavaScript). En la zona de un barrio
+                con menos de 5 proyectos el índice dice
+                <b>«Sin datos suficientes»</b> y cuántos hacen falta.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s12">
+            <input type="checkbox" id="o7" />
+            <div>
+              <label for="o7" class="qué"
+                ><b>Cuando pase la fecha de vigencia de la edición</b> (la del
+                15 de un mes al 15 del siguiente) y todavía no haya una nueva,
+                abre «Nuevos» y una ficha<span class="origen o-s12"
+                  >Nuevo · S12</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> arriba aparece <b>«Mes sin edición»</b> con los
+                días que lleva vencida la edición y la advertencia de que los
+                precios pueden haber cambiado; la fuente sigue diciendo la
+                edición; el índice no se presenta como de hoy.
+                <b>Esta prueba solo se puede hacer al llegar la fecha</b> (la CI
+                la cubre con una fecha simulada).
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–N), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–O), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -2003,6 +2209,19 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 012 (2026-10-22):</b><br />
+          <b>Nuevo:</b> bloque O (vivienda nueva: la pestaña «Nuevos» en Buscar,
+          «pagas al menos» con cada peso y su norma, lo que falta sumar
+          nombrado, la ficha honesta, la espera con tu arriendo solo en el
+          teléfono, «lo que puedes pagar» sobre los nuevos, los filtros y «mes
+          sin edición»): 7 pruebas nuevas, 3 del gate mínimo ⭐.<br />
+          <b>Mejorado:</b> —<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 91 pruebas, 31 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          9).
+        </p>
         <p>
           <b>Sprint 010 (2026-10-19):</b><br />
           <b>Nuevo:</b> bloque N (decidir con números: «¿Está caro?» como rango,
@@ -2098,7 +2317,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v8:";
+        var CLAVE = "guia-inmobiliaria-v9:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

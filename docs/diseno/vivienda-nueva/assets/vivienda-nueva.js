@@ -252,6 +252,16 @@
           "Parqueadero: el aviso no dice si va incluido.",
           "Parking: the ad does not say whether it is included.",
         );
+      case "parqueadero_en_conflicto":
+        return par(
+          "Parqueadero: dos páginas de la revista imprimen datos distintos, no se suma.",
+          "Parking: two pages of the magazine print different figures, so it is not added.",
+        );
+      case "clase_en_conflicto":
+        return par(
+          "Dos páginas de la revista imprimen datos distintos sobre si es VIS o sobre la ciudad: el registro se calculó con el caso más barato y puede costar más.",
+          "Two pages of the magazine print different figures on whether it is VIS or on the city: registration was computed with the cheapest case and may cost more.",
+        );
       case "subidas_en_obra":
         return par(
           "El aviso no dice que el precio sea fijo: puede subir mientras se construye.",

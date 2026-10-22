@@ -7644,6 +7644,9 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "clase_en_conflicto"
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {

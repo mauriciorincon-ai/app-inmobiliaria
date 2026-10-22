@@ -112,8 +112,8 @@ export const VIVIENDA_NUEVA = {
       en: "The index: asking price per private m²",
     },
     nota: {
-      es: "Mediana del m² «desde» sobre el área privada, con el recorte de atípicos y el mínimo de 5 proyectos del «¿Está caro?». Sin 5, no hay mediana. Un proyecto cuyas páginas imprimen cifras distintas no entra.",
-      en: "Median «from» price per private m², with the same outlier trimming and 5-project minimum as «Is it overpriced?». Without 5, there is no median. A project whose pages print different figures is left out.",
+      es: "Mediana del m² «desde» sobre el área privada, con el recorte de atípicos y el mínimo de 5 proyectos del «¿Está caro?». Sin 5, no hay mediana. Un proyecto cuyas páginas imprimen cifras distintas no entra. Es un m² aproximado: el precio «desde» y el área «desde» no siempre son de la misma unidad.",
+      en: "Median «from» price per private m², with the same outlier trimming and 5-project minimum as «Is it overpriced?». Without 5, there is no median. A project whose pages print different figures is left out. It is an approximate m²: the «from» price and the «from» area are not always the same unit.",
     },
     medianaDe: {
       es: "mediana del m² privado «desde» de {usados} proyectos ({n} en la edición)",
@@ -250,8 +250,14 @@ export const VIVIENDA_NUEVA = {
   tarjeta: {
     desde: { es: "Desde", en: "From" },
     alMenos: { es: "Pagas al menos", en: "You pay at least" },
-    m2Privada: { es: "de área privada", en: "of private area" },
-    m2Construida: { es: "de área construida", en: "of built area" },
+    m2Privada: {
+      es: "de área privada, aproximado",
+      en: "of private area, approximate",
+    },
+    m2Construida: {
+      es: "de área construida, aproximado",
+      en: "of built area, approximate",
+    },
     sinArea: { es: "Sin área: no hay m²", en: "No area: no price per m²" },
     m2Conflicto: {
       es: "Cifras en conflicto: no hay m²",
@@ -382,6 +388,14 @@ export const VIVIENDA_NUEVA = {
       parqueadero_no_lo_dice: {
         es: "Parqueadero: el aviso no dice si va incluido.",
         en: "Parking: the ad does not say whether it is included.",
+      },
+      parqueadero_en_conflicto: {
+        es: "Parqueadero: dos páginas de la revista imprimen datos distintos, no se suma.",
+        en: "Parking: two pages of the magazine print different figures, so it is not added.",
+      },
+      clase_en_conflicto: {
+        es: "Dos páginas de la revista imprimen datos distintos sobre si es VIS o sobre la ciudad: el registro se calculó con el caso más barato y puede costar más.",
+        en: "Two pages of the magazine print different figures on whether it is VIS or on the city: registration was computed with the cheapest case and may cost more.",
       },
       subidas_en_obra: {
         es: "El aviso no dice que el precio sea fijo: puede subir mientras se construye.",

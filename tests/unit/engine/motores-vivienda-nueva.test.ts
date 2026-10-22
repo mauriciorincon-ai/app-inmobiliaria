@@ -274,6 +274,86 @@ describe("precio verdadero", () => {
   });
 });
 
+describe("un campo en conflicto que no es el precio ni las áreas tampoco entra a la cuenta (auditoría S12, M2)", () => {
+  it("parqueadero contradicho: ni se suma ni se elige, se nombra", () => {
+    const r = precioVerdadero(
+      entrada({ en_conflicto: ["parqueadero_precio"] }),
+      tarifas,
+    );
+    if (r.estado !== "calculado") throw new Error("debía calcular");
+    expect(ids(r.partidas)).toEqual(["precio_desde", "derechos_registro"]);
+    expect(ids(r.faltantes)).toContain("parqueadero_en_conflicto");
+    expect(ids(r.faltantes)).not.toContain("parqueadero_sin_precio");
+    // Sin el conflicto el parqueadero sí se sumaría (la demo en rojo de la regla).
+    const sin = precioVerdadero(entrada(), tarifas);
+    if (sin.estado !== "calculado") throw new Error("debía calcular");
+    expect(ids(sin.partidas)).toContain("parqueadero");
+    expect(r.alMenos).toBe(sin.alMenos - 20_000_000);
+  });
+
+  it("segmento contradicho: el registro se calcula con el caso más barato y se nombra, no con el de la primera página", () => {
+    // 250 M cabe en el tope VIS de Bogotá: «No VIS» liquidaría como general; en conflicto se toma VIS (el más barato).
+    const general = precioVerdadero(entrada({ segmento: "No VIS" }), tarifas);
+    const dudoso = precioVerdadero(
+      entrada({ segmento: "No VIS", en_conflicto: ["segmento"] }),
+      tarifas,
+    );
+    if (general.estado !== "calculado" || dudoso.estado !== "calculado") {
+      throw new Error("debía calcular");
+    }
+    expect(general.clase).toBe("general");
+    expect(dudoso.clase).toBe("vis");
+    expect(dudoso.alMenos).toBeLessThan(general.alMenos);
+    expect(ids(dudoso.faltantes)).toContain("clase_en_conflicto");
+    expect(ids(dudoso.faltantes)).not.toContain("segmento_no_lo_dice");
+  });
+
+  it("ciudad contradicha: se usa el tope VIS más alto (el caso más barato) y se nombra", () => {
+    // 250 M en Ibagué (tope 135 salarios = 236,4 M) pasa el tope: general. En conflicto se toma el tope de 150 (262,6 M): VIS.
+    const ibague = precioVerdadero(entrada({ ciudad: "Ibagué" }), tarifas);
+    const dudosa = precioVerdadero(
+      entrada({ ciudad: "Ibagué", en_conflicto: ["ciudad"] }),
+      tarifas,
+    );
+    if (ibague.estado !== "calculado" || dudosa.estado !== "calculado") {
+      throw new Error("debía calcular");
+    }
+    expect(ibague.clase).toBe("general");
+    expect(ids(ibague.faltantes)).toContain("supera_tope_vis");
+    expect(dudosa.clase).toBe("vis");
+    expect(ids(dudosa.faltantes)).toContain("clase_en_conflicto");
+  });
+
+  it("precio fijo o etapa contradichos: no se puede afirmar que el precio no sube", () => {
+    const fijo = precioVerdadero(entrada(), tarifas);
+    const dudoso = precioVerdadero(
+      entrada({ en_conflicto: ["precio_fijo"] }),
+      tarifas,
+    );
+    const inmediata = precioVerdadero(
+      entrada({ etapa: "entrega_inmediata", precio_fijo: NO_LO_DICE }),
+      tarifas,
+    );
+    const inmediataDudosa = precioVerdadero(
+      entrada({
+        etapa: "entrega_inmediata",
+        precio_fijo: NO_LO_DICE,
+        en_conflicto: ["etapa"],
+      }),
+      tarifas,
+    );
+    for (const [r, esperado] of [
+      [fijo, false],
+      [dudoso, true],
+      [inmediata, false],
+      [inmediataDudosa, true],
+    ] as const) {
+      if (r.estado !== "calculado") throw new Error("debía calcular");
+      expect(ids(r.faltantes).includes("subidas_en_obra")).toBe(esperado);
+    }
+  });
+});
+
 describe("un campo que dos páginas de la revista contradicen no se usa para calcular", () => {
   it("área privada contradicha: el m² cae a la construida; si las dos se contradicen, no hay m² y se dice por qué", () => {
     const privada = entrada({

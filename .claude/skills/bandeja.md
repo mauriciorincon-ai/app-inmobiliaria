@@ -44,15 +44,21 @@ sesión de Claude Code y nada más. Las credenciales son las de la app (`.env.lo
 - **Antes de leer:** la edición nueva cambia `EDICION` (número y vigencia) y `PAGINAS_EDICION` en
   `src/engine/vivienda-nueva/edicion.ts`. Los scripts de `scripts/vivienda-nueva/` siguen a `EDICION.numero` (semilla de la
   doble lectura, `unida-N.json`, informe); las lecturas de otra edición que haya en `crudo/` se ignoran por su campo `edicion`.
-  El generador de la maqueta (`maqueta.mjs`, `datos-187.js`) es de la edición 187: la lectura de las ediciones siguientes en
-  el producto llega con el S12.
+  El generador de la maqueta (`maqueta.mjs`, `datos-187.js`) es de la edición 187: el producto lee las ediciones siguientes de la base.
 - **Cómo se procesa:** el flujo de `scripts/vivienda-nueva/README.md` (render con `pdftoppm`, lectores en Sonnet con las
   reglas de `scripts/vivienda-nueva/LECTOR.md`, `validar.mjs --unir`, doble lectura con `muestra.mjs`, `cobertura.mjs`).
   El PDF se lee en la planeadora y jamás se copia al repo; sus metadatos no se leen; nadie visita URLs ni QR de la revista
   ni contacta a nadie; lo ilegible es `ilegible` y lo que el aviso no dice es `no_lo_dice`.
 - **Salida:** `validar.mjs --unir` deja `crudo/unida-N.json`; **no es el entregable** y el trabajo sigue pendiente. `bandeja.mjs
 entregar` lo valida contra el tipo (edición del trabajo, 68 páginas, ninguna sin leer, esquema estricto) y lo deja como
-  `crudo/edicion-N.json`. El destino es `scripts/vivienda-nueva/crudo/` (ignorado por git): un archivo versionado solo cambia por PR.
+  `crudo/edicion-N.json`: el trabajo queda `listo`. El destino del tipo es la tabla `ediciones` de la base (migración 15):
+  1. `bandeja.mjs cargar <id>` la carga **sin publicar**, fija la muestra de 5 (semilla = número de la edición) y escribe
+     `crudo/revision-N.html` (ignorado por git): las 5 filas procesadas al lado de su página de la revista.
+  2. El usuario compara y dice «revisada». Solo entonces `bandeja.mjs publicar <id> --revisada` (estado `entregado`); sin la
+     muestra exacta, la base lo rechaza (`muestra_no_coincide`).
+  3. `estado <N>` dice si está cargada o publicada; `retirar <N>` la quita de inmediato y deja los datos.
+     Contra una base que no es local, `cargar`, `publicar`, `estado` y `retirar` se niegan sin `--nube`, y `--nube` solo con el «sí»
+     del usuario. El humo anónimo (`scripts/humo-anonimo.mjs`) se corre antes y después.
 - **Revisión (G5):** doble lectura de al menos el 10 % de los proyectos, con cero discrepancias en precio y áreas, antes de
   generar la maqueta con `scripts/vivienda-nueva/maqueta.mjs`. Los números los hacen los motores; la IA solo transcribe.
 - **Al repo** llega solo lo procesado, con «Fuente: Estrenar Vivienda, edición N»: sin fotos, logos, textos de avisos,

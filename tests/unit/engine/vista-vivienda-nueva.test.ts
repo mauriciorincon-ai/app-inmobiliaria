@@ -17,8 +17,10 @@ import { precioVerdadero } from "../../../src/engine/vivienda-nueva/precio-verda
 import {
   edicionVigente,
   franjasNuevos,
+  entregaPartes,
   hayFiltrosNuevos,
   leerFiltrosNuevos,
+  leerPagina,
   paramsNuevos,
   vistaIndice,
   vistaLista,
@@ -197,6 +199,33 @@ describe("leerFiltrosNuevos / paramsNuevos (la URL de «Nuevos»; jamás lanza)"
   });
 });
 
+describe("leerPagina y entregaPartes", () => {
+  it("la página es 1 por omisión, se acota y nunca lanza", () => {
+    expect(leerPagina({})).toBe(1);
+    expect(leerPagina({ pag: "3" })).toBe(3);
+    expect(leerPagina({ pag: ["2", "9"] })).toBe(2);
+    expect(leerPagina({ pag: "0" })).toBe(1);
+    expect(leerPagina({ pag: "-4" })).toBe(1);
+    expect(leerPagina({ pag: "abc" })).toBe(1);
+    expect(leerPagina({ pag: "9999" })).toBe(1); // más de tres cifras no se entiende
+    expect(leerPagina({ pag: "500" })).toBe(20); // se acota
+  });
+
+  it("la entrega se dice según su precisión: mes exacto, hasta un mes o durante el año", () => {
+    expect(entregaPartes("2028-12", "mes")).toEqual({
+      anio: 2028,
+      mes: 12,
+      forma: "mes",
+    });
+    expect(entregaPartes("2028-12", null)?.forma).toBe("mes");
+    expect(entregaPartes("2028-06", "semestre")?.forma).toBe("hasta");
+    expect(entregaPartes("2028-09", "trimestre")?.forma).toBe("hasta");
+    expect(entregaPartes("2029-12", "anio")?.forma).toBe("anio");
+    expect(entregaPartes("inmediata", null)).toBeNull();
+    expect(entregaPartes(NO_LO_DICE, null)).toBeNull();
+  });
+});
+
 describe("franjas e índice", () => {
   it("el tope VIS de la franja sale de las tarifas", () => {
     expect(franjasNuevos(tarifas).map((f) => f.hasta)).toEqual([
@@ -355,6 +384,8 @@ describe("vistaLista", () => {
     expect(n("sabana:Cajicá")).toBe(1);
     expect(n("bogota:Kennedy")).toBe(1);
     expect(n("otra")).toBeUndefined();
+    // Los años de entrega que imprime la edición (la inmediata y la que no dice fecha no tienen año).
+    expect(v.anios).toEqual([2028, 2030]);
   });
 });
 

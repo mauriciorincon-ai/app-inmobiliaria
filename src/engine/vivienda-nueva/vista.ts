@@ -154,6 +154,17 @@ export function leerFiltrosNuevos(entrada: EntradaUrl): FiltrosNuevos {
   return f;
 }
 
+/** Cuántas tarjetas salen de a una vez; «ver más» es un enlace (`pag`), sin JavaScript. */
+export const PAGINA_NUEVOS = 12;
+const PAGINAS_MAX = 20;
+
+/** La página de la lista (1 por omisión). Un valor que no se entiende es la primera; nunca lanza. */
+export function leerPagina(entrada: EntradaUrl): number {
+  const v = primero(entrada, "pag");
+  if (v === undefined || !/^\d{1,3}$/.test(v)) return 1;
+  return Math.min(Math.max(1, Number(v)), PAGINAS_MAX);
+}
+
 /** La URL de «Nuevos» con sus filtros (`v=nuevos` primero): la inversa de `leerFiltrosNuevos`. */
 export function paramsNuevos(f: FiltrosNuevos): URLSearchParams {
   const p = new URLSearchParams({ v: "nuevos" });
@@ -264,6 +275,8 @@ export type VistaLista = {
   sinPrecio: TarjetaNuevo[];
   /** Los lugares para elegir, con cuántos proyectos tiene cada uno (antes de filtrar). */
   lugares: { clave: string; n: number }[];
+  /** Los años de entrega que la edición imprime (antes de filtrar), para elegir «a más tardar». */
+  anios: number[];
 };
 
 function resumenPrecio(pv: PrecioVerdadero): PrecioTarjeta {
@@ -334,6 +347,15 @@ export function vistaLista(
     .map(([clave, n]) => ({ clave, n }))
     .sort((a, b) => (a.clave < b.clave ? -1 : 1));
 
+  const anios = [
+    ...new Set(
+      cerca.flatMap((p) => {
+        const m = /^(\d{4})-\d{2}$/.exec(String(p.entrega));
+        return m ? [Number(m[1])] : [];
+      }),
+    ),
+  ].sort((a, b) => a - b);
+
   const filtrados = cerca.filter(
     (p) =>
       (f.lugar === undefined || lugarCumple(p, f.lugar)) &&
@@ -369,6 +391,7 @@ export function vistaLista(
     fuera: a.noCaben.map((x) => x.tarjeta),
     sinPrecio: a.sinPrecio.map((x) => x.tarjeta),
     lugares,
+    anios,
   };
 }
 
@@ -476,5 +499,32 @@ export function vistaProyecto(
           : precio.alMenos <= tope
             ? "dentro"
             : "fuera",
+  };
+}
+
+// --- la fecha de entrega, para escribirla en cada idioma ---------------------------------------------------------------
+/** Cómo se dice la entrega: el mes exacto, «hasta» un mes (trimestre o semestre) o «durante» un año. */
+export type EntregaPartes = {
+  anio: number;
+  mes: number;
+  forma: "mes" | "hasta" | "anio";
+};
+
+/** `AAAA-MM` + la precisión impresa → las partes para escribirla; `null` si el aviso no da una fecha. */
+export function entregaPartes(
+  entrega: string,
+  precision: string | null,
+): EntregaPartes | null {
+  const m = /^(\d{4})-(\d{2})$/.exec(entrega);
+  if (!m) return null;
+  return {
+    anio: Number(m[1]),
+    mes: Number(m[2]),
+    forma:
+      precision === "anio"
+        ? "anio"
+        : precision === "mes" || precision === null
+          ? "mes"
+          : "hasta",
   };
 }

@@ -30,6 +30,27 @@ export function formatearCOP(valor: number, idioma: Idioma = "es"): string {
 }
 
 /**
+ * Pesos en millones con `decimales` cifras: `$250,0 M` (es) · `COP 250.0M` (en). Para cifras de lectura rápida (tarjetas,
+ * índice); el precio exacto se escribe con `formatearCOP`. No finitos → vacío.
+ */
+export function formatearMillones(
+  valor: number,
+  idioma: Idioma = "es",
+  decimales = 1,
+): string {
+  if (!Number.isFinite(valor)) return "";
+  const x = (valor / 1e6).toFixed(decimales);
+  return idioma === "es" ? `$${x.replace(".", ",")} M` : `COP ${x}M`;
+}
+
+/** El m² en millones: `$9,97 M/m²` (es) · `COP 9.97M/m²` (en). */
+export function formatearM2(valor: number, idioma: Idioma = "es"): string {
+  if (!Number.isFinite(valor)) return "";
+  const x = (valor / 1e6).toFixed(2);
+  return idioma === "es" ? `$${x.replace(".", ",")} M/m²` : `COP ${x}M/m²`;
+}
+
+/**
  * ¿Lo escrito es un número ENTERO? Dígitos con separador de miles opcional (punto, coma o espacio, en
  * grupos de tres) y un «$» o «COP» delante. «85.5» o «420,000,000.00» no lo son: sin esta guarda,
  * `parsearCOP` los leería como 855 y 42.000.000.000 (se vuelve alcanzable cuando quien escribe es de un

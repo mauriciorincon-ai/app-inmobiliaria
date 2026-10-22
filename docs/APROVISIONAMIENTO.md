@@ -189,8 +189,12 @@ pnpm exec wrangler secret put OPERADOR_EMAIL
 
 ```bash
 pnpm preview:cf   # build OpenNext + workerd local: valida que la app corre en runtime Workers
-pnpm deploy:cf    # build + deploy real
+pnpm deploy:cf    # guarda de despliegue + build + deploy real
 ```
+
+Antes de construir, `scripts/guarda-despliegue.mjs` se niega a seguir (y dice cuál y dónde, sin imprimir valores) si hay una
+perilla de prueba encendida en el entorno, en un `.env*` de producción o en las `vars` de `wrangler.jsonc`: cualquier
+`*_SIMULACRO`, cualquier `*_MOCK`, `DISABLE_RATE_LIMIT` o `REGISTRO_MIN_MS` (S13). Esas perillas son solo de la CI y de las pruebas.
 
 El deploy **imprime la URL de la app** al terminar (subdominio de Cloudflare Workers de tu cuenta).
 Esa es la **preview privada de H1**: no está indexada (la app manda `robots: noindex`) y no se
@@ -328,7 +332,8 @@ Financiera y la guarda con su fecha; no hay llave ni cuenta. `TASA_SIMULACRO` es
 producción NO se define** (con ella el cron no sale a la red y guardaría una tasa fija de prueba).
 
 **La vivienda nueva (S12) tampoco pide nada tuyo en el Worker.** Lee la edición publicada con la llave pública. `NUEVOS_SIMULACRO`
-es solo de la CI y las pruebas (hace que el servidor respete la cabecera `x-hoy-simulado`): **en producción NO se define**.
+es solo de la CI y las pruebas (hace que el servidor respete la cabecera `x-hoy-simulado`): **en producción NO se define**, y
+desde el S13 `pnpm deploy:cf` lo comprueba por ti.
 
 ### 6.1 [TÚ] Poner los secretos en el Worker
 

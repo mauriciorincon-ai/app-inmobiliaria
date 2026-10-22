@@ -39,6 +39,38 @@ export type FilaProyecto = {
   en_conflicto: string[];
 };
 
+/**
+ * Las ÚNICAS claves de un proyecto que el anónimo puede leer (la lista blanca de `nuevos_publicados`, migración 15).
+ * La prueba unitaria la iguala a lo que produce `aFila`; el humo anónimo la exige en lo que devuelve la base.
+ */
+export const CLAVES_FILA = [
+  "slug",
+  "clave",
+  "nombre",
+  "constructora",
+  "tipo",
+  "ciudad",
+  "sector",
+  "region",
+  "segmento",
+  "precio_desde",
+  "area_construida_desde",
+  "area_construida_hasta",
+  "area_privada_desde",
+  "area_privada_hasta",
+  "etapa",
+  "entrega",
+  "entrega_precision",
+  "parqueadero",
+  "parqueadero_precio",
+  "precio_fijo",
+  "subsidio_anunciado",
+  "rotulos",
+  "apariciones",
+  "ilegibles",
+  "en_conflicto",
+] as const satisfies readonly (keyof FilaProyecto)[];
+
 // Los campos numéricos: en los «desde» el aviso puede callar («no lo dice»); en los «hasta», `null` es «no es un rango».
 type Desde = "precio_desde" | "area_construida_desde" | "area_privada_desde";
 type Hasta = "area_construida_hasta" | "area_privada_hasta";

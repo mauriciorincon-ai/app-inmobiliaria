@@ -7,6 +7,7 @@ import {
 import {
   aFila,
   asignarSlugs,
+  CLAVES_FILA,
   cargaDeEdicion,
   deFila,
   muestraDeRevision,
@@ -82,36 +83,11 @@ describe("aFila / deFila", () => {
     expect(aFila(sinCampo, "x").en_conflicto).toEqual([]);
   });
 
-  it("la fila lleva solo las columnas de la tabla: ni notas del lector ni nada fuera de la lista", () => {
+  it("la fila lleva solo las columnas de la lista blanca: ni notas del lector ni nada fuera de la lista", () => {
     expect(Object.keys(aFila(proyecto(), "x")).sort()).toEqual(
-      [
-        "slug",
-        "clave",
-        "nombre",
-        "constructora",
-        "tipo",
-        "ciudad",
-        "sector",
-        "region",
-        "segmento",
-        "precio_desde",
-        "area_construida_desde",
-        "area_construida_hasta",
-        "area_privada_desde",
-        "area_privada_hasta",
-        "etapa",
-        "entrega",
-        "entrega_precision",
-        "parqueadero",
-        "parqueadero_precio",
-        "precio_fijo",
-        "subsidio_anunciado",
-        "rotulos",
-        "apariciones",
-        "ilegibles",
-        "en_conflicto",
-      ].sort(),
+      [...CLAVES_FILA].sort(),
     );
+    expect(new Set(CLAVES_FILA).size).toBe(CLAVES_FILA.length);
   });
 });
 

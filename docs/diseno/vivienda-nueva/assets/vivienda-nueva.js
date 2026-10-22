@@ -212,7 +212,17 @@
 
   function faltante(f, p) {
     switch (f.id) {
+      case "derechos_registro":
+        return par(
+          "Derechos de registro: no pudimos verificar la tarifa en la norma, no se suman.",
+          "Registration fees: we could not verify the rate in the rule, so they are not added.",
+        );
       case "derechos_notariales":
+        if (f.monto === undefined)
+          return par(
+            "Derechos notariales: no los pudimos verificar en la norma para este caso, no se suman.",
+            "Notary fees: we could not verify them in the rule for this case, so they are not added.",
+          );
         return par(
           "Derechos notariales de la compraventa: " +
             "<span class=num>$" +
@@ -259,8 +269,8 @@
         );
       case "exencion_vip_con_subsidio":
         return par(
-          "VIP: el registro queda exento solo si recibes subsidio. Los derechos notariales de una VIP no los pudimos verificar: no se suman.",
-          "VIP: registration is exempt only if you get a subsidy. We could not verify the notary fees of a VIP, so they are not added.",
+          "VIP: el registro queda exento solo si recibes subsidio.",
+          "VIP: registration is exempt only if you get a subsidy.",
         );
       case "supera_tope_vis":
         return par(

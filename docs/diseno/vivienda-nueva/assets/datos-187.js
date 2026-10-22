@@ -9604,6 +9604,9 @@ window.DATOS_187 = {
       "id": "parqueadero_no_lo_dice"
      },
      {
+      "id": "derechos_notariales"
+     },
+     {
       "id": "impuesto_registro"
      },
      {

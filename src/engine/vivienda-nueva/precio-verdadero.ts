@@ -7,6 +7,8 @@
 // Lo que queda nombrado y sin sumar: los derechos notariales (se reparten según la promesa: se da su total), el impuesto
 // de registro y la beneficencia y el IVA notarial (no verificados), el parqueadero sin precio, lo que puede subir durante
 // la obra si el precio no es fijo, la hipoteca si compras con crédito y, en VIP, que la exención exige subsidio.
+// Una tarifa que no está `vigente` en `src/data` (o un caso que su norma no verifica) se nombra SIN monto: jamás se omite
+// en silencio ni se suma (decisión 4 del S12).
 //
 // El m² es «aproximado»: el precio «desde» y el área «desde» no siempre son de la misma unidad.
 import type { Proyecto } from "./edicion.ts";
@@ -41,6 +43,7 @@ export type Partida = {
 };
 
 export type IdFaltante =
+  | "derechos_registro"
   | "derechos_notariales"
   | "impuesto_registro"
   | "iva_notarial"
@@ -52,6 +55,7 @@ export type IdFaltante =
   | "exencion_vip_con_subsidio"
   | "supera_tope_vis";
 
+/** Sin `monto`: se nombra y no se puede dar la cifra (la tarifa no está verificada para este caso). */
 export type Faltante = { id: IdFaltante; monto?: number };
 
 export type M2Aproximado =
@@ -155,7 +159,9 @@ export function precioVerdadero(
   const faltantes: Faltante[] = [...porClase];
 
   const registro = derechosRegistro(desde, clase, tarifas);
-  if (registro !== null && registro > 0) {
+  if (registro === null) {
+    faltantes.push({ id: "derechos_registro" });
+  } else if (registro > 0) {
     partidas.push({ id: "derechos_registro", monto: registro });
   }
 
@@ -172,9 +178,11 @@ export function precioVerdadero(
   }
 
   const notariales = derechosNotariales(desde, clase, tarifas);
-  if (notariales !== null) {
-    faltantes.push({ id: "derechos_notariales", monto: notariales });
-  }
+  faltantes.push(
+    notariales === null
+      ? { id: "derechos_notariales" }
+      : { id: "derechos_notariales", monto: notariales },
+  );
   faltantes.push({ id: "impuesto_registro" }, { id: "iva_notarial" });
   if (p.precio_fijo !== "si" && p.etapa !== "entrega_inmediata") {
     faltantes.push({ id: "subidas_en_obra" });

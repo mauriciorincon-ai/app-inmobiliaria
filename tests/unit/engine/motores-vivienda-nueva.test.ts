@@ -189,7 +189,7 @@ describe("precio verdadero", () => {
     expect(ids(r.faltantes)).toContain("segmento_no_lo_dice");
   });
 
-  it("VIP: el registro queda exento con subsidio y se nombra; los derechos notariales de VIP no se verifican y no se suman", () => {
+  it("VIP: el registro queda exento con subsidio y se nombra; los derechos notariales de VIP no se verifican: se nombran SIN monto", () => {
     const r = precioVerdadero(
       entrada({ precio_desde: 150_000_000, segmento: "VIP" }),
       tarifas,
@@ -197,7 +197,9 @@ describe("precio verdadero", () => {
     if (r.estado !== "calculado") throw new Error("debía calcular");
     expect(ids(r.partidas)).toEqual(["precio_desde", "parqueadero"]);
     expect(ids(r.faltantes)).toContain("exencion_vip_con_subsidio");
-    expect(ids(r.faltantes)).not.toContain("derechos_notariales");
+    expect(r.faltantes.find((f) => f.id === "derechos_notariales")).toEqual({
+      id: "derechos_notariales",
+    });
     expect(derechosNotariales(150_000_000, "vip", tarifas)).toBeNull();
   });
 
@@ -254,7 +256,7 @@ describe("precio verdadero", () => {
     expect(ids(r.faltantes)).toContain("supera_tope_vis");
   });
 
-  it("si las tarifas no están vigentes, el «al menos» es el precio y el parqueadero, sin inventar registro", () => {
+  it("si las tarifas no están vigentes, el «al menos» es el precio y el parqueadero; registro y notaría se NOMBRAN sin monto", () => {
     const sinVerificar = {
       ...tarifas,
       conceptos: tarifas.conceptos.map((c) => ({
@@ -265,7 +267,10 @@ describe("precio verdadero", () => {
     const r = precioVerdadero(entrada(), sinVerificar);
     if (r.estado !== "calculado") throw new Error("debía calcular");
     expect(r.alMenos).toBe(270_000_000);
-    expect(ids(r.faltantes)).not.toContain("derechos_notariales");
+    expect(ids(r.partidas)).toEqual(["precio_desde", "parqueadero"]);
+    for (const id of ["derechos_registro", "derechos_notariales"]) {
+      expect(r.faltantes.find((f) => f.id === id)).toEqual({ id });
+    }
   });
 });
 

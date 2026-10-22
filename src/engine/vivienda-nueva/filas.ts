@@ -156,7 +156,11 @@ export function deFila(f: FilaProyecto): ProyectoUnico {
 
 // --- el identificador legible de cada proyecto -------------------------------------------------------------------------
 function slugDe(texto: string): string {
-  return normalizarClave(texto).replace(/ /g, "-").slice(0, 80);
+  // El corte a 80 no puede dejar un guion al final: el slug de la tabla no lo admite.
+  return normalizarClave(texto)
+    .replace(/ /g, "-")
+    .slice(0, 80)
+    .replace(/-+$/, "");
 }
 
 /**
@@ -186,7 +190,7 @@ export function asignarSlugs(
         : slugDe(String(p.constructora));
     let candidato = base;
     if (usados.has(candidato) && constructora) {
-      candidato = `${base}-${constructora}`.slice(0, 100);
+      candidato = `${base}-${constructora}`.slice(0, 100).replace(/-+$/, "");
     }
     let n = 2;
     const raiz = candidato;

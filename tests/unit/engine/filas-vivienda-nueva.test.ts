@@ -132,6 +132,24 @@ describe("asignarSlugs", () => {
     expect(m.get("p7#2")).toBe("proyecto-p7");
   });
 
+  it("un nombre largo se corta sin dejar un guion al final y todo slug cumple el patrón de la tabla", () => {
+    // 79 letras + espacio + más texto: el corte a 80 caería justo en el guion.
+    const largo = `${"a".repeat(79)} bcd`;
+    const m = asignarSlugs([
+      base(largo, "Uno", "uno|largo"),
+      base(
+        largo,
+        "Dos Constructora Con Un Nombre Muy Largo Que Se Pasa",
+        "dos|largo",
+      ),
+    ]);
+    for (const s of m.values()) {
+      expect(s).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+      expect(s.length).toBeLessThanOrEqual(100);
+    }
+    expect(new Set(m.values()).size).toBe(2);
+  });
+
   it("tildes y signos desaparecen del slug", () => {
     const m = asignarSlugs([base("Reserva de Cajicá 2", "A", "a|reserva")]);
     expect(m.get("a|reserva")).toBe("reserva-de-cajica-2");

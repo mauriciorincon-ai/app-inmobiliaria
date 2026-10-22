@@ -120,13 +120,17 @@ Verifica también en el dashboard de Supabase (Table Editor → `inmuebles`).
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=… NEXT_PUBLIC_SUPABASE_ANON_KEY=… \
-  node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/humo-anonimo.mjs --espera ausente|vacia|publicada
+  node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/humo-anonimo.mjs --espera ausente|vacia|publicada [--salas ausente|presente]
 ```
 
 `--espera ausente` antes de aplicar la migración 15 (la RPC pública aún no existe), `vacia` después de aplicarla y antes de
 publicar (la RPC responde `null`), `publicada` con una edición publicada (cada proyecto trae exactamente las 25 claves de la
 lista blanca). Siempre comprueba que `ping()` responde; con `vacia` y `publicada` comprueba además que el anónimo no lee las tablas y que
 no puede cargar, publicar ni retirar una edición (con `ausente` esas funciones aún no existen). Sale con código 1 si algo no es lo esperado y jamás imprime la URL ni la llave.
+
+Desde el S13, `--salas ausente` (antes de la migración 16) comprueba que las funciones de las salas aún no existen y `--salas presente`
+(después) que el anónimo no lee `salas_ventas`, que las funciones del operador y la del servidor le responden 401, que pedir una visita
+a una sala con una sesión falsa se rechaza y que `usados_para_comparar` devuelve solo área y precio.
 
 ---
 
@@ -317,15 +321,16 @@ Dos servicios nuevos, los dos **opcionales hasta el ensayo general**: el proveed
 Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la app: 40 consultas al mes,
 5 al día, 3 intentos por comprador; Brevo y Cloudflare, dentro de lo gratis).
 
-| Qué                                                            | Cuándo                                                                                                                                   | Qué haces tú                                                                   |
-| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Cuenta de Didit (validación de cédula contra la Registraduría) | **ensayo general** (hasta entonces, en producción «Identificarse» dice «no disponible»; el simulador es solo de desarrollo)              | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key    |
-| `CRON_SECRET`                                                  | antes del deploy                                                                                                                         | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker |
-| Brevo                                                          | **hecho el 2026-10-19 (S9)**: cuenta, dominio autenticado, remitente verificado y llave; los secretos están en el Worker (ver 6.1 y 6.4) | el mismo remitente verificado sirve para los avisos de la visita y las alertas |
-| Migraciones 10, 11 y 12                                        | ya aplicadas en la nube con tu «sí»                                                                                                      | nada                                                                           |
-| Migración 15 (S12, la edición de vivienda nueva en la base)    | **ya aplicada en la nube el 2026-10-21** con tu «sí» (15/15; humo anónimo antes, después y con la edición 187 publicada: 9 de 9)         | nada; cada mes, revisar la muestra de 5 antes de publicar (`/bandeja`)         |
-| Migración 14 (S10, tasa de vivienda y comparables de precio)   | **ya aplicada en la nube el 2026-10-19** con tu «sí» (14/14, `migration list --linked`)                                                  | nada                                                                           |
-| Migración 13 (S9, rechazo de una alerta que nadie pidió)       | **ya aplicada en la nube** con tu «sí» (13/13)                                                                                           | nada                                                                           |
+| Qué                                                             | Cuándo                                                                                                                                     | Qué haces tú                                                                     |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| Cuenta de Didit (validación de cédula contra la Registraduría)  | **ensayo general** (hasta entonces, en producción «Identificarse» dice «no disponible»; el simulador es solo de desarrollo)                | creas la cuenta **sin tarjeta y sin recarga automática**, copias la API key      |
+| `CRON_SECRET`                                                   | antes del deploy                                                                                                                           | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker   |
+| Brevo                                                           | **hecho el 2026-10-19 (S9)**: cuenta, dominio autenticado, remitente verificado y llave; los secretos están en el Worker (ver 6.1 y 6.4)   | el mismo remitente verificado sirve para los avisos de la visita y las alertas   |
+| Migraciones 10, 11 y 12                                         | ya aplicadas en la nube con tu «sí»                                                                                                        | nada                                                                             |
+| Migración 16 (S13, visita a salas de ventas y muestra validada) | **ya aplicada en la nube el 2026-10-22** con tu «sí» (16/16; humo anónimo con `--salas presente`: 18 de 18; la 187 intacta, 0 solicitudes) | nada; el operador escribe el contacto de cada sala en el panel, jamás en el repo |
+| Migración 15 (S12, la edición de vivienda nueva en la base)     | **ya aplicada en la nube el 2026-10-21** con tu «sí» (15/15; humo anónimo antes, después y con la edición 187 publicada: 9 de 9)           | nada; cada mes, revisar la muestra de 5 antes de publicar (`/bandeja`)           |
+| Migración 14 (S10, tasa de vivienda y comparables de precio)    | **ya aplicada en la nube el 2026-10-19** con tu «sí» (14/14, `migration list --linked`)                                                    | nada                                                                             |
+| Migración 13 (S9, rechazo de una alerta que nadie pidió)        | **ya aplicada en la nube** con tu «sí» (13/13)                                                                                             | nada                                                                             |
 
 **La tasa de vivienda (S10) no pide nada tuyo:** el cron diario la lee de un conjunto abierto de la Superintendencia
 Financiera y la guarda con su fecha; no hay llave ni cuenta. `TASA_SIMULACRO` es solo de la CI y las pruebas: **en

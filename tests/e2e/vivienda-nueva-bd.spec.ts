@@ -119,6 +119,12 @@ async function leer(hoy: string) {
   return data as unknown as NuevosPublicados | null;
 }
 
+// La base local se comparte: puede haber OTRA edición publicada (la de demostración 9000 de la siembra de Lighthouse). Lo
+// que estas pruebas afirman es que NUESTRA edición no sale, no que no salga ninguna.
+async function noEsLaMia(hoy: string) {
+  expect((await leer(hoy))?.edicion.numero, hoy).not.toBe(NUMERO);
+}
+
 // Una edición a la vez en la base: en serie, y solo en un proyecto de Playwright.
 test.describe.configure({ mode: "serial" });
 test.beforeEach(() => {
@@ -168,7 +174,7 @@ test("una edición cargada entra SIN publicar y el anónimo no la ve", async () 
     ),
   ).toEqual(["false,true"]);
   for (const dia of [ANTES, DESDE, HOY, HASTA, DESPUES]) {
-    expect(await leer(dia), dia).toBeNull();
+    await noEsLaMia(dia);
   }
 });
 
@@ -177,7 +183,7 @@ test("publicar exige la muestra EXACTA que fijó la carga (G5): otra distinta se
     /muestra_no_coincide/,
   );
   expect(() => publicar([])).toThrow(/muestra_no_coincide/);
-  expect(await leer(HOY)).toBeNull();
+  await noEsLaMia(HOY);
   expect(
     consultar(
       `select publicada::text from public.ediciones where numero = ${NUMERO}`,
@@ -232,7 +238,7 @@ test("publicar dos veces es inocuo y una edición publicada no se recarga (se re
 });
 
 test("la vigencia: antes de empezar no sale; dentro y después, la edición (después = la última publicada)", async () => {
-  expect(await leer(ANTES)).toBeNull();
+  await noEsLaMia(ANTES);
   expect((await leer(DESDE))?.edicion.numero).toBe(NUMERO);
   expect((await leer(HASTA))?.edicion.numero).toBe(NUMERO);
   // Vencida: sigue saliendo (el producto dirá «mes sin edición»), con su ventana a la vista.
@@ -277,7 +283,7 @@ test("retirar una edición la quita de inmediato y deja sus datos para revisarlo
     (l) => l === "t" || l === "f",
   );
   expect(res).toBe("t");
-  expect(await leer(HOY)).toBeNull();
+  await noEsLaMia(HOY);
   expect(
     consultar(
       `select count(*) from public.proyectos_nuevos where edicion = ${NUMERO}`,

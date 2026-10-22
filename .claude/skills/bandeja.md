@@ -54,8 +54,9 @@ entregar` lo valida contra el tipo (edición del trabajo, 68 páginas, ninguna s
   `crudo/edicion-N.json`: el trabajo queda `listo`. El destino del tipo es la tabla `ediciones` de la base (migración 15):
   1. `bandeja.mjs cargar <id>` la carga **sin publicar**, fija la muestra de 5 (semilla = número de la edición) y escribe
      `crudo/revision-N.html` (ignorado por git): las 5 filas procesadas al lado de su página de la revista.
-  2. El usuario compara y dice «revisada». Solo entonces `bandeja.mjs publicar <id> --revisada` (estado `entregado`); sin la
-     muestra exacta, la base lo rechaza (`muestra_no_coincide`).
+  2. El usuario compara y dice «revisada». Solo entonces `bandeja.mjs publicar <id> --revisada` (estado `entregado`); la CLI
+     recalcula la muestra desde `crudo/edicion-N.json` (misma semilla) y la base la compara con la que fijó la carga: si lo cargado
+     no es lo que se revisó, `muestra_no_coincide`. La barrera de fondo es la revisión del usuario (`--revisada`).
   3. `estado <N>` dice si está cargada o publicada; `retirar <N>` la quita de inmediato y deja los datos.
      Contra una base que no es local, `cargar`, `publicar`, `estado` y `retirar` se niegan sin `--nube`, y `--nube` solo con el «sí»
      del usuario. El humo anónimo (`scripts/humo-anonimo.mjs`) se corre antes y después.

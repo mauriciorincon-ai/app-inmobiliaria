@@ -86,8 +86,9 @@ Migration 15 puts the processed edition in two tables, `ediciones` and `proyecto
   on either table returns nothing.
 - **Load is not publish.** The bandeja type `edicion-del-mes` now ends in a database row. `entregar` leaves the validated
   `crudo/edicion-N.json` (job `listo`); `cargar` writes the edition **unpublished** and fixes a review sample of five projects
-  (random with a declared seed, by default the edition number); `publicar --revisada` is the `entregado` state and only
-  succeeds with that exact sample, so the review belongs to **this** edition. `retirar` takes a published edition down at once
+  (random with a declared seed, by default the edition number); `publicar --revisada` is the `entregado` state and the
+  database accepts it only if the sample the CLI recomputes from the delivered file matches the one the load fixed, so the review
+  belongs to **this** edition (the real barrier remains the user's review, `--revisada`). `retirar` takes a published edition down at once
   (the fallback if the publisher objects) and leaves its data for review. The review page `crudo/revision-N.html` shows the five
   rows next to their magazine pages and lives in the ignored folder like the pages themselves.
 - **Writes need a decision.** The loader uses the service key from the environment, prints which database it talks to

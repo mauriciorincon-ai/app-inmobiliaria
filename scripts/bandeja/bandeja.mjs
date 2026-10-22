@@ -33,7 +33,10 @@ import {
   EDICION,
   PAGINAS_EDICION,
 } from "../../src/engine/vivienda-nueva/edicion.ts";
-import { cargaDeEdicion } from "../../src/engine/vivienda-nueva/filas.ts";
+import {
+  cargaDeEdicion,
+  muestraDeRevision,
+} from "../../src/engine/vivienda-nueva/filas.ts";
 import { escribirRevision } from "./revision.mjs";
 import {
   archivoDeEdicion,
@@ -278,7 +281,7 @@ if (orden === "verificar") {
     `  Falta: \`cargar ${id}\` (a la base, sin publicar) y, tras revisar la muestra, \`publicar ${id} --revisada\`.`,
   );
   console.log(
-    `  Revisión pendiente (G5): ${tipo.def.revision.criterio} sobre ≥ ${tipo.def.revision.muestra * 100} % de los proyectos antes de publicar.`,
+    "  La doble lectura (≥ 10 %) se hace ANTES de entregar; la muestra de 5 proyectos se revisa tras `cargar`, contra sus páginas.",
   );
   console.log("Resumen:", JSON.stringify(resumir([{ id, estado: "listo" }])));
 } else if (orden === "cargar") {
@@ -344,6 +347,19 @@ if (orden === "verificar") {
     process.exit(1);
   }
   const db = conectarBase();
+  // La muestra revisada se RECALCULA desde el archivo entregado (misma semilla que usó `cargar`) y la base la compara con la
+  // que fijó la carga: si lo que está cargado no es lo que se revisó, `muestra_no_coincide` y no se publica.
+  const rutaEntrega = join(BASE, CARPETA_INTERMEDIA, archivoDeEdicion(numero));
+  if (!existsSync(rutaEntrega)) {
+    console.error(
+      `✗ no hay ${archivoDeEdicion(numero)}: la muestra a publicar sale de ese archivo`,
+    );
+    process.exit(1);
+  }
+  const revisada = muestraDeRevision(
+    JSON.parse(readFileSync(rutaEntrega, "utf8")).proyectos.map((p) => p.clave),
+    numero,
+  );
   const { data: ed, error: e1 } = await db
     .from("ediciones")
     .select("numero, publicada, muestra_claves")
@@ -357,16 +373,20 @@ if (orden === "verificar") {
   }
   const { data, error } = await db.rpc("publicar_edicion", {
     p_numero: numero,
-    p_muestra: ed.muestra_claves,
+    p_muestra: revisada,
   });
   if (error) {
-    console.error(`✗ la base rechazó la publicación: ${error.message}`);
+    console.error(
+      error.message.includes("muestra_no_coincide")
+        ? `✗ lo cargado en la base no es la edición que se revisó (la muestra no coincide): vuelve a \`cargar edicion-del-mes-${numero}\`, revisa de nuevo y publica`
+        : `✗ la base rechazó la publicación: ${error.message}`,
+    );
     process.exit(1);
   }
-  anotarAccion("publicar", numero, { revisada: ed.muestra_claves });
+  anotarAccion("publicar", numero, { revisada });
   console.log(
     data
-      ? `✓ edicion-del-mes-${numero}: PUBLICADA con la muestra revisada (${ed.muestra_claves.length} proyectos)`
+      ? `✓ edicion-del-mes-${numero}: PUBLICADA con la muestra revisada (${revisada.length} proyectos)`
       : `· edicion-del-mes-${numero} ya estaba publicada: nada que hacer`,
   );
   console.log(

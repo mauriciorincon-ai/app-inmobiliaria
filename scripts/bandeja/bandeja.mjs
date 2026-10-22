@@ -350,7 +350,9 @@ if (orden === "verificar") {
   const { data, error } = await db.rpc("cargar_edicion", { p_edicion: carga });
   if (error) {
     console.error(
-      `✗ la base rechazó la carga: ${error.code ?? ""} ${error.message}`,
+      error.message.includes("muestra_invalida")
+        ? "✗ la base rechazó la muestra de revisión (5 proyectos, o todos si hay menos, sin repetidos y de esta edición): no debería pasar con el archivo entregado; vuelve a entregar la transcripción"
+        : `✗ la base rechazó la carga: ${error.code ?? ""} ${error.message}`,
     );
     process.exit(1);
   }
@@ -405,9 +407,11 @@ if (orden === "verificar") {
   });
   if (error) {
     console.error(
-      error.message.includes("muestra_no_coincide")
-        ? `✗ lo cargado en la base no es la edición que se revisó (la muestra no coincide): vuelve a \`cargar edicion-del-mes-${numero}\`, revisa de nuevo y publica`
-        : `✗ la base rechazó la publicación: ${error.message}`,
+      error.message.includes("muestra_invalida")
+        ? `✗ la base no acepta esa muestra: debe tener 5 proyectos (o todos si la edición tiene menos), sin repetidos y de la edición ${numero}. Vuelve a \`cargar edicion-del-mes-${numero}\` y revisa la muestra que escribe`
+        : error.message.includes("muestra_no_coincide")
+          ? `✗ lo cargado en la base no es la edición que se revisó (la muestra no coincide): vuelve a \`cargar edicion-del-mes-${numero}\`, revisa de nuevo y publica`
+          : `✗ la base rechazó la publicación: ${error.message}`,
     );
     process.exit(1);
   }

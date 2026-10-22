@@ -129,7 +129,7 @@ describe("guarda de despliegue", () => {
     try {
       execFileSync(process.execPath, [SCRIPT], {
         cwd: dir,
-        env: { PATH: process.env.PATH ?? "" },
+        env: { PATH: process.env.PATH ?? "", NODE_ENV: "production" },
         stdio: "pipe",
       });
     } catch (e) {
@@ -145,7 +145,7 @@ describe("guarda de despliegue", () => {
     writeFileSync(join(dir, ".env.local"), "NEXT_PUBLIC_APP_URL=x\n");
     const ok = execFileSync(process.execPath, [SCRIPT], {
       cwd: dir,
-      env: { PATH: process.env.PATH ?? "" },
+      env: { PATH: process.env.PATH ?? "", NODE_ENV: "production" },
       encoding: "utf8",
     });
     expect(ok).toContain("guarda de despliegue");

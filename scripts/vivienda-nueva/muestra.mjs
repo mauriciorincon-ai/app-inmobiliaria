@@ -1,14 +1,12 @@
 // Elige con semilla declarada las páginas de la DOBLE LECTURA (≥ 10 % de los proyectos) y compara las dos lecturas (S11, F1).
-//   node scripts/vivienda-nueva/muestra.mjs                 → imprime las páginas de la muestra (la semilla es el número de la edición)
+//   node scripts/vivienda-nueva/muestra.mjs [--edicion N]   → imprime las páginas de la muestra (la semilla es el número de la edición)
 //   node scripts/vivienda-nueva/muestra.mjs --comparar      → compara crudo/doble-*.json contra la primera lectura
 // La segunda lectura la hace OTRO lector, de la página entera y SIN ver la primera. Todo vive en `crudo/` (ignorado).
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  EDICION,
-  validarLectura,
-} from "../../src/engine/vivienda-nueva/edicion.ts";
+import { validarLectura } from "../../src/engine/vivienda-nueva/edicion.ts";
+import { edicionDeTrabajo } from "./edicion-de-trabajo.mjs";
 import {
   CAMPOS_DE_ESTRUCTURA,
   compararLecturas,
@@ -16,13 +14,14 @@ import {
 } from "../../src/engine/vivienda-nueva/lectura.ts";
 
 const CRUDO = join(dirname(fileURLToPath(import.meta.url)), "crudo");
+const EDICION = edicionDeTrabajo(process.argv.slice(2));
 const SEMILLA = EDICION.numero;
 
 const unida = JSON.parse(
   readFileSync(join(CRUDO, `unida-${EDICION.numero}.json`), "utf8"),
 );
 
-if (process.argv[2] !== "--comparar") {
+if (!process.argv.includes("--comparar")) {
   const paginas = muestraDobleLectura(unida.paginas, SEMILLA, 0.1);
   const n = unida.paginas
     .filter((p) => paginas.includes(p.pagina))

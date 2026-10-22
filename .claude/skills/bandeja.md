@@ -41,17 +41,17 @@ sesión de Claude Code y nada más. Las credenciales son las de la app (`.env.lo
 - **Origen:** `archivo`. Un PDF `AAAA-MM-edicion-N.pdf` en la carpeta de fuentes privadas de la planeadora
   (`~/Code/hr01-develop-ai-apps/portafolio/inmobiliaria/fuentes/estrenar-vivienda/`, `BANDEJA_FUENTES` para apuntar a otra) sin su
   `edicion-N.json` en el destino es un trabajo pendiente. Vence el día 15 del mes siguiente.
-- **Antes de leer:** la edición nueva cambia `EDICION` (número y vigencia) y `PAGINAS_EDICION` en
-  `src/engine/vivienda-nueva/edicion.ts`. Los scripts de `scripts/vivienda-nueva/` siguen a `EDICION.numero` (semilla de la
-  doble lectura, `unida-N.json`, informe); las lecturas de otra edición que haya en `crudo/` se ignoran por su campo `edicion`.
-  El generador de la maqueta (`maqueta.mjs`, `datos-187.js`) es de la edición 187: el producto lee las ediciones siguientes de la base.
+- **Antes de leer:** nada que editar en el código (S13). Los scripts de `scripts/vivienda-nueva/` reciben `--edicion N` (y, para
+  unir las lecturas, `--paginas P`, las del PDF); sin esos argumentos siguen a la 187 (`EDICION` de `edicion.ts`). Las lecturas de
+  otra edición que haya en `crudo/` se ignoran por su campo `edicion`. El generador de la maqueta (`maqueta.mjs`, `datos-187.js`)
+  es de la edición 187: el producto lee las ediciones siguientes de la base.
 - **Cómo se procesa:** el flujo de `scripts/vivienda-nueva/README.md` (render con `pdftoppm`, lectores en Sonnet con las
   reglas de `scripts/vivienda-nueva/LECTOR.md`, `validar.mjs --unir`, doble lectura con `muestra.mjs`, `cobertura.mjs`).
   El PDF se lee en la planeadora y jamás se copia al repo; sus metadatos no se leen; nadie visita URLs ni QR de la revista
   ni contacta a nadie; lo ilegible es `ilegible` y lo que el aviso no dice es `no_lo_dice`.
 - **Salida:** `validar.mjs --unir` deja `crudo/unida-N.json`; **no es el entregable** y el trabajo sigue pendiente. `bandeja.mjs
-entregar` lo valida contra el tipo (edición del trabajo, 68 páginas, ninguna sin leer, esquema estricto) y lo deja como
-  `crudo/edicion-N.json`: el trabajo queda `listo`. El destino del tipo es la tabla `ediciones` de la base (migración 15):
+entregar` lo valida contra el tipo (edición del trabajo, páginas 1…N sin huecos —N lo dice el archivo, `--paginas P` lo contrasta con el PDF—, ninguna sin leer, esquema estricto), le escribe su `meta` (número, páginas y vigencia: la del nombre del PDF, del 15 al 15, o la de la portada con `--desde` y `--hasta`) y lo deja como
+  `crudo/edicion-N.json`: el trabajo queda `listo`. La vigencia impresa se compara con la portada. El destino del tipo es la tabla `ediciones` de la base (migración 15):
   1. `bandeja.mjs cargar <id>` la carga **sin publicar**, fija la muestra de 5 (semilla = número de la edición) y escribe
      `crudo/revision-N.html` (ignorado por git): las 5 filas procesadas al lado de su página de la revista.
   2. El usuario compara y dice «revisada». Solo entonces `bandeja.mjs publicar <id> --revisada` (estado `entregado`); la CLI

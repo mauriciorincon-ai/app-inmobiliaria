@@ -219,16 +219,21 @@ describe("validarLectura — lo que JAMÁS pasa", () => {
     ).toContain("precio_parqueadero_sin_adicional");
   });
 
-  it("rechaza una página repetida, un proyecto de otra página y otra edición", () => {
+  it("rechaza una página repetida, un proyecto de otra página y un número de edición que no es un entero positivo", () => {
     const base = lectura(proyecto());
     const repetida = { ...base, paginas: [base.paginas[0], base.paginas[0]] };
     expect(errores(repetida).join("|")).toContain("pagina_repetida");
     expect(errores(lectura(proyecto({ pagina: 61 }))).join("|")).toContain(
       "pagina_ajena",
     );
-    expect(
-      errores(lectura(proyecto(), { edicion: 188 })).length,
-    ).toBeGreaterThan(0);
+    // Cualquier edición se lee (S13): el número lo dice el archivo, no una constante de la 187.
+    expect(errores(lectura(proyecto(), { edicion: 188 }))).toEqual([]);
+    for (const malo of [0, -3, 1.5, "187"]) {
+      expect(
+        errores(lectura(proyecto(), { edicion: malo })).length,
+        String(malo),
+      ).toBeGreaterThan(0);
+    }
   });
 
   it("rechaza una lectura sin páginas y un lector con símbolos", () => {

@@ -58,9 +58,13 @@ function bandeja(...args: string[]) {
 }
 
 // Una edición sintética y completa (68 páginas sin proyectos): lo que `validar.mjs --unir` deja en `unida-N.json`.
-const edicion = (numero: number, extra: Record<string, unknown> = {}) => ({
+const edicion = (
+  numero: number,
+  extra: Record<string, unknown> = {},
+  total = 68,
+) => ({
   edicion: numero,
-  paginas: Array.from({ length: 68 }, (_, i) => ({
+  paginas: Array.from({ length: total }, (_, i) => ({
     pagina: i + 1,
     tipo: "portada",
     proyectos: [],
@@ -132,6 +136,18 @@ describe("la CLI de la bandeja con una edición nueva", () => {
     );
     expect(e.codigo).toBe(0);
     expect(existsSync(join(salida, CRUDO, "edicion-188.json"))).toBe(true);
+    // S13: el archivo entregado lleva su meta (número y páginas del archivo; vigencia del nombre del PDF).
+    expect(
+      JSON.parse(readFileSync(join(salida, CRUDO, "edicion-188.json"), "utf8"))
+        .meta,
+    ).toEqual({
+      numero: 188,
+      nombre: "Estrenar Vivienda",
+      desde: "2026-11-15",
+      hasta: "2026-12-15",
+      paginas: 68,
+    });
+    expect(e.texto).toContain("vigencia 2026-11-15 → 2026-12-15");
     // El registro deja la muestra PENDIENTE: nadie la ha revisado todavía.
     const registro = readFileSync(
       join(salida, "scripts/bandeja/registro/corridas.jsonl"),
@@ -147,6 +163,56 @@ describe("la CLI de la bandeja con una edición nueva", () => {
     const despues = bandeja("listar", "--hoy", "2026-11-16").texto;
     expect(despues).not.toContain("edicion-del-mes-188 · pendiente");
     expect(despues).toContain("edicion-del-mes-188 · listo");
+  });
+
+  it("S13 · una edición de 12 páginas (no 68) entra sin tocar código; --paginas la contrasta con el PDF y la portada puede mandar", () => {
+    pdf("2026-11-edicion-188.pdf");
+    escribirUnida(188, edicion(188, {}, 12));
+    const base = [
+      "entregar",
+      "edicion-del-mes-188",
+      join(salida, CRUDO, "unida-188.json"),
+      "--modelo",
+      "sonnet",
+      "--duracion-s",
+      "5",
+      "--hoy",
+      "2026-11-16",
+    ];
+    // El PDF dice 68 páginas y la transcripción trae 12: falta leer (o sobra), no se entrega.
+    const distinta = bandeja(...base, "--paginas", "68");
+    expect(distinta.codigo).toBe(1);
+    expect(distinta.texto).toContain("12 páginas y el PDF tiene 68");
+    expect(existsSync(join(salida, CRUDO, "edicion-188.json"))).toBe(false);
+
+    // Una portada que difiere de la convención del nombre se dice con --desde y --hasta.
+    const ok = bandeja(
+      ...base,
+      "--paginas",
+      "12",
+      "--desde",
+      "2026-11-12",
+      "--hasta",
+      "2026-12-12",
+    );
+    expect(ok.codigo).toBe(0);
+    expect(ok.texto).toContain("la que dijiste de la portada");
+    expect(
+      JSON.parse(readFileSync(join(salida, CRUDO, "edicion-188.json"), "utf8"))
+        .meta,
+    ).toMatchObject({ paginas: 12, desde: "2026-11-12", hasta: "2026-12-12" });
+
+    // Una vigencia absurda (de seis meses) no se guarda.
+    rmSync(join(salida, CRUDO, "edicion-188.json"));
+    const larga = bandeja(
+      ...base,
+      "--desde",
+      "2026-11-15",
+      "--hasta",
+      "2027-05-15",
+    );
+    expect(larga.codigo).toBe(1);
+    expect(larga.texto).toContain("vigencia_demasiado_larga");
   });
 
   it("una salida incompleta o de otra edición se rechaza y no escribe nada", () => {

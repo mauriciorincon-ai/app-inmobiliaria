@@ -1,10 +1,10 @@
 // Informe de cobertura de la edición unida (S11, F1): por campo, por región y contra el índice impreso de la revista.
-//   node scripts/vivienda-nueva/cobertura.mjs          → imprime el informe
+//   node scripts/vivienda-nueva/cobertura.mjs [--edicion N]  → imprime el informe
 //   node scripts/vivienda-nueva/cobertura.mjs --md     → además lo escribe en scripts/vivienda-nueva/INFORME-<N>.md
 //                                                        (solo agregados: ningún nombre, cifra de proyecto ni texto de aviso)
 // Lee `crudo/unida-<N>.json` (de validar.mjs --unir) y, si existe, `crudo/indice-p24-p25.json` (control, no fuente).
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { EDICION } from "../../src/engine/vivienda-nueva/edicion.ts";
+import { edicionDeTrabajo } from "./edicion-de-trabajo.mjs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -14,6 +14,7 @@ import {
 } from "../../src/engine/vivienda-nueva/lectura.ts";
 
 const CRUDO = join(dirname(fileURLToPath(import.meta.url)), "crudo");
+const EDICION = edicionDeTrabajo(process.argv.slice(2));
 const e = JSON.parse(
   readFileSync(join(CRUDO, `unida-${EDICION.numero}.json`), "utf8"),
 );

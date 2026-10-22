@@ -68,10 +68,12 @@ Constraints that cannot be undone once crossed:
 - The publisher could object to a public list of names with figures. The fallback is already designed: the aggregated
   index, with no per-project data. Withdrawing a project from `datos-187.js` is one regeneration.
 - The raw material exists only on the user's Mac. Losing it means re-reading the magazine; the processed data is in git.
-- A new edition changes `EDICION` (number, validity) and `PAGINAS_EDICION` in `src/engine/vivienda-nueva/edicion.ts`; the
-  scripts follow `EDICION.numero`, readings of another edition in the raw folder are ignored by their `edicion` field, and the
-  bandeja delivers `edicion-N.json` only after validating `unida-N.json`. The mockup generator is specific to edition 187;
-  the product reads later editions from the database (addendum, Sprint 012).
+- A new edition changes no code (Sprint 013): `entregar` writes the edition's `meta` (number and page count from the
+  transcription, validity from the PDF name or from the cover) into `edicion-N.json` and `cargar` reads it from there; the reading
+  scripts take `--edicion N` (and `--paginas P`). `EDICION` and `PAGINAS_EDICION` in `src/engine/vivienda-nueva/edicion.ts` are
+  edition 187's data (the mockup and the scripts' defaults). Readings of another edition in the raw folder are ignored by their
+  `edicion` field, and the bandeja delivers `edicion-N.json` only after validating `unida-N.json`. The mockup generator is specific
+  to edition 187; the product reads later editions from the database (addendum, Sprint 012).
 - **Out of scope:** contacting builders or sales rooms; any runtime LLM feature
   (that would need its own «code first» ADR); scheduled cloud runs of the bandeja (they need a sprint that proves them).
 

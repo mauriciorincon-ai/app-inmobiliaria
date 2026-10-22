@@ -19,6 +19,7 @@ import {
 } from "../../../src/engine/bandeja/bandeja";
 import { verificarLock } from "../../../src/engine/bandeja/lock";
 import {
+  construirMeta,
   DEFINICION_EDICION_DEL_MES,
   ID_EDICION_DEL_MES,
   numeroDeEdicion,
@@ -155,10 +156,49 @@ describe("carnadas del contrato (§ 6): todas rechazadas", () => {
     expect(entregar(TOMADO, registrado(), conTelefono).estado).toBe(
       "rechazado",
     );
-    // Una salida a medias (menos páginas que la edición) tampoco.
-    const corta = edicionValida();
-    corta.paginas = corta.paginas.slice(0, 10);
-    expect(entregar(TOMADO, registrado(), corta).estado).toBe("rechazado");
+    // Una salida con huecos (falta la página 11 de las 68) o con una aparición fuera de la edición tampoco (S13: el total
+    // de páginas lo dice el propio archivo, así que lo que se comprueba es que sean 1…N sin saltos).
+    const hueco = edicionValida();
+    hueco.paginas.splice(10, 1);
+    expect(entregar(TOMADO, registrado(), hueco).estado).toBe("rechazado");
+    const fuera = edicionValida();
+    fuera.paginas = fuera.paginas.slice(0, 10);
+    // La edición ahora tiene 10 páginas, pero el proyecto dice aparecer en la 50.
+    fuera.proyectos[0].apariciones = [50];
+    expect(entregar(TOMADO, registrado(), fuera).estado).toBe("rechazado");
+  });
+
+  it("S13 · una edición de otro tamaño (12 páginas, la 188) entra con su meta; una meta que no cuadra se rechaza", () => {
+    const doce = () => {
+      const e = edicionValida();
+      e.edicion = 188;
+      e.paginas = e.paginas.slice(0, 12);
+      return e;
+    };
+    const meta = {
+      numero: 188,
+      nombre: "Estrenar Vivienda",
+      desde: "2026-11-15",
+      hasta: "2026-12-15",
+      paginas: 12,
+    };
+    expect(
+      entregar({ estado: "tomado", id: "edicion-del-mes-188" }, registrado(), {
+        ...doce(),
+        meta,
+      }).estado,
+    ).toBe("entregado");
+    for (const mala of [
+      { ...meta, paginas: 68 },
+      { ...meta, numero: 187 },
+    ]) {
+      const r = entregar(
+        { estado: "tomado", id: "edicion-del-mes-188" },
+        registrado(),
+        { ...doce(), meta: mala },
+      );
+      expect(r.estado).toBe("rechazado");
+    }
   });
 
   it("C03 · la entrada con «ignora tus instrucciones» se anota y la salida no cambia de destino ni de esquema", () => {
@@ -546,5 +586,63 @@ describe("el repo real: el destino del tipo lo ignora git", () => {
       ok: false,
       razon: "destino_no_ignorado",
     });
+  });
+});
+
+describe("S13 · los metadatos de la edición salen del archivo y del nombre del PDF, no de edicion.ts", () => {
+  it("el número y la vigencia salen del nombre (del 15 al 15) y las páginas, de la transcripción", () => {
+    expect(construirMeta("2026-11-edicion-188.pdf", 70)).toEqual({
+      numero: 188,
+      nombre: "Estrenar Vivienda",
+      desde: "2026-11-15",
+      hasta: "2026-12-15",
+      paginas: 70,
+    });
+    // Diciembre pasa de año.
+    expect(construirMeta("2026-12-edicion-189.pdf", 64)).toMatchObject({
+      desde: "2026-12-15",
+      hasta: "2027-01-15",
+    });
+  });
+
+  it("lo que el usuario dice de la portada manda sobre la convención", () => {
+    expect(
+      construirMeta("2026-11-edicion-188.pdf", 70, {
+        desde: "2026-11-12",
+        hasta: "2026-12-12",
+      }),
+    ).toMatchObject({ desde: "2026-11-12", hasta: "2026-12-12" });
+  });
+
+  it("un nombre sin la convención y sin vigencia dada no inventa nada", () => {
+    expect(construirMeta("revista.pdf", 70)).toEqual({
+      error: ["nombre_sin_convencion"],
+    });
+    // Con el número en el nombre pero sin mes, tampoco.
+    expect(construirMeta("edicion-188.pdf", 70)).toEqual({
+      error: ["nombre_sin_convencion"],
+    });
+  });
+
+  it("una vigencia invertida, de más de dos meses, con una fecha imposible o sin páginas se rechaza", () => {
+    const motivos = (v: { desde: string; hasta: string }, p = 70) => {
+      const r = construirMeta("2026-11-edicion-188.pdf", p, v);
+      return "error" in r ? r.error.join("|") : "ok";
+    };
+    expect(motivos({ desde: "2026-12-15", hasta: "2026-11-15" })).toContain(
+      "vigencia_invertida",
+    );
+    expect(motivos({ desde: "2026-11-15", hasta: "2027-03-15" })).toContain(
+      "vigencia_demasiado_larga",
+    );
+    expect(motivos({ desde: "2026-13-45", hasta: "2026-12-15" })).toContain(
+      "fecha_invalida",
+    );
+    expect(motivos({ desde: "2026-11-15", hasta: "2026-12-15" }, 0)).toContain(
+      "paginas",
+    );
+    expect(
+      motivos({ desde: "2026-11-15", hasta: "2026-12-15" }, 501),
+    ).toContain("paginas");
   });
 });

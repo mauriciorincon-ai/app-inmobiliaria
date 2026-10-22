@@ -5,7 +5,12 @@
 // Destino: `scripts/vivienda-nueva/crudo/` (ignorado por git). Al repo solo llega lo procesado (maqueta.mjs), con su
 // fuente. La revisión (G5): doble lectura de al menos el 10 % de los proyectos, con cero discrepancias en precio y áreas.
 import { z } from "zod";
-import { PAGINAS_EDICION, PaginaSchema } from "../../vivienda-nueva/edicion.ts";
+import {
+  MetaEdicionSchema,
+  NOMBRE_REVISTA,
+  PaginaSchema,
+  type MetaEdicion,
+} from "../../vivienda-nueva/edicion.ts";
 import { ProyectoUnicoSchema } from "../../vivienda-nueva/lectura.ts";
 import { type Tipo, type Trabajo, type ValidadorDeSalida } from "../bandeja.ts";
 
@@ -50,6 +55,34 @@ export function creaEdicion(nombre: string): string | null {
 export function numeroDeEdicion(nombre: string): number | null {
   const m = nombre.match(NOMBRE);
   return m ? Number(m[3]) : null;
+}
+
+/**
+ * Lo que `cargar` lee de una edición (S13): el número y las páginas salen de la propia transcripción; la vigencia, de la
+ * convención del nombre del PDF (del 15 del mes al 15 del siguiente) o de lo que el usuario dice de la portada
+ * (`--desde`/`--hasta`). Devuelve `null` si el nombre no sigue la convención y no se dio la vigencia a mano.
+ */
+export function construirMeta(
+  nombrePdf: string,
+  paginas: number,
+  vigencia: { desde?: string; hasta?: string } = {},
+): MetaEdicion | { error: string[] } {
+  const numero = numeroDeEdicion(nombrePdf);
+  const desde = vigencia.desde ?? creaEdicion(nombrePdf);
+  const hasta = vigencia.hasta ?? venceEdicion(nombrePdf);
+  if (numero === null || desde === null || hasta === null) {
+    return { error: ["nombre_sin_convencion"] };
+  }
+  const r = MetaEdicionSchema.safeParse({
+    numero,
+    nombre: NOMBRE_REVISTA,
+    desde,
+    hasta,
+    paginas,
+  });
+  return r.success
+    ? r.data
+    : { error: r.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`) };
 }
 
 /** El archivo donde espera la transcripción entregada de una edición, dentro de la carpeta intermedia. */
@@ -107,6 +140,9 @@ const SalidaSchema = z
     reconciliados: z.array(z.unknown()),
     paginasSinLeer: z.array(z.number().int()),
     paginasRepetidas: z.array(z.number().int()),
+    // La escribe `entregar` (S13). Opcional aquí para que la transcripción de la 187, entregada antes, siga válida;
+    // `cargar` la exige.
+    meta: MetaEdicionSchema.optional(),
   })
   .strict();
 
@@ -126,7 +162,15 @@ export const validarEdicionDelMes: ValidadorDeSalida = (salida, trabajo) => {
     razones.push("edicion_distinta");
   }
   if (r.data.paginasSinLeer.length > 0) razones.push("paginas_sin_leer");
-  if (r.data.paginas.length !== PAGINAS_EDICION)
+  // Las páginas son 1…N sin huecos ni repetidas: N lo dice el propio archivo (no una constante de la edición 187).
+  const total = r.data.paginas.length;
+  const numeros = new Set(r.data.paginas.map((p) => p.pagina));
+  if (numeros.size !== total || r.data.paginas.some((p) => p.pagina > total))
     razones.push("paginas_incompletas");
+  if (r.data.proyectos.some((p) => p.apariciones.some((a) => a > total)))
+    razones.push("aparicion_fuera_de_la_edicion");
+  const meta = r.data.meta;
+  if (meta && (meta.numero !== r.data.edicion || meta.paginas !== total))
+    razones.push("meta_no_coincide");
   return razones.length === 0 ? { ok: true } : { ok: false, razones };
 };

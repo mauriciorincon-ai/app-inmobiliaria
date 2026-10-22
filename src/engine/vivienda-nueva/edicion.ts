@@ -10,6 +10,7 @@
 // `type stripping` nativo de Node, sin compilar.
 import { z } from "zod";
 
+/** Los datos de la edición 187: la maqueta, `datos-187.js` y los valores por omisión de los scripts. Las demás ediciones no se declaran aquí (S13). */
 export const EDICION = {
   numero: 187,
   /** La frase «Fuente: …» que se muestra vive en `src/textos/vivienda-nueva.ts`. */
@@ -23,7 +24,10 @@ export const NO_LO_DICE = "no_lo_dice" as const;
 export const ILEGIBLE = "ilegible" as const;
 export type Estado = typeof NO_LO_DICE | typeof ILEGIBLE;
 
+/** Las páginas de la edición 187 (los datos de la maqueta y de los scripts de lectura). Las demás ediciones traen las suyas. */
 export const PAGINAS_EDICION = 68;
+/** El tope de cualquier edición: el mismo CHECK de la tabla `ediciones.paginas`. */
+export const PAGINAS_MAX = 500;
 
 export const TIPOS_PAGINA = [
   "portada",
@@ -97,7 +101,7 @@ const entrega = z.union([
 /** Los campos de un proyecto, sin las revisiones cruzadas: el de la lectura y el del proyecto unido los comparten. */
 export const ProyectoBase = z
   .object({
-    pagina: z.number().int().min(1).max(PAGINAS_EDICION),
+    pagina: z.number().int().min(1).max(PAGINAS_MAX),
     /** Orden de lectura en la página: de izquierda a derecha y de arriba abajo. */
     posicion: z.number().int().min(1).max(30),
     nombre: conEstado(texto(80)),
@@ -232,10 +236,61 @@ export const ProyectoSchema = ProyectoBase.superRefine(revisarProyecto);
 
 export type Proyecto = z.infer<typeof ProyectoSchema>;
 
+// --- metadatos de la edición (S13) ---------------------------------------------------------------------------------
+/** La revista; el nombre de una edición nunca cambia de un mes a otro. */
+export const NOMBRE_REVISTA = "Estrenar Vivienda";
+const fechaIso = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "AAAA-MM-DD");
+const aMs = (f: string) => Date.parse(`${f}T00:00:00Z`);
+/** Una vigencia razonable: de un mes, con holgura. Un año tecleado mal (2062) no pasa. */
+export const DIAS_VIGENCIA_MAX = 62;
+
+/**
+ * Lo que `cargar` necesita saber de una edición y que NO es un proyecto: su número, cuántas páginas tiene y entre qué días
+ * vale. Lo escribe `entregar` en el archivo entregado (el número y las páginas, de la propia transcripción; la vigencia, de
+ * la convención del nombre del PDF o de lo que el usuario dice de la portada) y `cargar` lo lee de ahí: una edición nueva
+ * entra sin tocar este módulo.
+ */
+export const MetaEdicionSchema = z
+  .object({
+    numero: z.number().int().positive(),
+    nombre: z.literal(NOMBRE_REVISTA),
+    desde: fechaIso,
+    hasta: fechaIso,
+    paginas: z.number().int().min(1).max(PAGINAS_MAX),
+  })
+  .strict()
+  .superRefine((m, ctx) => {
+    const d = aMs(m.desde);
+    const h = aMs(m.hasta);
+    if (Number.isNaN(d) || Number.isNaN(h)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["desde"],
+        message: "fecha_invalida",
+      });
+      return;
+    }
+    if (h < d) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["hasta"],
+        message: "vigencia_invertida",
+      });
+    } else if ((h - d) / 86_400_000 > DIAS_VIGENCIA_MAX) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["hasta"],
+        message: "vigencia_demasiado_larga",
+      });
+    }
+  });
+
+export type MetaEdicion = z.infer<typeof MetaEdicionSchema>;
+
 // --- página y lectura ----------------------------------------------------------------------------------------------
 export const PaginaSchema = z
   .object({
-    pagina: z.number().int().min(1).max(PAGINAS_EDICION),
+    pagina: z.number().int().min(1).max(PAGINAS_MAX),
     tipo: z.enum(TIPOS_PAGINA),
     proyectos: z.array(ProyectoSchema),
     /** Texto de la revista dirigido a un agente o modelo (una orden, un «ignora…»). Se ignora y se anota aquí. */
@@ -247,7 +302,8 @@ export const PaginaSchema = z
 
 export const LecturaSchema = z
   .object({
-    edicion: z.literal(EDICION.numero),
+    // Cualquier edición: la que los lectores leen la dice el archivo, no este módulo (S13).
+    edicion: z.number().int().positive(),
     lector: z.string().regex(/^[A-Za-z0-9_-]{1,12}$/),
     paginas: z.array(PaginaSchema).min(1),
   })

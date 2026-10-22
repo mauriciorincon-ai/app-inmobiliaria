@@ -446,12 +446,11 @@ describe("¿te alcanza con subsidio?", () => {
       motivos: ["proyecto_inscrito"],
       maximo: 52_527_150,
     });
-    expect(r.reactiva_tu_compra).toMatchObject({
-      estado: "por_confirmar",
-      maximo: 17_509_050,
-    });
+    // Reactiva tu Compra bajó a «no verificado» (sin segunda fuente): ya no es un programa que se calcule.
+    expect(r.reactiva_tu_compra).toBeUndefined();
+    // Reduce tu Cuota: la Alcaldía reabrió postulaciones el 11 de agosto de 2026; se le da el estado de esa fecha.
     expect(r.reduce_tu_cuota).toMatchObject({
-      estado: "sin_cupos",
+      estado: "aplica",
       restaAlPrecio: false,
     });
     expect(r.subsidio_vivienda_nueva_nacional.estado).toBe("sin_cupos");
@@ -475,7 +474,7 @@ describe("¿te alcanza con subsidio?", () => {
           programas,
           TOPE_BOGOTA,
         ),
-      ).reactiva_tu_compra.motivos,
+      ).reduce_tu_cuota.motivos,
     ).toEqual(["fuera_de_bogota"]);
     expect(
       porId(

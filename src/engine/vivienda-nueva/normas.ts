@@ -43,6 +43,8 @@ export const ProgramaSchema = z
     estado: z.enum(ESTADOS_NORMA),
     estado_al: fecha,
     estado_segun: z.string().min(1),
+    /** Las fuentes (entidad y documento, sin enlaces) en que se comprobó: mínimo dos, o el programa baja a `no_verificado`. */
+    verificada_en: z.array(z.string().min(5)).min(2),
     nota: bilingue,
   })
   .strict();
@@ -101,6 +103,7 @@ export const TarifasSchema = z
         municipios_aglomeracion_bogota: z.array(z.string()).min(1),
         otras_aglomeraciones: z.array(z.string()).min(1),
         norma: z.string().min(1),
+        verificada_en: z.array(z.string().min(5)).min(2),
         anio: z.number().int(),
         consultado: fecha,
         estado: z.enum(ESTADOS_NORMA),

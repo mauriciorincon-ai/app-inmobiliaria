@@ -17715,27 +17715,11 @@ window.DATOS_187 = {
    "estadoAl": "2026-06-01",
    "normas": [
     "Decreto Distrital 653 de 2025",
-    "Resolución 836 de 2025 (Secretaría Distrital del Hábitat), artículos 23 y 25"
+    "Resolución 836 de 2025 (Secretaría Distrital del Hábitat), artículo 23"
    ],
-   "consultado": "2026-10-20",
+   "consultado": "2026-10-21",
    "minimo": 17509050,
    "maximo": 52527150,
-   "restaAlPrecio": true
-  },
-  {
-   "id": "reactiva_tu_compra",
-   "nombre": {
-    "es": "Reactiva tu Compra, Reactiva tu Hogar",
-    "en": "Reactivate your Purchase, Reactivate your Home"
-   },
-   "estado": "vigente",
-   "estadoAl": "2026-06-01",
-   "normas": [
-    "Resolución 293 de 2026 (Secretaría Distrital del Hábitat)"
-   ],
-   "consultado": "2026-10-20",
-   "minimo": null,
-   "maximo": 17509050,
    "restaAlPrecio": true
   },
   {
@@ -17744,13 +17728,13 @@ window.DATOS_187 = {
     "es": "Reduce tu Cuota",
     "en": "Reduce your Payment"
    },
-   "estado": "sin_cupos",
-   "estadoAl": "2026-06-01",
+   "estado": "vigente",
+   "estadoAl": "2026-08-11",
    "normas": [
     "Decreto Distrital 653 de 2025, artículo 159",
     "Resolución 676 de 2024 (Secretaría Distrital del Hábitat)"
    ],
-   "consultado": "2026-10-20",
+   "consultado": "2026-10-21",
    "minimo": null,
    "maximo": 21010860,
    "restaAlPrecio": false
@@ -17766,7 +17750,7 @@ window.DATOS_187 = {
    "normas": [
     "Decreto 1077 de 2015 (Decreto Único Reglamentario del Sector Vivienda)"
    ],
-   "consultado": "2026-10-20",
+   "consultado": "2026-10-21",
    "minimo": 35018100,
    "maximo": 52527150,
    "restaAlPrecio": true
@@ -17775,15 +17759,15 @@ window.DATOS_187 = {
  "escrituracion": [
   {
    "id": "derechos_registro",
-   "norma": "Resolución 2026-001726-6 de 2026 (SNR), artículos 1 literal b, 17, 20, 23 y parágrafo 8",
+   "norma": "Resolución 2026-001726-6 de 2026 (SNR), artículos 1 literal b, 17, 20, 23 y parágrafo 8; su artículo 29 (vigencia) lo modificó la Resolución 2026-001896-6 de 2026 (SNR)",
    "estado": "vigente",
-   "consultado": "2026-10-20"
+   "consultado": "2026-10-21"
   },
   {
    "id": "derechos_notariales",
    "norma": "Resolución 2026-000964-6 de 2026 (SNR), artículos 2 literal b, 31, 32 y 33",
    "estado": "vigente",
-   "consultado": "2026-10-20"
+   "consultado": "2026-10-21"
   },
   {
    "id": "impuesto_registro_y_beneficencia",
@@ -17810,18 +17794,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -17851,18 +17827,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -17891,17 +17859,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -17928,18 +17889,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -17969,18 +17922,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -18009,18 +17954,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -18049,18 +17985,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -18090,18 +18018,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -18130,17 +18050,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18166,17 +18079,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18202,17 +18108,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18239,18 +18138,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -18279,17 +18170,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18315,17 +18199,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18351,17 +18228,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18387,17 +18257,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18424,18 +18287,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -18464,17 +18319,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18500,17 +18348,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18536,18 +18377,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -18575,17 +18407,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18611,17 +18436,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18648,18 +18466,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -18688,18 +18498,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -18727,17 +18528,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18763,18 +18557,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -18802,17 +18587,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18838,17 +18616,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18874,17 +18645,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -18911,18 +18675,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -18952,18 +18708,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -18992,18 +18740,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19032,18 +18771,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -19073,18 +18804,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -19113,17 +18836,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19150,18 +18866,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -19190,18 +18898,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19229,17 +18928,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19265,17 +18957,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19301,17 +18986,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19337,17 +19015,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19373,17 +19044,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19409,17 +19073,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19445,17 +19102,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19481,18 +19131,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19520,17 +19161,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19556,18 +19190,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19595,17 +19220,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19631,18 +19249,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19671,18 +19280,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -19711,18 +19312,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19750,17 +19342,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19786,17 +19371,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -19823,18 +19401,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -19863,18 +19433,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19902,18 +19463,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -19942,18 +19494,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -19982,17 +19526,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20019,18 +19556,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20057,18 +19587,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20095,18 +19618,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20132,17 +19648,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20168,17 +19677,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20204,17 +19706,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20240,17 +19735,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20276,17 +19764,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20312,17 +19793,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20349,18 +19823,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20387,18 +19854,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20425,18 +19885,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20463,18 +19916,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20501,18 +19947,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20538,17 +19977,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20574,17 +20006,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20610,17 +20035,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20646,17 +20064,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20683,18 +20094,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20720,17 +20124,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20756,17 +20153,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20792,17 +20182,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20829,18 +20212,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20867,18 +20243,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20904,17 +20273,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20941,18 +20303,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -20978,17 +20333,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21015,18 +20363,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21052,17 +20393,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21088,17 +20422,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21124,17 +20451,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21168,18 +20488,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -21209,18 +20521,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -21249,17 +20553,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21286,18 +20583,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -21327,18 +20616,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -21367,18 +20648,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -21407,18 +20679,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -21448,18 +20712,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -21488,17 +20744,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21524,17 +20773,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21560,17 +20802,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21597,18 +20832,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -21637,17 +20864,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21673,17 +20893,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21709,17 +20922,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21745,17 +20951,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21782,18 +20981,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -21822,17 +21013,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21858,17 +21042,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21894,18 +21071,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -21933,17 +21101,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -21969,17 +21130,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22006,18 +21160,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -22046,18 +21192,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -22085,17 +21222,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22121,18 +21251,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -22160,17 +21281,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22196,17 +21310,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22232,17 +21339,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22269,18 +21369,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -22310,18 +21402,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -22350,18 +21434,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -22390,18 +21465,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -22431,18 +21498,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -22471,17 +21530,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22508,18 +21560,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -22548,18 +21592,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -22587,17 +21622,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22623,17 +21651,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22659,17 +21680,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22695,17 +21709,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22731,17 +21738,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22767,17 +21767,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22803,17 +21796,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22839,18 +21825,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -22878,17 +21855,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22914,18 +21884,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -22953,17 +21914,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -22989,18 +21943,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -23029,18 +21974,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -23069,18 +22006,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -23108,17 +22036,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23144,17 +22065,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23181,18 +22095,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "supera_tope_vis",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "supera_tope_vis"
        ]
       },
       {
@@ -23221,18 +22127,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -23260,18 +22157,9 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
-       "estado": "por_confirmar",
-       "motivos": [
-        "proyecto_inscrito"
-       ]
-      },
-      {
        "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
-       ]
+       "estado": "aplica",
+       "motivos": []
       },
       {
        "id": "subsidio_vivienda_nueva_nacional",
@@ -23300,18 +22188,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "por_confirmar",
        "motivos": [
-        "segmento_no_lo_dice",
-        "proyecto_inscrito"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
+        "segmento_no_lo_dice"
        ]
       },
       {
@@ -23340,17 +22220,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23377,18 +22250,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23415,18 +22281,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23453,18 +22312,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23490,17 +22342,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23526,17 +22371,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23562,17 +22400,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23598,17 +22429,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23634,17 +22458,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23670,17 +22487,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23707,18 +22517,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23745,18 +22548,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23783,18 +22579,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23821,18 +22610,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23859,18 +22641,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23896,17 +22671,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23932,17 +22700,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -23968,17 +22729,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24004,17 +22758,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24041,18 +22788,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24078,17 +22818,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24114,17 +22847,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24150,17 +22876,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24187,18 +22906,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24225,18 +22937,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24262,17 +22967,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24299,18 +22997,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24336,17 +23027,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24373,18 +23057,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24410,17 +23087,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24446,17 +23116,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24482,17 +23145,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24525,17 +23181,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24561,17 +23210,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24598,18 +23240,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24635,17 +23270,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24671,17 +23299,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24707,17 +23328,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24743,17 +23357,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24779,17 +23386,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24816,18 +23416,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24854,18 +23447,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24892,18 +23478,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24929,17 +23508,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -24966,18 +23538,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25004,18 +23569,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25042,18 +23600,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25080,18 +23631,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25117,17 +23661,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25154,18 +23691,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25192,18 +23722,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25229,17 +23752,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25266,18 +23782,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25304,18 +23813,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25341,17 +23843,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25377,17 +23872,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25414,18 +23902,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25451,17 +23932,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25488,18 +23962,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25526,18 +23993,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25564,18 +24024,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25601,17 +24054,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25637,17 +24083,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25673,17 +24112,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25709,17 +24141,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25745,17 +24170,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25782,18 +24200,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25819,17 +24230,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25855,17 +24259,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25892,18 +24289,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25930,18 +24320,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -25968,18 +24351,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26006,18 +24382,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26044,18 +24413,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26082,18 +24444,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26120,18 +24475,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26157,17 +24505,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26194,18 +24535,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26231,17 +24565,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26268,18 +24595,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26305,17 +24625,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26341,17 +24654,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26377,17 +24683,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26414,18 +24713,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26452,18 +24744,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26489,17 +24774,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26525,17 +24803,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26561,17 +24832,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26597,17 +24861,10 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26634,18 +24891,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26673,19 +24923,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26713,19 +24956,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26753,19 +24989,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26792,18 +25021,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26830,18 +25052,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26868,18 +25083,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26906,18 +25114,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26944,18 +25145,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -26982,18 +25176,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27021,19 +25208,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27061,19 +25241,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27101,19 +25274,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27141,19 +25307,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27181,19 +25340,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27220,18 +25372,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27258,18 +25403,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27296,18 +25434,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27334,18 +25465,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27373,19 +25497,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27412,18 +25529,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27450,18 +25560,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27488,18 +25591,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27527,19 +25623,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27567,19 +25656,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27606,18 +25688,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27645,19 +25720,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "supera_tope_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27684,18 +25752,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27723,19 +25784,12 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota",
         "no_vis"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27762,18 +25816,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27800,18 +25847,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {
@@ -27838,18 +25878,11 @@ window.DATOS_187 = {
        ]
       },
       {
-       "id": "reactiva_tu_compra",
+       "id": "reduce_tu_cuota",
        "estado": "no_aplica",
        "motivos": [
         "ingreso",
         "fuera_de_bogota"
-       ]
-      },
-      {
-       "id": "reduce_tu_cuota",
-       "estado": "sin_cupos",
-       "motivos": [
-        "sin_cupos"
        ]
       },
       {

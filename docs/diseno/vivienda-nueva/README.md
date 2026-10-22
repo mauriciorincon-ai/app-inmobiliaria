@@ -62,8 +62,8 @@ pagar.
    de ventas y confirma por WhatsApp; la dirección llega con la confirmación. Nunca se publican los teléfonos ni las
    direcciones de la revista. Pedir la visita exige el WhatsApp verificado, como en los usados.
 7. **Subsidios:**
-   - Solo programas verificados en su norma, con la fecha de su estado. «Sin cupos» se dice; lo no verificado (cajas de
-     compensación de 2026, cobertura de tasa) no se muestra.
+   - Solo programas verificados en dos fuentes, con la fecha de su estado. «Sin cupos» se dice; lo no verificado (cajas de
+     compensación de 2026, cobertura de tasa, Fondo Nacional del Ahorro y, desde el S12, Reactiva tu Compra) no se muestra.
    - No se suman programas entre sí; el «mejor caso» es el mayor y queda «por confirmar» si el proyecto debe estar inscrito.
 8. **Los nombres de proyectos y constructoras salen con sus cifras** (decisión del 2026-10-20). Si la editorial objeta,
    se pasa al índice agregado.

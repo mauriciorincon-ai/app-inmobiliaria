@@ -10,6 +10,8 @@ import { ProyectoUnicoSchema } from "../../vivienda-nueva/lectura.ts";
 import { type Tipo, type Trabajo, type ValidadorDeSalida } from "../bandeja.ts";
 
 export const ID_EDICION_DEL_MES = "edicion-del-mes";
+/** Donde espera la transcripción entregada (`edicion-N.json`) antes de cargarse: ignorada por git, jamás se versiona. */
+export const CARPETA_INTERMEDIA = "scripts/vivienda-nueva/crudo/";
 /** Dónde está el insumo: dentro de la planeadora (privada, solo en el Mac del usuario). */
 export const CARPETA_DE_FUENTES = "fuentes/estrenar-vivienda/";
 
@@ -17,7 +19,9 @@ export const DEFINICION_EDICION_DEL_MES: Tipo = {
   id: ID_EDICION_DEL_MES,
   origen: "archivo",
   entrada: CARPETA_DE_FUENTES,
-  destino: { clase: "archivo_ignorado", ruta: "scripts/vivienda-nueva/crudo/" },
+  // G4: el resultado vuelve a una FILA (la tabla de ediciones). La transcripción validada espera antes, en una carpeta
+  // ignorada por git, hasta que alguien la carga y, tras revisar la muestra, la publica.
+  destino: { clase: "fila", ruta: "ediciones" },
   revision: { publica: true, muestra: 0.1, criterio: "doble_lectura" },
 };
 
@@ -48,7 +52,7 @@ export function numeroDeEdicion(nombre: string): number | null {
   return m ? Number(m[3]) : null;
 }
 
-/** El archivo donde vuelve la transcripción unida de una edición, dentro del destino del tipo. */
+/** El archivo donde espera la transcripción entregada de una edición, dentro de la carpeta intermedia. */
 export const archivoDeEdicion = (numero: number) => `edicion-${numero}.json`;
 
 /** Solo el NOMBRE del archivo: la bandeja no abre el PDF ni lee sus metadatos para saber que existe. */
@@ -61,8 +65,9 @@ export type ArchivoDeFuente = { nombre: string };
 export function trabajosDeEdicion(
   archivos: readonly ArchivoDeFuente[],
   transcritas: readonly number[],
-): { trabajos: Trabajo[]; ignorados: string[] } {
+): { trabajos: Trabajo[]; listos: Trabajo[]; ignorados: string[] } {
   const trabajos: Trabajo[] = [];
+  const listos: Trabajo[] = [];
   const ignorados: string[] = [];
   for (const a of archivos) {
     const numero = numeroDeEdicion(a.nombre);
@@ -72,8 +77,7 @@ export function trabajosDeEdicion(
       ignorados.push(a.nombre);
       continue;
     }
-    if (transcritas.includes(numero)) continue;
-    trabajos.push({
+    const trabajo: Trabajo = {
       id: `${ID_EDICION_DEL_MES}-${numero}`,
       tipo: ID_EDICION_DEL_MES,
       origen: "archivo",
@@ -83,9 +87,13 @@ export function trabajosDeEdicion(
       vence,
       estado: "pendiente",
       entrada: `${CARPETA_DE_FUENTES}${a.nombre}`,
-    });
+    };
+    // Con su transcripción entregada el trabajo está «listo»: falta cargarla a su destino y publicarla tras la revisión.
+    if (transcritas.includes(numero))
+      listos.push({ ...trabajo, estado: "listo" });
+    else trabajos.push(trabajo);
   }
-  return { trabajos, ignorados };
+  return { trabajos, listos, ignorados };
 }
 
 // La salida: la edición unida (`validar.mjs --unir`). Cada página pasa el esquema ESTRICTO de la F1 (sin teléfonos,

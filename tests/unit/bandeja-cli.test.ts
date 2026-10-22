@@ -44,7 +44,14 @@ function bandeja(...args: string[]) {
     {
       cwd: RAIZ,
       encoding: "utf8",
-      env: { ...process.env, BANDEJA_FUENTES: fuentes, BANDEJA_SALIDA: salida },
+      env: {
+        ...process.env,
+        BANDEJA_FUENTES: fuentes,
+        BANDEJA_SALIDA: salida,
+        // Una base que NO es local y una llave ficticia: la CLI debe negarse antes de abrir ninguna conexión.
+        SUPABASE_URL: "https://proyecto-de-prueba.supabase.test",
+        SUPABASE_SERVICE_ROLE_KEY: "llave-de-prueba-sin-valor",
+      },
     },
   );
   return { codigo: r.status, texto: `${r.stdout}${r.stderr}` };
@@ -136,10 +143,10 @@ describe("la CLI de la bandeja con una edición nueva", () => {
       procesados: 1,
       muestra_revisada: "pendiente:doble_lectura",
     });
-    // Y ya no está pendiente.
-    expect(bandeja("listar", "--hoy", "2026-11-16").texto).not.toContain(
-      "edicion-del-mes-188",
-    );
+    // Ya no está pendiente: está LISTO (falta cargarlo a la base y publicarlo tras la revisión).
+    const despues = bandeja("listar", "--hoy", "2026-11-16").texto;
+    expect(despues).not.toContain("edicion-del-mes-188 · pendiente");
+    expect(despues).toContain("edicion-del-mes-188 · listo");
   });
 
   it("una salida incompleta o de otra edición se rechaza y no escribe nada", () => {
@@ -192,13 +199,34 @@ describe("la CLI de la bandeja con una edición nueva", () => {
     expect(existsSync(join(salida, CRUDO, "edicion-188.json"))).toBe(true);
   });
 
-  it("lo que no sigue el nombre de una edición no se toca, y la edición ya transcrita no se lista", () => {
+  it("lo que no sigue el nombre de una edición no se toca, y la edición ya transcrita sale como lista, no como pendiente", () => {
     pdf("2026-10-edicion-187.pdf");
     pdf("notas.pdf");
     writeFileSync(join(salida, CRUDO, "edicion-187.json"), "{}");
     const l = bandeja("listar", "--hoy", "2026-10-20");
     expect(l.codigo).toBe(0);
-    expect(l.texto).not.toContain("edicion-del-mes-187");
+    expect(l.texto).not.toContain("edicion-del-mes-187 · pendiente");
+    expect(l.texto).toContain("edicion-del-mes-187 · listo");
     expect(l.texto).toContain("no siguen el nombre");
+  });
+
+  it("cargar, publicar, estado y retirar se niegan a tocar una base que no es local sin --nube, antes de leer nada", () => {
+    for (const orden of [
+      ["cargar", "edicion-del-mes-188"],
+      ["publicar", "edicion-del-mes-188", "--revisada"],
+      ["estado", "188"],
+      ["retirar", "188"],
+    ]) {
+      const r = bandeja(...orden, "--hoy", "2026-11-16");
+      expect(r.codigo, orden[0]).toBe(1);
+      expect(r.texto, orden[0]).toContain("NUBE");
+      expect(r.texto, orden[0]).toContain("sin --nube");
+    }
+  });
+
+  it("publicar exige --revisada: la edición se publica solo con la muestra revisada", () => {
+    const r = bandeja("publicar", "edicion-del-mes-188", "--hoy", "2026-11-16");
+    expect(r.codigo).toBe(1);
+    expect(r.texto).toContain("--revisada");
   });
 });

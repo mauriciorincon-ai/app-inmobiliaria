@@ -13,5 +13,7 @@
   "/alertas",
   "/alertas/nueva?op=venta",
   "/herramientas",
-  "/i/demo-apartamento-chapinero/esta-caro"
+  "/i/demo-apartamento-chapinero/esta-caro",
+  "/buscar?v=nuevos",
+  "/nuevos/torre-alba-ficticia"
 ]

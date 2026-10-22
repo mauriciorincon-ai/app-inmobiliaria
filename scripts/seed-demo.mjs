@@ -6,7 +6,11 @@
 //
 // Requiere env: SUPABASE_URL (o NEXT_PUBLIC_SUPABASE_URL) + SUPABASE_SERVICE_ROLE_KEY.
 // Uso: node scripts/seed-demo.mjs
+//
+// También siembra la edición SINTÉTICA de vivienda nueva (S12, nº 9000, nombres ficticios) para que Lighthouse audite
+// `/buscar?v=nuevos` y `/nuevos/<slug>`. Solo contra una base LOCAL: jamás escribe una edición de demostración en la nube.
 
+import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
 
 const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -136,4 +140,53 @@ for (const d of DEMOS) {
     process.exit(1);
   }
   console.log(`[seed-demo] Creado (${d.slug}).`);
+}
+
+// ── La edición SINTÉTICA de vivienda nueva (S12) ───────────────────────────────────────────────
+// Número 9000, nombres ficticios, ventana relativa a HOY (empezó hace 10 días y vence en 10), así que siempre está vigente.
+// Idempotente: se retira, se vuelve a cargar y se publica con su muestra (la misma regla que la edición real).
+const LOCAL = /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(url);
+if (!LOCAL) {
+  console.log(
+    "[seed-demo] La base no es local: no se siembra la edición de vivienda nueva.",
+  );
+} else {
+  const demo = JSON.parse(
+    readFileSync(new URL("./seed-demo-edicion.json", import.meta.url), "utf8"),
+  );
+  const NUMERO = 9000;
+  const muestra = demo.proyectos.slice(0, 5).map((p) => p.clave);
+  const edicion = {
+    numero: NUMERO,
+    nombre: demo.nombre,
+    desde: fechaHace(10),
+    hasta: new Date(hoy.getTime() + 10 * 86_400_000).toISOString().slice(0, 10),
+    paginas: demo.paginas,
+    muestra_claves: muestra,
+    muestra_semilla: NUMERO,
+    proyectos: demo.proyectos,
+  };
+  await db.rpc("retirar_edicion", { p_numero: NUMERO });
+  const { error: errC } = await db.rpc("cargar_edicion", {
+    p_edicion: edicion,
+  });
+  if (errC) {
+    console.error(
+      `[seed-demo] No se pudo cargar la edición ${NUMERO}: ${errC.message}`,
+    );
+    process.exit(1);
+  }
+  const { error: errP } = await db.rpc("publicar_edicion", {
+    p_numero: NUMERO,
+    p_muestra: muestra,
+  });
+  if (errP) {
+    console.error(
+      `[seed-demo] No se pudo publicar la edición ${NUMERO}: ${errP.message}`,
+    );
+    process.exit(1);
+  }
+  console.log(
+    `[seed-demo] Edición ${NUMERO} (vivienda nueva) publicada: ${demo.proyectos.length} proyectos.`,
+  );
 }

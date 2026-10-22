@@ -327,6 +327,9 @@ Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la 
 Financiera y la guarda con su fecha; no hay llave ni cuenta. `TASA_SIMULACRO` es solo de la CI y las pruebas: **en
 producción NO se define** (con ella el cron no sale a la red y guardaría una tasa fija de prueba).
 
+**La vivienda nueva (S12) tampoco pide nada tuyo en el Worker.** Lee la edición publicada con la llave pública. `NUEVOS_SIMULACRO`
+es solo de la CI y las pruebas (hace que el servidor respete la cabecera `x-hoy-simulado`): **en producción NO se define**.
+
 ### 6.1 [TÚ] Poner los secretos en el Worker
 
 ```bash

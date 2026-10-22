@@ -77,6 +77,8 @@ jobs:
       BREVO_MOCK: "1"
       # S10: el paso «tasa» del cron no sale a la red en la CI (respuesta fija; ADR 018).
       TASA_SIMULACRO: "1"
+      # S12: la fecha de «hoy» de la vivienda nueva se puede fijar con la cabecera `x-hoy-simulado` (solo aquí, nunca en producción).
+      NUEVOS_SIMULACRO: "1"
       IDENTIDAD_TOPE_DIA: "100000"
       IDENTIDAD_TOPE_MES: "100000"
       # S9: el tope diario de correos de alerta (solo se respeta con Brevo en simulacro).

@@ -30,6 +30,8 @@ describe("guarda de despliegue", () => {
       "IDENTIDAD_MOCK",
       "DISABLE_RATE_LIMIT",
       "REGISTRO_MIN_MS",
+      // S15: el lector de CTL nace apagado y espera su validación con certificados reales.
+      "LECTOR_CTL_ACTIVO",
       // Una perilla futura que siga la convención queda cubierta sin tocar la lista.
       "SALAS_SIMULACRO",
       "OTRO_MOCK",
@@ -45,6 +47,27 @@ describe("guarda de despliegue", () => {
     ]) {
       expect(esPerillaDePrueba(n), n).toBe(false);
     }
+  });
+
+  it("DEMO EN ROJO: el lector de CTL encendido en el entorno, en un .env o en wrangler detiene el despliegue; apagado, no", () => {
+    expect(revisar({ entorno: { LECTOR_CTL_ACTIVO: "1" } })).toEqual([
+      { nombre: "LECTOR_CTL_ACTIVO", donde: "entorno" },
+    ]);
+    expect(
+      revisar({
+        archivos: {
+          ".env.production.local": "LECTOR_CTL_ACTIVO=1",
+          "wrangler.jsonc": '{ "vars": { "LECTOR_CTL_ACTIVO": "1" } }',
+        },
+      }),
+    ).toEqual([
+      { nombre: "LECTOR_CTL_ACTIVO", donde: ".env.production.local" },
+      { nombre: "LECTOR_CTL_ACTIVO", donde: "wrangler.jsonc" },
+    ]);
+    expect(revisar({ entorno: { LECTOR_CTL_ACTIVO: "0" } })).toEqual([]);
+    expect(
+      revisar({ archivos: { ".env.local": "LECTOR_CTL_ACTIVO=" } }),
+    ).toEqual([]);
   });
 
   it("DEMO EN ROJO: cada perilla encendida en el entorno, en un .env o en wrangler detiene el despliegue", () => {

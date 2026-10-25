@@ -43,3 +43,138 @@ export function pasosDe<T extends PasoGuia<string>>(
 ): T[] {
   return pasos.filter((p) => p.cuando === "siempre" || credito);
 }
+
+// Qué dice cada documento: las cláusulas típicas de la promesa, la escritura y el registro. Es texto fijo y versionado, sin IA y sin
+// leer el documento de nadie; el texto de cada una vive en `src/textos/papeleo-clausulas.ts` bajo el mismo id. Todas son `vigente`:
+// una cláusula sin artículo leído no entra. `normas` dice, por número, qué artículos cita; cada uno está en el registro de lo que se
+// leyó en su texto oficial (`src/data/normas-clausulas.json`, con dónde y cuándo), y una prueba ata el texto a esos números.
+export type IdNorma =
+  | "codigo_civil"
+  | "codigo_comercio"
+  | "ley_153_1887"
+  | "ley_1579_2012"
+  | "ley_258_1996"
+  | "decreto_960_1970"
+  | "ordenanza_039_2020"
+  | "estatuto_tributario";
+
+export const DOCUMENTOS_CLAUSULAS = [
+  "promesa",
+  "escritura",
+  "registro",
+] as const;
+export type DocumentoClausula = (typeof DOCUMENTOS_CLAUSULAS)[number];
+
+export type Clausula<Id extends string> = PasoGuia<Id> & {
+  estado: "vigente";
+  documento: DocumentoClausula;
+  normas: Partial<Record<IdNorma, readonly number[]>>;
+};
+
+export const CLAUSULAS = [
+  {
+    id: "requisitos",
+    documento: "promesa",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { ley_153_1887: [89] },
+  },
+  {
+    id: "plazo_y_notaria",
+    documento: "promesa",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { ley_153_1887: [89] },
+  },
+  {
+    id: "arras",
+    documento: "promesa",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { codigo_civil: [1859, 1860, 1861], codigo_comercio: [22, 866] },
+  },
+  {
+    id: "clausula_penal",
+    documento: "promesa",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { codigo_civil: [1592, 1599, 1600, 1601], codigo_comercio: [867] },
+  },
+  {
+    id: "incumplimiento",
+    documento: "promesa",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { codigo_civil: [1546] },
+  },
+  {
+    id: "perfecciona",
+    documento: "escritura",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { codigo_civil: [1857] },
+  },
+  {
+    id: "precio_real",
+    documento: "escritura",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { estatuto_tributario: [90] },
+  },
+  {
+    id: "gastos",
+    documento: "escritura",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: {
+      codigo_civil: [1862],
+      decreto_960_1970: [223],
+      ordenanza_039_2020: [212],
+    },
+  },
+  {
+    id: "saneamiento",
+    documento: "escritura",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { codigo_civil: [1880, 1893, 1894, 1895, 1898] },
+  },
+  {
+    id: "vivienda_familiar",
+    documento: "escritura",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { ley_258_1996: [3, 6, 12] },
+  },
+  {
+    id: "dueno_al_registrar",
+    documento: "registro",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { codigo_civil: [756], ley_1579_2012: [2] },
+  },
+  {
+    id: "prioridad",
+    documento: "registro",
+    estado: "vigente",
+    cuando: "siempre",
+    normas: { ley_1579_2012: [3] },
+  },
+  {
+    id: "hipoteca",
+    documento: "registro",
+    estado: "vigente",
+    cuando: "credito",
+    normas: { codigo_civil: [2434, 2435], ley_1579_2012: [28] },
+  },
+] as const satisfies readonly Clausula<string>[];
+
+export type IdClausula = (typeof CLAUSULAS)[number]["id"];
+
+/** Las cláusulas de un documento que aplican a esta compra (con crédito entra la de la hipoteca). */
+export function clausulasDe(
+  documento: DocumentoClausula,
+  credito: boolean,
+): (typeof CLAUSULAS)[number][] {
+  return pasosDe(CLAUSULAS, credito).filter((c) => c.documento === documento);
+}

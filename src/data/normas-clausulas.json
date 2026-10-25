@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "consultado": "2026-10-25",
+  "nota": "Registro de los artículos que citan las cláusulas de «Qué dice cada documento» (S14), cada uno leído en su texto oficial en la fecha de consulta. Una cláusula solo cita artículos de esta lista; una prueba lo comprueba.",
+  "normas": {
+    "codigo_civil": {
+      "nombre": "Código Civil (Ley 84 de 1873)",
+      "leida_en": "Texto del Código Civil en el Régimen Legal de Bogotá (Secretaría Jurídica Distrital), con sus notas de vigencia",
+      "articulos": [
+        756, 1546, 1592, 1599, 1600, 1601, 1857, 1859, 1860, 1861, 1862, 1880,
+        1893, 1894, 1895, 1898, 2434, 2435
+      ]
+    },
+    "codigo_comercio": {
+      "nombre": "Código de Comercio (Decreto 410 de 1971)",
+      "leida_en": "Texto del Código de Comercio en el Régimen Legal de Bogotá (Secretaría Jurídica Distrital)",
+      "articulos": [22, 866, 867]
+    },
+    "ley_153_1887": {
+      "nombre": "Ley 153 de 1887",
+      "leida_en": "Texto de la Ley 153 de 1887 en el gestor normativo de la Comisión de Regulación de Agua Potable (CRA)",
+      "articulos": [89]
+    },
+    "ley_1579_2012": {
+      "nombre": "Ley 1579 de 2012 (Estatuto de Registro de Instrumentos Públicos)",
+      "leida_en": "Texto de la Ley 1579 de 2012 en el gestor normativo de la CRA",
+      "articulos": [2, 3, 28]
+    },
+    "ley_258_1996": {
+      "nombre": "Ley 258 de 1996 (afectación a vivienda familiar)",
+      "leida_en": "Texto de la Ley 258 de 1996 en el gestor normativo de Función Pública, con la modificación de la Ley 854 de 2003",
+      "articulos": [3, 6, 12]
+    },
+    "decreto_960_1970": {
+      "nombre": "Decreto-Ley 960 de 1970 (Estatuto del Notariado)",
+      "leida_en": "Texto del Decreto-Ley 960 de 1970 en el gestor normativo de Función Pública (leído en la F1 del S14)",
+      "articulos": [223]
+    },
+    "ordenanza_039_2020": {
+      "nombre": "Ordenanza 039 de 2020 de Cundinamarca (Estatuto de Rentas)",
+      "leida_en": "Texto de la Ordenanza 039 de 2020 en el PDF de la Gobernación de Cundinamarca (leído en la F1 del S14)",
+      "articulos": [212]
+    },
+    "estatuto_tributario": {
+      "nombre": "Estatuto Tributario (Decreto 624 de 1989)",
+      "leida_en": "Texto del Estatuto Tributario en el normograma de la DIAN, art. 90 en la redacción de la Ley 2010 de 2019",
+      "articulos": [90]
+    }
+  }
+}

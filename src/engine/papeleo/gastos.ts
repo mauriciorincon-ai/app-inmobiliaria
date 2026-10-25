@@ -18,6 +18,7 @@
 import {
   derechosNotariales,
   derechosRegistro,
+  topeVip,
   topeVis,
   type ClaseVivienda,
   type TarifasEscrituracion,
@@ -229,6 +230,7 @@ export type LineaGasto = {
 
 export type AvisoGasto =
   | { id: "supera_tope_vis"; tope: number }
+  | { id: "supera_tope_vip"; tope: number }
   | { id: "vis_sin_subsidio" }
   | { id: "vip_sin_subsidio" }
   | { id: "avaluo_mayor"; avaluo: number }
@@ -319,15 +321,22 @@ export function gastos(
 
   // El tope de la VIS se mide contra el precio de la escritura (Res. SNR 2026-001726-6 art. 17).
   // Una opción genérica («otro municipio de Cundinamarca», «otra ciudad») no está en las listas de aglomeración: tope de 135.
+  // S15: la VIP tiene su tope, menor e igual en todo el país (Ley 1955 de 2019, art. 85); por encima de él ya no es VIP, pero
+  // sigue siendo VIS si no pasa el de la VIS (el mismo artículo define las dos).
+  let tipo = entrada.tipo;
+  if (tipo === "vip" && precio > topeVip(esc)) {
+    avisos.push({ id: "supera_tope_vip", tope: topeVip(esc) });
+    tipo = "vis";
+  }
   const tope = topeVis(ciudad.nombre ?? "", esc);
-  const especial = entrada.tipo !== "normal";
+  const especial = tipo !== "normal";
   const dentroDelTope = precio <= tope;
   if (especial && !dentroDelTope) avisos.push({ id: "supera_tope_vis", tope });
 
   let claseNotarial: ClaseVivienda = "general";
   let claseRegistro: ClaseVivienda = "general";
   if (especial && dentroDelTope) {
-    if (entrada.tipo === "vis") {
+    if (tipo === "vis") {
       claseNotarial = "vis";
       if (entrada.subsidio) claseRegistro = "vis";
       else avisos.push({ id: "vis_sin_subsidio" });
@@ -335,6 +344,9 @@ export function gastos(
       claseNotarial = "vip";
       claseRegistro = "vip";
     } else {
+      // Una VIP sin subsidio no tiene la exención de la VIP, pero es una VIS (Ley 1955 de 2019, art. 85): la notaría cobra la mitad
+      // (Res. SNR 2026-000964-6, art. 31, que no pide subsidio) y el registro el ordinario (Res. 2026-001726-6, art. 17, par. 2).
+      claseNotarial = "vis";
       avisos.push({ id: "vip_sin_subsidio" });
     }
   }
@@ -499,7 +511,8 @@ export function gastos(
     un("retencion_enajenacion", "vendedor", null, {
       base: null,
       tarifa: null,
-      norma: ret?.norma ?? null,
+      // La de una empresa no es la del art. 398 (activos fijos de personas naturales): sin norma citada.
+      norma: entrada.vende === "empresa" ? null : (ret?.norma ?? null),
       cobra: null,
       anio,
       consultado,

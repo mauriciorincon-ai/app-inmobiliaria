@@ -112,6 +112,18 @@ function entrada(extra: Partial<EntradaPrecio> = {}): EntradaPrecio {
 const ids = (xs: { id: string }[]) => xs.map((x) => x.id);
 
 describe("precio verdadero", () => {
+  it("S15: una VIP o una vivienda general no nombran el registro sin subsidio; una «no dice» que cabe en el tope VIS, sí", () => {
+    const vip = precioVerdadero(entrada({ segmento: "VIP" }), tarifas);
+    const general = precioVerdadero(entrada({ segmento: "No VIS" }), tarifas);
+    const noDice = precioVerdadero(entrada({ segmento: NO_LO_DICE }), tarifas);
+    for (const r of [vip, general, noDice]) if (r.estado !== "calculado") throw new Error("debía calcular");
+    if (vip.estado !== "calculado" || general.estado !== "calculado" || noDice.estado !== "calculado") return;
+    expect(ids(vip.faltantes)).not.toContain("registro_sin_subsidio");
+    expect(ids(general.faltantes)).not.toContain("registro_sin_subsidio");
+    expect(noDice.faltantes.find((f) => f.id === "registro_sin_subsidio")?.monto).toBe(2_884_100);
+  });
+
+
   it("VIS en Bogotá con parqueadero aparte y precio fijo: al menos 271.442.000", () => {
     // 250.000.000 + registro VIS 1.442.000 + parqueadero 20.000.000
     const r = precioVerdadero(entrada(), tarifas);
@@ -124,12 +136,15 @@ describe("precio verdadero", () => {
       "parqueadero",
     ]);
     expect(ids(r.faltantes)).toEqual([
+      "registro_sin_subsidio",
       "derechos_notariales",
       "impuesto_registro",
       "iva_notarial",
       "hipoteca",
     ]);
-    expect(r.faltantes[0].monto).toBe(390_100);
+    // S15: la mitad del registro de la VIS exige subsidio (Res. 2026-001726-6, art. 17, par. 2): sin él, el registro general.
+    expect(r.faltantes[0].monto).toBe(2_884_100);
+    expect(r.faltantes[1].monto).toBe(390_100);
     expect(r.m2).toEqual({ base: "privada", area: 50, valor: 5_000_000 });
   });
 

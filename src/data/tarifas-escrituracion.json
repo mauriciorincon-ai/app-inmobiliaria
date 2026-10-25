@@ -39,6 +39,8 @@
   "topes_vis": {
     "smmlv": 135,
     "smmlv_aglomeraciones": 150,
+    "smmlv_vip": 90,
+    "norma_vip": "Ley 1955 de 2019, artículo 85 («El valor máximo de la Vivienda de Interés Prioritario, será de noventa salarios mínimos mensuales legales vigentes»), leído el 2026-10-25 en el gestor normativo de Función Pública, sin nota de modificación ni de derogatoria en ese artículo. El mismo artículo fija los 135 y 150 salarios de la VIS. El tope mayor de la VIP en renovación urbana (110 salarios) no se calcula.",
     "municipios_aglomeracion_bogota": [
       "Bogotá",
       "Cajicá",

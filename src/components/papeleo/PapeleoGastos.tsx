@@ -44,7 +44,10 @@ export default function PapeleoGastos({
 
   function textoAviso(a: AvisoGasto): string {
     return rellenar(t.avisos[a.id], {
-      tope: a.id === "supera_tope_vis" ? dinero(a.tope) : "",
+      tope:
+        a.id === "supera_tope_vis" || a.id === "supera_tope_vip"
+          ? dinero(a.tope)
+          : "",
       avaluo: a.id === "avaluo_mayor" ? dinero(a.avaluo) : "",
     });
   }

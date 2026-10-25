@@ -6,7 +6,8 @@
 //
 // Lo que queda nombrado y sin sumar: los derechos notariales (se reparten según la promesa: se da su total), el impuesto
 // de registro y la beneficencia y el IVA notarial (no verificados), el parqueadero sin precio, lo que puede subir durante
-// la obra si el precio no es fijo, la hipoteca si compras con crédito y, en VIP, que la exención exige subsidio.
+// la obra si el precio no es fijo, la hipoteca si compras con crédito y que el registro de la VIS (la mitad) y el de la VIP (exento)
+// exigen subsidio: la VIS nombra cuánto cuesta el registro sin él (S15).
 // Un campo que dos páginas de la revista contradicen jamás entra a la cuenta (ni el precio ni el parqueadero), ni decide la
 // clase de registro (VIS o general) ni «precio fijo»: se usa el caso MÁS BARATO posible para la cota inferior y se nombra.
 // Una tarifa que no está `vigente` en `src/data` (o un caso que su norma no verifica) se nombra SIN monto: jamás se omite
@@ -57,6 +58,7 @@ export type IdFaltante =
   | "hipoteca"
   | "segmento_no_lo_dice"
   | "exencion_vip_con_subsidio"
+  | "registro_sin_subsidio"
   | "supera_tope_vis";
 
 /** Sin `monto`: se nombra y no se puede dar la cifra (la tarifa no está verificada para este caso). */
@@ -180,6 +182,16 @@ export function precioVerdadero(
     faltantes.push({ id: "derechos_registro" });
   } else if (registro > 0) {
     partidas.push({ id: "derechos_registro", monto: registro });
+  }
+  // S15 (deuda del S14): la mitad de la VIS en el registro exige el subsidio (Res. SNR 2026-001726-6, art. 17, parágrafo 2). La
+  // cota inferior sigue siendo el caso con subsidio; lo que cuesta sin él se nombra con su monto.
+  if (clase === "vis") {
+    const sinSubsidio = derechosRegistro(desde, "general", tarifas);
+    faltantes.push(
+      sinSubsidio === null
+        ? { id: "registro_sin_subsidio" }
+        : { id: "registro_sin_subsidio", monto: sinSubsidio },
+    );
   }
 
   if (enConflicto(p, "parqueadero", "parqueadero_precio")) {

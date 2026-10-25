@@ -72,6 +72,11 @@ export default function FichaNuevo({
         ? tf.faltante.derechos_notariales_sin_monto
         : rellenar(tf.faltante.derechos_notariales, { monto: cop(f.monto) });
     }
+    if (f.id === "registro_sin_subsidio") {
+      return f.monto === undefined
+        ? tf.faltante.registro_sin_subsidio_sin_monto
+        : rellenar(tf.faltante.registro_sin_subsidio, { monto: cop(f.monto) });
+    }
     return rellenar(etiqueta(textos, f.id), { ciudad: String(v.ciudad) });
   };
 

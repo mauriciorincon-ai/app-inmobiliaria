@@ -301,11 +301,30 @@ describe("el avalúo catastral y la clase de vivienda", () => {
     expect(g.avisos.some((a) => a.id === "hojas_adicionales")).toBe(false);
   });
 
-  it("VIP sin subsidio se liquida como vivienda normal y lo dice", () => {
+  it("VIP sin subsidio: sin exención, pero es VIS — la notaría paga la mitad (art. 31, sin subsidio) y el registro el ordinario", () => {
     const g = calcular({ precio: 90_000_000, tipo: "vip", subsidio: false });
-    expect(g.claseNotarial).toBe("general");
+    const vis = calcular({ precio: 90_000_000, tipo: "vis", subsidio: false });
+    expect(g.claseNotarial).toBe("vis");
     expect(g.claseRegistro).toBe("general");
+    expect(linea(g, "comprador", "derechos_notariales")?.valor).toBe(
+      linea(vis, "comprador", "derechos_notariales")?.valor,
+    );
+    expect(linea(g, "comprador", "derechos_registro")?.valor).toBe(
+      linea(vis, "comprador", "derechos_registro")?.valor,
+    );
     expect(g.avisos).toContainEqual({ id: "vip_sin_subsidio" });
+  });
+
+  it("el tope de la VIP es el suyo (90 salarios, Ley 1955 art. 85): justo en el tope sigue siendo VIP; un peso más ya es VIS", () => {
+    // 90 × $1.750.905 = $157.581.450.
+    const tope = 157_581_450;
+    const justo = calcular({ precio: tope, tipo: "vip", subsidio: true });
+    expect(justo.claseRegistro).toBe("vip");
+    expect(justo.avisos.some((a) => a.id === "supera_tope_vip")).toBe(false);
+    const encima = calcular({ precio: tope + 1, tipo: "vip", subsidio: true });
+    expect(encima.avisos).toContainEqual({ id: "supera_tope_vip", tope });
+    expect(encima.claseNotarial).toBe("vis");
+    expect(encima.claseRegistro).toBe("vis");
   });
 
   it("por encima del tope VIS del lugar se liquida como normal y se dice el tope (135 salarios fuera de la aglomeración)", () => {
@@ -341,6 +360,8 @@ describe("quién vende, el crédito y lo que no hay", () => {
     expect(linea(g, "vendedor", "retencion_enajenacion")).toMatchObject({
       estado: "no_verificado",
       valor: null,
+      // El art. 398 es el de los activos fijos de personas naturales: a una empresa no se le cita.
+      norma: null,
     });
     expect(g.avisos).toContainEqual({ id: "vende_empresa" });
   });

@@ -433,6 +433,14 @@ export const VIVIENDA_NUEVA = {
         es: "VIP: el registro queda exento solo si recibes subsidio.",
         en: "VIP: registration is exempt only if you get a subsidy.",
       },
+      registro_sin_subsidio: {
+        es: "VIS: el registro se sumó con la mitad, que es solo con subsidio de vivienda del Estado o de una caja de compensación. Sin subsidio, el registro cuesta {monto} (Res. SNR 2026-001726-6, art. 17, parágrafo 2).",
+        en: "VIS: registration was added at half, which only applies with a housing subsidy from the State or a family compensation fund. Without a subsidy, registration costs {monto} (SNR Res. 2026-001726-6, art. 17, paragraph 2).",
+      },
+      registro_sin_subsidio_sin_monto: {
+        es: "VIS: el registro se sumó con la mitad, que es solo con subsidio de vivienda del Estado o de una caja de compensación. Sin subsidio cuesta más; la tarifa general no está verificada para este año.",
+        en: "VIS: registration was added at half, which only applies with a housing subsidy from the State or a family compensation fund. Without a subsidy it costs more; the general rate is not verified for this year.",
+      },
       supera_tope_vis: {
         es: "Se anuncia como VIS, pero su precio pasa el tope VIS de 2026 en {ciudad}: se calculó como vivienda general. Pregunta en qué año se liquida el precio.",
         en: "It is advertised as VIS, but its price is above the 2026 VIS cap in {ciudad}: computed as regular housing. Ask which year the price is set in.",

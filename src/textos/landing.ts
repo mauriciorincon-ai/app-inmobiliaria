@@ -157,12 +157,12 @@ export const LANDING = {
 
   queViene: {
     titulo: {
-      es: "Lo que ya funciona y lo que sigue",
-      en: "What already works and what's next",
+      es: "Lo que ya funciona",
+      en: "What already works",
     },
     subtitulo: {
-      es: "Del lado de quien compra ya hay búsqueda, verificación y visitas; lo que falta, te lo decimos claro.",
-      en: "On the buyer's side there is already search, verification and visits; what's still missing, we tell you plainly.",
+      es: "Del lado de quien compra ya hay búsqueda, verificación y visitas, y tú puedes pedir una sesión de fotos desde tu anuncio.",
+      en: "On the buyer's side there is already search, verification and visits, and you can ask for a photo session from your listing.",
     },
     ya: { es: "Ya disponible", en: "Available now" },
     pronto: { es: "Próximamente", en: "Coming soon" },
@@ -192,8 +192,8 @@ export const LANDING = {
       {
         titulo: { es: "Fotos que venden", en: "Photos that sell" },
         texto: {
-          es: "Te ayudaremos a que tu inmueble se vea espectacular. Una buena foto es lo que más mira quien compra.",
-          en: "We'll help your property look its best. A good photo is the first thing buyers look at.",
+          es: "Pide una sesión de fotos desde «Mi anuncio»: el equipo la agenda contigo por WhatsApp. Una buena foto es lo que más mira quien compra.",
+          en: "Ask for a photo session from My listing: the team schedules it with you on WhatsApp. A good photo is the first thing buyers look at.",
         },
       },
     ],

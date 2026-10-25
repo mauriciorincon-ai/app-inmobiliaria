@@ -3,10 +3,11 @@ import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma } from "@/i18n/textos";
 import { LANDING } from "@/textos/landing";
 
-// Las tarjetas ya construidas llevan la estrella de calidad y «Ya disponible»; la que falta, «Próximamente».
-const YA_DISPONIBLE = [true, true, false] as const;
+// Las tarjetas ya construidas llevan la estrella de calidad y «Ya disponible»; una que falte llevaría «Próximamente». Desde el S15
+// las tres están construidas (la tercera: la sesión de fotos que el dueño pide desde «Mi anuncio»).
+const YA_DISPONIBLE = [true, true, true] as const;
 
-// Honesto: dice lo que ya funciona y lo que sigue. Cualitativo, sin cifras (las de fotos están
+// Honesto: dice lo que ya funciona. Cualitativo, sin cifras (las de fotos están
 // prohibidas por evidencia débil — design-system.md).
 export default function QueViene({ lang }: { lang: Idioma }) {
   const t = enIdioma(LANDING.queViene, lang);

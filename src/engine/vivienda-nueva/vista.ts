@@ -18,7 +18,23 @@ import {
   type Indice,
 } from "./indice.ts";
 import { enConflicto, type ProyectoUnico, type Region } from "./lectura.ts";
+import type { Subsidios } from "./normas.ts";
+import {
+  nuevoOUsado,
+  type NuevoOUsado,
+  type UsadoParaComparar,
+} from "./nuevo-o-usado.ts";
 import { precioVerdadero, type PrecioVerdadero } from "./precio-verdadero.ts";
+import type { Programa } from "./subsidio.ts";
+import {
+  HOGARES_EJEMPLO,
+  INICIAL_EJEMPLO,
+  PLAZO_EJEMPLO,
+  teAlcanza,
+  type HogarTeAlcanza,
+  type ProyectoSubsidio,
+} from "./te-alcanza.ts";
+import type { FuentePrecio } from "../precio/comparables.ts";
 
 // --- la edición --------------------------------------------------------------------------------------------------------
 export type EdicionPublicada = {
@@ -453,6 +469,19 @@ function normaVigente(
     : null;
 }
 
+/** «La espera» de un proyecto a `hoy`, en meses (sin arriendo: ese número vive en el teléfono). */
+function esperaEnMeses(p: ProyectoUnico, hoy: string): EsperaMeses {
+  const e = espera(p, hoy, 0);
+  return e.estado === "calculada"
+    ? {
+        estado: "calculada",
+        meses: e.meses,
+        aproximada: e.aproximada,
+        vencida: e.vencida,
+      }
+    : e;
+}
+
 export function vistaProyecto(
   proyectos: readonly ProyectoPublicado[],
   slug: string,
@@ -463,16 +492,7 @@ export function vistaProyecto(
   const p = proyectos.find((x) => x.slug === slug);
   if (!p) return null;
   const precio = precioVerdadero(p, tarifas);
-  const e = espera(p, hoy, 0);
-  const esperaMeses: EsperaMeses =
-    e.estado === "calculada"
-      ? {
-          estado: "calculada",
-          meses: e.meses,
-          aproximada: e.aproximada,
-          vencida: e.vencida,
-        }
-      : e;
+  const esperaMeses = esperaEnMeses(p, hoy);
   return {
     slug: p.slug,
     nombre: p.nombre,
@@ -507,6 +527,289 @@ export function vistaProyecto(
             ? "dentro"
             : "fuera",
   };
+}
+
+// --- «¿Nuevo o usado?» (S13, pantalla 03) ------------------------------------------------------------------------------
+/** Las zonas de la maqueta: manzanas con manzanas, Bogotá con Bogotá y la Sabana con la Sabana. */
+export const ZONAS_COMPARAR = ["bogota", "sabana"] as const;
+export type ZonaComparar = (typeof ZONAS_COMPARAR)[number];
+
+export type FiltrosComparar = {
+  zona: ZonaComparar;
+  /** El presupuesto: lo que el comprador escribe o «lo que puedes pagar» ya calculado en su teléfono. */
+  max?: number;
+  pago: boolean;
+};
+
+/** Los filtros de «¿Nuevo o usado?» desde la URL (Bogotá por omisión). Nunca lanza. */
+export function leerFiltrosComparar(entrada: EntradaUrl): FiltrosComparar {
+  const zona = de(ZONAS_COMPARAR, primero(entrada, "zona")) ?? "bogota";
+  // El mismo `max` (y su techo) y el mismo `pago` que la búsqueda de «Nuevos».
+  const { max, pago } = leerFiltrosNuevos(entrada);
+  return max === undefined ? { zona, pago } : { zona, max, pago };
+}
+
+/** La inversa de `leerFiltrosComparar`. */
+export function paramsComparar(f: FiltrosComparar): URLSearchParams {
+  const p = new URLSearchParams({ zona: f.zona });
+  if (f.max !== undefined) p.set("max", String(f.max));
+  if (f.pago) p.set("pago", "1");
+  return p;
+}
+
+export type NuevoQueCabe = { tarjeta: TarjetaNuevo; espera: EsperaMeses };
+
+export type VistaNuevoOUsado = {
+  zona: ZonaComparar;
+  presupuesto: number | null;
+  /** Apartamentos de la edición en la zona, con precio o sin él. */
+  total: number;
+  /** El motor de comparación; `null` sin presupuesto (sin tope no hay «lo que cabe»). */
+  resultado: NuevoOUsado | null;
+  /** Los apartamentos nuevos que caben, del «al menos» más bajo al más alto: los mismos de `resultado.nuevos.caben`. */
+  caben: NuevoQueCabe[];
+  /** `false` si la base no respondió: la pantalla dice «no disponible», jamás «0 usados». */
+  usadosDisponibles: boolean;
+};
+
+/**
+ * Apartamentos nuevos frente a apartamentos usados en venta, con el mismo presupuesto y en la misma zona. Lo nuevo entra
+ * por su precio VERDADERO (`precioVerdadero`) y su m² privado aproximado (sin área privada o con precio o área en
+ * conflicto, no entra al m²); lo usado, por el motor de comparables del S10 con la fuente como dato. Con menos de 5 usados
+ * tras el recorte no hay comparación (`nuevoOUsado`).
+ */
+export function vistaNuevoOUsado(
+  proyectos: readonly ProyectoPublicado[],
+  usados: readonly UsadoParaComparar[] | null,
+  tarifas: TarifasEscrituracion,
+  f: FiltrosComparar,
+  fuente: FuentePrecio,
+  hoy: string,
+): VistaNuevoOUsado {
+  const apartamentos = proyectos
+    .filter((p) => p.region === f.zona && p.tipo === "apartamento")
+    .sort((a, b) => (a.slug < b.slug ? -1 : 1))
+    .map((p) => ({ p, pv: precioVerdadero(p, tarifas) }));
+  // Innmobiliaria publica solo en Bogotá (fase 1: la lista de localidades del registro es cerrada). En la Sabana no hay
+  // usados que comparar y el motor lo dice: «sin datos», con 0.
+  const enBogota = f.zona === "bogota";
+  const base = {
+    zona: f.zona,
+    total: apartamentos.length,
+    usadosDisponibles: !enBogota || usados !== null,
+  };
+  if (f.max === undefined) {
+    return { ...base, presupuesto: null, resultado: null, caben: [] };
+  }
+  const resultado = nuevoOUsado(
+    f.max,
+    apartamentos.map(({ p, pv }) => ({
+      id: p.slug,
+      alMenos: pv.estado === "calculado" ? pv.alMenos : null,
+      m2Privado: pv.m2.base === "privada" ? pv.m2.valor : null,
+    })),
+    enBogota ? (usados ?? []) : [],
+    fuente,
+  );
+  const porSlug = new Map(apartamentos.map((x) => [x.p.slug, x]));
+  return {
+    ...base,
+    presupuesto: f.max,
+    resultado,
+    caben: resultado.nuevos.caben.map((slug) => {
+      const { p, pv } = porSlug.get(slug) as (typeof apartamentos)[number];
+      return { tarjeta: tarjeta(p, pv), espera: esperaEnMeses(p, hoy) };
+    }),
+  };
+}
+
+// --- «¿Te alcanza con subsidio?» (S13, pantalla 04) --------------------------------------------------------------------
+/** Un programa como lo enseña la pantalla: su norma, su año, su estado con fecha y su monto de este año. */
+export type ProgramaVisible = {
+  id: string;
+  nombre: { es: string; en: string };
+  entidad: string;
+  ambito: Programa["ambito"];
+  destino: "compra" | "cuota";
+  estado: "vigente" | "sin_cupos" | "suspendido";
+  estadoAl: string;
+  consultado: string;
+  anio: number;
+  normas: string[];
+  minimo: number | null;
+  maximo: number;
+  ingresoMaximo: number | null;
+  /** Solo un subsidio de compra baja el precio al firmar; el de la cuota alivia después. */
+  restaAlPrecio: boolean;
+};
+
+export type VistaTeAlcanza = {
+  programas: ProgramaVisible[];
+  /** Solo el NOMBRE de lo que no se pudo verificar: ni su monto ni su estado llegan a la pantalla, y jamás suma. */
+  noMostrados: { es: string; en: string }[];
+  /** Los tres hogares de ejemplo de la maqueta, calculados por el servidor con `teAlcanza`. */
+  hogares: HogarTeAlcanza[];
+  /** El proyecto con que se explican los programas («Los programas, para …»): el VIS o VIP de Bogotá con el «al menos» más bajo. */
+  ejemplo: ProyectoSubsidio | null;
+  /** Lo que la isla del teléfono necesita para correr EL MISMO motor con el ingreso del comprador, que no sale de allí. */
+  motor: {
+    proyectos: ProyectoSubsidio[];
+    programas: Programa[];
+    tasaEA: number;
+  };
+  tasa: { tasaEA: number; fechaCorte: string };
+};
+
+export function vistaTeAlcanza(
+  proyectos: readonly ProyectoPublicado[],
+  subsidios: Pick<Subsidios, "programas" | "no_verificados">,
+  tarifas: TarifasEscrituracion,
+  tasa: { tasaEA: number; fechaCorte: string },
+): VistaTeAlcanza {
+  // Bogotá y la Sabana, solo vivienda y solo con precio verdadero calculado: lo que se puede comparar con un tope.
+  const conPrecio: ProyectoSubsidio[] = cercanos(proyectos)
+    .flatMap((p) => {
+      const pv = precioVerdadero(p, tarifas);
+      return pv.estado === "calculado"
+        ? [
+            {
+              slug: p.slug,
+              nombre: p.nombre,
+              segmento: p.segmento,
+              precio_desde: pv.desde,
+              region: p.region,
+              topeVis: topeVis(String(p.ciudad), tarifas),
+              alMenos: pv.alMenos,
+            },
+          ]
+        : [];
+    })
+    .sort((a, b) => a.alMenos - b.alMenos || (a.slug < b.slug ? -1 : 1));
+
+  // Lo que se muestra: ni el arriendo (no es compra) ni lo no verificado.
+  const visibles = subsidios.programas.filter(
+    (p) => p.destino !== "arriendo" && p.estado !== "no_verificado",
+  );
+  const programas: ProgramaVisible[] = visibles.map((p) => ({
+    id: p.id,
+    nombre: p.nombre,
+    entidad: p.entidad,
+    ambito: p.ambito,
+    destino: p.destino as ProgramaVisible["destino"],
+    estado: p.estado as ProgramaVisible["estado"],
+    estadoAl: p.estado_al,
+    consultado: p.consultado,
+    anio: p.anio,
+    normas: [...p.normas],
+    minimo: p.monto.pesos_2026.minimo,
+    maximo: p.monto.pesos_2026.maximo,
+    ingresoMaximo: p.ingreso_maximo_pesos_2026,
+    restaAlPrecio: p.destino === "compra",
+  }));
+  const paraElMotor: Programa[] = visibles.map((p) => ({
+    id: p.id,
+    ambito: p.ambito,
+    destino: p.destino,
+    estado: p.estado,
+    ingreso_maximo_pesos_2026: p.ingreso_maximo_pesos_2026,
+    monto: {
+      pesos_2026: {
+        minimo: p.monto.pesos_2026.minimo,
+        maximo: p.monto.pesos_2026.maximo,
+      },
+    },
+  }));
+  const noMostrados = [
+    ...subsidios.programas.filter((p) => p.estado === "no_verificado"),
+    ...subsidios.no_verificados,
+  ].map((p) => p.nombre);
+
+  const esSocial = (p: ProyectoSubsidio) =>
+    p.segmento === "VIS" || p.segmento === "VIP";
+  const ejemplo =
+    conPrecio.find((p) => p.region === "bogota" && esSocial(p)) ??
+    conPrecio.find((p) => p.region === "bogota") ??
+    conPrecio[0] ??
+    null;
+
+  return {
+    programas,
+    noMostrados,
+    hogares: HOGARES_EJEMPLO.map((ingresos) =>
+      teAlcanza(
+        {
+          ingresos,
+          inicial: INICIAL_EJEMPLO,
+          plazoAnos: PLAZO_EJEMPLO,
+          tasaEA: tasa.tasaEA,
+        },
+        conPrecio,
+        paraElMotor,
+      ),
+    ),
+    ejemplo,
+    motor: {
+      proyectos: conPrecio,
+      programas: paraElMotor,
+      tasaEA: tasa.tasaEA,
+    },
+    tasa: { tasaEA: tasa.tasaEA, fechaCorte: tasa.fechaCorte },
+  };
+}
+
+// --- la visita a la sala de ventas (S13, pantalla 05) ------------------------------------------------------------------
+export type ProyectoSala = {
+  slug: string;
+  nombre: ProyectoUnico["nombre"];
+  constructora: ProyectoUnico["constructora"];
+  ciudad: ProyectoUnico["ciudad"];
+  sector: ProyectoUnico["sector"];
+  region: Region;
+  /** Las páginas de la edición donde aparece: la fuente, y lo que el operador abre para buscar la sala. */
+  paginas: number[];
+};
+
+export type VistaVisitaSala =
+  | { estado: "pedir"; proyecto: ProyectoSala; edicion: EdicionPublicada }
+  | {
+      estado: "sin_edicion";
+      proyecto: ProyectoSala;
+      edicion: EdicionPublicada;
+      vencida: string;
+      dias: number;
+    };
+
+/**
+ * Si se puede pedir la visita a la sala de un proyecto, con la MISMA regla que `solicitar_visita_sala` (migración 16): el
+ * proyecto debe estar en la edición vigente hoy. Con la edición vencida («mes sin edición») se dice y no se ofrece;
+ * `null` si no hay edición o el proyecto no está en ella.
+ */
+export function vistaVisitaSala(
+  proyectos: readonly ProyectoPublicado[],
+  vigencia: Vigencia,
+  slug: string,
+): VistaVisitaSala | null {
+  if (vigencia.estado === "sin_publicar") return null;
+  const p = proyectos.find((x) => x.slug === slug);
+  if (!p) return null;
+  const proyecto: ProyectoSala = {
+    slug: p.slug,
+    nombre: p.nombre,
+    constructora: p.constructora,
+    ciudad: p.ciudad,
+    sector: p.sector,
+    region: p.region,
+    paginas: [...p.apariciones],
+  };
+  return vigencia.estado === "vigente"
+    ? { estado: "pedir", proyecto, edicion: vigencia.edicion }
+    : {
+        estado: "sin_edicion",
+        proyecto,
+        edicion: vigencia.edicion,
+        vencida: vigencia.vencida,
+        dias: vigencia.dias,
+      };
 }
 
 // --- la fecha de entrega, para escribirla en cada idioma ---------------------------------------------------------------

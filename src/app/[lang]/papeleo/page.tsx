@@ -6,8 +6,10 @@ import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { leerEntrada } from "@/engine/papeleo/formulario";
 import { leerIdioma, type PropsLang } from "@/i18n/ruta";
 import { enIdioma } from "@/i18n/textos";
+import { lectorCtlActivo } from "@/lib/ctl-activo";
 import { CIUDADES } from "@/lib/papeleo/datos";
 import { hoyNuevos } from "@/lib/vivienda-nueva/datos";
+import { CTL } from "@/textos/ctl";
 import { HERRAMIENTAS } from "@/textos/herramientas";
 import { PAPELEO } from "@/textos/papeleo";
 import { PAPELEO_CLAUSULAS } from "@/textos/papeleo-clausulas";
@@ -57,6 +59,7 @@ export default async function PapeleoPage({
           inicial={inicial}
           hoy={hoy}
           desdeAnuncio={inicial.precio !== null}
+          ctl={lectorCtlActivo() ? enIdioma(CTL, lang) : null}
         />
       </main>
     </>

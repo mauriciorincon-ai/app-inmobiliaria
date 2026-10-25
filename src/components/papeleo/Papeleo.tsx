@@ -1,6 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
+import type { TextosCtl } from "@/components/papeleo/PapeleoCtl";
 import PapeleoClausulas from "@/components/papeleo/PapeleoClausulas";
 import PapeleoGastos from "@/components/papeleo/PapeleoGastos";
 import { Documentos, Plazos } from "@/components/papeleo/PapeleoGuia";
@@ -31,13 +33,19 @@ import type { PAPELEO_CLAUSULAS } from "@/textos/papeleo-clausulas";
 export type TextosPapeleo = Proyectado<typeof PAPELEO>;
 export type TextosClausulas = Proyectado<typeof PAPELEO_CLAUSULAS>;
 
-type Seccion = "gastos" | "documentos" | "plazos" | "clausulas";
+type Seccion = "gastos" | "documentos" | "plazos" | "clausulas" | "ctl";
 const SECCIONES: readonly Seccion[] = [
   "gastos",
   "documentos",
   "plazos",
   "clausulas",
 ];
+
+// El lector de CTL (S15) es la quinta sección y solo existe con el interruptor encendido. Se carga diferido, y solo cuando se abre
+// la sección: el resto de la página no paga por él.
+const PapeleoCtl = dynamic(() => import("@/components/papeleo/PapeleoCtl"), {
+  loading: () => <div className="min-h-[20rem]" aria-hidden="true" />,
+});
 
 type Campos = {
   precio: string;
@@ -61,6 +69,7 @@ export default function Papeleo({
   inicial,
   hoy,
   desdeAnuncio,
+  ctl,
 }: {
   lang: Idioma;
   t: TextosPapeleo;
@@ -68,6 +77,8 @@ export default function Papeleo({
   inicial: EntradaGastos;
   hoy: string;
   desdeAnuncio: boolean;
+  /** Los textos del lector de CTL; `null` con el lector apagado (no hay quinta sección). */
+  ctl: TextosCtl | null;
 }) {
   const [campos, setCampos] = useState<Campos>({
     precio: texto(inicial.precio),
@@ -80,6 +91,9 @@ export default function Papeleo({
     credito: inicial.credito,
   });
   const [seccion, setSeccion] = useState<Seccion>("gastos");
+  // Una vez abierta, la sección del lector queda montada: cambiar de pestaña no borra lo pegado.
+  const [ctlAbierto, setCtlAbierto] = useState(false);
+  const secciones: readonly Seccion[] = ctl ? [...SECCIONES, "ctl"] : SECCIONES;
   const cambiar = <K extends keyof Campos>(k: K, v: Campos[K]) =>
     setCampos((prev) => ({ ...prev, [k]: v }));
 
@@ -231,20 +245,23 @@ export default function Papeleo({
         aria-label={t.secciones.grupo}
         className="flex gap-2 overflow-x-auto pb-1"
       >
-        {SECCIONES.map((s) => (
+        {secciones.map((s) => (
           <button
             key={s}
             type="button"
             aria-pressed={seccion === s}
             aria-controls={`pap-${s}`}
-            onClick={() => setSeccion(s)}
+            onClick={() => {
+              setSeccion(s);
+              if (s === "ctl") setCtlAbierto(true);
+            }}
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
               seccion === s
                 ? "bg-purple text-white"
                 : "border border-purple-200 bg-white text-purple-600 hover:bg-purple-tint"
             }`}
           >
-            {t.secciones[s]}
+            {s === "ctl" ? ctl?.lector.pestana : t.secciones[s]}
           </button>
         ))}
       </div>
@@ -283,6 +300,14 @@ export default function Papeleo({
           estadoNorma={t.estados.vigente}
         />
       </section>
+      {ctl && (
+        <section id="pap-ctl" hidden={seccion !== "ctl"}>
+          <h2 className="mb-3 text-xl font-bold text-ink">
+            {ctl.lector.titulo}
+          </h2>
+          {ctlAbierto && <PapeleoCtl ctl={ctl} lang={lang} hoy={hoy} />}
+        </section>
+      )}
     </div>
   );
 }

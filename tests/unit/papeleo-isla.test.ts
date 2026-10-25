@@ -100,6 +100,10 @@ describe("la isla del papeleo no manda nada afuera", () => {
       "src/components/papeleo/PapeleoGastos.tsx",
       "src/components/papeleo/PapeleoGuia.tsx",
       "src/components/papeleo/PapeleoClausulas.tsx",
+      // S15 — el lector de CTL entra a la isla por el import diferido y se revisa igual que el resto.
+      "src/components/papeleo/PapeleoCtl.tsx",
+      "src/engine/ctl/lector.ts",
+      "src/data/normas-ctl.json",
       "src/engine/papeleo/gastos.ts",
       "src/engine/papeleo/guia.ts",
       "src/data/tarifas-papeleo.json",

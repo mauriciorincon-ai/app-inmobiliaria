@@ -72,7 +72,10 @@ export const CTL = {
       },
     },
     patrimonio_familia: {
-      titulo: { es: "Patrimonio de familia", en: "Family estate (patrimonio de familia)" },
+      titulo: {
+        es: "Patrimonio de familia",
+        en: "Family estate (patrimonio de familia)",
+      },
       queEs: {
         es: "Un patrimonio de familia: no es embargable y, si el dueño es casado o tiene hijos menores, para venderlo o cancelarlo necesita el consentimiento del cónyuge o el de los hijos, dado por medio de un curador.",
         en: "A family estate: it can't be seized and, if the owner is married or has minor children, selling or cancelling it needs the spouse's consent or the children's, given through a guardian.",
@@ -87,7 +90,10 @@ export const CTL = {
       },
     },
     falsa_tradicion: {
-      titulo: { es: "Falsa tradición", en: "Defective chain of title (falsa tradición)" },
+      titulo: {
+        es: "Falsa tradición",
+        en: "Defective chain of title (falsa tradición)",
+      },
       queEs: {
         es: "Una anotación de las que el registro llama falsa tradición: la venta de una cosa ajena o la transferencia de un derecho incompleto o sin antecedente propio.",
         en: "An entry of the kind the registry calls falsa tradición: the sale of someone else's property or the transfer of an incomplete right, or one with no prior title of its own.",
@@ -117,7 +123,23 @@ export const CTL = {
 
   // La pantalla (5.ª sección de `/papeleo`; F3).
   lector: {
-    titulo: { es: "Lee tu certificado de tradición", en: "Read your title record" },
+    rotulos: {
+      queEs: { es: "Qué es", en: "What it is" },
+      queHacer: { es: "Qué hacer", en: "What to do" },
+      norma: { es: "Norma", en: "Rule" },
+    },
+    pestana: { es: "Certificado (CTL)", en: "Title record (CTL)" },
+    resultado: { es: "Lo que encontramos", en: "What we found" },
+    cancelada: { es: "Cancelada", en: "Cancelled" },
+    especificacion: { es: "Dice: {texto}", en: "It says: {texto}" },
+    leidas: {
+      es: "Normas citadas, leídas en su texto oficial el {fecha}.",
+      en: "Rules cited, read in their official text on {fecha}.",
+    },
+    titulo: {
+      es: "Lee tu certificado de tradición",
+      en: "Read your title record",
+    },
     intro: {
       es: "Pega el texto del certificado de tradición y libertad (CTL). Te marcamos hipotecas, embargos, demandas y otras medidas cautelares, la afectación a vivienda familiar, el patrimonio de familia y la falsa tradición, con su anotación y si siguen vigentes.",
       en: "Paste the text of the title record (certificado de tradición y libertad, CTL). We flag mortgages, seizures, lawsuits and other precautionary measures, family-home registrations, family estates and defective chains of title, with their entry number and whether they still stand.",
@@ -133,14 +155,17 @@ export const CTL = {
     },
     leer: { es: "Leer el certificado", en: "Read the record" },
     borrar: { es: "Borrar el texto", en: "Clear the text" },
-    vacio: { es: "Pega el texto para leerlo.", en: "Paste the text to read it." },
+    vacio: {
+      es: "Pega el texto para leerlo.",
+      en: "Paste the text to read it.",
+    },
     sinAnotaciones: {
       es: "No encontramos anotaciones en este texto. ¿Es el certificado de tradición y libertad completo?",
       en: "We didn't find any entries in this text. Is it the complete title record?",
     },
     resumen: {
-      es: "{anotaciones} anotaciones leídas · {vigentes} marcas vigentes · {canceladas} canceladas",
-      en: "{anotaciones} entries read · {vigentes} active flags · {canceladas} cancelled",
+      es: "Anotaciones leídas: {anotaciones} · marcas vigentes: {vigentes} · marcas canceladas: {canceladas}",
+      en: "Entries read: {anotaciones} · active flags: {vigentes} · cancelled flags: {canceladas}",
     },
     sinMarcas: {
       es: "En las anotaciones que reconocemos no encontramos nada de lo que este lector marca.",
@@ -168,8 +193,8 @@ export const CTL = {
       en: "Entry {n} cancels an entry that isn't in the pasted text: check that it's complete.",
     },
     expedido: {
-      es: "Expedido hace {dias} días.",
-      en: "Issued {dias} days ago.",
+      es: "Días desde que se expidió: {dias}.",
+      en: "Days since it was issued: {dias}.",
     },
     viejo: {
       es: "Tiene más de {max} días: pide uno reciente antes de firmar.",

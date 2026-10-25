@@ -2,8 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FilaProyecto } from "../../src/engine/vivienda-nueva/filas";
 
-// S12 — lo que las páginas de vivienda nueva leen en el servidor. Una base falsa: la RPC pública responde lo que la
-// prueba pide (una edición, nada, un error, una forma rota o una excepción) y la lectura jamás lanza. La perilla de la
+// S12 — lo que las páginas de vivienda nueva leen en el servidor (y desde el S13, los usados para comparar). Una base
+// falsa: la RPC pública responde lo que la prueba pide (una edición, nada, un error, una forma rota o una excepción) y la
+// lectura jamás lanza. La perilla de la
 // fecha solo existe con `NUEVOS_SIMULACRO=1`. Datos 100 % sintéticos.
 
 const llamadas: Array<{ fn: string; args: unknown }> = [];
@@ -21,7 +22,7 @@ vi.mock("@/lib/supabase/server", () => ({
   }),
 }));
 
-const { cargarNuevos, hoyNuevos, TARIFAS } =
+const { cargarNuevos, cargarUsados, hoyNuevos, SUBSIDIOS, TARIFAS } =
   await import("../../src/lib/vivienda-nueva/datos");
 
 const FILA: FilaProyecto = {
@@ -145,5 +146,50 @@ describe("cargarNuevos: la edición que da la base para hoy, sin tumbar nunca la
         .map((c) => c.id)
         .sort(),
     ).toEqual(["derechos_notariales", "derechos_registro"]);
+  });
+});
+
+describe("cargarUsados: el área y el precio de los apartamentos usados en venta (S13)", () => {
+  it("pide la RPC pública con la operación y el tipo, y nada más (ni ingreso, ni presupuesto, ni zona)", async () => {
+    respuesta = async () => ({ data: [], error: null });
+    expect(await cargarUsados()).toEqual([]);
+    expect(llamadas).toEqual([
+      {
+        fn: "usados_para_comparar",
+        args: { p_operacion: "venta", p_tipo: "apartamento" },
+      },
+    ]);
+  });
+
+  it("los usados vuelven tal cual (solo área y precio)", async () => {
+    const usados = [
+      { area_m2: 50, precio_esperado: 250_000_000 },
+      { area_m2: 62, precio_esperado: 310_000_000 },
+    ];
+    respuesta = async () => ({ data: usados, error: null });
+    expect(await cargarUsados()).toEqual(usados);
+  });
+
+  it("un error, una forma inesperada o una excepción: `null` («no disponible», jamás «0 usados»), nunca lanza", async () => {
+    for (const data of [
+      null,
+      "no",
+      [{ area_m2: "50", precio_esperado: 1 }],
+      [{ area_m2: 0, precio_esperado: 1 }],
+      [{ area_m2: 50, precio_esperado: -1 }],
+      [null],
+    ]) {
+      respuesta = async () => ({ data, error: null });
+      expect(await cargarUsados(), JSON.stringify(data)).toBeNull();
+    }
+    respuesta = async () => ({ data: [], error: { code: "42501" } });
+    expect(await cargarUsados()).toBeNull();
+    respuesta = () => Promise.reject(new Error("red caída"));
+    expect(await cargarUsados()).toBeNull();
+  });
+
+  it("los programas de subsidio que usa el servidor son los de `src/data`, con su año", () => {
+    expect(SUBSIDIOS.vigencia).toBe(2026);
+    expect(SUBSIDIOS.programas.length).toBeGreaterThan(0);
   });
 });

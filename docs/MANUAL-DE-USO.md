@@ -368,7 +368,7 @@ solicitudes de visita.
   muestra.
 - **VIS y VIP (desde el Sprint 015):** una **VIP** tiene su propio tope, de **90 salarios mínimos**; por encima se liquida como VIS y lo dice. Una
   VIS o una VIP **sin subsidio** paga el registro completo (la mitad es solo con subsidio) y la notaría de una VIS, porque el artículo de la
-  resolución que la rebaja no pide subsidio.
+  resolución que la rebaja no pide subsidio; que una VIP cuente como VIS ahí es nuestra lectura de la norma, y la pantalla te dice que lo confirmes en la notaría.
 
 ## Antifraude, reportar y sesión de fotos · desde Sprint 015
 

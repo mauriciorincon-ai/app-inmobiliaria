@@ -169,8 +169,8 @@
         "verificado": false,
         "articulo": null,
         "condicion": {
-          "es": "La exención de derechos notariales de la VIP con subsidio la dice el artículo 2.1.8.3 del Decreto 1895 de 2016, que cita el artículo 23 de la resolución de registro; el texto de la resolución notarial no se releyó para ese caso.",
-          "en": "The notary-fee exemption for subsidized VIP comes from article 2.1.8.3 of Decree 1895 of 2016, quoted in article 23 of the registration resolution; the notary resolution's own text was not re-read for that case."
+          "es": "La exención de derechos notariales de la VIP con subsidio la dice el artículo 2.1.8.3 del Decreto 1895 de 2016, que cita el artículo 23 de la resolución de registro; la resolución notarial (art. 37, literal t) exime solo la VIP «para ahorradores», así que para la VIP con subsidio no hay una frase propia de la resolución notarial. Sin subsidio no se aplica la exención y la notaría se liquida como VIS (art. 31, ver «verificada_en»).",
+          "en": "The notary-fee exemption for subsidized VIP comes from article 2.1.8.3 of Decree 1895 of 2016, quoted in article 23 of the registration resolution; the notary resolution (art. 37, letter t) exempts only VIP «for savers», so there is no sentence of the notary resolution itself for subsidized VIP. Without a subsidy the exemption does not apply and the notary fee is computed as VIS (art. 31, see «verificada_en»)."
         }
       },
       "hipoteca": {
@@ -190,7 +190,8 @@
         "Texto de la Resolución 2026-000964-6 de la SNR, leído en la fuente",
         "Camacol, Informe Jurídico Nacional 1014 (2026): fecha de la resolución, vigencia desde el 1 de febrero y UVB",
         "Gerencie, tarifas notariales de 2026: $30.900 hasta $259.300, tres por mil sobre el exceso y la mitad para VIS",
-        "Texto de la Resolución 2026-000964-6 de la SNR, arts. 2 literal b, 31, 32, 33 y 51, releído el 2026-10-25 en el PDF oficial de la SNR: $30.900 hasta $259.300 y 3 por mil sobre el exceso; la mitad para VIS; 70 % para la hipoteca; la cuantía es la mayor entre el precio y el avalúo catastral"
+        "Texto de la Resolución 2026-000964-6 de la SNR, arts. 2 literal b, 31, 32, 33 y 51, releído el 2026-10-25 en el PDF oficial de la SNR: $30.900 hasta $259.300 y 3 por mil sobre el exceso; la mitad para VIS; 70 % para la hipoteca; la cuantía es la mayor entre el precio y el avalúo catastral",
+        "Texto de la Resolución 2026-000964-6 de la SNR, art. 31, releído el 2026-10-25 en el PDF oficial de la SNR: «En los contratos de compraventa e hipoteca referente a la adquisición de vivienda de interés social en los términos previstos en las Leyes 9 de 1989, 3ª de 1991 y 388 de 1997 [...] se causarán derechos notariales equivalentes a la mitad de los ordinarios señalados en la tarifa»; no menciona subsidio. Ley 1955 de 2019, art. 85, leído el 2026-10-25: el valor máximo de la VIP (90 SMMLV) está fijado dentro del artículo «Concepto de vivienda de interés social». Que una VIP sin subsidio pague la mitad notarial es lectura de esos dos textos, no una frase de la norma: el aviso lo dice y manda a confirmarlo en la notaría"
       ]
     },
     {

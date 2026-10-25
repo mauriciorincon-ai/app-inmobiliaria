@@ -68,8 +68,8 @@ export const PAPELEO = {
       en: "Without a housing subsidy from the State or a family compensation fund, registration does not get the VIS half rate (SNR Res. 2026-001726-6, art. 17, paragraph 2): it is charged in full. The notary's office does charge half (SNR Res. 2026-000964-6, art. 31).",
     },
     vip_sin_subsidio: {
-      es: "Sin subsidio no hay la exención de la VIP, pero una VIP es una VIS (su tope es menor; Ley 1955 de 2019, art. 85): la notaría cobra la mitad, que no pide subsidio (Res. SNR 2026-000964-6, art. 31), y el registro se cobra completo (Res. SNR 2026-001726-6, art. 17, parágrafo 2).",
-      en: "Without a subsidy there is no VIP exemption, but a VIP is a VIS (with a lower cap; Law 1955 of 2019, art. 85): the notary's office charges half, which does not require a subsidy (SNR Res. 2026-000964-6, art. 31), and registration is charged in full (SNR Res. 2026-001726-6, art. 17, paragraph 2).",
+      es: "Sin subsidio no hay la exención de la VIP. La notaría cobra la mitad a la vivienda de interés social sin pedir subsidio (Res. SNR 2026-000964-6, art. 31) y la Ley 1955 de 2019, art. 85, fija el tope de la VIP dentro del artículo que define esa vivienda: liquidamos la VIP sin subsidio como VIS, y conviene confirmarlo en la notaría. El registro se cobra completo (Res. SNR 2026-001726-6, art. 17, parágrafo 2).",
+      en: "Without a subsidy there is no VIP exemption. The notary's office charges half for social-interest housing without requiring a subsidy (SNR Res. 2026-000964-6, art. 31), and Law 1955 of 2019, art. 85, sets the VIP cap inside the article that defines that housing: we compute an unsubsidized VIP as VIS, and it is worth confirming at the notary's office. Registration is charged in full (SNR Res. 2026-001726-6, art. 17, paragraph 2).",
     },
     avaluo_mayor: {
       es: "El avalúo catastral ({avaluo}) es mayor que el precio: notaría, recaudos, registro e impuesto se liquidan sobre el avalúo. La retención la calculamos sobre el precio: la norma habla del «valor de la enajenación» y no dice si el avalúo la sube, pregúntalo en la notaría.",

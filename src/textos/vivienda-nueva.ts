@@ -764,7 +764,6 @@ export const VIVIENDA_NUEVA = {
         programa: { es: "Programa y norma", en: "Program and rule" },
         monto: { es: "Monto 2026", en: "2026 amount" },
         paraTi: { es: "Para ti", en: "For you" },
-        fecha: { es: "Fecha", en: "Date" },
       },
       monto: {
         rango: { es: "{minimo} a {maximo}", en: "{minimo} to {maximo}" },

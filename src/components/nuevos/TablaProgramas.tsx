@@ -37,20 +37,14 @@ export default function TablaProgramas({
   const motivos: Record<string, string> = t.motivo;
   return (
     <div className="mt-3 overflow-x-auto rounded-2xl border border-purple-200">
-      <table className="w-full min-w-[640px] text-left text-sm">
+      <table className="w-full text-left text-sm">
         <thead className="bg-cream text-xs uppercase tracking-wide text-mute">
           <tr>
             <th scope="col" className="px-4 py-3 font-semibold">
               {tp.cabeceras.programa}
             </th>
             <th scope="col" className="px-4 py-3 font-semibold">
-              {tp.cabeceras.monto}
-            </th>
-            <th scope="col" className="px-4 py-3 font-semibold">
               {tp.cabeceras.paraTi}
-            </th>
-            <th scope="col" className="px-4 py-3 font-semibold">
-              {tp.cabeceras.fecha}
             </th>
           </tr>
         </thead>
@@ -76,13 +70,18 @@ export default function TablaProgramas({
                   <span className="mt-0.5 block text-xs font-normal text-mute">
                     {p.normas.join(" · ")}
                   </span>
-                </th>
-                <td className="px-4 py-3 align-top text-gray">
-                  {monto}
-                  <span className="mt-0.5 block text-xs text-mute">
+                  <span className="mt-1 block text-sm font-normal text-gray">
+                    {tp.cabeceras.monto}: {monto}
+                  </span>
+                  <span className="block text-xs font-normal text-mute">
                     {p.restaAlPrecio ? tp.baja.compra : tp.baja.cuota}
                   </span>
-                </td>
+                  <span className="block text-xs font-normal text-mute">
+                    {rellenar(tp.estadoAl, {
+                      fecha: formatearFecha(p.estadoAl, lang),
+                    })}
+                  </span>
+                </th>
                 <td className="px-4 py-3 align-top">
                   {r ? (
                     <>
@@ -99,11 +98,6 @@ export default function TablaProgramas({
                       )}
                     </>
                   ) : null}
-                </td>
-                <td className="px-4 py-3 align-top text-xs text-mute">
-                  {rellenar(tp.estadoAl, {
-                    fecha: formatearFecha(p.estadoAl, lang),
-                  })}
                 </td>
               </tr>
             );

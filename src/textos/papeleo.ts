@@ -273,4 +273,218 @@ export const PAPELEO = {
       },
     },
   },
+
+  // La ruta: título de la pestaña y descripción (la ruta no se indexa hasta el hito de producción).
+  meta: {
+    titulo: {
+      es: "El papeleo, sin sorpresas — Innmobiliaria",
+      en: "The paperwork, with no surprises — Innmobiliaria",
+    },
+    descripcion: {
+      es: "Cuánto paga el comprador y cuánto el vendedor al escriturar, qué pedir antes de firmar la promesa, cuánto tarda cada paso y qué dice cada documento, con la norma de cada cifra. El precio no sale de tu teléfono.",
+      en: "How much the buyer and the seller each pay at closing, what to ask for before signing the promise, how long each step takes and what each document says, with the rule behind every figure. The price stays on your phone.",
+    },
+  },
+
+  pagina: {
+    titulo: {
+      es: "El papeleo, sin sorpresas",
+      en: "The paperwork, with no surprises",
+    },
+    bajada: {
+      es: "Cada peso del cierre con su norma, antes de firmar nada. El precio que escribes se queda en tu teléfono: ninguna petición lo lleva.",
+      en: "Every peso of the closing with the rule behind it, before you sign anything. The price you type stays on your phone: no request carries it.",
+    },
+  },
+
+  secciones: {
+    grupo: { es: "Sección", en: "Section" },
+    gastos: { es: "Gastos", en: "Costs" },
+    documentos: { es: "Documentos", en: "Documents" },
+    plazos: { es: "Plazos", en: "Timeline" },
+    clausulas: {
+      es: "Qué dice cada documento",
+      en: "What each document says",
+    },
+  },
+
+  campos: {
+    grupo: { es: "Tu compra", en: "Your purchase" },
+    invalido: {
+      es: "No pudimos leer este número.",
+      en: "We couldn't read this number.",
+    },
+    precio: {
+      etiqueta: {
+        es: "Precio de la compraventa (COP)",
+        en: "Sale price (COP)",
+      },
+      ejemplo: { es: "Ej: 450.000.000", en: "e.g. 450,000,000" },
+      ayudaAnuncio: {
+        es: "Viene del anuncio que estabas mirando.",
+        en: "Taken from the listing you were looking at.",
+      },
+    },
+    ciudad: {
+      etiqueta: { es: "Ciudad del inmueble", en: "City of the property" },
+      ayuda: {
+        es: "De ella dependen el tope de la vivienda de interés social y si el impuesto de registro está verificado.",
+        en: "It sets the social-interest housing cap and whether the registration tax is verified.",
+      },
+    },
+    tipo: {
+      etiqueta: { es: "Tipo de vivienda", en: "Type of home" },
+      normal: { es: "Vivienda normal", en: "Regular home" },
+      vis: {
+        es: "VIS (interés social)",
+        en: "VIS (social-interest housing)",
+      },
+      vip: {
+        es: "VIP (interés prioritario)",
+        en: "VIP (priority-interest housing)",
+      },
+    },
+    subsidio: {
+      etiqueta: {
+        es: "Tengo un subsidio de vivienda del Estado o de una caja de compensación",
+        en: "I have a housing subsidy from the State or a family compensation fund",
+      },
+      ayuda: {
+        es: "Sin subsidio, el registro no tiene la tarifa de VIS ni la exención de VIP.",
+        en: "Without a subsidy, registration does not get the VIS rate or the VIP exemption.",
+      },
+    },
+    ajustes: {
+      titulo: { es: "Ajustes", en: "Settings" },
+      ayuda: {
+        es: "Quién vende, cómo se reparten los gastos, el avalúo catastral y si compras con crédito.",
+        en: "Who sells, how the costs are split, the cadastral appraisal and whether you buy with a loan.",
+      },
+    },
+    vende: {
+      etiqueta: { es: "Quién vende", en: "Who sells" },
+      persona: { es: "Una persona natural", en: "A natural person" },
+      empresa: {
+        es: "Una empresa o constructora",
+        en: "A company or a developer",
+      },
+    },
+    reparto: {
+      etiqueta: {
+        es: "Quién paga la notaría y el impuesto de registro",
+        en: "Who pays the notary fees and the registration tax",
+      },
+      iguales: {
+        es: "Por mitades (lo que dice la norma)",
+        en: "In halves (what the rule says)",
+      },
+      comprador: { es: "Todo el comprador", en: "All the buyer" },
+      vendedor: { es: "Todo el vendedor", en: "All the seller" },
+      ayuda: {
+        es: "Otro reparto es un acuerdo de las partes: debe constar en la promesa. Los derechos de registro y el CTL los paga quien los pide, el comprador.",
+        en: "Any other split is an agreement between the parties and must be in the promise. The registration fees and the CTL are paid by whoever requests them, the buyer.",
+      },
+    },
+    avaluo: {
+      etiqueta: {
+        es: "Avalúo catastral (COP, opcional)",
+        en: "Cadastral appraisal (COP, optional)",
+      },
+      ayuda: {
+        es: "Notaría, registro e impuesto se liquidan sobre el mayor entre el precio y el avalúo catastral.",
+        en: "Notary fees, registration and tax are computed on the higher of the price and the cadastral appraisal.",
+      },
+    },
+    credito: {
+      etiqueta: {
+        es: "Compro con crédito hipotecario",
+        en: "I am buying with a mortgage loan",
+      },
+      ayuda: {
+        es: "Agrega los documentos del banco, el plazo de la hipoteca y su línea de gastos.",
+        en: "It adds the bank's documents, the mortgage deadline and its cost line.",
+      },
+    },
+  },
+
+  salidas: {
+    estimado: {
+      es: "Tarifas {anio}, de una tabla versionada por año con su norma, consultadas el {fecha}. Es un estimado hasta validarlo con el liquidador de la Superintendencia de Notariado y Registro.",
+      en: "{anio} rates, from a table versioned by year with its rule, checked on {fecha}. It is an estimate until checked against the calculator of the Superintendencia de Notariado y Registro (the national notary and land-registry authority).",
+    },
+    sinPrecio: {
+      es: "Escribe el precio de la compraventa y te mostramos cuánto paga cada parte, con su norma.",
+      en: "Type the sale price and we show you what each party pays, with its rule.",
+    },
+    vencidas: {
+      es: "Las tarifas que tenemos son de {anioTarifas} y estamos en {anioHoy}: no mostramos cifras de un año que ya pasó. Pregunta en la notaría o usa el liquidador de la Superintendencia de Notariado y Registro.",
+      en: "The rates we have are from {anioTarifas} and it is now {anioHoy}: we do not show figures from a year that has passed. Ask at the notary's office or use the Superintendencia de Notariado y Registro calculator.",
+    },
+    comprador: { es: "Paga el comprador", en: "The buyer pays" },
+    vendedor: { es: "Paga el vendedor", en: "The seller pays" },
+    total: { es: "Total verificado", en: "Verified total" },
+    faltaUno: {
+      es: "Falta 1 concepto sin verificar: este total es lo mínimo que pagas.",
+      en: "1 item is not verified: this total is the least you pay.",
+    },
+    faltanVarios: {
+      es: "Faltan {n} conceptos sin verificar: este total es lo mínimo que pagas.",
+      en: "{n} items are not verified: this total is the least you pay.",
+    },
+    sinCifra: { es: "Sin cifra", en: "No figure" },
+    sinLineas: {
+      es: "Este actor no paga nada de lo que calculamos.",
+      en: "This party pays nothing of what we compute.",
+    },
+    cobra: { es: "Lo cobra: {quien}", en: "Charged by: {quien}" },
+    normaAnio: { es: "{norma} · tarifa {anio}", en: "{norma} · {anio} rate" },
+    tarifa: {
+      por_mil: {
+        es: "{valor} por mil de {base}",
+        en: "{valor} per thousand of {base}",
+      },
+      porcentaje: { es: "{valor} % de {base}", en: "{valor}% of {base}" },
+      fija: { es: "Tarifa fija", en: "Flat fee" },
+      escala: {
+        es: "Escala por rango de valor sobre {base}",
+        en: "Value-bracket scale on {base}",
+      },
+    },
+    parte: {
+      es: "Tu parte: {parte} % de {total}",
+      en: "Your share: {parte}% of {total}",
+    },
+    ganancia: {
+      es: "La ganancia ocasional, el impuesto sobre la utilidad de la venta, depende de cada caso: aquí no la calculamos.",
+      en: "Capital gains tax (ganancia ocasional), the tax on the profit from the sale, depends on each case: we do not compute it here.",
+    },
+    avisos: {
+      es: "Lo que cambió esta cuenta",
+      en: "What changed this estimate",
+    },
+  },
+
+  guia: {
+    documentos: {
+      titulo: {
+        es: "Qué pedir antes de firmar la promesa",
+        en: "What to ask for before signing the promise of sale",
+      },
+      bajada: {
+        es: "Marca lo que ya tienes. Las marcas se quedan en esta pantalla: no se guardan.",
+        en: "Tick what you already have. The ticks stay on this screen: they are not saved.",
+      },
+    },
+    plazos: {
+      titulo: {
+        es: "Cuánto tarda cada paso",
+        en: "How long each step takes",
+      },
+      bajada: {
+        es: "Cada plazo con la norma de donde sale; donde no hay una norma, lo decimos.",
+        en: "Each deadline with the rule it comes from; where there is no rule, we say so.",
+      },
+    },
+    norma: { es: "De dónde sale", en: "Where it comes from" },
+  },
 } as const satisfies Arbol;

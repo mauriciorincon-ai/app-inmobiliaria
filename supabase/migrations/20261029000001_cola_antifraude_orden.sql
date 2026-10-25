@@ -1,4 +1,5 @@
--- S15 (2.ª migración, declarada en el cierre) — la cola antifraude del operador: su orden y quién se queda en ella.
+-- S15 (2.ª migración, declarada en el cierre) — la cola antifraude del operador (su orden y quién se queda en ella) y la validación de
+-- `guardar_banderas_precio`.
 -- La migración 17 tenía dos fallos que se vieron probando la pantalla de punta a punta:
 --  1. Ordenaba con `pausado` como primera clave: un anuncio recién pausado caía al final de la lista y, con más de 200 filas
 --     abiertas, salía de ella junto con su botón «Reactivar». Ahora manda lo último que pasó con el anuncio (una bandera o un
@@ -63,4 +64,47 @@ as $$
     order by ultima desc nulls last
     limit 200
   ) x
+$$;
+
+-- Una bandera de precio sin `porcentaje` o sin `n` pasaba la validación: `jsonb_typeof` de una clave ausente es NULL y `NULL <> 'number'` no
+-- es verdadero. Ahora una clave ausente cuenta como «no es un número» y se rechaza. (La detectó la auditoría del S15; solo la llaman el
+-- operador y el trabajo diario.)
+create or replace function public.guardar_banderas_precio(p_hallazgos jsonb)
+returns integer
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_limpios jsonb;
+begin
+  if p_hallazgos is null or jsonb_typeof(p_hallazgos) <> 'object' then
+    raise exception 'hallazgos_invalidos' using errcode = 'check_violation';
+  end if;
+  if exists (
+    select 1 from jsonb_each(p_hallazgos) h
+     where h.key !~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+        or jsonb_typeof(h.value) <> 'object'
+        or coalesce(jsonb_typeof(h.value -> 'porcentaje'), '') <> 'number'
+        or coalesce(jsonb_typeof(h.value -> 'n'), '') <> 'number'
+        or (h.value ->> 'porcentaje')::numeric not between 30 and 100
+        or (h.value ->> 'n')::numeric < 5
+        or coalesce(h.value ->> 'ambito', '') not in ('barrio', 'localidad')
+  ) then
+    raise exception 'hallazgos_invalidos' using errcode = 'check_violation';
+  end if;
+  select coalesce(jsonb_object_agg(
+           h.key,
+           jsonb_build_object(
+             'porcentaje', round((h.value ->> 'porcentaje')::numeric),
+             'n', floor((h.value ->> 'n')::numeric)::integer,
+             'ambito', h.value ->> 'ambito'
+           )
+         ), '{}'::jsonb)
+    into v_limpios
+    from jsonb_each(p_hallazgos) h
+    join public.inmuebles i on i.id = h.key::uuid
+   where i.vigente_hasta > now() and i.estado = 'publicado_fundador' and i.pausado_at is null;
+  return public.aplicar_banderas('precio', v_limpios);
+end;
 $$;

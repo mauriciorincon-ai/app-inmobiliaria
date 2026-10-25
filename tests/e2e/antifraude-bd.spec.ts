@@ -565,6 +565,12 @@ test("la bandera de precio se guarda con su lista blanca y rechaza lo que no cum
     { [a.id]: { porcentaje: 35, n: 4, ambito: "barrio" } },
     { [a.id]: { porcentaje: 35, n: 6, ambito: "ciudad" } },
     { "no-es-uuid": { porcentaje: 35, n: 6, ambito: "barrio" } },
+    // Una clave ausente no es un número: jsonb_typeof(NULL) es NULL y antes la validación lo dejaba pasar (2.ª migración).
+    { [a.id]: { n: 6, ambito: "barrio" } },
+    { [a.id]: { porcentaje: 35, ambito: "barrio" } },
+    { [a.id]: { porcentaje: 35, n: 6 } },
+    { [a.id]: {} },
+    { [a.id]: "no es un objeto" },
   ]) {
     expect(() => guardar(malo)).toThrow(/hallazgos_invalidos/);
   }

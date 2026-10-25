@@ -15,7 +15,7 @@ busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verif
 escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
 visita; desde el Sprint 009 también guarda favoritos, compara, comparte listas con notas y recibe
 alertas por correo; desde el Sprint 010 también decide con números: ve si un precio está en línea con
-su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
+su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad; desde el Sprint 013 la compara con un usado, ve qué subsidios le sirven y pide visitar la sala de ventas) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
 panel privado). El dueño decide si los compradores verificados pueden escribirle y recibir
 solicitudes de visita.
 
@@ -282,8 +282,53 @@ solicitudes de visita.
   **«Mes sin edición»**, cuántos días lleva vencida y que los precios pueden haber cambiado; el índice no se presenta como de hoy.
 - **Limitaciones conocidas:** solo la revista de un mes, solo Bogotá y la Sabana en el índice, y los proyectos que la revista no
   imprime no existen aquí. Las cifras son un **estimado**: la escritura real la liquidan la notaría y la oficina de registro. Si la
-  editorial pide retirar los nombres, la edición se retira de inmediato (un índice sin nombres está pensado, pero no construido). Pedir una visita a la sala de ventas, comparar con
-  un usado y los subsidios no están en esta versión.
+  editorial pide retirar los nombres, la edición se retira de inmediato (un índice sin nombres está pensado, pero no construido).
+
+### ¿Nuevo o usado? · desde Sprint 013
+
+- **Qué hace:** con **tu presupuesto** y en la **misma zona** (Bogotá o la Sabana), compara los **apartamentos nuevos** que caben, por su
+  precio verdadero («pagas al menos»), con los **apartamentos usados en venta** de Innmobiliaria: cuántos hay, el **m² mediano** de cada
+  lado y cuánto más (o menos) cuesta el m² estrenando. Entras desde un botón en la pestaña **Nuevos** o desde la ficha de un proyecto.
+- **Cómo se usa:** en **Herramientas** calculas lo que puedes pagar y vuelves aquí con ese tope (`Tu presupuesto: $…`). Cambias de zona
+  con los dos botones de arriba. Cada apartamento nuevo que cabe sale en una tarjeta, con los **meses de espera** hasta la entrega.
+- **Cuándo NO compara, y lo dice:** con **menos de 5 usados comparables** en tu presupuesto y zona («No hay comparación honesta»); con
+  menos de 5 apartamentos nuevos que quepan y tengan área privada; en la **Sabana**, porque Innmobiliaria publica solo en Bogotá; y si no
+  pudimos leer los usados («No pudimos leer los usados»: eso no quiere decir que no haya).
+- **Los usados son anuncios vivos hoy** en Innmobiliaria (su área y su precio), con la fecha de la lectura; no son una tasación. Solo se
+  comparan apartamentos con apartamentos. La cuota inicial durante la obra **no** la imprime la revista y no se inventa.
+
+### ¿Te alcanza con subsidio? · desde Sprint 013
+
+- **Qué hace:** muestra **qué subsidios existen** para comprar vivienda nueva y si **te sirven**, con tres hogares de ejemplo ($4 M, $6 M y $8 M
+  al mes) y **«Tu hogar»**, que se calcula con lo que guardaste en «lo que puedes pagar». Entras desde un botón en la pestaña **Nuevos** o
+  desde la ficha de un proyecto.
+- **Cómo leerlo:** arriba, cuántos proyectos de Bogotá y la Sabana te alcanzan **sin subsidio** y cuántos con **el mejor caso** (el mayor
+  subsidio de compra que aplica; queda **por confirmar** porque el proyecto debe estar inscrito en el programa). **Los programas jamás se
+  suman entre sí.** La tabla muestra cada programa con su **norma**, su **monto**, lo que dice para el hogar (**Aplica**, **Por confirmar**,
+  **No aplica** o **Sin cupos**, siempre con símbolo y texto) y la **fecha de su estado**. «Reduce tu Cuota» alivia la cuota, no el precio.
+- **Lo que no mostramos:** un programa que no pudimos verificar en la norma primaria **solo se nombra**, sin monto ni estado.
+  Un programa **sin cupos** se dice como tal y no suma.
+- **Tus ingresos no salen de tu teléfono:** «Tu hogar» se calcula **en este teléfono** con el mismo motor de los hogares de ejemplo; ninguna
+  petición lleva tus ingresos. Si no has calculado «lo que puedes pagar», la sección te invita a hacerlo.
+- **Limitaciones conocidas:** las cifras son las de 2026 y las normas se verificaron en octubre de 2026; si un programa cambia, la
+  pantalla se actualiza con la nueva fecha. Es un cálculo, **no una aprobación** del subsidio ni del crédito.
+
+### Visitar la sala de ventas de un proyecto nuevo · desde Sprint 013
+
+- **Qué hace:** en la ficha de un proyecto, **«Pedir una visita»** lleva a la pantalla de la sala de ventas. Mientras la constructora no esté en
+  Innmobiliaria, **coordinamos nosotros**: le escribimos a la sala, te proponemos horarios y te confirmamos por WhatsApp. **Ningún dato tuyo
+  va a la constructora sin que lo aceptes.**
+- **Cómo se usa:**
+  1. Necesitas tu **WhatsApp verificado** (como al pedir una visita a un usado); si no lo tienes, la pantalla te lleva a verificarlo y vuelves.
+  2. Elige **cuándo te sirve** (entre semana, sábado o domingo), escribe tu **correo** (solo sirve para los avisos de esta visita) y acepta.
+     La solicitud lleva solo eso: el proyecto, la franja y el correo.
+  3. Recibes un correo con el enlace de **tu solicitud** (`Ver mi solicitud`). Cuando el equipo tenga horarios de la sala, te escribimos y **eliges uno**
+     (o dices que ninguno te sirve); queda **confirmada** y puedes agregarla a tu calendario o cancelarla.
+  4. La **dirección de la sala te llega por WhatsApp** con la confirmación. Los teléfonos y direcciones de las salas **no se publican ni salen por correo**.
+  5. Si en **dos días hábiles** (hora de Bogotá, sin contar festivos) la sala no responde, te avisamos por correo. La solicitud sigue abierta.
+- **Mes sin edición:** con la edición vencida la pantalla dice **«Mes sin edición»** y **no ofrece** pedir la visita: los datos pueden haber cambiado.
+- **Limitaciones conocidas:** hasta 5 solicitudes abiertas a la vez; una por proyecto; si no se pudo concretar, puedes pedirla de nuevo pasados 14 días.
+  El plazo de dos días hábiles no descuenta festivos (el aviso puede llegar un día antes, nunca después). Aún no hay botón para marcar que fuiste.
 
 ## Features
 
@@ -467,6 +512,25 @@ solicitudes de visita.
 - **Limitaciones conocidas:** el cupo es una decisión del equipo; el número de publicados es real y
   no se puede editar.
 
+### Visitas a salas de ventas (panel del operador) · desde Sprint 013
+
+- **Qué hace:** la pestaña **«Visitas a salas»** (`/operador/salas`) es la cola de las solicitudes de visita a salas de ventas de vivienda nueva.
+  Cada solicitud trae el **proyecto**, la **página de la revista** donde aparece, el comprador como en el panel de los anuncios (**nombre y los
+  4 últimos dígitos** de su WhatsApp hasta que la visita se confirma), la **franja** que pidió y **cuándo vence el plazo** de dos días hábiles.
+- **Cómo se usa:**
+  1. **Guarda el contacto de la sala** (una vez por proyecto): toca la línea «Falta el contacto de la sala» y escribe el teléfono (con indicativo,
+     solo números) y la dirección que encuentres en la revista o en su página. **Solo tú lo ves**; no está en el repositorio ni en ningún lugar público.
+     Con los dos campos vacíos se borra.
+  2. **«Escribirle a la sala por WhatsApp»** abre WhatsApp con un mensaje ya escrito (el proyecto y la franja, **sin ningún dato del comprador**). Lo envías tú
+     desde tu teléfono: **el sistema no manda ningún WhatsApp**.
+  3. Con lo que te responda la sala, **«Proponer horarios»** (de 1 a 3, en hora de Bogotá): al comprador le llega un correo con el enlace para elegir.
+     Si dice «ninguno me sirve», la solicitud vuelve a **Por atender**.
+  4. Confirmada la visita, **«Mandarle la dirección al comprador por WhatsApp»** abre WhatsApp con la dirección de la sala (necesitas haberla guardado) en
+     el idioma del comprador. Aquí sí ves su número completo.
+  5. **«Rechazar la solicitud»** (si no se pudo concretar) o **«Cancelar la visita»** (si ya estaba confirmada) avisan al comprador por correo.
+- **Grupos:** Por atender · Con horarios propuestos · Confirmadas · Cerradas (últimos 30 días). Si pasó el plazo, la fila dice que el comprador ya recibió el aviso de que la sala no responde.
+- **Limitaciones conocidas:** el plazo no descuenta festivos; no hay «marcar asistencia» para las salas; el contacto de cada sala lo escribe una persona (la revista no lo trae).
+
 ## Preguntas frecuentes
 
 - **¿Cuánto cuesta publicar?** Nada. Publicar como fundador es gratis y no cobramos comisión.
@@ -496,15 +560,16 @@ solicitudes de visita.
 
 ## Historial
 
-| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                                                                                                         |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                                                                                                     |
-| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                                                                                                               |
-| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                                                                                                          |
-| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                                                                                                       |
-| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                                                        |
-| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                                                   |
-| 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió»                                    |
-| 009    | Guardar y avisar: favoritos sin cuenta (pasan a tu cuenta al verificar), comparar hasta 4, listas compartidas con notas, alertas por correo con doble confirmación y baja en un clic, resumen diario, navegación Buscar · Guardados · Alertas y precio editable en Mi anuncio                                                                                           |
-| 010    | Decidir con números: «¿Está caro?» como rango P25–P75 con su N, fecha y fuente (nunca un avalúo), datos de la zona, simulador de cuota con el tope del 40 % del Decreto 583 de 2025 y la tasa con su fecha, «lo que puedes pagar» en Buscar y en las alertas, el rango del dueño al publicar, la fila de Comparar y la sección Herramientas                             |
-| 012    | Vivienda nueva: pestaña «Nuevos» en Buscar con el índice de la edición vigente (mediana del m² privado, solo con 5 o más proyectos), la lista con «pagas al menos» y filtros, la ficha del proyecto con cada peso y su norma, lo que falta sumar nombrado, «la espera» con tu arriendo solo en el teléfono, la ficha honesta, «lo que puedes pagar» y «mes sin edición» |
+| Sprint | Features añadidas a este manual                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | Landing de expectativa, flujo publicar=registro (3 pasos), confirmación, política de privacidad, panel del operador                                                                                                                                                                                                                                                                                                               |
+| 002    | Completar anuncio (fotos + descripción + score), enlace privado "mi anuncio", ficha pública compartible, verificación 2 niveles y re-contacto en el panel                                                                                                                                                                                                                                                                         |
+| 003    | Cupos de fundador por zona, invitación por WhatsApp (referido), vigencia renovable, paquete de fundador (4 guías), panel de campaña y zonas/cupos del operador, correo opcional en el registro                                                                                                                                                                                                                                    |
+| 005    | Español e inglés: selector ES/EN, idioma por navegador y recordado, avisos (correo y WhatsApp) en el idioma del vendedor, política de privacidad en inglés, panel del operador en los dos idiomas                                                                                                                                                                                                                                 |
+| 006    | Buscar (comprador): filtros, lista y mapa con zona dibujada; el anuncio se ubica por el barrio del catálogo de Catastro Bogotá (select en publicar); sello con fecha del CTL y «re-verificación pendiente»; «vivo hace N días»; asignar barrio y registrar CTL nuevo en el panel                                                                                                                                                  |
+| 007    | Comprador verificado: verificar tu WhatsApp enviando un código (Innmobiliaria solo recibe), contactar al dueño con un toque, «Compradores que abrieron tu chat» en Mi anuncio; el WhatsApp del dueño ya no está en la ficha pública; el sello solo se escribe por el registro del CTL                                                                                                                                             |
+| 008    | La visita: identificarte con tu cédula (opcional, el número no se guarda), pedir una visita contando para qué buscas y cómo pagarías, tarjeta del comprador y «solo compradores identificados» en Mi anuncio, proponer hasta 3 horarios, confirmar, calendario `.ics`, recordatorio por correo el día antes y «asistió / no asistió»                                                                                              |
+| 009    | Guardar y avisar: favoritos sin cuenta (pasan a tu cuenta al verificar), comparar hasta 4, listas compartidas con notas, alertas por correo con doble confirmación y baja en un clic, resumen diario, navegación Buscar · Guardados · Alertas y precio editable en Mi anuncio                                                                                                                                                     |
+| 010    | Decidir con números: «¿Está caro?» como rango P25–P75 con su N, fecha y fuente (nunca un avalúo), datos de la zona, simulador de cuota con el tope del 40 % del Decreto 583 de 2025 y la tasa con su fecha, «lo que puedes pagar» en Buscar y en las alertas, el rango del dueño al publicar, la fila de Comparar y la sección Herramientas                                                                                       |
+| 012    | Vivienda nueva: pestaña «Nuevos» en Buscar con el índice de la edición vigente (mediana del m² privado, solo con 5 o más proyectos), la lista con «pagas al menos» y filtros, la ficha del proyecto con cada peso y su norma, lo que falta sumar nombrado, «la espera» con tu arriendo solo en el teléfono, la ficha honesta, «lo que puedes pagar» y «mes sin edición»                                                           |
+| 013    | Nuevo o usado: «¿Nuevo o usado?» (apartamentos nuevos frente a usados en venta, mismo presupuesto y zona, con la regla de 5 comparables), «¿Te alcanza con subsidio?» (programas con su norma, año y estado con fecha; «tu hogar» se calcula en el teléfono) y la visita a la sala de ventas (WhatsApp verificado, horarios, confirmación, aviso si la sala no responde en dos días hábiles) con su cola en el panel del operador |

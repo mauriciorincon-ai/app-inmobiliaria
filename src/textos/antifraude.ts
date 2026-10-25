@@ -30,7 +30,10 @@ export const ANTIFRAUDE = {
 
   // El paso «protégete», en la página de reportar y en la de las reglas.
   protegete: {
-    titulo: { es: "Mientras tanto, protégete", en: "Meanwhile, protect yourself" },
+    titulo: {
+      es: "Mientras tanto, protégete",
+      en: "Meanwhile, protect yourself",
+    },
     pasos: [
       {
         es: "No pagues anticipos antes de visitar.",
@@ -158,8 +161,8 @@ export const ANTIFRAUDE = {
           en: "A photo that's already in another listing",
         },
         texto: {
-          es: "Al subir una foto calculamos una huella de la imagen (no guardamos nada más). Si se parece a la huella de una foto de un anuncio con otro teléfono —{distancia} de {bits} puntos o menos de diferencia—, la regla lo señala.",
-          en: "When a photo is uploaded we compute a fingerprint of the image (we keep nothing else). If it's close to the fingerprint of a photo in a listing with a different phone number —{distancia} of {bits} points apart or less—, the rule flags it.",
+          es: "Al subir una foto calculamos una huella de la imagen: se guarda junto a la foto y no sirve para reconstruirla. Si se parece a la huella de una foto de un anuncio con otro teléfono —{distancia} de {bits} puntos o menos de diferencia—, la regla lo señala.",
+          en: "When a photo is uploaded we compute a fingerprint of the image: it is kept with the photo and can't be used to rebuild it. If it's close to the fingerprint of a photo in a listing with a different phone number —{distancia} of {bits} points apart or less—, the rule flags it.",
         },
       },
       matricula: {
@@ -168,8 +171,8 @@ export const ANTIFRAUDE = {
           en: "Same title number, another phone",
         },
         texto: {
-          es: "La matrícula inmobiliaria de un anuncio verificado aparece en otro anuncio publicado con otro teléfono. El mismo dueño con su mismo número no cuenta.",
-          en: "The property registration number of a verified listing shows up in another listing published with a different phone. The same owner with the same number doesn't count.",
+          es: "La matrícula inmobiliaria de un anuncio verificado aparece en otro anuncio, esté publicado o ya no, con otro teléfono. El mismo dueño con su mismo número no cuenta.",
+          en: "The property registration number of a verified listing shows up in another listing, published or not any more, with a different phone. The same owner with the same number doesn't count.",
         },
       },
       telefono: {
@@ -199,7 +202,7 @@ export const ANTIFRAUDE = {
       },
       pedir_ctl: {
         es: "Le pide al dueño un certificado de tradición y libertad de 30 días o menos. Si el anuncio era verificado, queda en «re-verificación pendiente» hasta verlo.",
-        en: "Asks the owner for a title record issued 30 days ago or less. If the listing was verified, it shows \"re-check pending\" until we see it.",
+        en: 'Asks the owner for a title record issued 30 days ago or less. If the listing was verified, it shows "re-check pending" until we see it.',
       },
       descartar: {
         es: "Descarta la señal cuando tiene explicación, y deja escrito por qué.",
@@ -222,7 +225,10 @@ export const ANTIFRAUDE = {
       es: "Reglas revisadas. Banderas abiertas: {precio} de precio, {foto} de foto, {matricula} de matrícula y {telefono} de teléfono.",
       en: "Rules checked. Open flags: {precio} price, {foto} photo, {matricula} title number and {telefono} phone.",
     },
-    huellar: { es: "Huellar fotos pendientes", en: "Fingerprint pending photos" },
+    huellar: {
+      es: "Huellar fotos pendientes",
+      en: "Fingerprint pending photos",
+    },
     huellando: { es: "Huellando {n} fotos…", en: "Fingerprinting {n} photos…" },
     huellado: {
       es: "Fotos huelladas: {ok}. Sin poder leer: {fallidas}.",
@@ -281,19 +287,31 @@ export const ANTIFRAUDE = {
     reportes: {
       titulo: { es: "Lo que dicen los reportes", en: "What the reports say" },
       // `{motivos}` = los motivos de un reporte, separados por « · ».
-      fila: { es: "«{motivos}» · {fecha}", en: "\"{motivos}\" · {fecha}" },
+      fila: { es: "«{motivos}» · {fecha}", en: '"{motivos}" · {fecha}' },
     },
     estado: {
       pausado: { es: "Pausado desde el {fecha}", en: "Paused since {fecha}" },
-      ctlPedido: { es: "CTL pedido el {fecha}", en: "Title record requested on {fecha}" },
+      ctlPedido: {
+        es: "CTL pedido el {fecha}",
+        en: "Title record requested on {fecha}",
+      },
     },
     acciones: {
-      etiqueta: { es: "Acciones sobre el anuncio", en: "Actions on the listing" },
+      etiqueta: {
+        es: "Acciones sobre el anuncio",
+        en: "Actions on the listing",
+      },
       pausar: { es: "Pausar el anuncio", en: "Pause the listing" },
       reactivar: { es: "Reactivar el anuncio", en: "Reactivate the listing" },
-      pedirCtl: { es: "Pedir el CTL al dueño", en: "Ask the owner for the title record" },
+      pedirCtl: {
+        es: "Pedir el CTL al dueño",
+        en: "Ask the owner for the title record",
+      },
       descartar: { es: "Descartar las banderas", en: "Dismiss the flags" },
-      escribir: { es: "Escribirle al dueño por WhatsApp", en: "Message the owner on WhatsApp" },
+      escribir: {
+        es: "Escribirle al dueño por WhatsApp",
+        en: "Message the owner on WhatsApp",
+      },
       verFicha: { es: "Ver la ficha", en: "See the listing" },
       trabajando: { es: "Guardando…", en: "Saving…" },
     },
@@ -308,7 +326,7 @@ export const ANTIFRAUDE = {
       },
       ctlPedido: {
         es: "CTL pedido. Escríbele al dueño: el anuncio sigue visible y, si era verificado, con «re-verificación pendiente» hasta que muestre un CTL de 30 días o menos.",
-        en: "Title record requested. Message the owner: the listing stays visible and, if it was verified, shows \"re-check pending\" until they show a title record 30 days old or less.",
+        en: 'Title record requested. Message the owner: the listing stays visible and, if it was verified, shows "re-check pending" until they show a title record 30 days old or less.',
       },
       descartado: {
         es: "Banderas descartadas, con la razón y la fecha en el registro de la revisión.",
@@ -316,7 +334,10 @@ export const ANTIFRAUDE = {
       },
     },
     descartar: {
-      titulo: { es: "¿Por qué las descartas?", en: "Why are you dismissing them?" },
+      titulo: {
+        es: "¿Por qué las descartas?",
+        en: "Why are you dismissing them?",
+      },
       razones: {
         es_el_dueno: {
           es: "Comprobé que publica el dueño",

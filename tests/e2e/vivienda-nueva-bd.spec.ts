@@ -3,6 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 import { consultar, ejecutar } from "./utils/bd";
 import { fechaBogota } from "./utils/fechas";
 import type { NuevosPublicados } from "../../src/lib/supabase/types";
+import {
+  soltarCandadoEdicion,
+  tomarCandadoEdicion,
+} from "./utils/candado-edicion";
 
 // S12 «Nuevos, con lo que pagas de verdad» — la base de datos: la edición de la revista ya procesada.
 // Habla con la RPC pública con el anon key real y llama como `postgres` a las del servidor (el rol con el que las
@@ -137,8 +141,15 @@ test.describe.configure({ mode: "serial" });
 test.beforeEach(() => {
   test.skip(test.info().project.name !== "desktop-chromium", "una sola vez");
 });
-test.beforeAll(limpiar);
-test.afterAll(limpiar);
+test.beforeAll(async () => {
+  test.setTimeout(180_000);
+  await tomarCandadoEdicion();
+  limpiar();
+});
+test.afterAll(() => {
+  limpiar();
+  soltarCandadoEdicion();
+});
 
 test("el anónimo NO lee ni escribe las tablas de la edición", async () => {
   cargar(edicion());

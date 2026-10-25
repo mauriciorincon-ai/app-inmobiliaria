@@ -10,6 +10,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { consultar } from "./utils/bd";
+import {
+  soltarCandadoEdicion,
+  tomarCandadoEdicion,
+} from "./utils/candado-edicion";
 
 // S13 — «cada edición entra sin tocar código». Una edición SINTÉTICA «188» (número 9188 para no chocar con ninguna real ni
 // con las de la siembra) de 12 páginas —no las 68 de la 187— y 6 proyectos ficticios pasa por la bandeja de punta a punta
@@ -102,8 +106,15 @@ test.describe.configure({ mode: "serial" });
 test.beforeEach(() => {
   test.skip(test.info().project.name !== "desktop-chromium", "una sola vez");
 });
-test.beforeAll(limpiar);
-test.afterAll(limpiar);
+test.beforeAll(async () => {
+  test.setTimeout(180_000);
+  await tomarCandadoEdicion();
+  limpiar();
+});
+test.afterAll(() => {
+  limpiar();
+  soltarCandadoEdicion();
+});
 
 test("una edición nueva de 12 páginas entra, se publica y se retira sin tocar código", async () => {
   const temporal = mkdtempSync(join(tmpdir(), "edicion-nueva-"));

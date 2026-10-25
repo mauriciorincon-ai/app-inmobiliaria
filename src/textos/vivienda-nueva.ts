@@ -28,6 +28,26 @@ export const VIVIENDA_NUEVA = {
       es: "{nombre} — vivienda nueva — Innmobiliaria",
       en: "{nombre} — new home — Innmobiliaria",
     },
+    nuevoOUsado: {
+      titulo: {
+        es: "¿Nuevo o usado? — Innmobiliaria",
+        en: "New or resale? — Innmobiliaria",
+      },
+      descripcion: {
+        es: "Con tu presupuesto y en la misma zona: los apartamentos nuevos por su precio verdadero frente a los usados en venta de Innmobiliaria.",
+        en: "With your budget and in the same area: new apartments by their true price against Innmobiliaria's resale apartments for sale.",
+      },
+    },
+    teAlcanza: {
+      titulo: {
+        es: "¿Te alcanza con subsidio? — Innmobiliaria",
+        en: "Can a subsidy get you there? — Innmobiliaria",
+      },
+      descripcion: {
+        es: "Los programas de subsidio verificados en su norma y con su fecha, frente a la vivienda nueva de Bogotá y la Sabana. Tus ingresos no salen de tu teléfono.",
+        en: "Subsidy programs verified in their rule and with their date, against new homes in Bogotá and the savanna. Your income never leaves your phone.",
+      },
+    },
   },
 
   mercado: {
@@ -496,6 +516,434 @@ export const VIVIENDA_NUEVA = {
       conflicto: {
         es: "Dos páginas de la revista imprimen cifras distintas en: {campos}.",
         en: "Two pages of the magazine print different figures for: {campos}.",
+      },
+    },
+  },
+
+  // S13 — «¿Nuevo o usado?», «¿Te alcanza con subsidio?» y la visita a la sala de ventas. Mismas reglas que el resto del
+  // módulo: cada cifra sale de un motor; aquí solo viven las frases. Lo no verificado no se muestra.
+  accesos: {
+    titulo: { es: "Para decidir mejor", en: "To decide better" },
+    nuevoOUsado: {
+      titulo: { es: "¿Nuevo o usado?", en: "New or resale?" },
+      detalle: {
+        es: "Con tu presupuesto y en la misma zona: lo nuevo por su precio verdadero frente a los usados de Innmobiliaria.",
+        en: "With your budget and in the same area: new homes by their true price against Innmobiliaria's resale homes.",
+      },
+    },
+    teAlcanza: {
+      titulo: {
+        es: "¿Te alcanza con subsidio?",
+        en: "Can a subsidy get you there?",
+      },
+      detalle: {
+        es: "Los programas que pudimos verificar, con su norma y su fecha. Tus ingresos se quedan en tu teléfono.",
+        en: "The programs we could verify, with their rule and date. Your income stays on your phone.",
+      },
+    },
+  },
+
+  nuevoOUsado: {
+    volver: { es: "Volver a vivienda nueva", en: "Back to new homes" },
+    titulo: { es: "¿Nuevo o usado?", en: "New or resale?" },
+    bajada: {
+      es: "Con lo que puedes pagar y en la misma zona: los apartamentos nuevos por su precio verdadero frente a los apartamentos usados en venta de Innmobiliaria, con la misma regla de 5 comparables.",
+      en: "With what you can afford and in the same area: new apartments by their true price against Innmobiliaria's resale apartments for sale, with the same 5-comparable rule.",
+    },
+    zona: {
+      grupo: { es: "Zona", en: "Area" },
+      bogota: { es: "Bogotá", en: "Bogotá city" },
+      sabana: { es: "Sabana", en: "Savanna" },
+    },
+    presupuesto: {
+      etiqueta: { es: "Tu presupuesto: {precio}", en: "Your budget: {precio}" },
+      nota: {
+        es: "Tus ingresos no salen de tu teléfono: solo viaja este tope.",
+        en: "Your income never leaves your phone: only this cap travels.",
+      },
+      ajustar: { es: "Cambiar mis números", en: "Change my numbers" },
+    },
+    sinPresupuesto: {
+      titulo: { es: "Falta tu presupuesto", en: "Your budget is missing" },
+      detalle: {
+        es: "Sin un tope no hay «lo que cabe». Calcula lo que puedes pagar y vuelve aquí: tus ingresos no salen de tu teléfono, solo viaja el tope.",
+        en: "Without a cap there is no «what fits». Work out what you can afford and come back: your income never leaves your phone, only the cap travels.",
+      },
+      calcular: {
+        es: "Calcular lo que puedo pagar",
+        en: "Work out what I can afford",
+      },
+    },
+    nuevos: {
+      eyebrow: {
+        es: "Apartamentos nuevos que caben",
+        en: "New apartments that fit",
+      },
+      pie: {
+        es: "por su precio verdadero («pagas al menos»). {fuente}",
+        en: "by their true price («you pay at least»). {fuente}",
+      },
+      mediana: {
+        es: "m² privado aproximado, mediana: {valor}",
+        en: "Approximate private m², median: {valor}",
+      },
+      sinMediana: {
+        es: "Menos de 5 con área privada: sin mediana",
+        en: "Fewer than 5 with private area: no median",
+      },
+    },
+    usados: {
+      eyebrow: {
+        es: "Usados en venta en Innmobiliaria",
+        en: "Resale homes for sale on Innmobiliaria",
+      },
+      pie: {
+        es: "Anuncios vivos en Innmobiliaria al {fecha}.",
+        en: "Live listings on Innmobiliaria as of {fecha}.",
+      },
+      mediana: { es: "m² mediano: {valor}", en: "Median m²: {valor}" },
+      mitad: {
+        es: "La mitad entre {p25} y {p75}",
+        en: "Half between {p25} and {p75}",
+      },
+      sinDatos: { es: "Sin datos suficientes", en: "Not enough data" },
+      sinDatosDetalle: {
+        es: "Hay {n} usados en tu presupuesto y zona; hacen falta {minimo} para comparar.",
+        en: "There are {n} resale homes in your budget and area; {minimo} are needed to compare.",
+      },
+      sabana: {
+        es: "Innmobiliaria publica solo en Bogotá: en la Sabana no hay usados con los que comparar.",
+        en: "Innmobiliaria lists only in Bogotá: there are no resale homes in the savanna to compare with.",
+      },
+      noDisponible: {
+        titulo: {
+          es: "No pudimos leer los usados",
+          en: "We could not load the resale homes",
+        },
+        detalle: {
+          es: "Intenta de nuevo en unos minutos. Sin ellos no se compara, y no es que no haya.",
+          en: "Try again in a few minutes. Without them there is no comparison, and that does not mean there are none.",
+        },
+      },
+    },
+    veredicto: {
+      mas: {
+        es: "Estrenar cuesta {pct} % más por m²",
+        en: "A new home costs {pct}% more per m²",
+      },
+      menos: {
+        es: "Estrenar cuesta {pct} % menos por m²",
+        en: "A new home costs {pct}% less per m²",
+      },
+      igual: {
+        es: "Estrenar cuesta lo mismo por m²",
+        en: "A new home costs the same per m²",
+      },
+      detalle: {
+        es: "Medianas de lo que cabe en {presupuesto}. Lo nuevo se entrega después y calla datos; lo usado se ve hoy.",
+        en: "Medians of what fits in {presupuesto}. New homes are handed over later and leave facts out; resale homes can be seen today.",
+      },
+      sin: {
+        titulo: {
+          es: "No hay comparación honesta",
+          en: "No honest comparison",
+        },
+        detalle: {
+          es: "Con menos de 5 usados comparables no se compara: se dice.",
+          en: "With fewer than 5 comparable resale homes there is no comparison: we say so.",
+        },
+        detalleNuevos: {
+          es: "Con menos de 5 apartamentos nuevos con área privada que quepan no hay mediana del m² nuevo: no se compara, se dice.",
+          en: "With fewer than 5 new apartments that fit and have a private area there is no new-home median: no comparison, and we say so.",
+        },
+      },
+    },
+    caben: {
+      titulo: {
+        es: "Los apartamentos nuevos que caben",
+        en: "The new apartments that fit",
+      },
+      nota: {
+        es: "«Pagas al menos» no incluye lo que el aviso calla: la cuota inicial durante la obra, por ejemplo, no la imprime la revista y no se inventa. Cada ficha cuenta lo que falta.",
+        en: "«You pay at least» leaves out what the ad is silent on: the down payment during construction, for example, is not printed in the magazine and is never invented. Each sheet says what is missing.",
+      },
+      vacio: {
+        es: "Ningún apartamento nuevo de esta zona cabe en tu presupuesto.",
+        en: "No new apartment in this area fits your budget.",
+      },
+      espera: {
+        inmediata: { es: "Entrega inmediata", en: "Ready to move in" },
+        meses: {
+          es: "Espera: {meses} meses hasta la entrega",
+          en: "Wait: {meses} months until handover",
+        },
+        mesesUno: {
+          es: "Espera: 1 mes hasta la entrega",
+          en: "Wait: 1 month until handover",
+        },
+        vencida: {
+          es: "La fecha impresa ya llegó: pregunta si ya entregaron",
+          en: "The printed date has arrived: ask whether it has been handed over",
+        },
+        sinFecha: {
+          es: "El aviso no dice cuándo entregan",
+          en: "The ad does not say when it is handed over",
+        },
+        enConflicto: {
+          es: "Dos páginas imprimen una entrega distinta",
+          en: "Two pages print different handover dates",
+        },
+      },
+    },
+  },
+
+  teAlcanza: {
+    titulo: {
+      es: "¿Te alcanza con subsidio?",
+      en: "Can a subsidy get you there?",
+    },
+    bajada: {
+      es: "Solo programas verificados en su norma, con su fecha. Un programa sin cupos se dice; uno que no pudimos verificar no se muestra.",
+      en: "Only programs verified in their rule, with their date. A program with no places is shown as such; one we could not verify is not shown.",
+    },
+    hogares: {
+      grupo: { es: "Hogar de ejemplo", en: "Sample household" },
+      etiqueta: { es: "Hogar de {ingresos}", en: "{ingresos} household" },
+      pasaTope: { es: "pasa el tope", en: "over the cap" },
+    },
+    resumen: {
+      es: "Hogar de ejemplo con {ingresos} al mes: puede pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa de referencia {tasa} E. A. con corte al {fecha}).",
+      en: "Sample household earning {ingresos} a month: can afford up to {tope} ({inicial}% down, {plazo} years, reference rate {tasa} effective annual as of {fecha}).",
+    },
+    resumenPropia: {
+      es: "Con {ingresos} al mes puedes pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa {tasa} E. A., la que escribiste).",
+      en: "Earning {ingresos} a month you can afford up to {tope} ({inicial}% down, {plazo} years, {tasa} effective annual, the one you typed).",
+    },
+    sinTope: {
+      es: "Con esos números el simulador no calcula un tope: no se inventa.",
+      en: "With those numbers the calculator gives no cap: it is not made up.",
+    },
+    sinSubsidio: {
+      eyebrow: {
+        es: "Sin subsidio te alcanzan",
+        en: "Without a subsidy you can afford",
+      },
+      pie: {
+        es: "de {total} proyectos de Bogotá y la Sabana con precio",
+        en: "of {total} projects in Bogotá and the savanna with a price",
+      },
+    },
+    conSubsidio: {
+      eyebrow: {
+        es: "Con el mejor caso de subsidio",
+        en: "With the best-case subsidy",
+      },
+      pie: {
+        es: "por confirmar: el proyecto debe estar inscrito y no se suman programas entre sí",
+        en: "to be confirmed: the project must be enrolled and programs are not added together",
+      },
+    },
+    programas: {
+      titulo: {
+        es: "Los programas, para {nombre}",
+        en: "The programs, for {nombre}",
+      },
+      contexto: {
+        es: "{zona} · {segmento} · desde {precio}",
+        en: "{zona} · {segmento} · from {precio}",
+      },
+      sinEjemplo: {
+        es: "No hay un proyecto con precio con el cual explicar los programas.",
+        en: "There is no priced project to explain the programs with.",
+      },
+      cabeceras: {
+        programa: { es: "Programa y norma", en: "Program and rule" },
+        monto: { es: "Monto 2026", en: "2026 amount" },
+        paraTi: { es: "Para ti", en: "For you" },
+        fecha: { es: "Fecha", en: "Date" },
+      },
+      monto: {
+        rango: { es: "{minimo} a {maximo}", en: "{minimo} to {maximo}" },
+        hasta: { es: "hasta {maximo}", en: "up to {maximo}" },
+      },
+      estadoAl: { es: "estado al {fecha}", en: "status as of {fecha}" },
+      baja: {
+        compra: {
+          es: "Baja el precio al firmar",
+          en: "Lowers the price at signing",
+        },
+        cuota: {
+          es: "Alivia la cuota después, no el precio",
+          en: "Eases the payment later, not the price",
+        },
+      },
+    },
+    estado: {
+      aplica: { es: "Aplica", en: "Applies" },
+      por_confirmar: { es: "Por confirmar", en: "To be confirmed" },
+      no_aplica: { es: "No aplica", en: "Does not apply" },
+      sin_cupos: { es: "Sin cupos", en: "No places" },
+    },
+    motivo: {
+      ingreso: {
+        es: "Tus ingresos pasan el tope del programa",
+        en: "Your income is above the program cap",
+      },
+      fuera_de_bogota: {
+        es: "Solo para proyectos en Bogotá",
+        en: "Only for projects in Bogotá",
+      },
+      no_vis: { es: "El proyecto no es VIS", en: "The project is not VIS" },
+      segmento_no_lo_dice: {
+        es: "El aviso no dice si es VIS",
+        en: "The ad does not say whether it is VIS",
+      },
+      supera_tope_vis: {
+        es: "El precio pasa el tope VIS de 2026",
+        en: "The price is above the 2026 VIS cap",
+      },
+      proyecto_inscrito: {
+        es: "El proyecto debe estar inscrito en el programa: pregúntalo en la sala",
+        en: "The project must be enrolled in the program: ask at the sales room",
+      },
+      sin_cupos: {
+        es: "Sin cupos a la fecha de la fuente",
+        en: "No places as of the source date",
+      },
+      suspendido: { es: "Suspendido", en: "Suspended" },
+    },
+    noMostrados: {
+      titulo: { es: "Lo que no mostramos", en: "What we do not show" },
+      detalle: {
+        es: "{lista}: no los pudimos verificar en la fuente primaria. Tus ingresos se quedan en tu teléfono.",
+        en: "{lista}: we could not verify them in the primary source. Your income stays on your phone.",
+      },
+    },
+    tuHogar: {
+      titulo: { es: "Tu hogar", en: "Your household" },
+      cargando: { es: "Leyendo tus números…", en: "Reading your numbers…" },
+      sinDatos: {
+        es: "Calcula lo que puedes pagar y aquí verás tus números, hechos en tu teléfono con los mismos programas.",
+        en: "Work out what you can afford and your numbers will show here, computed on your phone with the same programs.",
+      },
+      calcular: {
+        es: "Calcular lo que puedo pagar",
+        en: "Work out what I can afford",
+      },
+      cambiar: { es: "Cambiar mis números", en: "Change my numbers" },
+      privado: {
+        es: "Calculado en tu teléfono con lo que guardaste en «lo que puedes pagar»: ninguna petición lleva tus ingresos.",
+        en: "Computed on your phone from what you saved in «what you can afford»: no request carries your income.",
+      },
+    },
+  },
+
+  visita: {
+    meta: {
+      es: "Visita a la sala de ventas de {nombre} — Innmobiliaria",
+      en: "Visit the sales room of {nombre} — Innmobiliaria",
+    },
+    volver: { es: "Volver a la ficha", en: "Back to the project" },
+    titulo: { es: "Visitar la sala de ventas", en: "Visit the sales room" },
+    sinWhatsapp: {
+      titulo: { es: "Primero, tu WhatsApp", en: "First, your WhatsApp" },
+      detalle: {
+        es: "Pedir una visita exige tu WhatsApp verificado, como en los usados. Es una sola vez y toma unos 30 segundos.",
+        en: "Requesting a visit needs your verified WhatsApp, as with resale homes. It is one time and takes about 30 seconds.",
+      },
+      boton: { es: "Verificar mi WhatsApp", en: "Verify my WhatsApp" },
+    },
+    sinEdicion: {
+      titulo: { es: "Mes sin edición", en: "Month without an edition" },
+      detalle: {
+        es: "La edición {n} de la revista venció hace {dias} días y la de este mes todavía no llega. No pedimos visitas con datos vencidos: puede que la sala ya haya cambiado precios o disponibilidad.",
+        en: "Edition {n} of the magazine expired {dias} days ago and this month's has not arrived. We do not take visit requests on expired data: the sales room may have changed prices or availability.",
+      },
+      detalleUno: {
+        es: "La edición {n} de la revista venció hace 1 día y la de este mes todavía no llega. No pedimos visitas con datos vencidos: puede que la sala ya haya cambiado precios o disponibilidad.",
+        en: "Edition {n} of the magazine expired 1 day ago and this month's has not arrived. We do not take visit requests on expired data: the sales room may have changed prices or availability.",
+      },
+      ficha: { es: "Ver la ficha", en: "See the project sheet" },
+    },
+    pedir: {
+      coordinamos: {
+        es: "Mientras la constructora no esté en Innmobiliaria, coordinamos nosotros: le escribimos a la sala de ventas y te confirmamos por WhatsApp. Ninguno de tus datos va a la constructora sin que lo aceptes.",
+        en: "Until the builder is on Innmobiliaria, we coordinate: we contact the sales room and confirm with you over WhatsApp. None of your details go to the builder unless you accept.",
+      },
+      franja: { es: "¿Cuándo te sirve?", en: "When suits you?" },
+      franjas: {
+        entre_semana: { es: "Entre semana", en: "Weekdays" },
+        sabado: { es: "Sábado", en: "Saturday" },
+        domingo: { es: "Domingo", en: "Sunday" },
+      },
+      correo: { es: "Tu correo", en: "Your email" },
+      correoAyuda: {
+        es: "Solo para los avisos de esta visita: los horarios que te propongamos y el recordatorio.",
+        en: "Only for this visit's notices: the times we offer and the reminder.",
+      },
+      consentimiento: {
+        es: "Acepto que Innmobiliaria use mi WhatsApp y mi correo para coordinar esta visita, según la",
+        en: "I agree that Innmobiliaria uses my WhatsApp and email to coordinate this visit, under the",
+      },
+      politica: { es: "política de privacidad", en: "privacy policy" },
+      enviar: { es: "Pedir la visita", en: "Request the visit" },
+      enviando: { es: "Enviando…", en: "Sending…" },
+      cargando: { es: "Un momento…", en: "One moment…" },
+    },
+    errores: {
+      correo: {
+        es: "Escribe un correo válido.",
+        en: "Enter a valid email address.",
+      },
+      consentimiento: {
+        es: "Para pedir la visita necesitamos tu aceptación.",
+        en: "We need your agreement to request the visit.",
+      },
+      franja: { es: "Elige una franja.", en: "Pick a time slot." },
+      ya_solicitada: {
+        es: "Ya pediste la visita a este proyecto. Ábrela desde el correo que te enviamos.",
+        en: "You already asked to visit this project. Open it from the email we sent you.",
+      },
+      demasiadas_solicitudes: {
+        es: "Ya tienes 5 solicitudes de visita en curso. Espera a que se resuelva alguna o cancela una.",
+        en: "You already have 5 visit requests in progress. Wait for one to resolve or cancel one.",
+      },
+      rechazada_reciente: {
+        es: "No pudimos concretar la visita a este proyecto hace poco. Puedes volver a pedirla pasados 14 días.",
+        en: "We could not arrange a visit to this project recently. You can ask again after 14 days.",
+      },
+      no_disponible: {
+        es: "Este proyecto ya no está en la edición vigente.",
+        en: "This project is no longer in the current edition.",
+      },
+      email_invalido: {
+        es: "Escribe un correo válido.",
+        en: "Enter a valid email address.",
+      },
+      franja_invalida: { es: "Elige una franja.", en: "Pick a time slot." },
+      servidor: {
+        es: "No pudimos enviar tu solicitud. Intenta de nuevo en un momento.",
+        en: "We could not send your request. Try again in a moment.",
+      },
+    },
+    solicitada: {
+      titulo: { es: "Recibimos tu solicitud", en: "We got your request" },
+      detalle: {
+        es: "Le escribimos a la sala de ventas y te confirmamos el día por WhatsApp. Si en dos días hábiles no responden, te lo decimos por correo.",
+        en: "We will contact the sales room and confirm the day with you over WhatsApp. If they do not answer within two business days, we will tell you by email.",
+      },
+      ver: { es: "Ver mi solicitud", en: "See my request" },
+    },
+    ficha: {
+      titulo: { es: "Visitar la sala de ventas", en: "Visit the sales room" },
+      detalle: {
+        es: "Pide la visita y la coordinamos nosotros con la sala. Lleva esta ficha: pregunta lo que el aviso no dice.",
+        en: "Request the visit and we coordinate it with the sales room. Bring this sheet: ask what the ad does not say.",
+      },
+      boton: { es: "Pedir una visita", en: "Request a visit" },
+      sinEdicion: {
+        es: "Mes sin edición: no pedimos visitas con una edición vencida.",
+        en: "Month without an edition: we do not take visit requests on an expired edition.",
       },
     },
   },

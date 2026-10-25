@@ -876,6 +876,62 @@ test.describe("la visita a la sala por la UI", () => {
     }
   });
 
+  test("el trabajo diario recuerda la visita de mañana a la sala, una sola vez y a ninguna cancelada", async ({
+    request,
+  }) => {
+    test.skip(!process.env.CRON_SECRET, "sin CRON_SECRET en el entorno");
+    const manana = new Date(`${enDias(1)}T10:00:00-05:00`).toISOString();
+    const confirmada = async (proyecto: string) => {
+      const c = await compradorVerificado();
+      const s = (await pedir(c.sesion, proyecto)).data!;
+      comoOperador(
+        `select public.proponer_horarios_sala('${s.solicitud_id}', array['${manana}'::timestamptz])`,
+      );
+      const v = (await api().rpc("obtener_visita", { p_token: s.token }))
+        .data as unknown as VisitaDelComprador;
+      const r = await api().rpc("elegir_horario", {
+        p_token: s.token,
+        p_horario_id: v.horarios[0].id,
+      });
+      expect(r.error).toBeNull();
+      return s.solicitud_id;
+    };
+    const viva = await confirmada(slug(7));
+    const cancelada = await confirmada(slug(8));
+    comoOperador(`select public.cancelar_visita_sala('${cancelada}')`);
+
+    // Con `x-alertas-solo` apuntando a una alerta que no existe, el paso de resúmenes no se lleva los de otras pruebas.
+    const correr = async () => {
+      const r = await request.post("/api/cron/diario", {
+        headers: {
+          authorization: `Bearer ${process.env.CRON_SECRET}`,
+          "x-alertas-solo": "00000000-0000-0000-0000-000000000000",
+        },
+      });
+      expect(r.status()).toBe(200);
+      return (await r.json()) as {
+        recordatorios: number;
+        correos: { enviados: number; fallidos: number };
+      };
+    };
+    const marca = (id: string) =>
+      consultar(
+        `select coalesce(recordatorio_at::text, 'null') from public.visitas where solicitud_id = '${id}'`,
+      )[0];
+
+    const primera = await correr();
+    expect(primera.recordatorios).toBeGreaterThanOrEqual(1);
+    // Un recordatorio de sala se arma y se manda (Brevo en simulacro): al comprador, sin fallos.
+    expect(primera.correos.enviados).toBeGreaterThanOrEqual(1);
+    expect(primera.correos.fallidos).toBe(0);
+    const reclamada = marca(viva);
+    expect(reclamada).not.toBe("null");
+    expect(marca(cancelada)).toBe("null");
+    // Correr otra vez el mismo día no repite: la marca no cambia.
+    await correr();
+    expect(marca(viva)).toBe(reclamada);
+  });
+
   test("el trabajo diario avisa «aún sin respuesta» UNA vez a quien lleva dos días hábiles esperando", async ({
     page,
     request,
@@ -897,7 +953,10 @@ test.describe("la visita a la sala por la UI", () => {
         headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
       });
       expect(r.status()).toBe(200);
-      return (await r.json()) as { sinRespuesta: number };
+      return (await r.json()) as {
+        sinRespuesta: number;
+        correos: { enviados: number; fallidos: number };
+      };
     };
     const marca = () =>
       consultar(
@@ -914,6 +973,9 @@ test.describe("la visita a la sala por la UI", () => {
     );
     const primera = await correr();
     expect(primera.sinRespuesta).toBeGreaterThanOrEqual(1);
+    // El aviso se arma y se manda (Brevo en simulacro) sin fallos.
+    expect(primera.correos.enviados).toBeGreaterThanOrEqual(1);
+    expect(primera.correos.fallidos).toBe(0);
     const reclamada = marca();
     expect(reclamada).not.toBe("-");
     await correr();

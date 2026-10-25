@@ -1,0 +1,257 @@
+// El lector de CTL (S15, maqueta 11): el comprador PEGA el texto de su certificado de tradición y libertad y el lector marca
+// lo que conviene preguntar antes de la promesa. Corre SOLO en el navegador: el texto no sale del teléfono, no se guarda y no
+// entra a ningún registro. Puro, sin zod, con la fecha de consulta como parámetro.
+//
+// Cómo lee (la estructura pública del certificado; Ley 1579 de 2012):
+//   1. parte el texto en ANOTACIONES por su número («ANOTACIÓN: Nro 3»);
+//   2. de cada una toma la fecha y la ESPECIFICACIÓN, con su código de naturaleza jurídica: los dos primeros dígitos son el
+//      grupo del art. 8, parágrafo 3 (02 gravámenes, 03 limitaciones y afectaciones, 04 medidas cautelares, 06 falsa
+//      tradición, 07/08 cancelaciones);
+//   3. clasifica por grupo y por palabra clave; lo que no reconoce lo dice («no reconocida»), jamás lo da por bueno;
+//   4. una cancelación deja sin efecto la anotación que NOMBRA por su número (arts. 62 y 63); si no nombra ninguna, el lector
+//      no adivina cuál canceló y lo avisa.
+import type { TipoMarca } from "./marcas.ts";
+
+export type Marca = {
+  tipo: TipoMarca;
+  anotacion: number;
+  fecha: string | null;
+  codigo: string | null;
+  vigente: boolean;
+  /** La anotación que la canceló, si alguna la nombra. */
+  canceladaPor: number | null;
+};
+
+export type NoReconocida = {
+  anotacion: number;
+  codigo: string | null;
+  especificacion: string;
+};
+
+export type Lectura =
+  | { estado: "vacio" }
+  | { estado: "sin_anotaciones" }
+  | {
+      estado: "leido";
+      anotaciones: number;
+      marcas: Marca[];
+      noReconocidas: NoReconocida[];
+      /** Cancelaciones que no dicen qué anotación cancelan. */
+      cancelacionesSinNumero: number[];
+      /** Cancelaciones que nombran una anotación que el texto no trae. */
+      referenciasRotas: number[];
+      /** Días desde la fecha de expedición del certificado, si el texto la trae. */
+      diasDesdeExpedicion: number | null;
+    };
+
+type Naturaleza = TipoMarca | "cancelacion" | "neutra" | "desconocida";
+
+type Anotacion = {
+  numero: number;
+  fecha: string | null;
+  codigo: string | null;
+  especificacion: string;
+  naturaleza: Naturaleza;
+  cancela: number[];
+  canceladaPor: number | null;
+};
+
+/** Mayúsculas, sin tildes y sin espacios repetidos (los saltos de línea se conservan). */
+export function normalizar(texto: string): string {
+  return texto
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toUpperCase()
+    .replace(/[ \t ]+/g, " ");
+}
+
+// El encabezado de una anotación; no el «se cancela anotación No: 3» ni el «cancelada por la anotación 5» de dentro.
+const INICIO_ANOTACION =
+  /(?<!(?:CANCELA|CANCELAN)(?:\s+(?:LA|LAS))?\s+|POR(?:\s+LA)?\s+)ANOTACION\s*:?\s*(?:NRO\.?|NO\.?|N[°º]\.?|NUMERO)?\s*:?\s*(\d{1,4})\b/g;
+const FIN_DE_ANOTACIONES =
+  /NRO\.? TOTAL DE ANOTACIONES|SALVEDADES\s*:|FIN DE ESTE DOCUMENTO/;
+const FECHA = /FECHA\s*:?\s*(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/;
+const ESPECIFICACION = /ESPECIFICACION\s*:?\s*([^\n]*)/;
+const CODIGO = /\b(0[1-9]\d{2})\b/;
+const CANCELA =
+  /CANCELA(?:N)?\s+(?:LA\s+|LAS\s+)?ANOTACION(?:ES)?\s*(?:NRO\.?|NO\.?|N[°º]\.?|NUMERO)?\s*:?\s*(\d{1,4}(?:\s*(?:,|Y)\s*\d{1,4})*)/;
+const CANCELADA_POR =
+  /CANCELAD[AO]\s+POR\s+(?:LA\s+)?ANOTACION\s*(?:NRO\.?|NO\.?|N[°º]\.?|NUMERO)?\s*:?\s*(\d{1,4})/;
+
+// Palabras clave por naturaleza (sobre el texto normalizado de la especificación).
+const ES_CANCELACION = /\bCANCELACION\b|\bLEVANTAMIENTO\b|\bDESEMBARGO\b/;
+const ES_FALSA_TRADICION =
+  /FALSA TRADICION|COSA AJENA|DERECHOS HERENCIALES|DERECHOS Y ACCIONES|MEJORAS EN SUELO AJENO|DERECHO INCOMPLETO/;
+const ES_HIPOTECA = /\bHIPOTECA/;
+const ES_EMBARGO = /\bEMBARGO/;
+const ES_CAUTELAR =
+  /\bDEMANDA\b|\bPROHIBICION|MEDIDA CAUTELAR|\bSECUESTRO\b/;
+const ES_VIVIENDA_FAMILIAR = /AFECTACION A VIVIENDA FAMILIAR/;
+const ES_PATRIMONIO = /PATRIMONIO DE FAMILIA/;
+// Actos que el lector reconoce y que no piden una pregunta antes de la promesa.
+const ES_NEUTRA =
+  /\bCOMPRAVENTA\b|\bADJUDICACION\b|\bSUCESION\b|\bDONACION\b|\bPERMUTA\b|DACION EN PAGO|\bREMATE\b|\bAPORTE\b|PROPIEDAD HORIZONTAL|\bLOTEO\b|\bENGLOBE\b|\bDESENGLOBE\b|\bACLARACION\b|\bACTUALIZACION\b|\bLINDEROS\b/;
+
+function naturalezaDe(especificacion: string, codigo: string | null): Naturaleza {
+  const grupo = codigo?.slice(0, 2) ?? null;
+  if (grupo === "07" || grupo === "08" || ES_CANCELACION.test(especificacion)) {
+    return "cancelacion";
+  }
+  if (grupo === "06" || ES_FALSA_TRADICION.test(especificacion)) {
+    return "falsa_tradicion";
+  }
+  if (ES_HIPOTECA.test(especificacion)) return "hipoteca";
+  if (ES_EMBARGO.test(especificacion)) return "embargo";
+  if (ES_VIVIENDA_FAMILIAR.test(especificacion)) return "vivienda_familiar";
+  if (ES_PATRIMONIO.test(especificacion)) return "patrimonio_familia";
+  if (grupo === "04" || ES_CAUTELAR.test(especificacion)) {
+    return "medida_cautelar";
+  }
+  if (ES_NEUTRA.test(especificacion)) return "neutra";
+  return "desconocida";
+}
+
+function fechaValida(d: number, mes: number, a: number): string | null {
+  const f = new Date(Date.UTC(a, mes - 1, d));
+  if (f.getUTCFullYear() !== a || f.getUTCMonth() !== mes - 1 || f.getUTCDate() !== d) {
+    return null;
+  }
+  return f.toISOString().slice(0, 10);
+}
+
+function fechaIso(m: RegExpExecArray | null): string | null {
+  return m ? fechaValida(Number(m[1]), Number(m[2]), Number(m[3])) : null;
+}
+
+function numerosDe(lista: string): number[] {
+  return (lista.match(/\d{1,4}/g) ?? []).map(Number);
+}
+
+/** Las anotaciones del texto, en el orden en que aparecen. */
+export function partirAnotaciones(texto: string): Anotacion[] {
+  const t = normalizar(texto);
+  const fin = t.search(FIN_DE_ANOTACIONES);
+  const cuerpo = fin >= 0 ? t.slice(0, fin) : t;
+  const inicios = [...cuerpo.matchAll(INICIO_ANOTACION)];
+  return inicios.map((m, i) => {
+    const desde = m.index ?? 0;
+    const hasta = i + 1 < inicios.length ? (inicios[i + 1].index ?? cuerpo.length) : cuerpo.length;
+    const bloque = cuerpo.slice(desde, hasta);
+    const especificacion = (ESPECIFICACION.exec(bloque)?.[1] ?? "").trim();
+    const codigo = CODIGO.exec(especificacion)?.[1] ?? null;
+    const naturaleza = naturalezaDe(especificacion, codigo);
+    const cancela = CANCELA.exec(bloque);
+    const canceladaPor = CANCELADA_POR.exec(bloque);
+    return {
+      numero: Number(m[1]),
+      fecha: fechaIso(FECHA.exec(bloque)),
+      codigo,
+      especificacion: especificacion.slice(0, 80),
+      naturaleza,
+      cancela: naturaleza === "cancelacion" && cancela ? numerosDe(cancela[1]) : [],
+      canceladaPor: canceladaPor ? Number(canceladaPor[1]) : null,
+    };
+  });
+}
+
+const MESES = [
+  "ENERO",
+  "FEBRERO",
+  "MARZO",
+  "ABRIL",
+  "MAYO",
+  "JUNIO",
+  "JULIO",
+  "AGOSTO",
+  "SEPTIEMBRE",
+  "OCTUBRE",
+  "NOVIEMBRE",
+  "DICIEMBRE",
+];
+const IMPRESO = /IMPRESO EL\s+(\d{1,2})\s+DE\s+([A-Z]+)\s+DE\s+(\d{4})/;
+const EXPEDICION = /FECHA DE EXPEDICION\s*:?\s*(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/;
+
+/** La fecha de expedición del certificado, si el texto la trae («Impreso el 20 de octubre de 2026» o «Fecha de expedición»). */
+export function fechaDeExpedicion(texto: string): string | null {
+  const t = normalizar(texto);
+  const exp = fechaIso(EXPEDICION.exec(t));
+  if (exp) return exp;
+  const m = IMPRESO.exec(t);
+  if (!m) return null;
+  const mes = MESES.indexOf(m[2]);
+  if (mes < 0) return null;
+  return fechaValida(Number(m[1]), mes + 1, Number(m[3]));
+}
+
+function diasEntre(desde: string, hoy: string): number {
+  return Math.round(
+    (Date.parse(`${hoy}T00:00:00Z`) - Date.parse(`${desde}T00:00:00Z`)) / 86_400_000,
+  );
+}
+
+export function leerCtl(texto: string, hoy: string): Lectura {
+  if (texto.trim() === "") return { estado: "vacio" };
+  const anotaciones = partirAnotaciones(texto);
+  if (anotaciones.length === 0) return { estado: "sin_anotaciones" };
+
+  const existentes = new Set(anotaciones.map((a) => a.numero));
+  const canceladaPor = new Map<number, number>();
+  const cancelacionesSinNumero: number[] = [];
+  const referenciasRotas: number[] = [];
+  for (const a of anotaciones) {
+    if (a.naturaleza !== "cancelacion") continue;
+    if (a.cancela.length === 0) cancelacionesSinNumero.push(a.numero);
+    for (const n of a.cancela) {
+      if (existentes.has(n) && n !== a.numero) canceladaPor.set(n, a.numero);
+      else referenciasRotas.push(a.numero);
+    }
+  }
+  // La nota en la anotación cancelada («cancelada por la anotación N») vale si N existe y es una cancelación.
+  for (const a of anotaciones) {
+    if (a.canceladaPor === null || canceladaPor.has(a.numero)) continue;
+    const por = anotaciones.find((x) => x.numero === a.canceladaPor);
+    if (por?.naturaleza === "cancelacion") canceladaPor.set(a.numero, por.numero);
+  }
+
+  const marcas: Marca[] = [];
+  const noReconocidas: NoReconocida[] = [];
+  for (const a of anotaciones) {
+    if (a.naturaleza === "desconocida") {
+      noReconocidas.push({
+        anotacion: a.numero,
+        codigo: a.codigo,
+        especificacion: a.especificacion,
+      });
+    } else if (a.naturaleza !== "cancelacion" && a.naturaleza !== "neutra") {
+      const por = canceladaPor.get(a.numero) ?? null;
+      marcas.push({
+        tipo: a.naturaleza,
+        anotacion: a.numero,
+        fecha: a.fecha,
+        codigo: a.codigo,
+        vigente: por === null,
+        canceladaPor: por,
+      });
+    }
+  }
+
+  const expedicion = fechaDeExpedicion(texto);
+  return {
+    estado: "leido",
+    anotaciones: anotaciones.length,
+    marcas,
+    noReconocidas,
+    cancelacionesSinNumero,
+    referenciasRotas: [...new Set(referenciasRotas)],
+    diasDesdeExpedicion: expedicion ? diasEntre(expedicion, hoy) : null,
+  };
+}
+
+/** Cuántas marcas siguen vigentes y cuántas se cancelaron. */
+export function resumenDe(marcas: readonly Marca[]): {
+  vigentes: number;
+  canceladas: number;
+} {
+  const vigentes = marcas.filter((m) => m.vigente).length;
+  return { vigentes, canceladas: marcas.length - vigentes };
+}

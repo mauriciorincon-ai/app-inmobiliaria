@@ -19,6 +19,21 @@ describe("el interruptor del lector de CTL", () => {
 
 // Que esté apagado NO depende solo de la función: la página solo manda los textos del lector con el interruptor encendido, y
 // ningún archivo de despliegue lo enciende. Solo el job e2e de la CI (certificados SINTÉTICOS) lo define.
+const DEFINE = /LECTOR_CTL_ACTIVO: "1"/g;
+
+/** Dónde define el interruptor un `ci.yml` fuera del job e2e (los trabajos de build, Lighthouse y demás deben medir la página apagada). */
+function definicionesFueraDelE2e(ci: string): number[] {
+  const e2e = ci.indexOf("\n  e2e:");
+  const siguiente = ci.indexOf("\n  lighthouse:", e2e);
+  if (e2e < 0 || siguiente < 0)
+    throw new Error(
+      "el ci.yml no trae los trabajos e2e y lighthouse en ese orden",
+    );
+  return [...ci.matchAll(DEFINE)]
+    .map((m) => m.index!)
+    .filter((i) => i < e2e || i > siguiente);
+}
+
 describe("el lector de CTL sigue apagado donde se sirve", () => {
   const RAIZ = join(__dirname, "..", "..");
   const leer = (f: string) => readFileSync(join(RAIZ, f), "utf8");
@@ -30,31 +45,28 @@ describe("el lector de CTL sigue apagado donde se sirve", () => {
     );
   });
 
-  it("solo el job e2e de la CI define el interruptor; el build, Lighthouse y el despliegue no", () => {
+  it("solo el job e2e de la CI define el interruptor; el build y Lighthouse no", () => {
     const ci = leer(".github/workflows/ci.yml");
-    const e2e = ci.indexOf("\n  e2e:");
-    const lighthouse = ci.indexOf("\n  lighthouse:");
-    expect(e2e).toBeGreaterThan(0);
-    expect(lighthouse).toBeGreaterThan(e2e);
-    const veces = [...ci.matchAll(/LECTOR_CTL_ACTIVO: "1"/g)].map(
-      (m) => m.index!,
+    expect([...ci.matchAll(DEFINE)]).toHaveLength(1);
+    expect(definicionesFueraDelE2e(ci)).toEqual([]);
+  });
+
+  it("DEMO EN ROJO: el detector ve el interruptor si alguien lo pone en Lighthouse o en el build", () => {
+    const base =
+      'jobs:\n  quality:\n    env:\n      A: b\n  e2e:\n    env:\n      LECTOR_CTL_ACTIVO: "1"\n  lighthouse:\n    env:\n      C: d\n';
+    expect(definicionesFueraDelE2e(base)).toEqual([]);
+    const enLighthouse = base.replace(
+      "      C: d",
+      '      LECTOR_CTL_ACTIVO: "1"',
     );
-    expect(veces).toHaveLength(1);
-    expect(veces[0]).toBeGreaterThan(e2e);
-    expect(veces[0]).toBeLessThan(lighthouse);
-    for (const f of [
-      "wrangler.jsonc",
-      "wrangler.toml",
-      ".env.example",
-      "package.json",
-    ]) {
-      let texto = "";
-      try {
-        texto = leer(f);
-      } catch {
-        // el archivo puede no existir
-      }
-      expect(texto, f).not.toContain("LECTOR_CTL_ACTIVO");
+    expect(definicionesFueraDelE2e(enLighthouse)).toHaveLength(1);
+    const enBuild = base.replace("      A: b", '      LECTOR_CTL_ACTIVO: "1"');
+    expect(definicionesFueraDelE2e(enBuild)).toHaveLength(1);
+  });
+
+  it("ningún archivo de despliegue lo enciende", () => {
+    for (const f of ["wrangler.jsonc", ".env.example", "package.json"]) {
+      expect(leer(f), f).not.toContain("LECTOR_CTL_ACTIVO");
     }
   });
 });

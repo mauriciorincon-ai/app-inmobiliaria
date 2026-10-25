@@ -32,6 +32,8 @@ export const OPERADOR = {
     campana: { es: "Campaña", en: "Campaign" },
     zonas: { es: "Zonas y cupos", en: "Areas and spots" },
     salas: { es: "Visitas a salas", en: "Sales-room visits" },
+    // S15
+    antifraude: { es: "Antifraude", en: "Anti-fraud" },
   },
   cerrarSesion: { es: "Cerrar sesión", en: "Sign out" },
 

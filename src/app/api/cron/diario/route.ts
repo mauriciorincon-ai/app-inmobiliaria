@@ -11,6 +11,7 @@ import {
 } from "@/lib/alertas-correo";
 import { avisarVisita } from "@/lib/visitas-correo";
 import { actualizarTasa, fetchDeTasa } from "@/lib/tasa-vivienda";
+import { revisarReglas } from "@/lib/antifraude";
 import { json } from "@/lib/visitas-http";
 
 // El trabajo diario (S8, ADR 016): a las 8:00 de Bogotá lo dispara el Cron Trigger del Worker (su
@@ -27,6 +28,8 @@ import { json } from "@/lib/visitas-http";
 //   4. La tasa de vivienda (S10, ADR 018): una lectura agregada del conjunto abierto de la Superfinanciera, guardada con
 //      su fecha de corte. Si falla, se registra y la corrida sigue: la interfaz usa la última guardada. No cambia el
 //      200/500 de la corrida. Con `TASA_SIMULACRO=1`, `x-tasa-simulacro: fallo` simula la caída del conjunto.
+//   5. Las reglas antifraude (S15): las mismas cuatro que el botón del operador. Solo dejan banderas en su cola: no pausan ni
+//      cambian lo que ve nadie. Si fallan, se registra y la corrida sigue.
 // Correr dos veces el mismo día no repite nada. Responde los conteos, sin datos de nadie. Con Brevo en
 // simulacro (CI y pruebas), la cabecera `x-alertas-tope` cambia el tope del día para ESTA corrida y
 // `x-alertas-solo` la limita a una alerta (las pruebas del cron no se llevan los resúmenes de otras pruebas).
@@ -119,6 +122,12 @@ export async function POST(req: NextRequest) {
     log.warn({ evento: "tasa", resultado: tasa }, "la tasa no se actualizó");
   }
 
+  const banderas = await revisarReglas(supabase);
+  if (!banderas) {
+    reportError("cron_antifraude_error", { requestId });
+    log.warn({ evento: "antifraude" }, "las reglas no corrieron");
+  }
+
   const salida = {
     recordatorios: (ids ?? []).length,
     sinRespuesta,
@@ -126,6 +135,7 @@ export async function POST(req: NextRequest) {
     resumenes,
     purga: purga ?? null,
     tasa,
+    banderas,
   };
   log.info(
     {

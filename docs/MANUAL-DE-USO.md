@@ -284,7 +284,7 @@ solicitudes de visita.
   imprime no existen aquí. Las cifras son un **estimado**: la escritura real la liquidan la notaría y la oficina de registro. Si la
   editorial pide retirar los nombres, la edición se retira de inmediato (un índice sin nombres está pensado, pero no construido).
 
-### ¿Nuevo o usado? · desde Sprint 013
+#### ¿Nuevo o usado? · desde Sprint 013
 
 - **Qué hace:** con **tu presupuesto** y en la **misma zona** (Bogotá o la Sabana), compara los **apartamentos nuevos** que caben, por su
   precio verdadero («pagas al menos»), con los **apartamentos usados en venta** de Innmobiliaria: cuántos hay, el **m² mediano** de cada
@@ -297,7 +297,7 @@ solicitudes de visita.
 - **Los usados son anuncios vivos hoy** en Innmobiliaria (su área y su precio), con la fecha de la lectura; no son una tasación. Solo se
   comparan apartamentos con apartamentos. La cuota inicial durante la obra **no** la imprime la revista y no se inventa.
 
-### ¿Te alcanza con subsidio? · desde Sprint 013
+#### ¿Te alcanza con subsidio? · desde Sprint 013
 
 - **Qué hace:** muestra **qué subsidios existen** para comprar vivienda nueva y si **te sirven**, con tres hogares de ejemplo ($4 M, $6 M y $8 M
   al mes) y **«Tu hogar»**, que se calcula con lo que guardaste en «lo que puedes pagar». Entras desde un botón en la pestaña **Nuevos** o
@@ -313,7 +313,7 @@ solicitudes de visita.
 - **Limitaciones conocidas:** las cifras son las de 2026 y las normas se verificaron en octubre de 2026; si un programa cambia, la
   pantalla se actualiza con la nueva fecha. Es un cálculo, **no una aprobación** del subsidio ni del crédito.
 
-### Visitar la sala de ventas de un proyecto nuevo · desde Sprint 013
+#### Visitar la sala de ventas de un proyecto nuevo · desde Sprint 013
 
 - **Qué hace:** en la ficha de un proyecto, **«Pedir una visita»** lleva a la pantalla de la sala de ventas. Mientras la constructora no esté en
   Innmobiliaria, **coordinamos nosotros**: le escribimos a la sala, te proponemos horarios y te confirmamos por WhatsApp. **Ningún dato tuyo
@@ -512,7 +512,7 @@ solicitudes de visita.
 - **Limitaciones conocidas:** el cupo es una decisión del equipo; el número de publicados es real y
   no se puede editar.
 
-### Visitas a salas de ventas (panel del operador) · desde Sprint 013
+#### Visitas a salas de ventas (panel del operador) · desde Sprint 013
 
 - **Qué hace:** la pestaña **«Visitas a salas»** (`/operador/salas`) es la cola de las solicitudes de visita a salas de ventas de vivienda nueva.
   Cada solicitud trae el **proyecto**, la **página de la revista** donde aparece, el comprador como en el panel de los anuncios (**nombre y los

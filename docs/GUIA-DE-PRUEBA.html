@@ -287,6 +287,16 @@
           color: #86efac;
         }
       }
+      .o-s13 {
+        background: #ede9fe;
+        color: #5b21b6;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s13 {
+          background: #2e1065;
+          color: #c4b5fd;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -335,21 +345,22 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 012 — Nuevos, con lo que pagas de verdad</h1>
+      <h1>Sprint 013 — Nuevo o usado, con la misma plata</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s12">Nuevo · S12</span>. Este sprint mete la
-        vivienda nueva en Buscar: la pestaña «Nuevos» con el índice, «pagas al
-        menos», la espera con tu arriendo (solo en tu teléfono) y la ficha
-        honesta (bloque O). Los bloques A a N siguen igual.
+        <span class="origen o-s13">Nuevo · S13</span>. Este sprint cierra el
+        módulo de vivienda nueva con tres pantallas: <b>¿Nuevo o usado?</b>,
+        <b>¿Te alcanza con subsidio?</b> y la <b>visita a la sala de ventas</b>
+        con su cola en el panel del operador (bloque P). Los bloques A a O
+        siguen igual.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-012/nuevos-con-lo-que-pagas</code>. En un teléfono real
-        cuando el filtro lo pida.
+        <code>sprint-013/nuevo-o-usado</code>. En un teléfono real cuando el
+        filtro lo pida.
       </div>
 
       <div class="barra">
@@ -363,8 +374,11 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
+          <button data-filtro="s13" aria-pressed="false">
+            Solo lo nuevo del S13
+          </button>
           <button data-filtro="s12" aria-pressed="false">
-            Solo lo nuevo del S12
+            Solo lo del S12
           </button>
           <button data-filtro="s10" aria-pressed="false">
             Solo lo del S10
@@ -2180,8 +2194,208 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE P ================= -->
+      <section class="bloque">
+        <h2>
+          <span class="letra">P</span> Nuevo o usado, subsidio y la visita a la
+          sala
+        </h2>
+        <p class="intro">
+          Tres pantallas nuevas dentro de la vivienda nueva:
+          <b>¿Nuevo o usado?</b> (apartamentos nuevos frente a usados en venta,
+          con tu presupuesto y la misma zona), <b>¿Te alcanza con subsidio?</b>
+          (programas con su norma, su año y la fecha de su estado) y
+          <b>«Pedir una visita»</b> a la sala de ventas, que coordina el
+          operador. Para estas pruebas necesitas la edición publicada en la
+          nube, la app desplegada, tu WhatsApp verificado y la sesión del
+          operador (tu panel). Las pruebas de la visita las haces tú de punta a
+          punta: comprador y operador.
+        </p>
+        <ul>
+          <li data-origen="s13 clave">
+            <input type="checkbox" id="p1" />
+            <div>
+              <label for="p1" class="qué"
+                >En <b>Herramientas</b> calcula lo que puedes pagar; abre
+                <b>Buscar → Nuevos</b> y toca <b>«¿Nuevo o usado?»</b>. Cambia
+                entre <b>Bogotá</b> y <b>Sabana</b
+                ><span class="origen o-s13">Nuevo · S13</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Tu presupuesto: $X» con la nota de que tus
+                ingresos no salen del teléfono; a la izquierda, cuántos
+                <b>apartamentos nuevos</b> caben (por «pagas al menos») y su m²
+                privado mediano; a la derecha, los <b>usados en venta</b> de
+                Innmobiliaria con su m² mediano, «la mitad entre…» y
+                <b>«Anuncios vivos en Innmobiliaria al [fecha]»</b>; abajo,
+                «Estrenar cuesta N % más (o menos) por m²» y las tarjetas de lo
+                que cabe con sus meses de espera. Con
+                <b>menos de 5 usados</b> dice <b>«Sin datos suficientes»</b> y
+                <b>«No hay comparación honesta»</b>; en la <b>Sabana</b> dice
+                que Innmobiliaria publica solo en Bogotá.
+                <b>Es tu juicio: ¿el número tiene sentido para ti?</b>
+              </p>
+              <p class="mal">
+                Mala señal: una comparación con menos de 5 usados, un usado
+                llamado «verificado» sin serlo, el ingreso en el enlace o la
+                cuota inicial de la obra inventada.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s13 clave">
+            <input type="checkbox" id="p2" />
+            <div>
+              <label for="p2" class="qué"
+                >Abre <b>«¿Te alcanza con subsidio?»</b>, recorre los tres
+                hogares ($4 M, $6 M y $8 M) y compara <b>un programa</b> con su
+                página oficial<span class="origen o-s13">Nuevo · S13</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cada programa trae su <b>norma</b> (decreto y
+                resolución), su <b>monto de 2026</b>, lo que dice para el hogar
+                (Aplica · Por confirmar · No aplica · Sin cupos, con símbolo y
+                texto) y <b>«estado al [fecha]»</b>. El hogar de $8 M dice
+                <b>«Tus ingresos pasan el tope del programa»</b>. El subsidio
+                nacional dice <b>«Sin cupos»</b> y no suma. Abajo,
+                <b>«Lo que no mostramos»</b> solo nombra lo que no se pudo
+                verificar, sin montos. «Con el mejor caso» queda
+                <b>por confirmar</b> y nunca suma dos programas.
+                <b
+                  >Es tu juicio de las normas: cada peso con su norma y su
+                  fecha.</b
+                >
+              </p>
+              <p class="mal">
+                Mala señal: un monto sin norma ni fecha, dos programas sumados,
+                un programa sin cupos presentado como disponible, o un programa
+                no verificado con cifras.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s13">
+            <input type="checkbox" id="p3" />
+            <div>
+              <label for="p3" class="qué"
+                >En <b>«Tu hogar»</b> (abajo de ¿Te alcanza?), con lo que
+                guardaste en Herramientas, abre las herramientas del navegador
+                (pestaña <b>Red</b>) y recarga la página<span
+                  class="origen o-s13"
+                  >Nuevo · S13</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Con $X al mes puedes pagar hasta $Y…», cuántos
+                proyectos te alcanzan sin subsidio y con el mejor caso, y la
+                tabla de programas para ti.
+                <b>Ninguna petición lleva tus ingresos</b>: todo se calcula en
+                el teléfono. Sin nada guardado, la sección te invita a
+                calcularlo.
+              </p>
+              <p class="mal">
+                Mala señal: tus ingresos o el tope en la URL, el cuerpo o las
+                cabeceras de una petición.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s13 clave">
+            <input type="checkbox" id="p4" />
+            <div>
+              <label for="p4" class="qué"
+                >Desde la ficha de un proyecto toca <b>«Pedir una visita»</b>,
+                elige una franja, escribe un correo tuyo y pídela. Luego, en tu
+                <b>panel</b>, abre <b>«Visitas a salas»</b>, guarda el
+                <b>contacto de la sala</b> (el teléfono y la dirección que ves
+                en la revista), toca
+                <b>«Escribirle a la sala por WhatsApp»</b> y
+                <b>«Proponer horarios»</b
+                ><span class="origen o-s13">Nuevo · S13</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> sin tu WhatsApp verificado la pantalla te lleva
+                a verificarlo y vuelves; al pedir, «Recibimos tu solicitud» y un
+                correo con el enlace; en el panel la solicitud sale en
+                <b>«Por atender»</b> con el proyecto, su página de la revista,
+                tu nombre y <b>solo los 4 últimos dígitos</b> de tu WhatsApp;
+                WhatsApp se abre con un mensaje ya escrito para la sala que
+                <b>no trae ningún dato tuyo</b> (el sistema no envía nada); al
+                proponer, te llega un correo con los horarios.
+                <b>Es tu juicio del flujo y del copy.</b>
+              </p>
+              <p class="mal">
+                Mala señal: tu número completo o tu correo en el panel antes de
+                confirmar, datos tuyos en el mensaje a la sala, un WhatsApp
+                enviado sin que lo envíes tú, o el contacto de la sala visible
+                fuera del panel.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s13 clave">
+            <input type="checkbox" id="p5" />
+            <div>
+              <label for="p5" class="qué"
+                >Con el correo, abre <b>tu solicitud</b>, elige un horario y
+                confírmalo; después, en el panel, toca
+                <b>«Mandarle la dirección al comprador por WhatsApp»</b
+                ><span class="origen o-s13">Nuevo · S13</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Visita confirmada» con el horario en hora de
+                Bogotá y la nota de que
+                <b>la dirección te llega por WhatsApp</b>
+                (tu solicitud no la muestra); en el panel la fila pasa a
+                <b>«Confirmadas»</b> y ya ves tu número completo; el WhatsApp se
+                abre con un mensaje en tu idioma que sí trae la dirección de la
+                sala. Cancelar la visita desde el panel te avisa por correo.
+              </p>
+              <p class="mal">
+                Mala señal: la dirección o el teléfono de la sala en tu
+                solicitud o en el correo.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s13">
+            <input type="checkbox" id="p6" />
+            <div>
+              <label for="p6" class="qué"
+                ><b>Cuando pase la vigencia de la edición</b> y no haya una
+                nueva, abre ¿Nuevo o usado?, ¿Te alcanza? y «Pedir una
+                visita»<span class="origen o-s13">Nuevo · S13</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> las tres dicen <b>«Mes sin edición»</b> con los
+                días vencidos; la visita <b>no se ofrece</b> con una edición
+                vencida.
+                <b>Esta prueba solo se puede hacer al llegar la fecha</b>
+                (la CI la cubre con una fecha simulada).
+              </p>
+            </div>
+          </li>
+          <li data-origen="s13">
+            <input type="checkbox" id="p7" />
+            <div>
+              <label for="p7" class="qué"
+                >Pide una visita y <b>espera dos días hábiles</b> sin que el
+                panel responda<span class="origen o-s13"
+                  >Nuevo · S13</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el trabajo de las 8:00 de Bogotá te manda un
+                correo <b>«Aún sin respuesta de la sala»</b> una sola vez; tu
+                solicitud sigue abierta. <b>Solo se puede ver con el tiempo</b>
+                (la CI lo cubre moviendo la fecha de la solicitud).
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–O), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–P), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -2209,6 +2423,18 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 013 (2026-10-25):</b><br />
+          <b>Nuevo:</b> bloque P (¿Nuevo o usado?, ¿Te alcanza con subsidio? con
+          «tu hogar» en el teléfono, y la visita a la sala de ventas con su cola
+          en el panel del operador, el aviso si la sala no responde y «mes sin
+          edición» en las tres): 7 pruebas nuevas, 4 del gate mínimo ⭐.<br />
+          <b>Mejorado:</b> —<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 96 pruebas, 35 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          10).
+        </p>
         <p>
           <b>Sprint 012 (2026-10-21):</b><br />
           <b>Nuevo:</b> bloque O (vivienda nueva: la pestaña «Nuevos» en Buscar,
@@ -2317,7 +2543,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v9:";
+        var CLAVE = "guia-inmobiliaria-v10:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

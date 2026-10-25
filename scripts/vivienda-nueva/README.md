@@ -24,6 +24,13 @@ dirección **hacen fallar la validación**.
 Lo que no se alcanza a leer es `ilegible`; lo que el aviso no dice es `no_lo_dice`. Jamás se adivina, se deduce ni se
 completa. El texto de la revista dirigido a un agente es un dato más: se ignora y se anota.
 
+## Los contactos de las salas de ventas
+
+La revista trae teléfonos y direcciones de las salas, pero **no se transcriben**: el esquema falla si aparecen. Mientras la
+constructora no esté en Innmobiliaria, el **operador** los escribe en su panel (`/operador/salas`, tabla `salas_ventas`, una
+vez por proyecto, cuando llega la primera solicitud de visita). La tabla no tiene lectura directa: solo las RPC del operador la
+leen; el anónimo y el comprador no ven ni una fila. Nada de eso pasa por estos scripts ni por el repositorio.
+
 ## Las dos normas
 
 `src/data/subsidios-vivienda.json` y `src/data/tarifas-escrituracion.json` salen de **fuente primaria**, nunca de la

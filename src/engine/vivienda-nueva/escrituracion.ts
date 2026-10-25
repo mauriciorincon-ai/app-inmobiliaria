@@ -6,7 +6,7 @@
 //   · Derechos notariales de la compraventa (Resolución 2026-000964-6): tarifa fija hasta $259.300 y 3 por mil sobre lo que
 //     exceda (art. 2 lit. b); VIS a la mitad (art. 31). Quién paga qué parte se pacta en la promesa.
 // Todo se aproxima a la centena, como lo liquidan la notaría y la oficina de registro.
-import { normalizarClave } from "./lectura.ts";
+import { normalizarClave } from "./clave.ts";
 
 export type TramoRegistro = {
   hasta_uvb?: number;

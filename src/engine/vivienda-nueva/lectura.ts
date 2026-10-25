@@ -1,6 +1,7 @@
 // Del montón de lecturas por página a UNA edición: une sin duplicar, compara la doble lectura, elige la muestra con
 // semilla declarada y mide la cobertura por campo (S11, F1). Puro: recibe lecturas ya validadas y devuelve datos.
 import { z } from "zod";
+import { normalizarClave } from "./clave.ts";
 import {
   ILEGIBLE,
   NO_LO_DICE,
@@ -43,15 +44,8 @@ export const SABANA = [
 export const REGIONES = ["bogota", "sabana", "otra", "sin_ciudad"] as const;
 export type Region = (typeof REGIONES)[number];
 
-/** Minúsculas, sin tildes ni signos, espacios simples. La base de toda comparación de nombres. */
-export function normalizarClave(s: string): string {
-  return s
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
+// `normalizarClave` vive en `clave.ts` (sin zod, para el teléfono) y se reexporta aquí: quien la importaba de `lectura.ts` no cambia.
+export { normalizarClave };
 
 export function regionDe(ciudad: string): Region {
   if (ciudad === NO_LO_DICE || ciudad === ILEGIBLE) return "sin_ciudad";

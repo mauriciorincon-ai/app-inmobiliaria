@@ -46,9 +46,9 @@ pnpm deploy:cf      # build + deploy a Cloudflare Workers (requiere cuenta CF co
 
 ```
 src/
-├─ app/            rutas [lang]/ (landing, publicar, buscar, ficha, visita, vivienda nueva, herramientas y papeleo, operador, privacidad) y api/
+├─ app/            rutas [lang]/ (landing, publicar, buscar, ficha, visita, vivienda nueva, herramientas y papeleo, antifraude, operador, privacidad) y api/
 ├─ components/     UI por módulo (publicar/, buscar/, nuevos/, visita/, operador/, motion/, ui/…), sin lógica de negocio
-├─ engine/         motores puros con tests (registro/, precio/, simulador/, vivienda-nueva/, papeleo/, visita/, agenda/…)
+├─ engine/         motores puros con tests (registro/, precio/, simulador/, vivienda-nueva/, papeleo/, antifraude/, ctl/, visita/, agenda/…)
 ├─ lib/            supabase/, brevo, logger, observability
 └─ textos/         diccionario {es, en}: todo texto nuevo nace aquí
 supabase/migrations/   schema + RLS + RPC

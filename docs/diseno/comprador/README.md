@@ -100,8 +100,28 @@ primaria leída el 2026-10-25 desmintió o en lo que el plan acordó:
 - **Más entradas que el precio:** ciudad, tipo (normal, VIS, VIP) y subsidio, quién vende, reparto, avalúo catastral y crédito, porque cada una
   cambia una norma (tope de la VIS, mitad de la VIS solo con subsidio, base ≥ avalúo, retención solo si vende una persona natural).
 - **Una línea más por actor:** los recaudos de la notaría (Res. SNR 2026-000964-6, art. 50).
-- **La cuarta pestaña** es «Qué dice cada documento» (cláusulas de texto fijo con su artículo) y ocupa el lugar del **lector de CTL**, que pasó
-  al Sprint 15 (decisión 1c del plan).
+- **La cuarta pestaña** es «Qué dice cada documento» (cláusulas de texto fijo con su artículo). El **lector de CTL** de la maqueta no cupo aquí:
+  llegó en el Sprint 15, como quinta sección (ver abajo).
+
+## Lo que el producto cambió respecto de las maquetas 11 y 12 (Sprint 015)
+
+Las maquetas quedan como las aprobó el usuario. El producto del S15 (antifraude, el lector de CTL y la sesión de fotos) se apartó de ellas en
+esto:
+
+- **Lector de CTL (maqueta 11).** Es la **quinta sección** de Papeleo («Certificado (CTL)»), no la cuarta, y **solo existe con el interruptor
+  `LECTOR_CTL_ACTIVO` encendido**; hoy está apagado porque no se validó con certificados reales. La franja «Condicionado» de la maqueta no se
+  muestra. Cada marca trae su anotación, si sigue vigente o qué anotación la canceló, y su norma; **lo que no reconoce lo lista**, y una
+  cancelación que no nombra la anotación que cancela no da nada por cancelado. Donde la maqueta dice «Sin embargos ni demandas inscritas», el
+  producto dice «no encontramos nada de lo que este lector marca»: no afirma que el certificado esté limpio, porque solo lee lo que reconoce. No es un
+  estudio de títulos y lo dice.
+- **Las reglas, visibles (maqueta 12).** La maqueta las muestra solo al operador; la VISION v2 pide que se vean, así que el producto suma la página
+  pública **«Cómo revisamos los anuncios»** (`/antifraude`) con los umbrales leídos de las mismas constantes que usa el motor.
+- **Reportar exige el WhatsApp verificado**, con un reporte por anuncio y persona y hasta cinco al día; el dueño no sabe quién reportó y la cola
+  tampoco lo muestra. Un reporte o una señal **nunca** pausan ni marcan un anuncio por sí solos.
+- **La cola suma lo que la maqueta no dibuja:** **«Reactivar el anuncio»** (una pausa sin vuelta sería un error) y que un anuncio con el CTL pedido
+  **se queda en la cola** hasta que se verifique, con el texto de WhatsApp ya escrito.
+- **La sesión de fotos no tiene maqueta propia** (decisión del plan): se dibujó con el sistema de diseño en «Mi anuncio» y en un panel del operador;
+  su aspecto queda para el ensayo general.
 
 ## Fuentes, licencias y cómo se regenera
 

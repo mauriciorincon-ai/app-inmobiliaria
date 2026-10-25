@@ -133,7 +133,11 @@ export default async function VisitaSalaPage({ params }: { params: Params }) {
           </p>
         </div>
       ) : (
-        <PedirVisitaSala slug={slug} t={t.visita} />
+        <>
+          {/* Texto estático y grande: es lo primero que se pinta (el LCP nace en el HTML, no tras leer la sesión). */}
+          <p className="mt-4 text-gray">{t.visita.pedir.coordinamos}</p>
+          <PedirVisitaSala slug={slug} t={t.visita} />
+        </>
       )}
     </>,
   );

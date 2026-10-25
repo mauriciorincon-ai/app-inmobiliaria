@@ -37,5 +37,44 @@
       { "resourceType": "script", "budget": 290 },
       { "resourceType": "total", "budget": 1000 }
     ]
+  },
+  {
+    "path": "/nuevo-o-usado",
+    "timings": [
+      { "metric": "first-contentful-paint", "budget": 1500 },
+      { "metric": "largest-contentful-paint", "budget": 3500 },
+      { "metric": "total-blocking-time", "budget": 300 },
+      { "metric": "cumulative-layout-shift", "budget": 0.1 }
+    ],
+    "resourceSizes": [
+      { "resourceType": "script", "budget": 285 },
+      { "resourceType": "total", "budget": 1000 }
+    ]
+  },
+  {
+    "path": "/te-alcanza",
+    "timings": [
+      { "metric": "first-contentful-paint", "budget": 1500 },
+      { "metric": "largest-contentful-paint", "budget": 3500 },
+      { "metric": "total-blocking-time", "budget": 300 },
+      { "metric": "cumulative-layout-shift", "budget": 0.1 }
+    ],
+    "resourceSizes": [
+      { "resourceType": "script", "budget": 295 },
+      { "resourceType": "total", "budget": 1000 }
+    ]
+  },
+  {
+    "path": "/nuevos/torre-alba-ficticia/visita$",
+    "timings": [
+      { "metric": "first-contentful-paint", "budget": 1500 },
+      { "metric": "largest-contentful-paint", "budget": 3500 },
+      { "metric": "total-blocking-time", "budget": 300 },
+      { "metric": "cumulative-layout-shift", "budget": 0.1 }
+    ],
+    "resourceSizes": [
+      { "resourceType": "script", "budget": 290 },
+      { "resourceType": "total", "budget": 1000 }
+    ]
   }
 ]

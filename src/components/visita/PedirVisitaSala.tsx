@@ -150,7 +150,6 @@ export default function PedirVisitaSala({
           noValidate
           className="space-y-6 rounded-2xl border border-purple-200 bg-white p-5"
         >
-          <p className="text-sm text-gray">{t.pedir.coordinamos}</p>
           <fieldset>
             <legend className="text-sm font-semibold text-ink">
               {t.pedir.franja}

@@ -68,6 +68,13 @@ const PUBLICAS = [
   // S13: pedir la visita a una sala de ventas (exige la sesión verificada) y los usados para comparar (área y precio).
   "solicitar_visita_sala(text,text,text,text)",
   "usados_para_comparar(operacion,tipo_inmueble)",
+  // S15: reportar un anuncio (exige la sesión verificada) y lo del dueño por su token: la huella de su foto, lo que el
+  // operador hizo con su anuncio y su sesión de fotos.
+  "reportar_anuncio(text,text,text[],text)",
+  "registrar_huella_foto(text,uuid,text)",
+  "mi_anuncio_extra(text)",
+  "solicitar_sesion_fotos(text,text)",
+  "cancelar_sesion_fotos(text)",
 ];
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
@@ -112,6 +119,9 @@ const SOLO_SERVIDOR = [
   "retirar_edicion",
   // S13: el aviso «aún sin respuesta» del cron.
   "reclamar_sin_respuesta_salas",
+  // S15: los ayudantes de las banderas y de la resolución (los llaman solo funciones SECURITY DEFINER).
+  "aplicar_banderas",
+  "resolver_revision",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
@@ -245,6 +255,33 @@ test("S13 · las funciones del operador para las salas las ejecuta authenticated
     "rechazar_solicitud_sala(uuid)",
     "cancelar_visita_sala(uuid)",
     "guardar_sala(text,text,text)",
+  ];
+  for (const f of firmas) {
+    const [fila] = consultar(
+      `select has_function_privilege('service_role', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('authenticated', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('anon', 'public.${f}', 'execute')::text`,
+    );
+    expect(fila, f).toBe("true,true,false");
+  }
+});
+
+test("S15 · la cola antifraude, las reglas, las huellas y las sesiones de fotos las ejecuta authenticated y el servidor, jamás anon", async () => {
+  const firmas = [
+    "antifraude_cola()",
+    "pausar_anuncio(uuid)",
+    "reactivar_anuncio(uuid)",
+    "pedir_ctl(uuid)",
+    "descartar_revision(uuid,text,text)",
+    "revisar_banderas()",
+    "anuncios_para_precio()",
+    "guardar_banderas_precio(jsonb)",
+    "fotos_sin_huella(integer)",
+    "registrar_huella_operador(uuid,text)",
+    "sesiones_panel()",
+    "agendar_sesion_fotos(uuid,timestamp with time zone)",
+    "marcar_sesion_hecha(uuid)",
+    "cancelar_sesion_fotos_operador(uuid)",
   ];
   for (const f of firmas) {
     const [fila] = consultar(

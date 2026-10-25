@@ -338,8 +338,8 @@ export type LoteDestinatario = {
   barrio: string;
   idioma: "es" | "en";
 };
-// renovar_vigencia: nueva fecha de corte.
-export type RenovacionResult = { vigente_hasta: string };
+// renovar_vigencia: nueva fecha de corte. S15: renovar no quita la pausa del operador; `pausado` lo dice.
+export type RenovacionResult = { vigente_hasta: string; pausado?: boolean };
 
 // Foto en la ficha pública (sin id: solo lo que se pinta).
 export type FotoFicha = {
@@ -438,6 +438,85 @@ export type SolicitudSala = {
   } | null;
   whatsapp: string | null;
   sala: { telefono: string | null; direccion: string | null } | null;
+};
+
+// ── S15 — antifraude, la pausa del operador y la sesión de fotos (migración 17) ──────────────────────────────
+export type MotivoReporte =
+  | "precio_irreal"
+  | "fotos_de_otro"
+  | "no_es_el_dueno"
+  | "pidio_plata"
+  | "ya_no_esta"
+  | "otra_cosa";
+export type ReglaBandera = "precio" | "foto" | "matricula" | "telefono";
+export type RazonDescarte =
+  | "es_el_dueno"
+  | "tiene_explicacion"
+  | "mismo_dueno"
+  | "sin_fundamento";
+export type EstadoSesionFotos = "solicitada" | "agendada" | "hecha" | "cancelada";
+
+/** Una fila de la cola antifraude del operador (`antifraude_cola`). Del que reporta, solo motivos, detalle y fecha. */
+export type RevisionAntifraude = {
+  id: string;
+  slug: string;
+  operacion: Operacion;
+  tipo: TipoInmueble;
+  barrio: string;
+  localidad: string | null;
+  precio_esperado: number;
+  nivel_verificacion: NivelVerificacion;
+  ctl_expedido_el: string | null;
+  creado: string;
+  vigente_hasta: string;
+  pausado_at: string | null;
+  ctl_pedido_at: string | null;
+  dueno: { nombre: string; whatsapp: string; idioma: "es" | "en" };
+  banderas: {
+    regla: ReglaBandera;
+    evidencia: Record<string, string | number>;
+    creada: string;
+  }[];
+  reportes: { motivos: MotivoReporte[]; detalle: string | null; creado: string }[];
+};
+
+/** Un anuncio visible con lo que `rangoDePrecio` necesita (`anuncios_para_precio`). */
+export type AnuncioParaPrecio = {
+  id: string;
+  slug: string;
+  operacion: Operacion;
+  tipo: TipoInmueble;
+  localidad: string | null;
+  sector_codigo: string | null;
+  area_m2: number;
+  precio_esperado: number;
+};
+
+export type SesionFotos = {
+  id: string;
+  estado: EstadoSesionFotos;
+  franja: FranjaVisita;
+  agendada_para: string | null;
+  creada: string;
+};
+
+/** Lo que «Mi anuncio» suma en el S15 (`mi_anuncio_extra`). */
+export type MiAnuncioExtra = {
+  pausado: boolean;
+  ctl_pedido: boolean;
+  sesion: SesionFotos | null;
+};
+
+/** Una fila del panel de sesiones de fotos (`sesiones_panel`). */
+export type SesionFotosPanel = SesionFotos & {
+  cancelada_por: "dueno" | "operador" | null;
+  inmueble: {
+    slug: string;
+    tipo: TipoInmueble;
+    barrio: string;
+    localidad: string | null;
+  };
+  dueno: { nombre: string; whatsapp: string; idioma: "es" | "en" };
 };
 
 export type ComparablePrecio = {
@@ -936,6 +1015,90 @@ export type Database = {
       reclamar_sin_respuesta_salas: {
         Args: { p_antes_de: string };
         Returns: string[];
+      };
+      // S15 (migración 17) — antifraude y sesión de fotos. Públicas: reportar (exige la sesión verificada) y lo del dueño
+      // por su token. Del operador (`authenticated`) y del trabajo diario (`service_role`): la cola, sus acciones, las
+      // reglas, las huellas y las sesiones.
+      reportar_anuncio: {
+        Args: {
+          p_sesion_hash: string;
+          p_slug: string;
+          p_motivos: MotivoReporte[];
+          p_detalle: string | null;
+        };
+        Returns: undefined;
+      };
+      registrar_huella_foto: {
+        Args: { p_token: string; p_foto_id: string; p_huella: string };
+        Returns: undefined;
+      };
+      mi_anuncio_extra: {
+        Args: { p_token: string };
+        Returns: MiAnuncioExtra | null;
+      };
+      solicitar_sesion_fotos: {
+        Args: { p_token: string; p_franja: FranjaVisita };
+        Returns: { id: string; estado: "solicitada" };
+      };
+      cancelar_sesion_fotos: { Args: { p_token: string }; Returns: undefined };
+      antifraude_cola: {
+        Args: Record<string, never>;
+        Returns: RevisionAntifraude[];
+      };
+      pausar_anuncio: { Args: { p_inmueble_id: string }; Returns: undefined };
+      reactivar_anuncio: {
+        Args: { p_inmueble_id: string };
+        Returns: undefined;
+      };
+      pedir_ctl: { Args: { p_inmueble_id: string }; Returns: undefined };
+      descartar_revision: {
+        Args: {
+          p_inmueble_id: string;
+          p_razon: RazonDescarte;
+          p_nota: string | null;
+        };
+        Returns: undefined;
+      };
+      revisar_banderas: {
+        Args: Record<string, never>;
+        Returns: Record<Exclude<ReglaBandera, "precio">, number>;
+      };
+      anuncios_para_precio: {
+        Args: Record<string, never>;
+        Returns: AnuncioParaPrecio[];
+      };
+      guardar_banderas_precio: {
+        Args: {
+          p_hallazgos: Record<
+            string,
+            { porcentaje: number; n: number; ambito: "barrio" | "localidad" }
+          >;
+        };
+        Returns: number;
+      };
+      fotos_sin_huella: {
+        Args: { p_limite: number };
+        Returns: { id: string; r2_key: string }[];
+      };
+      registrar_huella_operador: {
+        Args: { p_foto_id: string; p_huella: string };
+        Returns: undefined;
+      };
+      sesiones_panel: {
+        Args: Record<string, never>;
+        Returns: SesionFotosPanel[];
+      };
+      agendar_sesion_fotos: {
+        Args: { p_sesion_id: string; p_para: string };
+        Returns: undefined;
+      };
+      marcar_sesion_hecha: {
+        Args: { p_sesion_id: string };
+        Returns: undefined;
+      };
+      cancelar_sesion_fotos_operador: {
+        Args: { p_sesion_id: string };
+        Returns: undefined;
       };
       elegir_horario: {
         Args: { p_token: string; p_horario_id: string | null };

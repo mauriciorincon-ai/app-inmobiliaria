@@ -101,6 +101,7 @@ export function htmlDeRevision(carga) {
   @media (max-width:900px){.par{grid-template-columns:1fr}}
 </style></head><body>
 <h1>Revisión de la edición ${carga.numero} — ${carga.proyectos.length} proyectos cargados, sin publicar</h1>
+<p class="nota"><strong>Vigencia que se publicará: ${esc(carga.desde)} → ${esc(carga.hasta)}.</strong> Compárala con la portada de la revista; si no coincide, la edición <strong>no</strong> se publica (vuelve a entregar con las fechas de la portada).</p>
 <p class="nota">Muestra de ${muestra.length} proyectos al azar con semilla <strong>${carga.muestra_semilla}</strong> (misma semilla, misma muestra).
 Compara cada tabla con su página: «no lo dice» significa que el aviso <em>no</em> lo imprime; «ilegible», que no se alcanzó a leer. Si algo no coincide,
 la edición <strong>no</strong> se publica. Este archivo y las páginas viven solo en tu computador (carpeta ignorada por git).</p>

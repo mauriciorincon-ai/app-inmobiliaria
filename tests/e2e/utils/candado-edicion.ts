@@ -1,22 +1,33 @@
-import { mkdirSync, rmSync, statSync } from "node:fs";
+import { mkdirSync, rmSync, statSync, utimesSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 // La base local se comparte entre specs que corren en paralelo, y la edición que la app muestra es UNA: la vigente a la fecha, y
 // si hay varias, la de MAYOR número (`nuevos_publicados`, `solicitar_visita_sala`). Dos specs que publican a la vez una edición
 // vigente HOY se la quitan una a la otra. Este candado las pone en fila: quien publica una edición con ventana real lo toma en
-// su `beforeAll` y lo suelta en su `afterAll`. Es un directorio (`mkdir` es atómico). Un candado de más de 3 minutos es de una
-// corrida que murió a medias y se toma.
+// su `beforeAll` y lo suelta en su `afterAll`. Es un directorio (`mkdir` es atómico). Mientras su dueño vive lo renueva cada
+// 30 s (`utimes`); uno sin renovar en 3 minutos es de una corrida que murió a medias y se toma.
 const RUTA = join(tmpdir(), "inn-e2e-edicion-vigente.lock");
 const VIEJO_MS = 3 * 60_000;
+const RENOVAR_MS = 30_000;
+let renovador: NodeJS.Timeout | undefined;
 
 export async function tomarCandadoEdicion(
-  esperaMaxMs = 150_000,
+  esperaMaxMs = 540_000,
 ): Promise<void> {
   const t0 = Date.now();
   for (;;) {
     try {
       mkdirSync(RUTA);
+      renovador = setInterval(() => {
+        try {
+          const ahora = new Date();
+          utimesSync(RUTA, ahora, ahora);
+        } catch {
+          // soltado entre tanto
+        }
+      }, RENOVAR_MS);
+      renovador.unref();
       return;
     } catch (e) {
       if ((e as NodeJS.ErrnoException).code !== "EEXIST") throw e;
@@ -37,5 +48,7 @@ export async function tomarCandadoEdicion(
 }
 
 export function soltarCandadoEdicion(): void {
+  if (renovador) clearInterval(renovador);
+  renovador = undefined;
   rmSync(RUTA, { recursive: true, force: true });
 }

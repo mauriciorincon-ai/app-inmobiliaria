@@ -107,7 +107,7 @@ test.beforeEach(() => {
   test.skip(test.info().project.name !== "desktop-chromium", "una sola vez");
 });
 test.beforeAll(async () => {
-  test.setTimeout(180_000);
+  test.setTimeout(600_000);
   await tomarCandadoEdicion();
   limpiar();
 });

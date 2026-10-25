@@ -411,12 +411,15 @@ test.describe("en inglés", () => {
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------
-// Los enlaces «Lo que te cuesta escriturar este» desde las dos fichas. La edición (nº 9520, nombres ficticios) se carga por SQL con una
-// ventana que contiene el día simulado; el anuncio usado lo crea la RPC pública.
+// Los enlaces «Lo que te cuesta escriturar este» desde las dos fichas. La edición (nº 8990, nombres ficticios) se carga por SQL con una
+// ventana de junio de 2026 que contiene el día simulado pero NO el día real, y con un número menor que el de toda otra spec: la base
+// es compartida y la RPC elige por «ventana que contiene hoy, luego mayor número», así ninguna otra spec la ve como la suya.
+// El anuncio usado lo crea la RPC pública.
 test.describe("desde las fichas", () => {
   test.describe.configure({ mode: "serial" });
 
-  const NUMERO = 9520;
+  const NUMERO = 8990;
+  const DIA_DE_FICHAS = "2026-06-15";
   const filas = demo.proyectos as unknown as FilaProyecto[];
   const bogota = filas
     .map((f) => ({ f, p: deFila(f) }))
@@ -435,8 +438,8 @@ test.describe("desde las fichas", () => {
     const edicion = {
       numero: NUMERO,
       nombre: demo.nombre,
-      desde: "2026-10-01",
-      hasta: "2026-11-30",
+      desde: "2026-06-01",
+      hasta: "2026-06-30",
       paginas: demo.paginas,
       muestra_claves: filas.slice(0, 5).map((f) => f.clave),
       muestra_semilla: NUMERO,
@@ -458,6 +461,7 @@ test.describe("desde las fichas", () => {
   test("la ficha de vivienda nueva manda con su precio «desde», su ciudad, su tipo y vendedor constructora", async ({
     page,
   }) => {
+    await page.setExtraHTTPHeaders({ "x-hoy-simulado": DIA_DE_FICHAS });
     await page.goto(`/nuevos/${proyecto.f.slug}`);
     const enlace = page.getByRole("link", {
       name: "Lo que te cuesta escriturar este",
@@ -494,5 +498,32 @@ test.describe("desde las fichas", () => {
       String(precio),
     );
     await expect(total(page, "comprador")).toBeVisible();
+  });
+
+  test("un anuncio de arriendo no trae el enlace: el canon de un arriendo no es el precio de una compraventa", async ({
+    page,
+  }) => {
+    const { slug } = await crearAnuncio({
+      precio: 2_500_000,
+      operacion: "arriendo",
+    });
+    await page.goto(`/i/${slug}`);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Lo que te cuesta escriturar este" }),
+    ).toHaveCount(0);
+  });
+
+  test("el enlace de un anuncio usado lleva la ciudad del anuncio: Chía llega como Chía", async ({
+    page,
+  }) => {
+    const a = await crearAnuncio({ precio: 380_000_000 });
+    consultar(
+      `update public.vendedores set ciudad = 'Chía' where id = (select vendedor_id from public.inmuebles where id = '${a.id}')`,
+    );
+    await page.goto(`/i/${a.slug}`);
+    await expect(
+      page.getByRole("link", { name: "Lo que te cuesta escriturar este" }),
+    ).toHaveAttribute("href", `/papeleo?precio=${a.precio}&ciudad=chia`);
   });
 });

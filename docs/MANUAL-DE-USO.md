@@ -15,7 +15,7 @@ busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verif
 escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
 visita; desde el Sprint 009 también guarda favoritos, compara, comparte listas con notas y recibe
 alertas por correo; desde el Sprint 010 también decide con números: ve si un precio está en línea con
-su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad; desde el Sprint 013 la compara con un usado, ve qué subsidios le sirven y pide visitar la sala de ventas) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
+su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad; desde el Sprint 013 la compara con un usado, ve qué subsidios le sirven y pide visitar la sala de ventas; desde el Sprint 014 también ve el papeleo de la compra: cuánto paga cada parte, qué pedir y cuánto tarda cada paso) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
 panel privado). El dueño decide si los compradores verificados pueden escribirle y recibir
 solicitudes de visita.
 
@@ -199,7 +199,7 @@ solicitudes de visita.
 
 - **Qué hace:** te ayuda a decidir con números y no con corazonadas. En cada ficha ves **si el precio
   está en línea con los anuncios parecidos de su zona** y los **datos de la zona**; en
-  **Herramientas** calculas **cuánto pagarías al mes** y **hasta qué precio puedes comprar**. Es **un
+  **Herramientas** calculas **cuánto pagarías al mes**, **hasta qué precio puedes comprar** y, desde el Sprint 14, qué papeleo trae escriturar (ver «Papeleo sin sorpresas»). Es **un
   rango, no un avalúo**, y **un cálculo, no una aprobación de crédito**.
 - **¿Está caro? (en la ficha):** debajo del precio y del área hay una tarjeta con una de cuatro
   respuestas, siempre con símbolo y texto (nunca solo color): **En rango**, **Por encima del rango**,
@@ -264,8 +264,9 @@ solicitudes de visita.
   - **El precio verdadero.** «Pagas al menos» suma el precio «desde», los **derechos de registro** (Resolución 2026-001726-6 de la
     Superintendencia de Notariado y Registro, a cargo de quien registra) y el **parqueadero que se paga aparte** si el aviso da su
     precio. Cada peso trae su norma y la fecha en que la consultamos. **Es un mínimo, no un total:** lo que falta se **nombra y no
-    se suma** (los derechos notariales, que se reparten como diga la promesa de compraventa; el impuesto de registro y la
-    beneficencia y el IVA de la notaría, que no pudimos verificar; el parqueadero sin precio; que el precio puede subir mientras
+    se suma** (los derechos notariales, que se reparten como diga la promesa de compraventa; el impuesto de registro (la gente lo
+    llama «beneficencia»), que se parte entre comprador y vendedor y se ve con tu precio en **Papeleo**, y el IVA de la notaría, que no
+    pudimos verificar; el parqueadero sin precio; que el precio puede subir mientras
     se construye si el aviso no dice que es fijo; la hipoteca si compras con crédito).
   - **El m² es «aproximado»** y lo dice: el precio «desde» y el área «desde» no siempre son de la misma unidad. Sin área privada se
     usa la construida y también se dice.
@@ -330,6 +331,40 @@ solicitudes de visita.
 - **Mes sin edición:** con la edición vencida la pantalla dice **«Mes sin edición»** y **no ofrece** pedir la visita: los datos pueden haber cambiado.
 - **Limitaciones conocidas:** hasta 5 solicitudes abiertas a la vez; una por proyecto; si no se pudo concretar, puedes pedirla de nuevo pasados 14 días.
   El plazo de dos días hábiles no descuenta festivos (el aviso puede llegar un día antes, nunca después). Aún no hay botón para marcar que fuiste.
+
+## Papeleo sin sorpresas · desde Sprint 014
+
+- **Qué hace:** en **Herramientas** hay un selector **Simulador | Papeleo**. «Papeleo» te dice, **antes de firmar la promesa**, cuánto paga el
+  comprador y cuánto el vendedor al escriturar, qué documentos pedir, cuánto tarda cada paso y qué dice cada documento. No necesitas cuenta.
+  **El precio que escribes se queda en tu teléfono:** ninguna petición lo lleva y no se guarda en ninguna parte.
+- **Cómo se usa:**
+  1. Escribe el **precio de la compraventa**, elige la **ciudad** del inmueble y el **tipo** de vivienda (normal, VIS o VIP). Si es VIS o VIP,
+     marca si tienes un **subsidio** del Estado o de una caja de compensación: sin él, el registro no tiene la tarifa reducida.
+  2. En **Ajustes** dices quién vende (una persona o una empresa), cómo se reparten la notaría y el impuesto de registro (por mitades, como dice
+     la norma, o todo uno de los dos si así lo pactan), el **avalúo catastral** si lo conoces y si compras con **crédito**.
+  3. Cuatro secciones: **Gastos** (una tarjeta «Paga el comprador» y otra «Paga el vendedor»), **Documentos** (qué pedir antes de firmar; las
+     casillas son solo para ti y no se guardan), **Plazos** (la línea de tiempo) y **Qué dice cada documento** (las cláusulas más comunes de la
+     promesa, la escritura y el registro, con el artículo de donde sale cada una).
+  4. En la ficha de un proyecto nuevo y en la de un anuncio usado, el enlace **«Lo que te cuesta escriturar este»** abre la pantalla con el precio,
+     la ciudad y el tipo ya puestos.
+- **Cada cifra con su norma:** cada línea dice la norma de donde sale y el año de la tarifa; los documentos y los plazos llevan un sello con
+  símbolo y texto: **✓ Norma leída**, **● Práctica, no norma** (lo piden la notaría, el banco o la costumbre, no una ley que hayamos consultado)
+  o **▲ No verificado**. Lo que no pudimos verificar **se nombra sin cifra**, con quién lo cobra, y el total dice cuántos conceptos faltan: es **lo
+  mínimo que pagas**, no el total.
+- **Lo que no calculamos, y lo dice:** el **IVA de los derechos notariales** (no encontramos una norma clara), el impuesto de registro **fuera de
+  Bogotá y Cundinamarca** (depende de cada departamento), la **retención de una empresa o constructora**, los costos de la **hipoteca** y la
+  **ganancia ocasional** del vendedor. Cada hoja adicional de la escritura tiene un cobro aparte que no podemos saber de antemano.
+- **«Beneficencia»:** la gente llama así al impuesto de registro; es **un solo impuesto** del departamento (1 % del valor, que en Bogotá y
+  Cundinamarca se paga por partes iguales salvo pacto), no un cobro aparte.
+- **Tarifas de un año:** las cifras son las de **2026**, leídas de sus resoluciones en octubre de 2026. **Desde el 1 de enero de 2027 la pantalla
+  no muestra ninguna cifra de 2026**: dice de qué año son las tarifas que tiene y te manda a la notaría o al liquidador de la Superintendencia de
+  Notariado y Registro.
+- **Qué dice cada documento:** es un **texto fijo**, sin inteligencia artificial y **sin leer tu documento**. Cada cláusula explica lo que dice la
+  norma y qué mirar en tu promesa o tu escritura; **no es asesoría legal**, y cada documento lo repite. Si vende una constructora, las arras y la
+  cláusula penal pueden regirse por el Código de Comercio: la cláusula lo dice.
+- **Limitaciones conocidas:** es un **estimado** hasta validarlo con el liquidador de la Superintendencia de Notariado y Registro. La tarifa
+  notarial única de la VIS no se calcula. Las ciudades salen de las listas del tope de la vivienda de interés social; las demás caen en «Otra
+  ciudad». No hay lector de certificados de tradición: eso no es parte de esta pantalla.
 
 ## Features
 
@@ -574,3 +609,4 @@ solicitudes de visita.
 | 010    | Decidir con números: «¿Está caro?» como rango P25–P75 con su N, fecha y fuente (nunca un avalúo), datos de la zona, simulador de cuota con el tope del 40 % del Decreto 583 de 2025 y la tasa con su fecha, «lo que puedes pagar» en Buscar y en las alertas, el rango del dueño al publicar, la fila de Comparar y la sección Herramientas                                                                                       |
 | 012    | Vivienda nueva: pestaña «Nuevos» en Buscar con el índice de la edición vigente (mediana del m² privado, solo con 5 o más proyectos), la lista con «pagas al menos» y filtros, la ficha del proyecto con cada peso y su norma, lo que falta sumar nombrado, «la espera» con tu arriendo solo en el teléfono, la ficha honesta, «lo que puedes pagar» y «mes sin edición»                                                           |
 | 013    | Nuevo o usado: «¿Nuevo o usado?» (apartamentos nuevos frente a usados en venta, mismo presupuesto y zona, con la regla de 5 comparables), «¿Te alcanza con subsidio?» (programas con su norma, año y estado con fecha; «tu hogar» se calcula en el teléfono) y la visita a la sala de ventas (WhatsApp verificado, horarios, confirmación, aviso si la sala no responde en dos días hábiles) con su cola en el panel del operador |
+| 014    | Papeleo sin sorpresas: «Papeleo» en Herramientas (junto al simulador) con los gastos de escriturar por actor y su norma, qué pedir, plazos y qué dice cada documento; el precio se queda en el teléfono; lo no verificado se nombra sin cifra; enlace desde las fichas                                                                                                                                                            |

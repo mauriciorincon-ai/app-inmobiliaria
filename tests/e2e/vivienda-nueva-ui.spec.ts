@@ -218,8 +218,11 @@ test("una tarjeta abre la ficha: «pagas al menos» del motor, cada peso con su 
       `Derechos notariales de la compraventa: ${formatearCOP(notariales.monto!, "es")}`,
     ),
   ).toBeVisible();
+  // El impuesto de registro ya no es un «no lo pudimos verificar»: se verificó (S14), se reparte y se ve con el precio en Papeleo.
   await expect(
-    page.getByText("Impuesto de registro y beneficencia: no los pudimos"),
+    page.getByText(
+      "Impuesto de registro (la gente lo llama «beneficencia»): se reparte entre comprador y vendedor y no se suma aquí.",
+    ),
   ).toBeVisible();
   // La norma y la fecha de consulta de cada tarifa.
   await expect(

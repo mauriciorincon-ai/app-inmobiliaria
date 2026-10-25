@@ -394,8 +394,8 @@ export const VIVIENDA_NUEVA = {
         en: "Notary fees: we could not verify them in the rule for this case, so they are not added.",
       },
       impuesto_registro: {
-        es: "Impuesto de registro y beneficencia: no los pudimos verificar en la norma, no se suman.",
-        en: "Registration tax and charity levy: we could not verify them in the rule, so they are not added.",
+        es: "Impuesto de registro (la gente lo llama «beneficencia»): se reparte entre comprador y vendedor y no se suma aquí. Míralo con tu precio en Papeleo.",
+        en: "Registration tax (people call it «beneficencia»): it is split between buyer and seller and is not added here. See it with your price in Paperwork.",
       },
       iva_notarial: {
         es: "IVA y hojas de la notaría: no verificados.",
@@ -539,6 +539,16 @@ export const VIVIENDA_NUEVA = {
       detalle: {
         es: "Los programas que pudimos verificar, con su norma y su fecha. Tus ingresos se quedan en tu teléfono.",
         en: "The programs we could verify, with their rule and date. Your income stays on your phone.",
+      },
+    },
+    papeleo: {
+      titulo: {
+        es: "Lo que te cuesta escriturar este",
+        en: "What it costs to close on this one",
+      },
+      detalle: {
+        es: "Cuánto paga cada parte al escriturar, con la norma de cada cifra y lo que no pudimos verificar. El precio que escribes se queda en tu teléfono.",
+        en: "What each party pays at closing, with the rule behind every figure and what we could not verify. The price you type stays on your phone.",
       },
     },
   },

@@ -94,6 +94,7 @@ export default function TuHogar({
               ejemplo={ejemplo}
               programas={programas}
               fechaCorte={cap.tasaEA === null ? fechaCorte : null}
+              propio
               t={t}
               lang={lang}
             />

@@ -715,6 +715,10 @@ export const VIVIENDA_NUEVA = {
       es: "Hogar de ejemplo con {ingresos} al mes: puede pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa de referencia {tasa} E. A. con corte al {fecha}).",
       en: "Sample household earning {ingresos} a month: can afford up to {tope} ({inicial}% down, {plazo} years, reference rate {tasa} effective annual as of {fecha}).",
     },
+    resumenTuyo: {
+      es: "Con {ingresos} al mes puedes pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa de referencia {tasa} E. A. con corte al {fecha}).",
+      en: "Earning {ingresos} a month you can afford up to {tope} ({inicial}% down, {plazo} years, reference rate {tasa} effective annual as of {fecha}).",
+    },
     resumenPropia: {
       es: "Con {ingresos} al mes puedes pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa {tasa} E. A., la que escribiste).",
       en: "Earning {ingresos} a month you can afford up to {tope} ({inicial}% down, {plazo} years, {tasa} effective annual, the one you typed).",
@@ -942,8 +946,8 @@ export const VIVIENDA_NUEVA = {
       },
       boton: { es: "Pedir una visita", en: "Request a visit" },
       sinEdicion: {
-        es: "Mes sin edición: no pedimos visitas con una edición vencida.",
-        en: "Month without an edition: we do not take visit requests on an expired edition.",
+        es: "No pedimos visitas con una edición vencida: la sala puede haber cambiado precios o disponibilidad.",
+        en: "We do not take visit requests on an expired edition: the sales room may have changed prices or availability.",
       },
     },
   },

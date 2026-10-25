@@ -26,6 +26,7 @@ export default function HogarResultado({
   ejemplo,
   programas,
   fechaCorte,
+  propio = false,
   t,
   lang,
 }: {
@@ -33,6 +34,8 @@ export default function HogarResultado({
   ejemplo: ProyectoSubsidio | null;
   programas: readonly ProgramaVisible[];
   fechaCorte: string | null;
+  /** `true` en «tu hogar» (la isla del teléfono): «con X al mes puedes pagar…» y no «hogar de ejemplo». */
+  propio?: boolean;
   t: TextosHogar;
   lang: Idioma;
 }) {
@@ -42,14 +45,17 @@ export default function HogarResultado({
       <p className="text-gray">{tt.sinTope}</p>
     ) : (
       <p className="text-gray">
-        {rellenar(fechaCorte ? tt.resumen : tt.resumenPropia, {
-          ingresos: formatearCOP(h.ingresos, lang),
-          tope: formatearCOP(h.tope, lang),
-          inicial: Math.round(h.inicial * 100),
-          plazo: h.plazoAnos,
-          tasa: `${numero(h.tasaEA, lang)} %`,
-          fecha: fechaCorte ? formatearFecha(fechaCorte, lang) : "",
-        })}
+        {rellenar(
+          !propio ? tt.resumen : fechaCorte ? tt.resumenTuyo : tt.resumenPropia,
+          {
+            ingresos: formatearCOP(h.ingresos, lang),
+            tope: formatearCOP(h.tope, lang),
+            inicial: Math.round(h.inicial * 100),
+            plazo: h.plazoAnos,
+            tasa: `${numero(h.tasaEA, lang)} %`,
+            fecha: fechaCorte ? formatearFecha(fechaCorte, lang) : "",
+          },
+        )}
       </p>
     );
   const segmentos: Record<string, string> = t.segmento;

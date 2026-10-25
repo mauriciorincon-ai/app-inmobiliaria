@@ -171,6 +171,10 @@ export const CTL = {
       es: "En las anotaciones que reconocemos no encontramos nada de lo que este lector marca.",
       en: "In the entries we recognise we found nothing this reader flags.",
     },
+    sinMarcasConDudas: {
+      es: "Entre las anotaciones que reconocemos no hay nada de lo que este lector marca, pero hay anotaciones que no entendimos: revísalas abajo antes de firmar.",
+      en: "None of the entries we recognise is something this reader flags, but there are entries we didn't understand: check them below before signing.",
+    },
     vigente: { es: "Vigente", en: "Still standing" },
     anotacion: { es: "Anotación {n}", en: "Entry {n}" },
     fecha: { es: "del {fecha}", en: "dated {fecha}" },

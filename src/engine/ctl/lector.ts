@@ -80,25 +80,35 @@ const CANCELADA_POR =
 
 // Palabras clave por naturaleza (sobre el texto normalizado de la especificación).
 const ES_CANCELACION = /\bCANCELACION\b|\bLEVANTAMIENTO\b|\bDESEMBARGO\b/;
+const ES_PARCIAL = /\bPARCIAL/;
 const ES_FALSA_TRADICION =
   /FALSA TRADICION|COSA AJENA|DERECHOS HERENCIALES|DERECHOS Y ACCIONES|MEJORAS EN SUELO AJENO|DERECHO INCOMPLETO/;
 const ES_HIPOTECA = /\bHIPOTECA/;
 const ES_EMBARGO = /\bEMBARGO/;
-const ES_CAUTELAR =
-  /\bDEMANDA\b|\bPROHIBICION|MEDIDA CAUTELAR|\bSECUESTRO\b/;
+const ES_CAUTELAR = /\bDEMANDA\b|\bPROHIBICION|MEDIDA CAUTELAR|\bSECUESTRO\b/;
 const ES_VIVIENDA_FAMILIAR = /AFECTACION A VIVIENDA FAMILIAR/;
 const ES_PATRIMONIO = /PATRIMONIO DE FAMILIA/;
 // Actos que el lector reconoce y que no piden una pregunta antes de la promesa.
 const ES_NEUTRA =
   /\bCOMPRAVENTA\b|\bADJUDICACION\b|\bSUCESION\b|\bDONACION\b|\bPERMUTA\b|DACION EN PAGO|\bREMATE\b|\bAPORTE\b|PROPIEDAD HORIZONTAL|\bLOTEO\b|\bENGLOBE\b|\bDESENGLOBE\b|\bACLARACION\b|\bACTUALIZACION\b|\bLINDEROS\b/;
 
-function naturalezaDe(especificacion: string, codigo: string | null): Naturaleza {
+function naturalezaDe(
+  especificacion: string,
+  codigo: string | null,
+): Naturaleza {
   const grupo = codigo?.slice(0, 2) ?? null;
   if (grupo === "07" || grupo === "08" || ES_CANCELACION.test(especificacion)) {
-    return "cancelacion";
+    // Una cancelación PARCIAL deja viva parte de la anotación: no la da por cancelada, y como no sabemos cuánto queda, la lista
+    // como «no reconocida» en vez de callarla.
+    return ES_PARCIAL.test(especificacion) ? "desconocida" : "cancelacion";
   }
   if (grupo === "06" || ES_FALSA_TRADICION.test(especificacion)) {
     return "falsa_tradicion";
+  }
+  // El grupo 04 del art. 8 (medidas cautelares) manda sobre la palabra «hipotecaria»: un embargo «con acción real hipotecaria»
+  // es un embargo, no una hipoteca.
+  if (grupo === "04") {
+    return ES_EMBARGO.test(especificacion) ? "embargo" : "medida_cautelar";
   }
   if (ES_HIPOTECA.test(especificacion)) return "hipoteca";
   if (ES_EMBARGO.test(especificacion)) return "embargo";
@@ -113,7 +123,11 @@ function naturalezaDe(especificacion: string, codigo: string | null): Naturaleza
 
 function fechaValida(d: number, mes: number, a: number): string | null {
   const f = new Date(Date.UTC(a, mes - 1, d));
-  if (f.getUTCFullYear() !== a || f.getUTCMonth() !== mes - 1 || f.getUTCDate() !== d) {
+  if (
+    f.getUTCFullYear() !== a ||
+    f.getUTCMonth() !== mes - 1 ||
+    f.getUTCDate() !== d
+  ) {
     return null;
   }
   return f.toISOString().slice(0, 10);
@@ -135,7 +149,10 @@ export function partirAnotaciones(texto: string): Anotacion[] {
   const inicios = [...cuerpo.matchAll(INICIO_ANOTACION)];
   return inicios.map((m, i) => {
     const desde = m.index ?? 0;
-    const hasta = i + 1 < inicios.length ? (inicios[i + 1].index ?? cuerpo.length) : cuerpo.length;
+    const hasta =
+      i + 1 < inicios.length
+        ? (inicios[i + 1].index ?? cuerpo.length)
+        : cuerpo.length;
     const bloque = cuerpo.slice(desde, hasta);
     const especificacion = (ESPECIFICACION.exec(bloque)?.[1] ?? "").trim();
     const codigo = CODIGO.exec(especificacion)?.[1] ?? null;
@@ -148,7 +165,8 @@ export function partirAnotaciones(texto: string): Anotacion[] {
       codigo,
       especificacion: especificacion.slice(0, 80),
       naturaleza,
-      cancela: naturaleza === "cancelacion" && cancela ? numerosDe(cancela[1]) : [],
+      cancela:
+        naturaleza === "cancelacion" && cancela ? numerosDe(cancela[1]) : [],
       canceladaPor: canceladaPor ? Number(canceladaPor[1]) : null,
     };
   });
@@ -169,7 +187,8 @@ const MESES = [
   "DICIEMBRE",
 ];
 const IMPRESO = /IMPRESO EL\s+(\d{1,2})\s+DE\s+([A-Z]+)\s+DE\s+(\d{4})/;
-const EXPEDICION = /FECHA DE EXPEDICION\s*:?\s*(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/;
+const EXPEDICION =
+  /FECHA DE EXPEDICION\s*:?\s*(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/;
 
 /** La fecha de expedición del certificado, si el texto la trae («Impreso el 20 de octubre de 2026» o «Fecha de expedición»). */
 export function fechaDeExpedicion(texto: string): string | null {
@@ -185,7 +204,8 @@ export function fechaDeExpedicion(texto: string): string | null {
 
 function diasEntre(desde: string, hoy: string): number {
   return Math.round(
-    (Date.parse(`${hoy}T00:00:00Z`) - Date.parse(`${desde}T00:00:00Z`)) / 86_400_000,
+    (Date.parse(`${hoy}T00:00:00Z`) - Date.parse(`${desde}T00:00:00Z`)) /
+      86_400_000,
   );
 }
 
@@ -210,7 +230,8 @@ export function leerCtl(texto: string, hoy: string): Lectura {
   for (const a of anotaciones) {
     if (a.canceladaPor === null || canceladaPor.has(a.numero)) continue;
     const por = anotaciones.find((x) => x.numero === a.canceladaPor);
-    if (por?.naturaleza === "cancelacion") canceladaPor.set(a.numero, por.numero);
+    if (por?.naturaleza === "cancelacion")
+      canceladaPor.set(a.numero, por.numero);
   }
 
   const marcas: Marca[] = [];

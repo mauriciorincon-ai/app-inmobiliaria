@@ -14,7 +14,10 @@ import {
 // El lector de CTL (S15) contra certificados SINTÉTICOS con la estructura pública del certificado («PERSONA A», matrícula en
 // ceros). Hoy no hay certificados reales: el lector queda apagado hasta validarlo con ellos (`scripts/ctl-validar.mjs`).
 const fixture = (n: string) =>
-  readFileSync(join(__dirname, "..", "..", "fixtures", "ctl", `${n}.txt`), "utf8");
+  readFileSync(
+    join(__dirname, "..", "..", "fixtures", "ctl", `${n}.txt`),
+    "utf8",
+  );
 const HOY = "2026-10-25";
 
 function leido(l: Lectura) {
@@ -35,8 +38,22 @@ describe("los certificados sintéticos", () => {
     const l = leido(leerCtl(fixture("hipoteca-cancelada"), HOY));
     expect(l.anotaciones).toBe(4);
     expect(l.marcas).toEqual([
-      { tipo: "hipoteca", anotacion: 2, fecha: "2010-01-11", codigo: "0204", vigente: false, canceladaPor: 3 },
-      { tipo: "hipoteca", anotacion: 4, fecha: "2021-03-03", codigo: "0205", vigente: true, canceladaPor: null },
+      {
+        tipo: "hipoteca",
+        anotacion: 2,
+        fecha: "2010-01-11",
+        codigo: "0204",
+        vigente: false,
+        canceladaPor: 3,
+      },
+      {
+        tipo: "hipoteca",
+        anotacion: 4,
+        fecha: "2021-03-03",
+        codigo: "0205",
+        vigente: true,
+        canceladaPor: null,
+      },
     ]);
     expect(resumenDe(l.marcas)).toEqual({ vigentes: 1, canceladas: 1 });
     expect(l.cancelacionesSinNumero).toEqual([]);
@@ -57,13 +74,19 @@ describe("los certificados sintéticos", () => {
   it("falsa tradición, patrimonio de familia (uno cancelado), una anotación desconocida y una referencia rota; formato con tildes", () => {
     const l = leido(leerCtl(fixture("patrimonio-y-falsa-tradicion"), HOY));
     expect(l.anotaciones).toBe(6);
-    expect(l.marcas.map((m) => [m.tipo, m.anotacion, m.vigente, m.canceladaPor])).toEqual([
+    expect(
+      l.marcas.map((m) => [m.tipo, m.anotacion, m.vigente, m.canceladaPor]),
+    ).toEqual([
       ["falsa_tradicion", 1, true, null],
       ["patrimonio_familia", 2, true, null],
       ["patrimonio_familia", 4, false, 5],
     ]);
     expect(l.noReconocidas).toEqual([
-      { anotacion: 3, codigo: "0999", especificacion: "0999 ACTO DE PRUEBA QUE EL LECTOR NO CONOCE" },
+      {
+        anotacion: 3,
+        codigo: "0999",
+        especificacion: "0999 ACTO DE PRUEBA QUE EL LECTOR NO CONOCE",
+      },
     ]);
     expect(l.referenciasRotas).toEqual([6]);
     expect(l.marcas[0].fecha).toBe("1999-04-04");
@@ -80,7 +103,9 @@ describe("los bordes del texto", () => {
   });
 
   it("normaliza tildes, mayúsculas y espacios, conservando los saltos de línea", () => {
-    expect(normalizar("Anotación  Nro.\tdos\nespecificación")).toBe("ANOTACION NRO. DOS\nESPECIFICACION");
+    expect(normalizar("Anotación  Nro.\tdos\nespecificación")).toBe(
+      "ANOTACION NRO. DOS\nESPECIFICACION",
+    );
   });
 
   it("«se cancela anotación No: 2» dentro de un bloque NO abre otra anotación", () => {
@@ -94,12 +119,16 @@ describe("los bordes del texto", () => {
   it("la nota «cancelada por la anotación N» en la anotación cancelada también cuenta, si N es una cancelación", () => {
     const t = (tipoN: string) =>
       `ANOTACION: Nro 1 Fecha: 01-01-2020\nCancelada por la anotacion Nro 2\nESPECIFICACION: 0429 EMBARGO EJECUTIVO\nANOTACION: Nro 2 Fecha: 02-02-2021\nESPECIFICACION: ${tipoN}`;
-    expect(leido(leerCtl(t("0842 CANCELACION EMBARGO"), HOY)).marcas[0]).toMatchObject({
+    expect(
+      leido(leerCtl(t("0842 CANCELACION EMBARGO"), HOY)).marcas[0],
+    ).toMatchObject({
       vigente: false,
       canceladaPor: 2,
     });
     // Si la anotación 2 no es una cancelación, la nota no basta.
-    expect(leido(leerCtl(t("0125 COMPRAVENTA"), HOY)).marcas[0].vigente).toBe(true);
+    expect(leido(leerCtl(t("0125 COMPRAVENTA"), HOY)).marcas[0].vigente).toBe(
+      true,
+    );
   });
 
   it("una cancelación de varias anotaciones y una que se nombra a sí misma", () => {
@@ -109,7 +138,9 @@ describe("los bordes del texto", () => {
         HOY,
       ),
     );
-    expect(l.marcas.every((m) => !m.vigente && m.canceladaPor === 3)).toBe(true);
+    expect(l.marcas.every((m) => !m.vigente && m.canceladaPor === 3)).toBe(
+      true,
+    );
     expect(l.referenciasRotas).toEqual([4]);
   });
 
@@ -120,9 +151,61 @@ describe("los bordes del texto", () => {
         HOY,
       ),
     );
-    expect(l.marcas.map((m) => m.tipo)).toEqual(["medida_cautelar", "falsa_tradicion"]);
+    expect(l.marcas.map((m) => m.tipo)).toEqual([
+      "medida_cautelar",
+      "falsa_tradicion",
+    ]);
     expect(l.cancelacionesSinNumero).toEqual([3]);
-    expect(l.noReconocidas.map((n) => [n.anotacion, n.codigo])).toEqual([[4, null]]);
+    expect(l.noReconocidas.map((n) => [n.anotacion, n.codigo])).toEqual([
+      [4, null],
+    ]);
+  });
+
+  // Casos que la auditoría del S15 probó con un guion y que el lector leía con seguridad de más.
+  it("una cancelación PARCIAL no cancela nada: la hipoteca sigue vigente y la anotación se lista como no reconocida", () => {
+    const l = leido(
+      leerCtl(
+        "ANOTACION: Nro 1\nESPECIFICACION: 0204 HIPOTECA ABIERTA SIN LIMITE DE CUANTIA\n" +
+          "ANOTACION: Nro 2\nSe cancela anotacion No: 1\nESPECIFICACION: 0844 CANCELACION PARCIAL DE HIPOTECA\n" +
+          "NRO TOTAL DE ANOTACIONES: *2*",
+        HOY,
+      ),
+    );
+    expect(l.marcas.map((m) => [m.tipo, m.anotacion, m.vigente])).toEqual([
+      ["hipoteca", 1, true],
+    ]);
+    expect(l.noReconocidas.map((n) => n.anotacion)).toEqual([2]);
+    expect(l.cancelacionesSinNumero).toEqual([]);
+    // La cancelación completa de la misma anotación sí la cancela (el caso de contraste).
+    const total = leido(
+      leerCtl(
+        "ANOTACION: Nro 1\nESPECIFICACION: 0204 HIPOTECA ABIERTA SIN LIMITE DE CUANTIA\n" +
+          "ANOTACION: Nro 2\nSe cancela anotacion No: 1\nESPECIFICACION: 0843 CANCELACION POR VOLUNTAD DE LAS PARTES HIPOTECA\n" +
+          "NRO TOTAL DE ANOTACIONES: *2*",
+        HOY,
+      ),
+    );
+    expect(
+      total.marcas.map((m) => [m.tipo, m.vigente, m.canceladaPor]),
+    ).toEqual([["hipoteca", false, 2]]);
+    expect(total.noReconocidas).toEqual([]);
+  });
+
+  it("un embargo «con acción real hipotecaria» (grupo 04) es un embargo, no una hipoteca; una hipoteca del grupo 02 sigue siéndolo", () => {
+    const l = leido(
+      leerCtl(
+        "ANOTACION: Nro 1\nESPECIFICACION: 0429 EMBARGO EJECUTIVO CON ACCION REAL HIPOTECARIA\n" +
+          "ANOTACION: Nro 2\nESPECIFICACION: 0412 DEMANDA EN PROCESO HIPOTECARIO\n" +
+          "ANOTACION: Nro 3\nESPECIFICACION: 0204 HIPOTECA ABIERTA SIN LIMITE DE CUANTIA\n" +
+          "NRO TOTAL DE ANOTACIONES: *3*",
+        HOY,
+      ),
+    );
+    expect(l.marcas.map((m) => [m.anotacion, m.tipo])).toEqual([
+      [1, "embargo"],
+      [2, "medida_cautelar"],
+      [3, "hipoteca"],
+    ]);
   });
 
   it("«inembargable» no es un embargo; una fecha imposible queda en null", () => {
@@ -133,7 +216,14 @@ describe("los bordes del texto", () => {
       ),
     );
     expect(l.marcas).toEqual([
-      { tipo: "patrimonio_familia", anotacion: 1, fecha: null, codigo: "0315", vigente: true, canceladaPor: null },
+      {
+        tipo: "patrimonio_familia",
+        anotacion: 1,
+        fecha: null,
+        codigo: "0315",
+        vigente: true,
+        canceladaPor: null,
+      },
     ]);
   });
 
@@ -149,8 +239,12 @@ describe("los bordes del texto", () => {
   });
 
   it("la fecha de expedición: «Impreso el …» o «Fecha de expedición: …»; un mes que no existe no cuenta", () => {
-    expect(fechaDeExpedicion("Impreso el 3 de Enero de 2026 a las 9:00")).toBe("2026-01-03");
-    expect(fechaDeExpedicion("FECHA DE EXPEDICION: 15-10-2026")).toBe("2026-10-15");
+    expect(fechaDeExpedicion("Impreso el 3 de Enero de 2026 a las 9:00")).toBe(
+      "2026-01-03",
+    );
+    expect(fechaDeExpedicion("FECHA DE EXPEDICION: 15-10-2026")).toBe(
+      "2026-10-15",
+    );
     expect(fechaDeExpedicion("Impreso el 3 de Brumario de 2026")).toBeNull();
     expect(fechaDeExpedicion("sin fecha")).toBeNull();
   });

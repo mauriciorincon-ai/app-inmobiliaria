@@ -127,6 +127,10 @@ function Resultado({
       Number(b.vigente) - Number(a.vigente) || a.anotacion - b.anotacion,
   );
   const dias = lectura.diasDesdeExpedicion;
+  const hayDudas =
+    lectura.noReconocidas.length > 0 ||
+    lectura.cancelacionesSinNumero.length > 0 ||
+    lectura.referenciasRotas.length > 0;
 
   return (
     <div className="space-y-4">
@@ -153,9 +157,16 @@ function Resultado({
       )}
 
       {marcas.length === 0 ? (
-        <Aviso clase="bg-mint text-ok" simbolo="✓">
-          {t.sinMarcas}
-        </Aviso>
+        // El ✓ verde solo cuando no quedó nada sin entender: con dudas, un aviso neutro que manda a leerlas.
+        hayDudas ? (
+          <Aviso clase="bg-sky text-ink" simbolo="i">
+            {t.sinMarcasConDudas}
+          </Aviso>
+        ) : (
+          <Aviso clase="bg-mint text-ok" simbolo="✓">
+            {t.sinMarcas}
+          </Aviso>
+        )
       ) : (
         <ul className="space-y-3">
           {marcas.map((m) => (

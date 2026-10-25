@@ -151,6 +151,13 @@ test("un certificado limpio lo dice, y lo que no entiende lo nombra sin darlo po
   );
   await leer(page);
   await expect(page.getByTestId("ctl-no-reconocida")).toHaveCount(1);
+  // Con una anotación sin entender, el ✓ verde de «no encontramos nada» NO sale: un aviso neutro manda a leerla.
+  await expect(
+    page.getByText(/pero hay anotaciones que no entendimos/),
+  ).toBeVisible();
+  await expect(
+    page.getByText("no encontramos nada de lo que este lector marca"),
+  ).toHaveCount(0);
   await expect(page.getByTestId("ctl-no-reconocida")).toContainText(
     "Anotación 99",
   );

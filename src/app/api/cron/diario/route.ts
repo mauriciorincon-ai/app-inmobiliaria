@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { corteSinRespuesta } from "@/engine/agenda/plazo-salas";
 import { autorizadoCron } from "@/engine/cron/autorizacion";
 import { crearClienteServicio } from "@/lib/supabase/servicio";
 import { logger } from "@/lib/logger";
@@ -17,6 +18,8 @@ import { json } from "@/lib/visitas-http";
 // `Authorization: Bearer <CRON_SECRET>`, comparado en tiempo constante.
 //   1. Recordatorios: la base RECLAMA las visitas de mañana (y las de hoy que no han empezado) de forma
 //      atómica, a lo sumo una vez cada una y nunca una cancelada; a cada una le llegan dos correos.
+//      Y el aviso «aún sin respuesta» de las salas de ventas (S13): la base RECLAMA, una sola vez cada una, las solicitudes
+//      a una sala que llevan dos días hábiles (hora de Bogotá, sin festivos) en `pendiente`; al comprador le llega un correo.
 //   2. Resúmenes de las alertas (S9, ADR 017): DESPUÉS de los recordatorios, para que la visita nunca ceda su
 //      sitio en el cupo diario de correos. La base reclama a lo sumo un resumen por alerta y día.
 //   3. Purga Ley 1581: compradores sin verificar de 30 días y códigos vencidos de 7; alertas sin confirmar de 7
@@ -70,6 +73,30 @@ export async function POST(req: NextRequest) {
     fallidos += r.fallidos;
   }
 
+  // S13: las salas de ventas que no respondieron en dos días hábiles. Si el reclamo falla se registra y la corrida sigue: es un
+  // aviso, no la razón del trabajo; el siguiente día lo vuelve a intentar (nada se marcó).
+  let sinRespuesta = 0;
+  const { data: salas, error: errorSalas } = await supabase.rpc(
+    "reclamar_sin_respuesta_salas",
+    { p_antes_de: corteSinRespuesta(new Date()).toISOString() },
+  );
+  if (errorSalas) {
+    reportError("cron_salas_error", {
+      requestId,
+      code: errorSalas.code ?? "desconocido",
+    });
+    log.warn(
+      { evento: "rpc_error", code: errorSalas.code },
+      "falló el reclamo",
+    );
+  }
+  for (const id of salas ?? []) {
+    const r = await avisarVisita("sin_respuesta", id);
+    sinRespuesta++;
+    enviados += r.enviados;
+    fallidos += r.fallidos;
+  }
+
   const resumenes = await enviarResumenes(
     topeHoy(req.headers.get("x-alertas-tope")),
     alertaDeSimulacro(req.headers.get("x-alertas-solo")),
@@ -94,6 +121,7 @@ export async function POST(req: NextRequest) {
 
   const salida = {
     recordatorios: (ids ?? []).length,
+    sinRespuesta,
     correos: { enviados, fallidos },
     resumenes,
     purga: purga ?? null,
@@ -104,6 +132,7 @@ export async function POST(req: NextRequest) {
       evento: "cron",
       ...salida.correos,
       recordatorios: salida.recordatorios,
+      sinRespuesta,
       resumenes,
       tasa,
       ms: Date.now() - t0,

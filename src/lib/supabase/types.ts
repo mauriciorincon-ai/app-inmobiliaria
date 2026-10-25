@@ -222,22 +222,42 @@ export type SolicitudRecibida = {
 };
 
 // Lo que el comprador ve de SU solicitud (por su token): sin dirección y sin el correo de nadie.
-export type VisitaDelComprador = {
+/** La franja que el comprador pide para visitar una sala de ventas (S13). */
+export type FranjaVisita = "entre_semana" | "sabado" | "domingo";
+
+/** El proyecto nuevo al que se refiere una solicitud de sala (S13): sin teléfono ni dirección de la sala. */
+export type ProyectoDeVisita = {
+  slug: string;
+  nombre: string;
+  edicion: number;
+  franja: FranjaVisita;
+};
+
+type VisitaDelCompradorBase = {
   estado: EstadoSolicitud;
   fecha: string;
-  inmueble: {
-    slug: string;
-    operacion: Operacion;
-    tipo: TipoInmueble;
-    barrio: string;
-    nombre_publicador: string;
-  };
   horarios: HorarioPropuesto[];
   visita: {
     inicio: string;
     cancelada_por: "comprador" | "dueno" | null;
   } | null;
 };
+
+/** Lo que el comprador ve de SU solicitud: de un anuncio (`inmueble`) o de una sala de ventas (`proyecto`). */
+export type VisitaDelComprador = VisitaDelCompradorBase &
+  (
+    | {
+        inmueble: {
+          slug: string;
+          operacion: Operacion;
+          tipo: TipoInmueble;
+          barrio: string;
+          nombre_publicador: string;
+        };
+        proyecto?: undefined;
+      }
+    | { inmueble: null; proyecto: ProyectoDeVisita }
+  );
 
 export type ResultadoSolicitud = {
   solicitud_id: string;
@@ -259,23 +279,32 @@ export type ReservaIdentidad =
     };
 
 // Lo que el servidor necesita para armar los correos de una solicitud (solo service_role).
-export type DatosCorreoVisita = {
+type DatosCorreoVisitaBase = {
   estado: EstadoSolicitud;
-  intencion: IntencionVisita;
   comprador: { nombre: string; email: string | null; idioma: "es" | "en" };
   dueno: { nombre: string; email: string | null; idioma: "es" | "en" };
-  inmueble: {
-    slug: string;
-    operacion: Operacion;
-    tipo: TipoInmueble;
-    barrio: string;
-  };
   horarios: string[];
   visita: {
     inicio: string;
     cancelada_por: "comprador" | "dueno" | null;
   } | null;
 };
+
+/** Los datos de los correos: de un anuncio (`inmueble`) o de una sala (`proyecto`, `dueno` = el equipo, sin correo). */
+export type DatosCorreoVisita = DatosCorreoVisitaBase &
+  (
+    | {
+        intencion: IntencionVisita;
+        inmueble: {
+          slug: string;
+          operacion: Operacion;
+          tipo: TipoInmueble;
+          barrio: string;
+        };
+        proyecto?: undefined;
+      }
+    | { intencion: null; inmueble: null; proyecto: ProyectoDeVisita }
+  );
 
 // Resultado del canje del código que hace el webhook (solo service_role).
 export type ResultadoCanje = "ok" | "otro_numero" | "nada";
@@ -377,6 +406,40 @@ export type TasaVivienda = {
   entidades: number;
   fuente: string;
 };
+// ── S13 — la visita a la sala de ventas y los usados para comparar (migración 16) ──────────────────────────────
+/** Área y precio de un anuncio visible: sin slug ni barrio (`usados_para_comparar`). */
+export type UsadoParaComparar = { area_m2: number; precio_esperado: number };
+
+/** Una fila de la cola del operador (`salas_panel`). El teléfono completo del comprador solo llega con la visita confirmada. */
+export type SolicitudSala = {
+  id: string;
+  estado: EstadoSolicitud;
+  fecha: string;
+  franja: FranjaVisita;
+  sin_respuesta: boolean;
+  ninguno: boolean;
+  proyecto: {
+    slug: string;
+    nombre: string;
+    edicion: number;
+    constructora: string | null;
+    paginas: number[] | null;
+  };
+  comprador: {
+    nombre: string;
+    telefono_fin: string;
+    identificado: boolean;
+    idioma: "es" | "en";
+  };
+  horarios: HorarioPropuesto[];
+  visita: {
+    inicio: string;
+    cancelada_por: "comprador" | "dueno" | null;
+  } | null;
+  whatsapp: string | null;
+  sala: { telefono: string | null; direccion: string | null } | null;
+};
+
 export type ComparablePrecio = {
   slug: string;
   sector_codigo: string | null;
@@ -833,6 +896,46 @@ export type Database = {
       obtener_visita: {
         Args: { p_token: string };
         Returns: VisitaDelComprador | null;
+      };
+      // S13 (migración 16) — la visita a una sala de ventas. Pública: pedirla (exige la sesión verificada) y los usados
+      // para comparar. Del operador (`authenticated`): la cola, proponer, rechazar, cancelar y guardar el contacto.
+      solicitar_visita_sala: {
+        Args: {
+          p_sesion_hash: string;
+          p_slug: string;
+          p_franja: FranjaVisita;
+          p_email: string;
+        };
+        Returns: ResultadoSolicitud;
+      };
+      usados_para_comparar: {
+        Args: { p_operacion: Operacion; p_tipo: TipoInmueble };
+        Returns: UsadoParaComparar[];
+      };
+      salas_panel: { Args: Record<string, never>; Returns: SolicitudSala[] };
+      proponer_horarios_sala: {
+        Args: { p_solicitud_id: string; p_horarios: string[] };
+        Returns: undefined;
+      };
+      rechazar_solicitud_sala: {
+        Args: { p_solicitud_id: string };
+        Returns: undefined;
+      };
+      cancelar_visita_sala: {
+        Args: { p_solicitud_id: string };
+        Returns: undefined;
+      };
+      guardar_sala: {
+        Args: {
+          p_slug: string;
+          p_telefono: string | null;
+          p_direccion: string | null;
+        };
+        Returns: undefined;
+      };
+      reclamar_sin_respuesta_salas: {
+        Args: { p_antes_de: string };
+        Returns: string[];
       };
       elegir_horario: {
         Args: { p_token: string; p_horario_id: string | null };

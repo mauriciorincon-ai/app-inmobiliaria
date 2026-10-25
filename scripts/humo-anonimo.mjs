@@ -8,6 +8,10 @@
 //   ausente   : la migración 15 NO está (antes de aplicarla en la nube).
 //   vacia     : la migración está y ninguna edición está publicada (`nuevos_publicados` devuelve null).
 //   publicada : hay una edición publicada y cada proyecto trae EXACTAMENTE las claves de la lista blanca.
+//
+//   --salas ausente|presente (S13; por omisión «presente» salvo con `--espera ausente`): la migración 16. «ausente» exige que
+//   la visita a la sala y los usados para comparar NO existan; «presente» exige que existan, que el anónimo no lea ninguna
+//   sala, que las RPC del operador le estén cerradas y que pedir una visita con una sesión falsa se rechace.
 // Sale con código 1 si algo no es lo esperado. Nunca imprime la URL ni la llave: solo si la base es local o cuál es su inicio.
 import { CLAVES_FILA } from "../src/engine/vivienda-nueva/filas.ts";
 
@@ -17,6 +21,12 @@ const opcion = (nombre) => {
   return i >= 0 ? args[i + 1] : undefined;
 };
 const espera = opcion("--espera");
+const salas =
+  opcion("--salas") ?? (espera === "ausente" ? "ausente" : "presente");
+if (!["ausente", "presente"].includes(salas)) {
+  console.error("Uso: --salas ausente|presente");
+  process.exit(2);
+}
 if (!["ausente", "vacia", "publicada"].includes(espera ?? "")) {
   console.error(
     "Uso: humo-anonimo.mjs --espera ausente|vacia|publicada [--hoy AAAA-MM-DD]",
@@ -137,6 +147,83 @@ if (espera !== "ausente") {
       `HTTP ${r.estado}`,
     );
   }
+}
+
+// ── S13 (migración 16): la visita a la sala de ventas y los usados para comparar ──────────────────────────────────────
+if (salas === "ausente") {
+  for (const [nombre, cuerpo] of [
+    [
+      "solicitar_visita_sala",
+      {
+        p_sesion_hash: "0",
+        p_slug: "x",
+        p_franja: "sabado",
+        p_email: "a@b.co",
+      },
+    ],
+    ["usados_para_comparar", { p_operacion: "venta", p_tipo: "apartamento" }],
+  ]) {
+    const r = await rpc(nombre, cuerpo);
+    comprobar(
+      `la migración 16 NO está: ${nombre}() no existe`,
+      r.estado === 404 && r.json?.code === "PGRST202",
+      `HTTP ${r.estado}`,
+    );
+  }
+} else {
+  const t = await pedir("salas_ventas?select=*&limit=1");
+  comprobar(
+    "el anónimo no lee la tabla salas_ventas",
+    (t.estado === 200 && Array.isArray(t.json) && t.json.length === 0) ||
+      t.estado === 401 ||
+      t.estado === 403,
+    `HTTP ${t.estado}`,
+  );
+  // Las RPC del operador: el rechazo ocurre ANTES de ejecutar (sin el permiso), así que no cambia nada.
+  const UUID_NULO = "00000000-0000-0000-0000-000000000000";
+  for (const [nombre, cuerpo] of [
+    ["salas_panel", {}],
+    ["guardar_sala", { p_slug: "x", p_telefono: null, p_direccion: null }],
+    ["proponer_horarios_sala", { p_solicitud_id: UUID_NULO, p_horarios: [] }],
+    ["rechazar_solicitud_sala", { p_solicitud_id: UUID_NULO }],
+    ["cancelar_visita_sala", { p_solicitud_id: UUID_NULO }],
+    ["reclamar_sin_respuesta_salas", { p_antes_de: "2000-01-01T00:00:00Z" }],
+  ]) {
+    const r = await rpc(nombre, cuerpo);
+    comprobar(
+      `el anónimo no puede ejecutar ${nombre}`,
+      r.json?.code === "42501",
+      `HTTP ${r.estado}`,
+    );
+  }
+  // Pedir una visita con una sesión que no existe se rechaza en la primera comprobación, antes de escribir nada.
+  const pedirVisita = await rpc("solicitar_visita_sala", {
+    p_sesion_hash: "0".repeat(64),
+    p_slug: "proyecto-que-no-existe",
+    p_franja: "sabado",
+    p_email: "humo@ejemplo.test",
+  });
+  comprobar(
+    "pedir una visita a una sala con una sesión falsa se rechaza (exige el WhatsApp verificado)",
+    pedirVisita.json?.code === "42501" &&
+      String(pedirVisita.json?.message ?? "").includes("no_verificado"),
+    `HTTP ${pedirVisita.estado}`,
+  );
+  const usados = await rpc("usados_para_comparar", {
+    p_operacion: "venta",
+    p_tipo: "apartamento",
+  });
+  comprobar(
+    "usados_para_comparar devuelve solo área y precio",
+    usados.estado === 200 &&
+      Array.isArray(usados.json) &&
+      usados.json.every(
+        (u) => Object.keys(u).sort().join(",") === "area_m2,precio_esperado",
+      ),
+    Array.isArray(usados.json)
+      ? `${usados.json.length} anuncios`
+      : `HTTP ${usados.estado}`,
+  );
 }
 
 const fallos = resultados.filter((ok) => !ok).length;

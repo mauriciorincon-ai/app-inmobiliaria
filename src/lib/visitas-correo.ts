@@ -3,6 +3,7 @@
 // por Brevo. NUNCA lanza ni revierte nada: si un correo falla, la acción que lo provocó ya quedó hecha.
 // Los registros llevan conteos, jamás correos, nombres ni tokens.
 import {
+  esDeSala,
   necesitaEnlaceComprador,
   planearCorreos,
   type DatosSolicitud,
@@ -40,14 +41,22 @@ export async function avisarVisita(
     const datos = data as DatosSolicitud;
 
     let token = opciones.tokenComprador ?? null;
-    if (!token && datos.comprador.email && necesitaEnlaceComprador(evento)) {
+    if (
+      !token &&
+      datos.comprador.email &&
+      necesitaEnlaceComprador(evento, esDeSala(datos))
+    ) {
       const r = await supabase.rpc("nuevo_enlace_visita", {
         p_solicitud_id: solicitudId,
       });
       token = r.data ?? null;
     }
     const base = urlApp();
-    const ficha = `${base}/i/${datos.inmueble.slug}`;
+    // Una sala de ventas lleva a la ficha del proyecto nuevo y a la búsqueda de «Nuevos»; un anuncio, a su ficha.
+    const deSala = esDeSala(datos);
+    const ficha = deSala
+      ? `${base}/nuevos/${datos.proyecto.slug}`
+      : `${base}/i/${datos.inmueble.slug}`;
     const correos = planearCorreos(
       evento,
       datos,
@@ -55,7 +64,7 @@ export async function avisarVisita(
         comprador: token ? enlaceVisita(token) : ficha,
         dueno: `${base}/mi-anuncio`,
         ficha,
-        buscar: `${base}/buscar`,
+        buscar: deSala ? `${base}/buscar?v=nuevos` : `${base}/buscar`,
       },
       new Date(),
     );

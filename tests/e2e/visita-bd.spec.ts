@@ -723,7 +723,7 @@ test("flujo completo: pedir, proponer dos horarios, confirmar uno y marcar la as
   const v = (await suVisita(s.token))!;
   expect(v.estado).toBe("propuesta");
   expect(v.horarios).toHaveLength(2);
-  expect(Object.keys(v.inmueble).sort()).toEqual(
+  expect(Object.keys(v.inmueble!).sort()).toEqual(
     ["barrio", "nombre_publicador", "operacion", "slug", "tipo"].sort(),
   );
   const crudo = JSON.stringify(v);

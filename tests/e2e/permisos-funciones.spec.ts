@@ -65,6 +65,9 @@ const PUBLICAS = [
   "comparables_precio(operacion,tipo_inmueble,text)",
   // S12: la edición vigente de la vivienda nueva (solo ediciones PUBLICADAS, lista blanca de columnas).
   "nuevos_publicados(date)",
+  // S13: pedir la visita a una sala de ventas (exige la sesión verificada) y los usados para comparar (área y precio).
+  "solicitar_visita_sala(text,text,text,text)",
+  "usados_para_comparar(operacion,tipo_inmueble)",
 ];
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
@@ -107,6 +110,8 @@ const SOLO_SERVIDOR = [
   "cargar_edicion",
   "publicar_edicion",
   "retirar_edicion",
+  // S13: el aviso «aún sin respuesta» del cron.
+  "reclamar_sin_respuesta_salas",
 ];
 
 // Mismo alcance que las migraciones: funciones propias de `postgres` en `public`, sin event triggers
@@ -127,7 +132,8 @@ test("anon ejecuta SOLO la lista blanca de RPC públicas (por firma)", async () 
   const abiertas = consultar(
     `select p.oid::regprocedure::text ${PROPIAS} and has_function_privilege('anon', p.oid, 'execute') order by 1`,
   );
-  expect(abiertas).toEqual([...PUBLICAS].sort());
+  // Se ordenan los dos lados en JS: el `order by` de la base usa la colación del servidor y puntuación distinta.
+  expect([...abiertas].sort()).toEqual([...PUBLICAS].sort());
 });
 
 test("todas las RPC de la lista blanca existen (la lista no quedó desfasada)", async () => {
@@ -230,6 +236,33 @@ test("las funciones del servidor del S12 las ejecuta service_role y jamás anon 
     );
     expect(fila, f).toBe("true,false,false");
   }
+});
+
+test("S13 · las funciones del operador para las salas las ejecuta authenticated y el servidor, jamás anon (ni el comprador)", async () => {
+  const firmas = [
+    "salas_panel()",
+    "proponer_horarios_sala(uuid,timestamp with time zone[])",
+    "rechazar_solicitud_sala(uuid)",
+    "cancelar_visita_sala(uuid)",
+    "guardar_sala(text,text,text)",
+  ];
+  for (const f of firmas) {
+    const [fila] = consultar(
+      `select has_function_privilege('service_role', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('authenticated', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('anon', 'public.${f}', 'execute')::text`,
+    );
+    expect(fila, f).toBe("true,true,false");
+  }
+});
+
+test("S13 · el aviso «sin respuesta» lo ejecuta solo service_role", async () => {
+  const [fila] = consultar(
+    `select has_function_privilege('service_role', 'public.reclamar_sin_respuesta_salas(timestamp with time zone)', 'execute')::text
+        || ',' || has_function_privilege('anon', 'public.reclamar_sin_respuesta_salas(timestamp with time zone)', 'execute')::text
+        || ',' || has_function_privilege('authenticated', 'public.reclamar_sin_respuesta_salas(timestamp with time zone)', 'execute')::text`,
+  );
+  expect(fila).toBe("true,false,false");
 });
 
 test("ninguna función de public depende de PUBLIC", async () => {

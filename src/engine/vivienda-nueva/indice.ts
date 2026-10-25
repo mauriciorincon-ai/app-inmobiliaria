@@ -134,6 +134,7 @@ export type Indice = {
 };
 
 function franjaDe(p: ProyectoIndice, franjas: readonly Franja[]): string {
+  // Un precio en conflicto SÍ cuenta en su franja (la maqueta aprobada lo dice con «N con cifras en conflicto»); no entra a la mediana.
   if (typeof p.precio_desde !== "number") return "sin_precio";
   const precio = p.precio_desde;
   const f = franjas.find((x) => x.hasta === null || precio <= x.hasta);
@@ -165,8 +166,11 @@ export function indice(
         ),
       )
       .filter((g) => g.n > 0),
+    // Una entrega o una etapa en conflicto no cuenta como inmediata (S13, igual que el filtro de la lista).
     entregasInmediatas: cerca.filter(
-      (p) => p.etapa === "entrega_inmediata" || p.entrega === "inmediata",
+      (p) =>
+        !enConflicto(p, "entrega", "entrega_precision", "etapa") &&
+        (p.etapa === "entrega_inmediata" || p.entrega === "inmediata"),
     ).length,
     porSegmento: agrupar(cerca, (p) =>
       p.segmento === "ilegible" || p.segmento === "mixto"

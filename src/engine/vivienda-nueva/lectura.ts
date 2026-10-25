@@ -4,7 +4,7 @@ import { z } from "zod";
 import {
   ILEGIBLE,
   NO_LO_DICE,
-  PAGINAS_EDICION,
+  PAGINAS_MAX,
   ProyectoBase,
   revisarProyecto,
   type PaginaLeida,
@@ -117,9 +117,9 @@ export const ProyectoUnicoSchema = ProyectoBase.omit({
 })
   .extend({
     apariciones: z
-      .array(z.number().int().min(1).max(PAGINAS_EDICION))
+      .array(z.number().int().min(1).max(PAGINAS_MAX))
       .min(1)
-      .max(PAGINAS_EDICION),
+      .max(PAGINAS_MAX),
     region: z.enum(REGIONES),
     clave: z.string().min(1).max(200),
     en_conflicto: z

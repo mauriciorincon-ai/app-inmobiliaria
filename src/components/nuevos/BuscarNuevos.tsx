@@ -11,6 +11,7 @@ import {
   edicionVigente,
   leerPagina,
   vistaIndice,
+  paramsComparar,
   vistaLista,
   type FiltrosNuevos as Filtros,
 } from "@/engine/vivienda-nueva/vista";
@@ -110,6 +111,37 @@ export default function BuscarNuevos({
         )}
         {pago}
       </div>
+      <section aria-labelledby="accesos-titulo" className="mt-4">
+        <h2 id="accesos-titulo" className="sr-only">
+          {t.accesos.titulo}
+        </h2>
+        <ul className="grid gap-3 sm:grid-cols-2">
+          <li className="rounded-2xl border border-purple-200 bg-white p-4">
+            <Link
+              href={`/nuevo-o-usado?${paramsComparar({ zona: "bogota", max: tope ?? undefined, pago: filtros.pago }).toString()}`}
+              prefetch={false}
+              className="font-extrabold text-purple-600 underline underline-offset-4"
+            >
+              {t.accesos.nuevoOUsado.titulo}
+            </Link>
+            <p className="mt-1 text-sm text-gray">
+              {t.accesos.nuevoOUsado.detalle}
+            </p>
+          </li>
+          <li className="rounded-2xl border border-purple-200 bg-white p-4">
+            <Link
+              href="/te-alcanza"
+              prefetch={false}
+              className="font-extrabold text-purple-600 underline underline-offset-4"
+            >
+              {t.accesos.teAlcanza.titulo}
+            </Link>
+            <p className="mt-1 text-sm text-gray">
+              {t.accesos.teAlcanza.detalle}
+            </p>
+          </li>
+        </ul>
+      </section>
       <IndiceNuevos indice={indice} t={t} lang={lang} topeVis={topeVisBogota} />
       <FiltrosNuevos
         filtros={filtros}

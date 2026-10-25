@@ -1,19 +1,18 @@
 // Valida las lecturas de la revista contra el esquema y, con --unir, las junta en UNA edición (S11, F1).
 //   node scripts/vivienda-nueva/validar.mjs crudo/lectura-L1.json …   → solo valida (código de salida 1 si falla)
-//   node scripts/vivienda-nueva/validar.mjs --unir                    → valida las lecturas L* de la edición vigente
-//                                                                       (`EDICION.numero`; las de otra edición se
-//                                                                       ignoran), las une y escribe crudo/unida-<N>.json
+//   node scripts/vivienda-nueva/validar.mjs --unir [--edicion N --paginas P]
+//                                                                     → valida las lecturas L* de la edición (por omisión
+//                                                                       la de `edicion.ts`; con otra, `--edicion N` y
+//                                                                       `--paginas P` las del PDF; las lecturas de otra
+//                                                                       edición se ignoran), las une y escribe crudo/unida-<N>.json
 // `unida-<N>.json` NO es el entregable: la bandeja (`/bandeja`) lo valida contra el tipo `edicion-del-mes` y lo entrega como
 // `crudo/edicion-<N>.json`; hasta entonces el trabajo sigue pendiente. Todo vive en `crudo/` (ignorado por git).
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  EDICION,
-  PAGINAS_EDICION,
-  validarLectura,
-} from "../../src/engine/vivienda-nueva/edicion.ts";
+import { validarLectura } from "../../src/engine/vivienda-nueva/edicion.ts";
 import { unirLecturas } from "../../src/engine/vivienda-nueva/lectura.ts";
+import { edicionDeTrabajo, paginasDeLaEdicion } from "./edicion-de-trabajo.mjs";
 
 const CRUDO = join(dirname(fileURLToPath(import.meta.url)), "crudo");
 
@@ -39,6 +38,8 @@ if (args.length === 0) {
 }
 
 if (args[0] === "--unir") {
+  const edicion = edicionDeTrabajo(args);
+  const totalPaginas = paginasDeLaEdicion(edicion);
   const todas = readdirSync(CRUDO)
     .filter((f) => /^lectura-L[A-Za-z0-9_-]*\.json$/.test(f))
     .sort();
@@ -46,24 +47,24 @@ if (args[0] === "--unir") {
   const archivos = todas.filter(
     (f) =>
       JSON.parse(readFileSync(join(CRUDO, f), "utf8")).edicion ===
-      EDICION.numero,
+      edicion.numero,
   );
   if (archivos.length < todas.length) {
     console.log(
-      `Se ignoran ${todas.length - archivos.length} lecturas de otra edición (la vigente es la ${EDICION.numero}).`,
+      `Se ignoran ${todas.length - archivos.length} lecturas de otra edición (la que se une es la ${edicion.numero}).`,
     );
   }
   const lecturas = archivos.map((f) => cargar(join(CRUDO, f)));
   if (lecturas.some((l) => l === null) || lecturas.length === 0)
     process.exit(1);
-  const e = unirLecturas(lecturas, PAGINAS_EDICION);
+  const e = unirLecturas(lecturas, totalPaginas);
   writeFileSync(
-    join(CRUDO, `unida-${EDICION.numero}.json`),
-    JSON.stringify({ edicion: EDICION.numero, ...e }, null, 2),
+    join(CRUDO, `unida-${edicion.numero}.json`),
+    JSON.stringify({ edicion: edicion.numero, ...e }, null, 2),
   );
   const pr = e.paginas.reduce((s, p) => s + p.proyectos.length, 0);
   console.log(
-    `\nEdición unida: ${e.paginas.length}/${PAGINAS_EDICION} páginas leídas, ${pr} apariciones → ${e.proyectos.length} proyectos únicos`,
+    `\nEdición unida: ${e.paginas.length}/${totalPaginas} páginas leídas, ${pr} apariciones → ${e.proyectos.length} proyectos únicos`,
   );
   console.log(`Páginas sin leer: ${e.paginasSinLeer.join(", ") || "ninguna"}`);
   console.log(

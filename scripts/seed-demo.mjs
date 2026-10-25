@@ -8,7 +8,7 @@
 // Uso: node scripts/seed-demo.mjs
 //
 // También siembra la edición SINTÉTICA de vivienda nueva (S12, nº 9000, nombres ficticios) para que Lighthouse audite
-// `/buscar?v=nuevos` y `/nuevos/<slug>`. Solo contra una base LOCAL: jamás escribe una edición de demostración en la nube.
+// `/buscar?v=nuevos` y `/nuevos/<slug>`. Solo contra una base LOCAL: el script entero se niega a escribir en la nube.
 
 import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
@@ -18,6 +18,15 @@ const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!url || !serviceKey) {
   console.error("[seed-demo] Faltan SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY");
+  process.exit(1);
+}
+
+// Son datos de demostración (CI y local): contra una base que no es local no se siembra NADA. `.env.local` apunta a la nube y un
+// `source` descuidado habría dejado cuatro anuncios de mentira en producción.
+if (!/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(url)) {
+  console.error(
+    "[seed-demo] La base no es local: no se siembra ningún dato de demostración.",
+  );
   process.exit(1);
 }
 
@@ -145,12 +154,7 @@ for (const d of DEMOS) {
 // ── La edición SINTÉTICA de vivienda nueva (S12) ───────────────────────────────────────────────
 // Número 9000, nombres ficticios, ventana relativa a HOY (empezó hace 10 días y vence en 10), así que siempre está vigente.
 // Idempotente: se retira, se vuelve a cargar y se publica con su muestra (la misma regla que la edición real).
-const LOCAL = /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(url);
-if (!LOCAL) {
-  console.log(
-    "[seed-demo] La base no es local: no se siembra la edición de vivienda nueva.",
-  );
-} else {
+{
   const demo = JSON.parse(
     readFileSync(new URL("./seed-demo-edicion.json", import.meta.url), "utf8"),
   );

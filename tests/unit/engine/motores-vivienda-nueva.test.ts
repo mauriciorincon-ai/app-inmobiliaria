@@ -476,6 +476,36 @@ describe("la espera", () => {
     });
   });
 
+  it("con la entrega, su precisión o la etapa en conflicto no se cuenta: se nombra (S13)", () => {
+    for (const campo of ["entrega", "entrega_precision", "etapa"]) {
+      expect(
+        espera(
+          {
+            entrega: "2028-12",
+            entrega_precision: "mes",
+            etapa: NO_LO_DICE,
+            en_conflicto: [campo],
+          },
+          "2026-10-20",
+          1_800_000,
+        ),
+      ).toEqual({ estado: "en_conflicto" });
+    }
+    // El conflicto de un campo que no es de la entrega no la toca.
+    expect(
+      espera(
+        {
+          entrega: "2028-12",
+          entrega_precision: "mes",
+          etapa: NO_LO_DICE,
+          en_conflicto: ["precio_desde"],
+        },
+        "2026-10-20",
+        1_800_000,
+      ).estado,
+    ).toBe("calculada");
+  });
+
   it("una fecha impresa que ya pasó se dice como vencida", () => {
     const r = espera(
       { entrega: "2026-06", entrega_precision: "mes", etapa: NO_LO_DICE },
@@ -720,6 +750,24 @@ describe("índice", () => {
     ]);
     expect(i.porFranja[0]).toMatchObject({ medianaM2: 4_400_000 });
     expect(i.entregasInmediatas).toBe(2);
+    // S13: una entrega o etapa en conflicto no es inmediata; un precio en conflicto sigue en su franja (la tabla lo declara).
+    const enConflicto = indice(
+      [
+        ...bajos,
+        pi({ precio_desde: 100_000_000, en_conflicto: ["precio_desde"] }),
+        pi({ etapa: "entrega_inmediata", en_conflicto: ["etapa"] }),
+        pi({ entrega: "inmediata", en_conflicto: ["entrega"] }),
+        pi({ entrega: "inmediata", en_conflicto: ["entrega_precision"] }),
+        pi({ entrega: "inmediata", en_conflicto: ["precio_desde"] }),
+      ],
+      franjas,
+    );
+    expect(enConflicto.entregasInmediatas).toBe(1);
+    expect(enConflicto.porFranja.map((g) => [g.clave, g.n])).toEqual([
+      ["bajo", 6],
+      ["alto", 4],
+    ]);
+    expect(enConflicto.porFranja[0]).toMatchObject({ enConflicto: 1 });
     // Sin franjas: solo los sin precio; una franja que no cubre a nadie no aparece.
     expect(
       indice([pi({}), pi({ precio_desde: NO_LO_DICE })]).porFranja.map(

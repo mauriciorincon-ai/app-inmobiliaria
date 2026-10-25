@@ -360,7 +360,8 @@ describe("vistaLista", () => {
     expect(de({ lugar: "bogota:Kennedy" })).toEqual(["medio"]);
     expect(de({ franja: "hasta_150" })).toEqual(["barato", "vip"]);
     expect(de({ franja: "mas_de_400" })).toEqual(["caro"]);
-    expect(de({ franja: "sin_precio" })).toEqual(["sin-precio"]);
+    // «Sin precio» incluye el precio en conflicto (S13): ninguna de las dos páginas decide la franja.
+    expect(de({ franja: "sin_precio" })).toEqual(["conflicto", "sin-precio"]);
     expect(de({ segmento: "no_vis" })).toEqual(["caro"]);
     expect(de({ segmento: "no_lo_dice" })).toEqual(["ilegible", "ya"]);
     expect(de({ segmento: "vip" })).toEqual(["vip"]);
@@ -374,6 +375,41 @@ describe("vistaLista", () => {
     expect(
       de({ lugar: "bogota", segmento: "no_vis", franja: "hasta_150" }),
     ).toEqual([]);
+  });
+
+  it("un precio o una entrega en conflicto no ubica al proyecto en ninguna franja ni cumple ningún filtro de entrega (S13)", () => {
+    const con = [
+      pp("precio-dudoso", {
+        precio_desde: 100_000_000,
+        en_conflicto: ["precio_desde"],
+      }),
+      pp("entrega-dudosa", {
+        entrega: "2026-12",
+        en_conflicto: ["entrega"],
+      }),
+      pp("etapa-dudosa", {
+        etapa: "entrega_inmediata",
+        entrega: "inmediata",
+        en_conflicto: ["etapa"],
+      }),
+      pp("limpio", { entrega: "2027-06" }),
+    ];
+    const de = (extra: Partial<FiltrosNuevos>) => {
+      const v = vistaLista(con, tarifas, f(extra));
+      return [...v.dentro, ...v.fuera, ...v.sinPrecio]
+        .map((t) => t.slug)
+        .sort();
+    };
+    // Su «desde» impreso estaría en «hasta 150»: con el precio en disputa cae en «sin precio».
+    expect(de({ franja: "hasta_150" })).toEqual([]);
+    expect(de({ franja: "sin_precio" })).toEqual(["precio-dudoso"]);
+    // Ni «inmediata» ni «hasta 2027» los da por cumplidos, aunque cada página imprima una fecha.
+    expect(de({ entrega: "inmediata" })).toEqual([]);
+    expect(de({ entrega: 2027 })).toEqual(["limpio"]);
+    // Sin filtro de entrega siguen en la lista: se nombran, no se esconden.
+    expect(de({})).toHaveLength(4);
+    // Los años para elegir no salen de una entrega en disputa.
+    expect(vistaLista(con, tarifas, f()).anios).toEqual([2027, 2028]);
   });
 
   it("los lugares para elegir, con su número de proyectos, antes de filtrar", () => {
@@ -438,6 +474,27 @@ describe("vistaProyecto", () => {
     expect(vistaProyecto(lista, "muda", tarifas, HOY)!.espera).toEqual({
       estado: "sin_fecha",
     });
+  });
+
+  it("una entrega o una etapa en conflicto: la espera no se calcula con ninguna y se nombra (S13)", () => {
+    const dudosos = [
+      pp("entrega-en-disputa", {
+        entrega: "2027-01",
+        en_conflicto: ["entrega"],
+      }),
+      pp("etapa-en-disputa", { en_conflicto: ["etapa"] }),
+      pp("precision-en-disputa", { en_conflicto: ["entrega_precision"] }),
+    ];
+    for (const d of dudosos) {
+      expect(vistaProyecto(dudosos, d.slug, tarifas, HOY)!.espera).toEqual({
+        estado: "en_conflicto",
+      });
+    }
+    // Otro campo en conflicto (el precio) no toca la espera.
+    const otro = [pp("otro", { en_conflicto: ["precio_desde"] })];
+    expect(vistaProyecto(otro, "otro", tarifas, HOY)!.espera.estado).toBe(
+      "calculada",
+    );
   });
 
   it("una ciudad ilegible usa el tope VIS general", () => {

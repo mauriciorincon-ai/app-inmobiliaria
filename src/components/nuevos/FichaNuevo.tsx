@@ -12,6 +12,7 @@ import { formatearCOP } from "@/engine/format/cop";
 import { formatearFecha } from "@/engine/format/fecha";
 import {
   entregaPartes,
+  paramsComparar,
   type EdicionPublicada,
   type Vigencia,
   type VistaProyecto,
@@ -223,6 +224,13 @@ export default function FichaNuevo({
               </Aviso>
             </div>
           )}
+          {v.espera.estado === "en_conflicto" && (
+            <div className="mt-2">
+              <Aviso tono="info">
+                <p>{tf.espera.enConflicto}</p>
+              </Aviso>
+            </div>
+          )}
           {v.espera.estado === "calculada" && entrega && (
             <>
               <p className="mt-2 text-gray">{tf.espera.intro}</p>
@@ -313,6 +321,58 @@ export default function FichaNuevo({
             </Aviso>
           </div>
         )}
+      </section>
+
+      <section aria-labelledby="visita-titulo" className="mt-8">
+        <h2 id="visita-titulo" className="text-xl font-extrabold text-ink">
+          {t.visita.ficha.titulo}
+        </h2>
+        {vigencia.estado === "vigente" ? (
+          <>
+            <p className="mt-1 text-gray">{t.visita.ficha.detalle}</p>
+            <Link
+              href={`/nuevos/${v.slug}/visita`}
+              prefetch={false}
+              className="mt-3 inline-block rounded-full bg-purple px-6 py-3 text-sm font-semibold text-white shadow-card hover:bg-purple-600"
+            >
+              {t.visita.ficha.boton}
+            </Link>
+          </>
+        ) : (
+          <p className="mt-1 text-gray">{t.visita.ficha.sinEdicion}</p>
+        )}
+      </section>
+
+      <section aria-labelledby="accesos-titulo" className="mt-8">
+        <h2 id="accesos-titulo" className="text-xl font-extrabold text-ink">
+          {t.accesos.titulo}
+        </h2>
+        <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+          <li className="rounded-2xl border border-purple-200 bg-white p-4">
+            <Link
+              href={`/nuevo-o-usado?${paramsComparar({ zona: v.region === "sabana" ? "sabana" : "bogota", max: tope ?? undefined, pago: false }).toString()}`}
+              prefetch={false}
+              className="font-extrabold text-purple-600 underline underline-offset-4"
+            >
+              {t.accesos.nuevoOUsado.titulo}
+            </Link>
+            <p className="mt-1 text-sm text-gray">
+              {t.accesos.nuevoOUsado.detalle}
+            </p>
+          </li>
+          <li className="rounded-2xl border border-purple-200 bg-white p-4">
+            <Link
+              href="/te-alcanza"
+              prefetch={false}
+              className="font-extrabold text-purple-600 underline underline-offset-4"
+            >
+              {t.accesos.teAlcanza.titulo}
+            </Link>
+            <p className="mt-1 text-sm text-gray">
+              {t.accesos.teAlcanza.detalle}
+            </p>
+          </li>
+        </ul>
       </section>
     </article>
   );

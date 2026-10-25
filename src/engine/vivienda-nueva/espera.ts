@@ -1,12 +1,16 @@
 // «La espera» (S11, F2). Puro. Mientras el proyecto se construye, el comprador sigue pagando arriendo: meses hasta la
 // entrega × el arriendo que él escribe (ese número vive solo en su teléfono). La fecha de hoy es un PARÁMETRO, nunca el
 // reloj (regla 23): la maqueta y las pruebas la fijan. Una entrega impresa como semestre o año cuenta hasta su último mes
-// y se marca «aproximada»; una fecha que ya pasó no inventa meses.
+// y se marca «aproximada»; una fecha que ya pasó no inventa meses. Si dos páginas de la revista imprimen una entrega o
+// una etapa distintas, la espera NO se calcula con ninguna de las dos (S13, como el precio en el S12): se nombra.
 import type { Proyecto } from "./edicion.ts";
+import { enConflicto } from "./lectura.ts";
 
 export type Espera =
   | { estado: "inmediata" }
   | { estado: "sin_fecha" }
+  /** La entrega o la etapa la contradicen dos páginas: no se cuenta con ninguna, se dice. */
+  | { estado: "en_conflicto" }
   | {
       estado: "calculada";
       meses: number;
@@ -24,10 +28,15 @@ export function mesesHasta(hoy: string, mes: string): number {
 }
 
 export function espera(
-  p: Pick<Proyecto, "entrega" | "entrega_precision" | "etapa">,
+  p: Pick<Proyecto, "entrega" | "entrega_precision" | "etapa"> & {
+    en_conflicto?: readonly string[];
+  },
   hoy: string,
   arriendoMensual: number,
 ): Espera {
+  if (enConflicto(p, "entrega", "entrega_precision", "etapa")) {
+    return { estado: "en_conflicto" };
+  }
   if (p.entrega === "inmediata" || p.etapa === "entrega_inmediata") {
     return { estado: "inmediata" };
   }

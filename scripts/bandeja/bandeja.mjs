@@ -2,6 +2,7 @@
 //   node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/bandeja/bandeja.mjs verificar
 //   node … scripts/bandeja/bandeja.mjs listar [--hoy AAAA-MM-DD] [--autoriza-vencido]
 //   node … scripts/bandeja/bandeja.mjs entregar <id> <salida.json> --modelo <m> --duracion-s <n> [--autoriza-vencido]
+//                                       [--paginas <N: las del PDF>] [--desde AAAA-MM-DD --hasta AAAA-MM-DD: la portada]
 //   node … scripts/bandeja/bandeja.mjs cargar <id> [--nube]            (la edición a la base, SIN publicar; escribe revision-N.html)
 //   node … scripts/bandeja/bandeja.mjs publicar <id> --revisada [--nube] (solo con la muestra revisada por el usuario)
 //   node … scripts/bandeja/bandeja.mjs estado <N> [--nube] · retirar <N> [--nube]
@@ -11,11 +12,11 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   appendFileSync,
-  copyFileSync,
   existsSync,
   mkdirSync,
   readdirSync,
   readFileSync,
+  writeFileSync,
 } from "node:fs";
 import { homedir } from "node:os";
 import { createClient } from "@supabase/supabase-js";
@@ -30,10 +31,6 @@ import {
 } from "../../src/engine/bandeja/bandeja.ts";
 import { verificarLock } from "../../src/engine/bandeja/lock.ts";
 import {
-  EDICION,
-  PAGINAS_EDICION,
-} from "../../src/engine/vivienda-nueva/edicion.ts";
-import {
   cargaDeEdicion,
   muestraDeRevision,
 } from "../../src/engine/vivienda-nueva/filas.ts";
@@ -41,6 +38,7 @@ import { escribirRevision } from "./revision.mjs";
 import {
   archivoDeEdicion,
   CARPETA_INTERMEDIA,
+  construirMeta,
   DEFINICION_EDICION_DEL_MES,
   numeroDeEdicion,
   trabajosDeEdicion,
@@ -243,18 +241,39 @@ if (orden === "verificar") {
     );
     process.exit(1);
   }
-  const salida = JSON.parse(readFileSync(resolve(archivoSalida), "utf8"));
+  const leida = JSON.parse(readFileSync(resolve(archivoSalida), "utf8"));
+  const nombrePdf = `${t.entrada.split("/").pop()}`;
+  // S13: lo que `cargar` necesita saber de la edición viaja EN el archivo entregado. El número y las páginas salen de la
+  // propia transcripción; la vigencia, del nombre del PDF (del 15 al 15) o de lo que se dice de la portada.
+  const total = Array.isArray(leida.paginas) ? leida.paginas.length : 0;
+  const delPdf = bandera("paginas");
+  if (delPdf !== undefined && Number(delPdf) !== total) {
+    console.error(
+      `✗ ${id}: la transcripción trae ${total} páginas y el PDF tiene ${delPdf}: falta leer alguna o sobra una`,
+    );
+    process.exit(1);
+  }
+  const meta = construirMeta(nombrePdf, total, {
+    desde: bandera("desde") ?? leida.meta?.desde,
+    hasta: bandera("hasta") ?? leida.meta?.hasta,
+  });
+  if ("error" in meta) {
+    console.error(
+      `✗ ${id}: no se pudo fijar la edición (${meta.error.join(", ")})`,
+    );
+    process.exit(1);
+  }
+  const salida = { ...leida, meta };
   const e = entregar({ estado: "tomado", id }, tipo, salida);
   if (e.estado !== "entregado") {
     console.error(`✗ ${id}: rechazado (${e.razon})`);
     for (const r of e.razones.slice(0, 20)) console.error(`  · ${r}`);
     process.exit(1);
   }
-  const numero = numeroDeEdicion(`${t.entrada.split("/").pop()}`);
+  const numero = numeroDeEdicion(nombrePdf);
   const destino = join(BASE, CARPETA_INTERMEDIA, archivoDeEdicion(numero));
   mkdirSync(dirname(destino), { recursive: true });
-  if (resolve(archivoSalida) !== destino)
-    copyFileSync(resolve(archivoSalida), destino);
+  writeFileSync(destino, JSON.stringify(salida, null, 2));
   // G2: lo que la revista dijo a un agente ya vino anotado por el lector (`avisos_al_agente`); aquí se deja en el registro.
   const anotaciones = salida.paginas.flatMap((pg) =>
     pg.avisos_al_agente.map(() => ({
@@ -278,6 +297,9 @@ if (orden === "verificar") {
     `✓ ${id}: LISTO, validado y guardado en ${CARPETA_INTERMEDIA}${archivoDeEdicion(numero)} (ignorado por git)`,
   );
   console.log(
+    `  Edición ${meta.numero} · ${meta.paginas} páginas · vigencia ${meta.desde} → ${meta.hasta} ${bandera("desde") || bandera("hasta") ? "(la que dijiste de la portada)" : "(del nombre del PDF: compárala con la portada y, si difiere, vuelve a entregar con --desde y --hasta)"}`,
+  );
+  console.log(
     `  Falta: \`cargar ${id}\` (a la base, sin publicar) y, tras revisar la muestra, \`publicar ${id} --revisada\`.`,
   );
   console.log(
@@ -289,12 +311,6 @@ if (orden === "verificar") {
   const db = conectarBase();
   verificarContrato();
   registrarTipos();
-  if (EDICION.numero !== numero) {
-    console.error(
-      `✗ la edición vigente en edicion.ts es la ${EDICION.numero}, no la ${numero}: actualiza EDICION y PAGINAS_EDICION antes de cargar`,
-    );
-    process.exit(1);
-  }
   const ruta = join(BASE, CARPETA_INTERMEDIA, archivoDeEdicion(numero));
   if (!existsSync(ruta)) {
     console.error(`✗ no hay ${archivoDeEdicion(numero)}: primero \`entregar\``);
@@ -309,20 +325,34 @@ if (orden === "verificar") {
     );
     process.exit(1);
   }
+  // S13: número, páginas y vigencia salen del propio archivo entregado, no de `edicion.ts`: una edición nueva entra sin
+  // tocar código. Una transcripción entregada antes del S13 no trae `meta`: se vuelve a entregar para escribirla.
+  const meta = entrega.meta;
+  if (!meta || meta.numero !== numero) {
+    console.error(
+      `✗ ${archivoDeEdicion(numero)} no trae la vigencia de la edición ${numero}: vuelve a correr \`entregar\` (con --desde y --hasta si la portada difiere del nombre del PDF)`,
+    );
+    process.exit(1);
+  }
+  console.log(
+    `  Edición ${meta.numero} · ${meta.paginas} páginas · vigencia ${meta.desde} → ${meta.hasta}`,
+  );
   const carga = cargaDeEdicion(
     {
-      numero,
-      nombre: EDICION.nombre,
-      desde: EDICION.desde,
-      hasta: EDICION.hasta,
+      numero: meta.numero,
+      nombre: meta.nombre,
+      desde: meta.desde,
+      hasta: meta.hasta,
     },
-    PAGINAS_EDICION,
+    meta.paginas,
     entrega.proyectos,
   );
   const { data, error } = await db.rpc("cargar_edicion", { p_edicion: carga });
   if (error) {
     console.error(
-      `✗ la base rechazó la carga: ${error.code ?? ""} ${error.message}`,
+      error.message.includes("muestra_invalida")
+        ? "✗ la base rechazó la muestra de revisión (5 proyectos, o todos si hay menos, sin repetidos y de esta edición): no debería pasar con el archivo entregado; vuelve a entregar la transcripción"
+        : `✗ la base rechazó la carga: ${error.code ?? ""} ${error.message}`,
     );
     process.exit(1);
   }
@@ -377,9 +407,11 @@ if (orden === "verificar") {
   });
   if (error) {
     console.error(
-      error.message.includes("muestra_no_coincide")
-        ? `✗ lo cargado en la base no es la edición que se revisó (la muestra no coincide): vuelve a \`cargar edicion-del-mes-${numero}\`, revisa de nuevo y publica`
-        : `✗ la base rechazó la publicación: ${error.message}`,
+      error.message.includes("muestra_invalida")
+        ? `✗ la base no acepta esa muestra: debe tener 5 proyectos (o todos si la edición tiene menos), sin repetidos y de la edición ${numero}. Vuelve a \`cargar edicion-del-mes-${numero}\` y revisa la muestra que escribe`
+        : error.message.includes("muestra_no_coincide")
+          ? `✗ lo cargado en la base no es la edición que se revisó (la muestra no coincide): vuelve a \`cargar edicion-del-mes-${numero}\`, revisa de nuevo y publica`
+          : `✗ la base rechazó la publicación: ${error.message}`,
     );
     process.exit(1);
   }

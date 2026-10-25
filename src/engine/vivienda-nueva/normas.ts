@@ -71,6 +71,9 @@ export const SubsidiosSchema = z
   })
   .strict();
 
+/** `src/data/subsidios-vivienda.json` tal como lo valida la CI (`vivienda-nueva-normas`). */
+export type Subsidios = z.infer<typeof SubsidiosSchema>;
+
 /** Lo común a todo concepto de tarifa; el detalle de cada concepto lo lee su propio motor. */
 export const ConceptoTarifaSchema = z
   .object({

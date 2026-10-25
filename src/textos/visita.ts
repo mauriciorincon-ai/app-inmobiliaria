@@ -254,6 +254,60 @@ export const VISITA = {
         buscar: { es: "Buscar inmuebles", en: "Search homes" },
       },
     },
+    // S13 — la visita a la sala de ventas de un proyecto nuevo. Lo que no está aquí se reutiliza con «Innmobiliaria» en el lugar
+    // del dueño. La dirección de la sala la manda el equipo por WhatsApp, a mano: este enlace jamás la muestra.
+    sala: {
+      equipo: { es: "Innmobiliaria", en: "Innmobiliaria" },
+      proyecto: {
+        es: "Sala de ventas de {nombre}",
+        en: "Sales room of {nombre}",
+      },
+      pendiente: {
+        es: "Le escribimos a la sala de ventas y te confirmamos el día por WhatsApp. Cuando tengamos horarios te escribimos al correo que dejaste y los eliges aquí. Si en dos días hábiles no responden, te lo decimos.",
+        en: "We will contact the sales room and confirm the day with you over WhatsApp. When we have times we will write to the email you gave us and you pick one here. If they do not answer within two business days, we will tell you.",
+      },
+      confirmada: {
+        con: {
+          es: "{inmueble} · coordinada por {dueno}",
+          en: "{inmueble} · arranged by {dueno}",
+        },
+        direccion: {
+          es: "{dueno} te envía la dirección de la sala por WhatsApp, al número que verificaste. Los teléfonos y direcciones de las salas no se publican.",
+          en: "{dueno} sends you the sales room's address on WhatsApp, to the number you verified. Sales rooms' phones and addresses are never published.",
+        },
+      },
+      cancelada: {
+        porComprador: {
+          es: "La visita quedó cancelada. Puedes pedir otra cuando quieras.",
+          en: "The visit is cancelled. You can ask for another whenever you like.",
+        },
+      },
+      rechazada: {
+        titulo: {
+          es: "No pudimos concretar la visita",
+          en: "We could not arrange the visit",
+        },
+        texto: {
+          es: "En la edición hay más proyectos de vivienda nueva.",
+          en: "The edition has more new-home projects.",
+        },
+        buscar: { es: "Ver vivienda nueva", en: "See new homes" },
+      },
+      cancelarConfirmar: {
+        es: "Se cancela la visita; si ya había un horario, queda sin efecto.",
+        en: "The visit is cancelled; if a time was set, it no longer applies.",
+      },
+      ics: {
+        titulo: {
+          es: "Visita: sala de ventas de {nombre}",
+          en: "Visit: sales room of {nombre}",
+        },
+        descripcion: {
+          es: "Visita a la sala de ventas coordinada por {dueno}. La dirección te llega por WhatsApp. Lleva tu cédula; nunca pagues nada antes de visitar.",
+          en: "Sales-room visit arranged by {dueno}. The address reaches you on WhatsApp. Bring your cédula; never pay anything before the visit.",
+        },
+      },
+    },
     cancelarConfirmar: {
       retirar: { es: "Retirar mi solicitud", en: "Withdraw my request" },
       titulo: { es: "¿Cancelar?", en: "Cancel?" },

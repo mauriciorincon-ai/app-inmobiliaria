@@ -1,16 +1,23 @@
 // Lo que las páginas de vivienda nueva leen en el servidor (S12, F2): la edición publicada que toca HOY, por la única RPC
-// que el anónimo puede llamar (`nuevos_publicados`, lista blanca de columnas, solo ediciones publicadas). Un fallo de la
-// base nunca tumba la página: se vuelve `error` y la pantalla lo dice. Ni el ingreso ni el arriendo del comprador pasan
+// que el anónimo puede llamar (`nuevos_publicados`, lista blanca de columnas, solo ediciones publicadas), y desde el S13
+// el área y el precio de los apartamentos usados en venta (`usados_para_comparar`, sin slug). Un fallo de la base nunca
+// tumba la página: se vuelve `error` (o `null`) y la pantalla lo dice. Ni el ingreso ni el arriendo del comprador pasan
 // por aquí: ninguna petición los lleva.
 import { hoyBogota } from "@/engine/agenda/bogota";
 import type { TarifasEscrituracion } from "@/engine/vivienda-nueva/escrituracion";
 import { deFila, type FilaProyecto } from "@/engine/vivienda-nueva/filas";
+import type { Subsidios } from "@/engine/vivienda-nueva/normas";
+import type { UsadoParaComparar } from "@/engine/vivienda-nueva/nuevo-o-usado";
 import type { EdicionLeida } from "@/engine/vivienda-nueva/vista";
+import subsidios from "@/data/subsidios-vivienda.json";
 import tarifas from "@/data/tarifas-escrituracion.json";
 import { crearClienteAnon } from "@/lib/supabase/server";
 
 /** Las tarifas de escrituración de este año, con su norma y su fecha (validadas en la CI por `vivienda-nueva-normas`). */
 export const TARIFAS = tarifas as unknown as TarifasEscrituracion;
+
+/** Los programas de subsidio, con su norma, su estado y su fecha (validados en la CI por `vivienda-nueva-normas`). */
+export const SUBSIDIOS = subsidios as unknown as Subsidios;
 
 export type LecturaNuevos =
   | { estado: "ok"; leida: EdicionLeida }
@@ -68,5 +75,34 @@ export async function cargarNuevos(hoy: string): Promise<LecturaNuevos> {
     };
   } catch {
     return { estado: "error" };
+  }
+}
+
+const esUsado = (x: unknown): x is UsadoParaComparar => {
+  const u = x as Partial<UsadoParaComparar> | null;
+  return (
+    typeof u === "object" &&
+    u !== null &&
+    typeof u.area_m2 === "number" &&
+    u.area_m2 > 0 &&
+    typeof u.precio_esperado === "number" &&
+    u.precio_esperado > 0
+  );
+};
+
+/**
+ * Los apartamentos usados en venta que hoy se ven en la búsqueda: solo área y precio (`usados_para_comparar`). `null` si la
+ * base no responde o responde algo que no se entiende: la pantalla dice «no disponible», jamás «0 usados».
+ */
+export async function cargarUsados(): Promise<UsadoParaComparar[] | null> {
+  try {
+    const { data, error } = await crearClienteAnon().rpc(
+      "usados_para_comparar",
+      { p_operacion: "venta", p_tipo: "apartamento" },
+    );
+    if (error || !Array.isArray(data) || !data.every(esUsado)) return null;
+    return data;
+  } catch {
+    return null;
   }
 }

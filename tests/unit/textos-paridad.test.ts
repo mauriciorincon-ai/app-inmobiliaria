@@ -11,6 +11,8 @@ import { enIdioma, esHoja, rellenar } from "@/i18n/textos";
 const IGUALES = new Set<string>([
   // Etiqueta de fila del resumen: «WhatsApp» es el nombre del servicio en cualquier idioma.
   "paso3.filas.whatsapp",
+  // El nombre de la marca que coordina la visita a una sala de ventas (S13): es el mismo en los dos idiomas.
+  "pagina.sala.equipo",
 ]);
 
 describe("revisarParidad — lo que DEBE marcar", () => {

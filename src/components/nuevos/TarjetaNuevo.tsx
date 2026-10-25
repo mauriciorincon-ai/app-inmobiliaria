@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { formatearM2, formatearMillones } from "@/engine/format/cop";
 import type { TarjetaNuevo as DatosTarjeta } from "@/engine/vivienda-nueva/vista";
 import type { Idioma } from "@/i18n/idiomas";
@@ -13,12 +14,15 @@ export default function TarjetaNuevo({
   lang,
   tope,
   fuera,
+  pie,
 }: {
   p: DatosTarjeta;
   t: TextosNuevos;
   lang: Idioma;
   tope: number | null;
   fuera: boolean;
+  /** Una línea más al pie (en «¿Nuevo o usado?», la espera). */
+  pie?: ReactNode;
 }) {
   const tt = t.tarjeta;
   const zona = [p.sector, p.ciudad].filter((x) => !esVacio(x));
@@ -85,6 +89,7 @@ export default function TarjetaNuevo({
               ? tt.m2Conflicto
               : tt.sinArea}
         </p>
+        {pie && <p className="text-xs text-gray">{pie}</p>}
         {fuera && (
           <p className="mt-1 text-xs font-semibold text-aviso">
             <span aria-hidden="true">! </span>

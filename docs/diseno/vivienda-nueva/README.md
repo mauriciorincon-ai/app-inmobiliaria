@@ -2,7 +2,7 @@
 
 Maqueta navegable del módulo de vivienda nueva, con las cifras **reales** de la edición 187 de la revista (procesada) y
 calculadas por los motores de `src/engine/vivienda-nueva/`. Es la maqueta aprobada de la que salen el índice y la ficha del
-producto (S12: pestaña «Nuevos» de Buscar y `/nuevos/[slug]`) y, en el S13, nuevo o usado, subsidio y la visita. **La maqueta
+producto (S12: pestaña «Nuevos» de Buscar y `/nuevos/[slug]`; S13: `/nuevo-o-usado`, `/te-alcanza` y `/nuevos/[slug]/visita`). **La maqueta
 no es código de producto:** HTML autocontenido que se abre con doble clic en `index.html`; los textos del producto viven en
 `src/textos/vivienda-nueva.ts`.
 
@@ -23,7 +23,7 @@ y el **marco**.
   fecha.
 - **De ejemplo:** el hogar (ingresos de $8 M, 30 % de cuota inicial, 20 años), el arriendo de $1.800.000, los hogares de
   «te alcanza» y los usados de «nuevo o usado». En el producto, el ingreso y el arriendo los escribe el comprador y no
-  salen de su teléfono; los usados son los anuncios verificados de la búsqueda. También son de ejemplo, en `05-visita.html`,
+  salen de su teléfono; los usados son los anuncios vivos de hoy en Innmobiliaria (en el S13 la pantalla no afirma que estén verificados). También son de ejemplo, en `05-visita.html`,
   el plazo de «dos días hábiles» y la hora de la visita confirmada: el S13 los define de verdad, y los teléfonos y
   direcciones de las salas de ventas los ve solo el operador.
 - **Fecha de corte:** 20 de octubre de 2026 (perilla del generador, nunca el reloj). El estado «mes sin edición» usa el
@@ -85,3 +85,18 @@ pagar.
 
 **Aprobada el 2026-10-20**, sin cambios, con la frase del usuario: «Sonnet listo construye», dicha tras ver las cinco
 pantallas con sus estados y las ocho decisiones de arriba. Con ella se abrió la F3.
+
+## Lo construido en el S13 frente a esta maqueta
+
+Las pantallas 03, 04 y 05 salen de esta maqueta con los mismos estados y las mismas reglas. Lo que cambia, dicho:
+
+- **03 · ¿Nuevo o usado?** Compara **apartamentos** nuevos con **apartamentos** usados en venta, y los usados son los **anuncios vivos hoy**
+  en Innmobiliaria (la maqueta decía «verificados»; no todos lo son y la pantalla no lo afirma). En la Sabana no hay usados: Innmobiliaria
+  publica solo en Bogotá. Si la base no responde dice «no pudimos leer los usados», no «0 usados».
+- **04 · ¿Te alcanza con subsidio?** Los tres hogares salen del servidor con el mismo motor; «Tu hogar» se calcula en el teléfono con lo guardado en
+  «lo que puedes pagar». De lo no verificado se muestra solo el **nombre**.
+- **05 · Visita a la sala.** El plazo de «dos días hábiles» ya no es de ejemplo: son 48 horas de lunes a viernes en hora de Bogotá, sin festivos.
+  La dirección de la sala la manda **el operador por WhatsApp** al confirmar (la maqueta decía «te llega por WhatsApp»; el correo no la lleva).
+  El contacto de cada sala lo escribe el operador en su panel: la revista no lo trae.
+- **Cuota inicial durante la obra:** el archivo del sprint la pedía en las tarjetas, pero el aviso de la revista no imprime el plan de pagos.
+  No se inventa: la tarjeta trae lo que pagas al menos, el m² y la espera.

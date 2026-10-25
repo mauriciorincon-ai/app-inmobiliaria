@@ -2,7 +2,7 @@
 // lengua ya elegida. Sin frases: todo texto sale de `src/textos/vivienda-nueva.ts`.
 import { localeIntl, type Idioma } from "@/i18n/idiomas";
 import { rellenar, type Proyectado } from "@/i18n/textos";
-import type { EntregaPartes } from "@/engine/vivienda-nueva/vista";
+import type { EntregaPartes, EsperaMeses } from "@/engine/vivienda-nueva/vista";
 import type { VIVIENDA_NUEVA } from "@/textos/vivienda-nueva";
 
 export type TextosNuevos = Proyectado<typeof VIVIENDA_NUEVA>;
@@ -54,4 +54,22 @@ const formateadoresNumero: Record<Idioma, Intl.NumberFormat> = {
 /** Un número con la coma o el punto de su idioma: 35,18 (es) · 35.18 (en). */
 export function numero(n: number, lang: Idioma): string {
   return formateadoresNumero[lang].format(n);
+}
+
+/** La espera en una línea (la lista de «¿Nuevo o usado?»): los meses, o por qué no se cuentan. Jamás un número inventado. */
+export function esperaCorta(
+  e: EsperaMeses,
+  t: TextosNuevos["nuevoOUsado"]["caben"]["espera"],
+): string {
+  switch (e.estado) {
+    case "inmediata":
+      return t.inmediata;
+    case "sin_fecha":
+      return t.sinFecha;
+    case "en_conflicto":
+      return t.enConflicto;
+    case "calculada":
+      if (e.vencida) return t.vencida;
+      return e.meses === 1 ? t.mesesUno : rellenar(t.meses, { meses: e.meses });
+  }
 }

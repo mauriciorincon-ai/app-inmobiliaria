@@ -92,9 +92,15 @@ export default async function Privacidad({ params }: PropsLang) {
           <section>
             <h2 className="text-lg font-bold text-ink">{t.visitas.titulo}</h2>
             <p className="mt-2 text-sm leading-relaxed">{t.visitas.texto}</p>
+            <p className="mt-3 text-sm leading-relaxed">{t.visitas.salas}</p>
             <p className="mt-3 text-sm leading-relaxed">
               {t.visitas.conservacion}
             </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-bold text-ink">{t.telefono.titulo}</h2>
+            <p className="mt-2 text-sm leading-relaxed">{t.telefono.texto}</p>
           </section>
 
           <section>

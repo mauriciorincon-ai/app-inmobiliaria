@@ -3,6 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 import { consultar, ejecutar } from "./utils/bd";
 import { fechaBogota } from "./utils/fechas";
 import type { NuevosPublicados } from "../../src/lib/supabase/types";
+import {
+  soltarCandadoEdicion,
+  tomarCandadoEdicion,
+} from "./utils/candado-edicion";
 
 // S12 «Nuevos, con lo que pagas de verdad» — la base de datos: la edición de la revista ya procesada.
 // Habla con la RPC pública con el anon key real y llama como `postgres` a las del servidor (el rol con el que las
@@ -82,18 +86,25 @@ function proyecto(n: number, extra: Record<string, unknown> = {}) {
   };
 }
 
-const MUESTRA = ["constructora ficticia|proyecto ficticio 2"];
+// S13: la base valida la muestra (≥ 5 proyectos, o todos si la edición tiene menos, sin repetidos y de ESA edición). La
+// edición de prueba trae 3 proyectos: se revisa entera. Una carga con otros proyectos lleva la muestra que les toca.
+const claveDe = (p: { clave: unknown }) => p.clave as string;
+const muestraDe = (ps: { clave: unknown }[]) => ps.slice(0, 5).map(claveDe);
+const PROYECTOS = [proyecto(1), proyecto(2), proyecto(3)];
+const MUESTRA = muestraDe(PROYECTOS);
 
 function edicion(extra: Record<string, unknown> = {}) {
+  const proyectos =
+    (extra.proyectos as ReturnType<typeof proyecto>[]) ?? PROYECTOS;
   return {
     numero: NUMERO,
     nombre: "Edición Ficticia",
     desde: DESDE,
     hasta: HASTA,
     paginas: 10,
-    muestra_claves: MUESTRA,
+    muestra_claves: muestraDe(proyectos),
     muestra_semilla: NUMERO,
-    proyectos: [proyecto(1), proyecto(2), proyecto(3)],
+    proyectos,
     ...extra,
   };
 }
@@ -130,8 +141,15 @@ test.describe.configure({ mode: "serial" });
 test.beforeEach(() => {
   test.skip(test.info().project.name !== "desktop-chromium", "una sola vez");
 });
-test.beforeAll(limpiar);
-test.afterAll(limpiar);
+test.beforeAll(async () => {
+  test.setTimeout(600_000);
+  await tomarCandadoEdicion();
+  limpiar();
+});
+test.afterAll(() => {
+  limpiar();
+  soltarCandadoEdicion();
+});
 
 test("el anónimo NO lee ni escribe las tablas de la edición", async () => {
   cargar(edicion());
@@ -179,10 +197,18 @@ test("una edición cargada entra SIN publicar y el anónimo no la ve", async () 
 });
 
 test("publicar exige la muestra EXACTA que fijó la carga (G5): otra distinta se rechaza", async () => {
+  // Una muestra que no es válida para la edición (corta o vacía) la rechaza la base por inválida (S13).
   expect(() => publicar(["constructora ficticia|proyecto ficticio 1"])).toThrow(
-    /muestra_no_coincide/,
+    /muestra_invalida/,
   );
-  expect(() => publicar([])).toThrow(/muestra_no_coincide/);
+  expect(() => publicar([])).toThrow(/muestra_invalida/);
+  // Una muestra VÁLIDA pero distinta de la que fijó la carga: la revisión era de otra. Con 6 proyectos la de 5 puede ser otra.
+  const seis = [1, 2, 3, 4, 5, 6].map((n) => proyecto(n));
+  cargar(edicion({ proyectos: seis }));
+  expect(() =>
+    publicar([1, 2, 3, 4, 6].map((n) => claveDe(proyecto(n)))),
+  ).toThrow(/muestra_no_coincide/);
+  cargar(edicion()); // vuelve la edición de 3 proyectos para las pruebas que siguen
   await noEsLaMia(HOY);
   expect(
     consultar(
@@ -268,7 +294,7 @@ test("con dos ediciones publicadas, la vigente es la de mayor número cuya venta
         }),
       )}$j$::jsonb)`,
     );
-    publicar(MUESTRA, otra);
+    publicar(muestraDe([proyecto(1), proyecto(2)]), otra);
     // Hoy solo cae en la primera; el día siguiente a su ventana cae en la segunda.
     expect((await leer(HOY))?.edicion.numero).toBe(NUMERO);
     expect((await leer(DESPUES))?.edicion.numero).toBe(otra);

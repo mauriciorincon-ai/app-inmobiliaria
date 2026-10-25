@@ -23,7 +23,7 @@ y el **marco**.
   fecha.
 - **De ejemplo:** el hogar (ingresos de $8 M, 30 % de cuota inicial, 20 años), el arriendo de $1.800.000, los hogares de
   «te alcanza» y los usados de «nuevo o usado». En el producto, el ingreso y el arriendo los escribe el comprador y no
-  salen de su teléfono; los usados son los anuncios verificados de la búsqueda. También son de ejemplo, en `05-visita.html`,
+  salen de su teléfono; los usados son los anuncios vivos de hoy en Innmobiliaria (en el S13 la pantalla no afirma que estén verificados). También son de ejemplo, en `05-visita.html`,
   el plazo de «dos días hábiles» y la hora de la visita confirmada: el S13 los define de verdad, y los teléfonos y
   direcciones de las salas de ventas los ve solo el operador.
 - **Fecha de corte:** 20 de octubre de 2026 (perilla del generador, nunca el reloj). El estado «mes sin edición» usa el

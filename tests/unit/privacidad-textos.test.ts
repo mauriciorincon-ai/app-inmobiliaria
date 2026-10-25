@@ -59,7 +59,7 @@ describe("/privacidad — el teléfono y la sala de ventas (es/en)", () => {
       ["arriendo", "rent"],
       ["no los enviamos", "neither receive nor keep"],
       ["precio máximo", "maximum price"],
-      ["no revela tus ingresos", "does not reveal your income"],
+      ["tus ingresos no viajan", "your income does not travel"],
     ]) {
       expect(es, e).toContain(e);
       expect(en, i).toContain(i);
@@ -81,6 +81,23 @@ describe("/privacidad — el teléfono y la sala de ventas (es/en)", () => {
       expect(es, e).toContain(e);
       expect(en, i).toContain(i);
     }
+  });
+
+  it("la política no promete que Innmobiliaria jamás escribe por WhatsApp, ni que el precio máximo no revela el ingreso", () => {
+    expect(PRIVACIDAD.compradores.texto.es).not.toContain(
+      "nunca te envía mensajes por WhatsApp",
+    );
+    expect(PRIVACIDAD.compradores.texto.en).not.toContain(
+      "never sends you WhatsApp messages",
+    );
+    expect(PRIVACIDAD.compradores.texto.es).toContain("a mano");
+    expect(PRIVACIDAD.compradores.texto.en).toContain("by hand");
+    expect(PRIVACIDAD.telefono.texto.es).not.toContain(
+      "no revela tus ingresos",
+    );
+    expect(PRIVACIDAD.telefono.texto.en).not.toContain(
+      "does not reveal your income",
+    );
   });
 
   it("no queda la frase caducada «Innmobiliaria no te envía mensajes por WhatsApp» en la visita", () => {

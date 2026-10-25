@@ -82,8 +82,9 @@ solicitudes de visita.
 
 - **Qué hace:** antes de escribirle a un dueño, pruebas que tu WhatsApp es tuyo. Así el dueño sabe
   que le escribe una persona real con un número real. Verificar el WhatsApp **no prueba quién
-  eres**: para eso, la identificación con tu cédula (más abajo) es aparte y opcional. **Innmobiliaria nunca te envía mensajes por WhatsApp:
-  eres tú quien nos escribe un código.**
+  eres**: para eso, la identificación con tu cédula (más abajo) es aparte y opcional. **Para verificarte, Innmobiliaria no te escribe por WhatsApp:
+  eres tú quien nos escribe un código.** (La única vez que el equipo te escribe a mano es si pides visitar la sala de
+  ventas de un proyecto nuevo, ya confirmada; ver «Visitas a salas de ventas».)
 - **Cómo se usa:** en la ficha de un anuncio toca **«Escribirle por WhatsApp»** →
   1. Si aún no verificaste, te lo explica y te lleva a **«Verificar mi WhatsApp»**.
   2. Escribe tu nombre y tu celular de Colombia, acepta la política de datos y toca **«Verificar con
@@ -542,8 +543,8 @@ solicitudes de visita.
   **Mi anuncio** (nombre, últimos 4 dígitos y fecha).
 - **¿Innmobiliaria me escribe por WhatsApp para verificarme?** No: eres tú quien nos manda el código.
   Nosotros solo lo recibimos y nunca respondemos por ahí.
-- **¿Las alertas me escriben por WhatsApp?** No. Solo por correo, con un resumen al día. Innmobiliaria
-  nunca te escribe por WhatsApp.
+- **¿Las alertas me escriben por WhatsApp?** No. Solo por correo, con un resumen al día; la alerta
+  nunca usa WhatsApp.
 - **¿Cómo dejo de recibir una alerta?** Con el enlace **«Dejar de recibirla: un clic»** que trae cada
   correo (no pide sesión) o desde **Alertas**, con **Borrar**.
 - **¿«¿Está caro?» es un avalúo?** No. Es un rango de lo que piden otros dueños por anuncios

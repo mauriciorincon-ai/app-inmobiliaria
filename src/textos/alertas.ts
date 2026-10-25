@@ -151,8 +151,8 @@ export const ALERTAS = {
     politica: { es: "Política de datos", en: "Data policy" },
     honeypot: { es: "No llenar", en: "Do not fill in" },
     soloCorreo: {
-      es: "Te escribimos solo por correo. Innmobiliaria nunca te escribe por WhatsApp.",
-      en: "We write to you by email only. Innmobiliaria never writes to you on WhatsApp.",
+      es: "Te escribimos solo por correo; esta alerta nunca usa WhatsApp.",
+      en: "We write to you by email only; this alert never uses WhatsApp.",
     },
     crear: { es: "Crear alerta", en: "Create alert" },
     creando: { es: "Creando…", en: "Creating…" },

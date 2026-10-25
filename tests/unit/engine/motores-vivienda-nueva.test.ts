@@ -750,6 +750,24 @@ describe("índice", () => {
     ]);
     expect(i.porFranja[0]).toMatchObject({ medianaM2: 4_400_000 });
     expect(i.entregasInmediatas).toBe(2);
+    // S13: una entrega o etapa en conflicto no es inmediata; un precio en conflicto sigue en su franja (la tabla lo declara).
+    const enConflicto = indice(
+      [
+        ...bajos,
+        pi({ precio_desde: 100_000_000, en_conflicto: ["precio_desde"] }),
+        pi({ etapa: "entrega_inmediata", en_conflicto: ["etapa"] }),
+        pi({ entrega: "inmediata", en_conflicto: ["entrega"] }),
+        pi({ entrega: "inmediata", en_conflicto: ["entrega_precision"] }),
+        pi({ entrega: "inmediata", en_conflicto: ["precio_desde"] }),
+      ],
+      franjas,
+    );
+    expect(enConflicto.entregasInmediatas).toBe(1);
+    expect(enConflicto.porFranja.map((g) => [g.clave, g.n])).toEqual([
+      ["bajo", 6],
+      ["alto", 4],
+    ]);
+    expect(enConflicto.porFranja[0]).toMatchObject({ enConflicto: 1 });
     // Sin franjas: solo los sin precio; una franja que no cubre a nadie no aparece.
     expect(
       indice([pi({}), pi({ precio_desde: NO_LO_DICE })]).porFranja.map(

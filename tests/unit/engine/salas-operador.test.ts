@@ -144,6 +144,26 @@ describe("los mensajes de WhatsApp", () => {
     expect(`${es}${en}`).not.toMatch(/\{/);
   });
 
+  it("un nombre con «$&» o «$'» sale tal cual en los mensajes (no se interpreta como patrón de reemplazo)", () => {
+    const sala = mensajeParaSala(OPERADOR.salas.mensajes.sala, {
+      proyecto: "Torre $& $' $1 Ficticia",
+      franja: "sábado",
+    });
+    expect(sala).toContain("Torre $& $' $1 Ficticia");
+    expect(sala).not.toMatch(/\{/);
+    const comprador = mensajeParaComprador(OPERADOR.salas.mensajes.comprador, {
+      nombre: "Ana $&",
+      proyecto: "Torre $' Ficticia",
+      inicio: "2026-10-31T15:00:00Z",
+      direccion: "Calle $& # 1 (dirección de prueba)",
+      idioma: "es",
+    });
+    expect(comprador).toContain("Hola Ana $&");
+    expect(comprador).toContain("Torre $' Ficticia");
+    expect(comprador).toContain("Calle $& # 1 (dirección de prueba)");
+    expect(comprador).not.toMatch(/\{/);
+  });
+
   it("sin la dirección guardada no hay mensaje al comprador (el panel pide guardarla; no se envía a medias)", () => {
     expect(
       mensajeParaComprador(OPERADOR.salas.mensajes.comprador, {

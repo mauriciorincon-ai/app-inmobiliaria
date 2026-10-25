@@ -74,8 +74,8 @@ export function mensajeParaSala(
   datos: { proyecto: string; franja: string },
 ): string {
   return plantilla.es
-    .replace("{proyecto}", datos.proyecto)
-    .replace("{franja}", datos.franja);
+    .replace("{proyecto}", () => datos.proyecto)
+    .replace("{franja}", () => datos.franja);
 }
 
 /** El mensaje al comprador con la dirección de la sala, en SU idioma. Null si la dirección no está guardada. */
@@ -89,10 +89,11 @@ export function mensajeParaComprador(
     idioma: Idioma;
   },
 ): string | null {
-  if (datos.direccion === null) return null;
+  const direccion = datos.direccion;
+  if (direccion === null) return null;
   return plantilla[datos.idioma]
-    .replace("{nombre}", datos.nombre)
-    .replace("{proyecto}", datos.proyecto)
-    .replace("{horario}", formatearHorario(datos.inicio, datos.idioma))
-    .replace("{direccion}", datos.direccion);
+    .replace("{nombre}", () => datos.nombre)
+    .replace("{proyecto}", () => datos.proyecto)
+    .replace("{horario}", () => formatearHorario(datos.inicio, datos.idioma))
+    .replace("{direccion}", () => direccion);
 }

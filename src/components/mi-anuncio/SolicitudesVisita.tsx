@@ -4,12 +4,8 @@ import { useState } from "react";
 import Campo from "@/components/ui/Campo";
 import { formatearDia, formatearHorario } from "@/engine/agenda/bogota";
 import { accionesDueno } from "@/engine/agenda/estados";
-import {
-  MAX_HORARIOS,
-  PRIMERA_HORA,
-  ULTIMA_HORA,
-  validarHorarios,
-} from "@/engine/agenda/horarios";
+import { MAX_HORARIOS, validarHorarios } from "@/engine/agenda/horarios";
+import { etiquetaHora, HORAS_PROPUESTAS } from "@/engine/agenda/horas-propuestas";
 import { construirWaMe } from "@/engine/format/whatsapp";
 import { presupuestoDicho } from "@/engine/format/presupuesto";
 import { mascararTelefono } from "@/engine/verificacion/mascara";
@@ -36,22 +32,6 @@ const BOTON =
 const BOTON_SEC =
   "inline-flex items-center justify-center rounded-full border border-purple-200 px-5 py-2.5 text-sm font-semibold text-purple-600 transition-colors hover:bg-purple-tint disabled:opacity-60";
 const CHIP = "rounded-full px-3 py-1 text-xs font-semibold";
-
-// Las horas que se pueden proponer: de 6:00 a 21:00 cada media hora, en hora de Bogotá.
-const HORAS: string[] = [];
-for (let m = PRIMERA_HORA; m <= ULTIMA_HORA; m += 30) {
-  HORAS.push(
-    `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`,
-  );
-}
-
-function etiquetaHora(hora: string, lang: Idioma): string {
-  return new Intl.DateTimeFormat(localeIntl(lang), {
-    timeZone: "UTC",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(`2000-01-01T${hora}:00Z`));
-}
 
 function iniciales(nombre: string): string {
   return nombre
@@ -532,7 +512,7 @@ function Tarjeta({
                 onChange={(v) => actualizarFila(i, "hora", v)}
                 control="select"
                 placeholder={t.horarios.hora}
-                opciones={HORAS.map((h) => ({
+                opciones={HORAS_PROPUESTAS.map((h) => ({
                   value: h,
                   label: etiquetaHora(h, lang),
                 }))}

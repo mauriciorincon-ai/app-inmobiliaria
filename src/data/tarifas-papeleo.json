@@ -8,7 +8,9 @@
   },
   "alias_ciudad": {
     "santiago de cali": "cali",
-    "cartagena de indias": "cartagena"
+    "cartagena de indias": "cartagena",
+    "bogota d c": "bogota",
+    "bogota dc": "bogota"
   },
   "conceptos": [
     {

@@ -291,8 +291,12 @@ describe("el avalúo catastral y la clase de vivienda", () => {
         valor: null,
       });
     }
-    // Los recaudos se causan también en las escrituras exentas (art. 50): $28.900 hasta $100.000.000.
-    expect(linea(g, "comprador", "recaudos_notariales")?.valor).toBe(14_450);
+    // Los recaudos de una escritura exenta tienen una fila aparte en el art. 50 (19.300) y la exención VIP no se leyó en la norma
+    // notarial: ni los 14.450 del tramo ni los 9.650 de la fila exenta se afirman. Se nombran sin cifra.
+    expect(linea(g, "comprador", "recaudos_notariales")).toMatchObject({
+      estado: "no_verificado",
+      valor: null,
+    });
     expect(g.avisos).toContainEqual({ id: "vip_notarial_no_verificado" });
     expect(g.avisos.some((a) => a.id === "hojas_adicionales")).toBe(false);
   });
@@ -551,6 +555,14 @@ describe("las ciudades", () => {
     expect(resolverCiudad("Bogotá", false, esc, pap)).toBe("bogota");
     expect(resolverCiudad("  CHÍA ", true, esc, pap)).toBe("chia");
     expect(resolverCiudad("Santiago de Cali", false, esc, pap)).toBe("cali");
+    // «Bogotá D.C.» es Bogotá: sin el alias caería en «otra ciudad» (sin impuesto de registro y con el tope VIS equivocado).
+    for (const texto of [
+      "Bogotá D.C.",
+      "Bogotá, D.C.",
+      "Bogota D. C.",
+      "BOGOTÁ DC",
+    ])
+      expect(resolverCiudad(texto, false, esc, pap), texto).toBe("bogota");
     expect(resolverCiudad("Cartagena de Indias", false, esc, pap)).toBe(
       "cartagena",
     );

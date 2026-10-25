@@ -407,9 +407,11 @@ export function gastos(
   if (claseNotarial === "vis") avisos.push({ id: "vis_tarifa_unica" });
   if (notariales !== null) avisos.push({ id: "hojas_adicionales" });
 
-  // Recaudos de la notaría (art. 50): por tramo de cuantía, aun en las escrituras exentas.
+  // Recaudos de la notaría (art. 50): por tramo de cuantía. La tabla trae una fila aparte para las escrituras exentas de derechos
+  // notariales (19.300), pero la exención de una VIP con subsidio no se leyó en la norma notarial: ahí el recaudo no se afirma.
   const rec = vigente<ConceptoRecaudos>(pap, "recaudos_notariales");
-  const recaudo = rec ? tramoRecaudo(rec, base) : null;
+  const exentaSinVerificar = claseNotarial === "vip" && notariales === null;
+  const recaudo = rec && !exentaSinVerificar ? tramoRecaudo(rec, base) : null;
   repartida("recaudos_notariales", recaudo, entrada.reparto, {
     base,
     tarifa: recaudo === null ? null : { tipo: "fija", valor: recaudo },

@@ -8,7 +8,11 @@ import {
   precioUnico,
   type AnuncioCreado,
 } from "./utils/anuncios";
-import { compradorVerificado, sesionNueva, telefonoNuevo } from "./utils/comprador";
+import {
+  compradorVerificado,
+  sesionNueva,
+  telefonoNuevo,
+} from "./utils/comprador";
 import { fechaBogota } from "./utils/fechas";
 import { problemasDePausa, type FuncionCatalogo } from "./utils/puertas-pausa";
 
@@ -28,15 +32,21 @@ test.beforeEach(() => {
   test.skip(test.info().project.name !== "desktop-chromium", "una sola vez");
 });
 
-const json = <T>(sql: string): T => JSON.parse(consultar(sql)[0] ?? "null") as T;
-const pausar = (a: AnuncioCreado) => consultar(`select public.pausar_anuncio('${a.id}')`);
-const reactivar = (a: AnuncioCreado) => consultar(`select public.reactivar_anuncio('${a.id}')`);
+const json = <T>(sql: string): T =>
+  JSON.parse(consultar(sql)[0] ?? "null") as T;
+const pausar = (a: AnuncioCreado) =>
+  consultar(`select public.pausar_anuncio('${a.id}')`);
+const reactivar = (a: AnuncioCreado) =>
+  consultar(`select public.reactivar_anuncio('${a.id}')`);
 const revisar = () =>
   json<{ foto: number; telefono: number; matricula: number }>(
     "select public.revisar_banderas()::text",
   );
 const banderaDe = (a: AnuncioCreado, regla: string) =>
-  json<{ evidencia: Record<string, unknown>; resolucion: string | null } | null>(
+  json<{
+    evidencia: Record<string, unknown>;
+    resolucion: string | null;
+  } | null>(
     `select (select jsonb_build_object('evidencia', evidencia, 'resolucion', resolucion)
                from public.banderas where inmueble_id = '${a.id}' and regla = '${regla}')::text`,
   );
@@ -57,7 +67,11 @@ async function slugsDeBusqueda(precio: number): Promise<string[]> {
   });
   return ((data ?? []) as { slug: string }[]).map((f) => f.slug);
 }
-async function reportar(sesion: string, slug: string, extra: Record<string, unknown> = {}) {
+async function reportar(
+  sesion: string,
+  slug: string,
+  extra: Record<string, unknown> = {},
+) {
   return api().rpc("reportar_anuncio", {
     p_sesion_hash: sesion,
     p_slug: slug,
@@ -91,42 +105,69 @@ test("la pausa cierra la ficha, la búsqueda, los resúmenes, los favoritos, las
     p_nombre: "Otra",
   });
   expect(
-    (await api().rpc("agregar_a_lista", { p_sesion_hash: sesion, p_lista: lista, p_slug: a.slug })).error,
+    (
+      await api().rpc("agregar_a_lista", {
+        p_sesion_hash: sesion,
+        p_lista: lista,
+        p_slug: a.slug,
+      })
+    ).error,
   ).toBeNull();
-  await api().rpc("fusionar_favoritos", { p_sesion_hash: sesion, p_slugs: [a.slug] });
+  await api().rpc("fusionar_favoritos", {
+    p_sesion_hash: sesion,
+    p_slugs: [a.slug],
+  });
 
   const enComparables = async () =>
-    ((await api().rpc("comparables_precio", {
-      p_operacion: "venta",
-      p_tipo: "apartamento",
-      p_localidad: "Chapinero",
-    })).data as { slug: string }[]).map((c) => c.slug);
+    (
+      (
+        await api().rpc("comparables_precio", {
+          p_operacion: "venta",
+          p_tipo: "apartamento",
+          p_localidad: "Chapinero",
+        })
+      ).data as { slug: string }[]
+    ).map((c) => c.slug);
 
   // Antes: se ve por todas las puertas.
   expect(await ficha(a.slug)).not.toBeNull();
   expect(await enComparables()).toContain(a.slug);
   expect(await slugsDeBusqueda(a.precio)).toEqual([a.slug]);
-  expect((await api().rpc("mis_favoritos", { p_sesion_hash: sesion })).data).toContain(a.slug);
+  expect(
+    (await api().rpc("mis_favoritos", { p_sesion_hash: sesion })).data,
+  ).toContain(a.slug);
 
   pausar(a);
 
   expect(await ficha(a.slug)).toBeNull();
   expect(await slugsDeBusqueda(a.precio)).toEqual([]);
-  expect((await api().rpc("resumen_anuncios", { p_slugs: [a.slug] })).data).toEqual([]);
-  expect((await api().rpc("mis_favoritos", { p_sesion_hash: sesion })).data).not.toContain(a.slug);
   expect(
-    (await api().rpc("fusionar_favoritos", { p_sesion_hash: sesion, p_slugs: [a.slug] })).data,
+    (await api().rpc("resumen_anuncios", { p_slugs: [a.slug] })).data,
+  ).toEqual([]);
+  expect(
+    (await api().rpc("mis_favoritos", { p_sesion_hash: sesion })).data,
   ).not.toContain(a.slug);
-  const listas = (await api().rpc("mis_listas", { p_sesion_hash: sesion })).data as {
+  expect(
+    (
+      await api().rpc("fusionar_favoritos", {
+        p_sesion_hash: sesion,
+        p_slugs: [a.slug],
+      })
+    ).data,
+  ).not.toContain(a.slug);
+  const listas = (await api().rpc("mis_listas", { p_sesion_hash: sesion }))
+    .data as {
     id: string;
     slugs: string[];
   }[];
   expect(listas.find((l) => l.id === lista)?.slugs).toEqual([]);
-  const detalle = (await api().rpc("obtener_lista", {
-    p_sesion_hash: sesion,
-    p_token: null,
-    p_lista: lista,
-  })).data as { items: unknown[]; no_disponibles: number };
+  const detalle = (
+    await api().rpc("obtener_lista", {
+      p_sesion_hash: sesion,
+      p_token: null,
+      p_lista: lista,
+    })
+  ).data as { items: unknown[]; no_disponibles: number };
   expect(detalle.items).toEqual([]);
   expect(detalle.no_disponibles).toBe(1);
   const agregar = await api().rpc("agregar_a_lista", {
@@ -135,7 +176,14 @@ test("la pausa cierra la ficha, la búsqueda, los resúmenes, los favoritos, las
     p_slug: a.slug,
   });
   expect(agregar.error?.message).toContain("no_disponible");
-  expect((await api().rpc("registrar_contacto", { p_sesion_hash: sesion, p_slug: a.slug })).data).toBeNull();
+  expect(
+    (
+      await api().rpc("registrar_contacto", {
+        p_sesion_hash: sesion,
+        p_slug: a.slug,
+      })
+    ).data,
+  ).toBeNull();
   const visita = await api().rpc("solicitar_visita", {
     p_sesion_hash: sesion,
     p_slug: a.slug,
@@ -148,10 +196,13 @@ test("la pausa cierra la ficha, la búsqueda, los resúmenes, los favoritos, las
   });
   expect(visita.error?.message).toContain("no_disponible");
   expect(await enComparables()).not.toContain(a.slug);
-  expect((await reportar(sesion, a.slug)).error?.message).toContain("no_disponible");
+  expect((await reportar(sesion, a.slug)).error?.message).toContain(
+    "no_disponible",
+  );
 
   // Renovar confirma la vigencia pero NO quita la pausa, y lo dice.
-  const renovado = (await api().rpc("renovar_vigencia", { p_token: a.token })).data as {
+  const renovado = (await api().rpc("renovar_vigencia", { p_token: a.token }))
+    .data as {
     vigente_hasta: string;
     pausado: boolean;
   };
@@ -161,8 +212,16 @@ test("la pausa cierra la ficha, la búsqueda, los resúmenes, los favoritos, las
   reactivar(a);
   expect(await ficha(a.slug)).not.toBeNull();
   expect(await slugsDeBusqueda(a.precio)).toEqual([a.slug]);
-  expect((await api().rpc("mis_favoritos", { p_sesion_hash: sesion })).data).toContain(a.slug);
-  expect(((await api().rpc("renovar_vigencia", { p_token: a.token })).data as { pausado: boolean }).pausado).toBe(false);
+  expect(
+    (await api().rpc("mis_favoritos", { p_sesion_hash: sesion })).data,
+  ).toContain(a.slug);
+  expect(
+    (
+      (await api().rpc("renovar_vigencia", { p_token: a.token })).data as {
+        pausado: boolean;
+      }
+    ).pausado,
+  ).toBe(false);
 });
 
 test("un reporte y una bandera NO cambian lo que ve el comprador (solo el operador pausa)", async () => {
@@ -172,7 +231,9 @@ test("un reporte y una bandera NO cambian lo que ve el comprador (solo el operad
   conTelefono(b, telefonoNuevo());
   const matricula = `50N-${Date.now() % 1e8}`;
   for (const x of [a, b]) {
-    consultar(`select public.marcar_verificado_ctl('${x.id}', '${matricula}', date '${fechaBogota(2)}')`);
+    consultar(
+      `select public.marcar_verificado_ctl('${x.id}', '${matricula}', date '${fechaBogota(2)}')`,
+    );
   }
   const antes = await ficha(a.slug);
   const { sesion } = await compradorVerificado();
@@ -182,7 +243,11 @@ test("un reporte y una bandera NO cambian lo que ve el comprador (solo el operad
 
   expect(await ficha(a.slug)).toEqual(antes);
   expect(await slugsDeBusqueda(a.precio)).toEqual([a.slug]);
-  expect(consultar(`select pausado_at is null from public.inmuebles where id = '${a.id}'`)[0]).toBe("t");
+  expect(
+    consultar(
+      `select pausado_at is null from public.inmuebles where id = '${a.id}'`,
+    )[0],
+  ).toBe("t");
 });
 
 test("reportar: exige el WhatsApp verificado, motivos de la lista cerrada, uno por anuncio y a lo sumo 5 en 24 h", async () => {
@@ -194,19 +259,34 @@ test("reportar: exige el WhatsApp verificado, motivos de la lista cerrada, uno p
     [{ p_motivos: ["inventado"] }, "motivo_invalido"],
     [{ p_detalle: "x".repeat(501) }, "detalle_invalido"],
   ] as const) {
-    expect((await reportar(sesion, a.slug, extra)).error?.message).toContain(codigo);
+    expect((await reportar(sesion, a.slug, extra)).error?.message).toContain(
+      codigo,
+    );
   }
   expect(
-    (await reportar(sesion, a.slug, { p_motivos: ["precio_irreal", "pidio_plata", "precio_irreal"] })).error,
+    (
+      await reportar(sesion, a.slug, {
+        p_motivos: ["precio_irreal", "pidio_plata", "precio_irreal"],
+      })
+    ).error,
   ).toBeNull();
   expect(
-    consultar(`select array_to_string(motivos, ',') from public.reportes where inmueble_id = '${a.id}'`),
+    consultar(
+      `select array_to_string(motivos, ',') from public.reportes where inmueble_id = '${a.id}'`,
+    ),
   ).toEqual(["pidio_plata,precio_irreal"]);
-  expect((await reportar(sesion, a.slug)).error?.message).toContain("ya_reportado");
+  expect((await reportar(sesion, a.slug)).error?.message).toContain(
+    "ya_reportado",
+  );
 
-  const otros = await Promise.all([1, 2, 3, 4, 5].map(() => crearAnuncio({ precio: precioUnico() })));
-  for (const o of otros.slice(0, 4)) expect((await reportar(sesion, o.slug)).error).toBeNull();
-  expect((await reportar(sesion, otros[4].slug)).error?.message).toContain("demasiados_reportes");
+  const otros = await Promise.all(
+    [1, 2, 3, 4, 5].map(() => crearAnuncio({ precio: precioUnico() })),
+  );
+  for (const o of otros.slice(0, 4))
+    expect((await reportar(sesion, o.slug)).error).toBeNull();
+  expect((await reportar(sesion, otros[4].slug)).error?.message).toContain(
+    "demasiados_reportes",
+  );
 });
 
 test("RLS: nadie lee reportes, banderas ni sesiones de forma directa; cada dueño y cada comprador tocan solo lo suyo", async () => {
@@ -228,27 +308,74 @@ test("RLS: nadie lee reportes, banderas ni sesiones de forma directa; cada dueñ
   expect((await operador.rpc("antifraude_cola")).error).toBeNull();
   // anon no ejecuta las del operador.
   expect((await api().rpc("antifraude_cola")).error).not.toBeNull();
-  expect((await api().rpc("pausar_anuncio", { p_inmueble_id: "00000000-0000-0000-0000-000000000000" })).error).not.toBeNull();
+  expect(
+    (
+      await api().rpc("pausar_anuncio", {
+        p_inmueble_id: "00000000-0000-0000-0000-000000000000",
+      })
+    ).error,
+  ).not.toBeNull();
 
   // Dos dueños: cada token ve y toca solo su anuncio.
   const uno = await crearAnuncio({ precio: precioUnico() });
   const dos = await crearAnuncio({ precio: precioUnico() });
-  expect((await api().rpc("solicitar_sesion_fotos", { p_token: uno.token, p_franja: "sabado" })).error).toBeNull();
-  const extraDos = (await api().rpc("mi_anuncio_extra", { p_token: dos.token })).data as { sesion: unknown };
+  expect(
+    (
+      await api().rpc("solicitar_sesion_fotos", {
+        p_token: uno.token,
+        p_franja: "sabado",
+      })
+    ).error,
+  ).toBeNull();
+  const extraDos = (await api().rpc("mi_anuncio_extra", { p_token: dos.token }))
+    .data as { sesion: unknown };
   expect(extraDos.sesion).toBeNull();
-  expect((await api().rpc("cancelar_sesion_fotos", { p_token: dos.token })).error?.message).toContain("estado_invalido");
-  expect(((await api().rpc("mi_anuncio_extra", { p_token: uno.token })).data as { sesion: { estado: string } }).sesion.estado).toBe("solicitada");
-  expect((await api().rpc("mi_anuncio_extra", { p_token: "x".repeat(43) })).data).toBeNull();
+  expect(
+    (await api().rpc("cancelar_sesion_fotos", { p_token: dos.token })).error
+      ?.message,
+  ).toContain("estado_invalido");
+  expect(
+    (
+      (await api().rpc("mi_anuncio_extra", { p_token: uno.token })).data as {
+        sesion: { estado: string };
+      }
+    ).sesion.estado,
+  ).toBe("solicitada");
+  expect(
+    (await api().rpc("mi_anuncio_extra", { p_token: "x".repeat(43) })).data,
+  ).toBeNull();
   const [fotoUno] = consultar(
     `insert into public.fotos (inmueble_id, r2_key, orden, ancho, alto, bytes)
      values ('${uno.id}', '${uno.id}/${crypto.randomUUID()}-full.webp', 0, 400, 300, 1000) returning id`,
   );
-  await api().rpc("registrar_huella_foto", { p_token: dos.token, p_foto_id: fotoUno, p_huella: "0123456789abcdef" });
-  expect(consultar(`select huella is null from public.fotos where id = '${fotoUno}'`)[0]).toBe("t");
-  await api().rpc("registrar_huella_foto", { p_token: uno.token, p_foto_id: fotoUno, p_huella: "0123456789abcdef" });
-  expect(consultar(`select huella is null from public.fotos where id = '${fotoUno}'`)[0]).toBe("f");
+  await api().rpc("registrar_huella_foto", {
+    p_token: dos.token,
+    p_foto_id: fotoUno,
+    p_huella: "0123456789abcdef",
+  });
   expect(
-    (await api().rpc("registrar_huella_foto", { p_token: uno.token, p_foto_id: fotoUno, p_huella: "zz" })).error?.message,
+    consultar(
+      `select huella is null from public.fotos where id = '${fotoUno}'`,
+    )[0],
+  ).toBe("t");
+  await api().rpc("registrar_huella_foto", {
+    p_token: uno.token,
+    p_foto_id: fotoUno,
+    p_huella: "0123456789abcdef",
+  });
+  expect(
+    consultar(
+      `select huella is null from public.fotos where id = '${fotoUno}'`,
+    )[0],
+  ).toBe("f");
+  expect(
+    (
+      await api().rpc("registrar_huella_foto", {
+        p_token: uno.token,
+        p_foto_id: fotoUno,
+        p_huella: "zz",
+      })
+    ).error?.message,
   ).toContain("huella_invalida");
 
   // Dos compradores: cada uno su reporte; la cola del operador no dice quién reportó.
@@ -265,6 +392,73 @@ test("RLS: nadie lee reportes, banderas ni sesiones de forma directa; cada dueñ
   for (const r of fila?.reportes ?? []) {
     expect(Object.keys(r).sort()).toEqual(["creado", "detalle", "motivos"]);
   }
+  await operador.auth.signOut();
+});
+
+test("la cola ordena por lo último que pasó: un anuncio recién pausado queda arriba, no al final (2.ª migración)", async () => {
+  const operador = createClient(url, anon);
+  const { error: errLogin } = await operador.auth.signInWithPassword({
+    email: process.env.OPERADOR_EMAIL ?? "operador@innmobiliaria.test",
+    password: process.env.OPERADOR_PASSWORD ?? "operador-seguro-123",
+  });
+  expect(errLogin).toBeNull();
+  const a = await crearAnuncio({ precio: precioUnico() });
+  const b = await crearAnuncio({ precio: precioUnico() });
+  const c = await compradorVerificado();
+  expect((await reportar(c.sesion, a.slug)).error).toBeNull();
+  expect((await reportar(c.sesion, b.slug)).error).toBeNull();
+  const posiciones = async () => {
+    const cola = ((await operador.rpc("antifraude_cola")).data ?? []) as {
+      id: string;
+    }[];
+    return {
+      a: cola.findIndex((r) => r.id === a.id),
+      b: cola.findIndex((r) => r.id === b.id),
+    };
+  };
+
+  // El reporte más reciente va arriba.
+  let p = await posiciones();
+  expect(p.a).toBeGreaterThanOrEqual(0);
+  expect(p.b).toBeGreaterThanOrEqual(0);
+  expect(p.b).toBeLessThan(p.a);
+
+  // Pausar `a` es lo último que pasa: sube por encima de `b` (la 17 lo mandaba al final) y sigue en la cola para reactivarlo.
+  pausar(a);
+  p = await posiciones();
+  expect(p.a).toBeGreaterThanOrEqual(0);
+  expect(p.a).toBeLessThan(p.b);
+
+  // Sin nada abierto, un anuncio pausado sigue en la cola (para poder reactivarlo).
+  consultar(
+    `update public.reportes set resolucion = 'descartar', razon = 'sin_fundamento', resuelta_at = now() where inmueble_id = '${a.id}'`,
+  );
+  expect((await posiciones()).a).toBeGreaterThanOrEqual(0);
+
+  // Pedir el CTL cierra lo abierto, pero el anuncio sigue visible y el operador aún tiene que escribirle al dueño: se queda en la
+  // cola (con su WhatsApp) hasta que se verifique. La 17 lo soltaba al instante.
+  const d = await crearAnuncio({ precio: precioUnico() });
+  expect((await reportar(c.sesion, d.slug)).error).toBeNull();
+  consultar(`select public.pedir_ctl('${d.id}')`);
+  const dEnCola = async () => {
+    const cola = ((await operador.rpc("antifraude_cola")).data ?? []) as {
+      id: string;
+      ctl_pedido_at: string | null;
+      pausado_at: string | null;
+      reportes: unknown[];
+    }[];
+    return cola.find((r) => r.id === d.id);
+  };
+  const fila = await dEnCola();
+  expect(fila?.ctl_pedido_at).not.toBeNull();
+  expect(fila?.pausado_at).toBeNull();
+  expect(fila?.reportes).toHaveLength(0);
+  expect(await ficha(d.slug)).not.toBeNull();
+  // Verificarlo con un CTL nuevo limpia el pedido y lo saca de la cola.
+  consultar(
+    `select public.marcar_verificado_ctl('${d.id}', '50N-9988776', date '${fechaBogota(2)}')`,
+  );
+  expect(await dEnCola()).toBeUndefined();
   await operador.auth.signOut();
 });
 
@@ -286,7 +480,9 @@ function conFoto(a: AnuncioCreado, huella: string) {
 
 test("regla del teléfono: el mismo WhatsApp con el mismo nombre (tildes y espacios aparte) no dispara; con otro nombre, sí", async () => {
   const tel = telefonoNuevo();
-  const [a, b, c] = await Promise.all([1, 2, 3].map(() => crearAnuncio({ precio: precioUnico() })));
+  const [a, b, c] = await Promise.all(
+    [1, 2, 3].map(() => crearAnuncio({ precio: precioUnico() })),
+  );
   conTelefono(a, tel, "José  Pérez");
   conTelefono(b, tel, "jose perez");
   revisar();
@@ -299,19 +495,30 @@ test("regla del teléfono: el mismo WhatsApp con el mismo nombre (tildes y espac
 });
 
 test("regla de la matrícula: la misma con el mismo teléfono no dispara; con otro teléfono, sí (sin importar guiones ni mayúsculas)", async () => {
-  const [a, b, c] = await Promise.all([1, 2, 3].map(() => crearAnuncio({ precio: precioUnico() })));
+  const [a, b, c] = await Promise.all(
+    [1, 2, 3].map(() => crearAnuncio({ precio: precioUnico() })),
+  );
   const tel = telefonoNuevo();
   conTelefono(a, tel);
   conTelefono(b, tel);
   conTelefono(c, telefonoNuevo());
   const numero = `${Date.now() % 1e8}`;
-  consultar(`select public.marcar_verificado_ctl('${a.id}', '50N-${numero}', date '${fechaBogota(2)}')`);
-  consultar(`select public.marcar_verificado_ctl('${b.id}', '50N-${numero}', date '${fechaBogota(2)}')`);
+  consultar(
+    `select public.marcar_verificado_ctl('${a.id}', '50N-${numero}', date '${fechaBogota(2)}')`,
+  );
+  consultar(
+    `select public.marcar_verificado_ctl('${b.id}', '50N-${numero}', date '${fechaBogota(2)}')`,
+  );
   revisar();
   expect(banderaDe(a, "matricula")).toBeNull();
-  consultar(`select public.marcar_verificado_ctl('${c.id}', '50n ${numero}', date '${fechaBogota(2)}')`);
+  consultar(
+    `select public.marcar_verificado_ctl('${c.id}', '50n ${numero}', date '${fechaBogota(2)}')`,
+  );
   revisar();
-  expect(banderaDe(a, "matricula")?.evidencia).toEqual({ slug: c.slug, otros: 1 });
+  expect(banderaDe(a, "matricula")?.evidencia).toEqual({
+    slug: c.slug,
+    otros: 1,
+  });
   expect(banderaDe(c, "matricula")?.evidencia).toMatchObject({ otros: 2 });
 });
 
@@ -333,8 +540,14 @@ test("regla de la foto: a 6 bits es la misma foto, a 7 no; el mismo teléfono y 
   conFoto(l1, "0000000000000001");
   conFoto(l2, "0000000000000001"); // lisa: no informa
   revisar();
-  expect(banderaDe(f1, "foto")?.evidencia).toMatchObject({ slug: f2.slug, distancia: 6 });
-  expect(banderaDe(f2, "foto")?.evidencia).toMatchObject({ slug: f1.slug, distancia: 6 });
+  expect(banderaDe(f1, "foto")?.evidencia).toMatchObject({
+    slug: f2.slug,
+    distancia: 6,
+  });
+  expect(banderaDe(f2, "foto")?.evidencia).toMatchObject({
+    slug: f1.slug,
+    distancia: 6,
+  });
   expect(banderaDe(f3, "foto")).toBeNull();
   expect(banderaDe(g1, "foto")).toBeNull();
   expect(banderaDe(l1, "foto")).toBeNull();
@@ -343,7 +556,9 @@ test("regla de la foto: a 6 bits es la misma foto, a 7 no; el mismo teléfono y 
 test("la bandera de precio se guarda con su lista blanca y rechaza lo que no cumple la regla", async () => {
   const a = await crearAnuncio({ precio: precioUnico() });
   const guardar = (h: unknown) =>
-    consultar(`select public.guardar_banderas_precio('${JSON.stringify(h)}'::jsonb)`);
+    consultar(
+      `select public.guardar_banderas_precio('${JSON.stringify(h)}'::jsonb)`,
+    );
   for (const malo of [
     { [a.id]: { porcentaje: 29, n: 6, ambito: "barrio" } },
     { [a.id]: { porcentaje: 35, n: 4, ambito: "barrio" } },
@@ -352,8 +567,19 @@ test("la bandera de precio se guarda con su lista blanca y rechaza lo que no cum
   ]) {
     expect(() => guardar(malo)).toThrow(/hallazgos_invalidos/);
   }
-  guardar({ [a.id]: { porcentaje: 37.4, n: 6, ambito: "barrio", telefono: "3001112233" } });
-  expect(banderaDe(a, "precio")?.evidencia).toEqual({ porcentaje: 37, n: 6, ambito: "barrio" });
+  guardar({
+    [a.id]: {
+      porcentaje: 37.4,
+      n: 6,
+      ambito: "barrio",
+      telefono: "3001112233",
+    },
+  });
+  expect(banderaDe(a, "precio")?.evidencia).toEqual({
+    porcentaje: 37,
+    n: 6,
+    ambito: "barrio",
+  });
 });
 
 test("el operador: pedir el CTL deja «re-verificación pendiente»; descartar pide razón y la bandera no reaparece; pausar y reactivar no se repiten", async () => {
@@ -362,7 +588,9 @@ test("el operador: pedir el CTL deja «re-verificación pendiente»; descartar p
   conTelefono(a, telefonoNuevo());
   conTelefono(b, telefonoNuevo());
   const numero = `${(Date.now() + 7) % 1e8}`;
-  consultar(`select public.marcar_verificado_ctl('${a.id}', '50N-${numero}', date '${fechaBogota(2)}')`);
+  consultar(
+    `select public.marcar_verificado_ctl('${a.id}', '50N-${numero}', date '${fechaBogota(2)}')`,
+  );
   const { sesion } = await compradorVerificado();
   await reportar(sesion, a.slug);
 
@@ -373,18 +601,38 @@ test("el operador: pedir el CTL deja «re-verificación pendiente»; descartar p
          from public.inmuebles where id = '${a.id}'`,
     )[0],
   ).toBe("verificado,true,true");
-  expect(consultar(`select resolucion from public.reportes where inmueble_id = '${a.id}'`)).toEqual(["pedir_ctl"]);
+  expect(
+    consultar(
+      `select resolucion from public.reportes where inmueble_id = '${a.id}'`,
+    ),
+  ).toEqual(["pedir_ctl"]);
   expect((await ficha(a.slug))?.ctl_expedido_el).toBeNull();
-  consultar(`select public.marcar_verificado_ctl('${a.id}', '50N-${numero}', date '${fechaBogota(1)}')`);
-  expect(consultar(`select ctl_pedido_at is null from public.inmuebles where id = '${a.id}'`)[0]).toBe("t");
+  consultar(
+    `select public.marcar_verificado_ctl('${a.id}', '50N-${numero}', date '${fechaBogota(1)}')`,
+  );
+  expect(
+    consultar(
+      `select ctl_pedido_at is null from public.inmuebles where id = '${a.id}'`,
+    )[0],
+  ).toBe("t");
 
   // Descartar: razón de la lista cerrada; sin nada abierto, no hay qué descartar.
-  expect(() => consultar(`select public.descartar_revision('${a.id}', 'porque_si', null)`)).toThrow(/razon_invalida/);
-  expect(() => consultar(`select public.descartar_revision('${a.id}', 'es_el_dueno', null)`)).toThrow(/estado_invalido/);
-  consultar(`select public.marcar_verificado_ctl('${b.id}', '50N-${numero}', date '${fechaBogota(2)}')`);
+  expect(() =>
+    consultar(`select public.descartar_revision('${a.id}', 'porque_si', null)`),
+  ).toThrow(/razon_invalida/);
+  expect(() =>
+    consultar(
+      `select public.descartar_revision('${a.id}', 'es_el_dueno', null)`,
+    ),
+  ).toThrow(/estado_invalido/);
+  consultar(
+    `select public.marcar_verificado_ctl('${b.id}', '50N-${numero}', date '${fechaBogota(2)}')`,
+  );
   revisar();
   expect(banderaDe(a, "matricula")?.resolucion).toBeNull();
-  consultar(`select public.descartar_revision('${a.id}', 'mismo_dueno', 'Vendió y volvió a publicar')`);
+  consultar(
+    `select public.descartar_revision('${a.id}', 'mismo_dueno', 'Vendió y volvió a publicar')`,
+  );
   revisar();
   expect(banderaDe(a, "matricula")?.resolucion).toBe("descartar");
 
@@ -398,20 +646,31 @@ test("la sesión de fotos: una abierta por anuncio, 3 en 30 días, y el operador
   const a = await crearAnuncio({ precio: precioUnico() });
   const pedir = (franja = "entre_semana") =>
     api().rpc("solicitar_sesion_fotos", { p_token: a.token, p_franja: franja });
-  const cancelar = () => api().rpc("cancelar_sesion_fotos", { p_token: a.token });
+  const cancelar = () =>
+    api().rpc("cancelar_sesion_fotos", { p_token: a.token });
   expect((await pedir("lunes")).error?.message).toContain("franja_invalida");
   const { data: primera } = await pedir();
   expect((await pedir()).error?.message).toContain("ya_solicitada");
   const id = (primera as { id: string }).id;
-  expect(() => consultar(`select public.marcar_sesion_hecha('${id}')`)).toThrow(/estado_invalido/);
-  expect(() => consultar(`select public.agendar_sesion_fotos('${id}', now() - interval '1 day')`)).toThrow(/fecha_invalida/);
-  consultar(`select public.agendar_sesion_fotos('${id}', now() + interval '3 days')`);
-  const panel = json<{ id: string; estado: string; dueno: { whatsapp: string } }[]>(
-    "select public.sesiones_panel()::text",
+  expect(() => consultar(`select public.marcar_sesion_hecha('${id}')`)).toThrow(
+    /estado_invalido/,
   );
+  expect(() =>
+    consultar(
+      `select public.agendar_sesion_fotos('${id}', now() - interval '1 day')`,
+    ),
+  ).toThrow(/fecha_invalida/);
+  consultar(
+    `select public.agendar_sesion_fotos('${id}', now() + interval '3 days')`,
+  );
+  const panel = json<
+    { id: string; estado: string; dueno: { whatsapp: string } }[]
+  >("select public.sesiones_panel()::text");
   expect(panel.find((s) => s.id === id)).toMatchObject({ estado: "agendada" });
   consultar(`select public.marcar_sesion_hecha('${id}')`);
-  expect(() => consultar(`select public.cancelar_sesion_fotos_operador('${id}')`)).toThrow(/estado_invalido/);
+  expect(() =>
+    consultar(`select public.cancelar_sesion_fotos_operador('${id}')`),
+  ).toThrow(/estado_invalido/);
   expect((await cancelar()).error?.message).toContain("estado_invalido");
 
   // Ya van 1 en 30 días; dos más se pueden pedir (y cancelar) y la cuarta no.

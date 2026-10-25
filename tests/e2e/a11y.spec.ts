@@ -14,6 +14,7 @@ const rutas = [
   "/buscar",
   "/buscar?v=nuevos",
   "/herramientas",
+  "/papeleo?precio=1150000000",
 ];
 
 for (const ruta of rutas) {

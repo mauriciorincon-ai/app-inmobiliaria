@@ -91,8 +91,8 @@ export const PAPELEO_CLAUSULAS = {
         en: "Something one party hands over, usually money, as a pledge that the deal will happen. Unless it is stated in writing that it is given as part of the price or as a sign that the parties have agreed, the law understands that each party may back out: whoever gave it loses it, and whoever received it pays it back doubled.",
       },
       queMirar: {
-        es: "Si dicen «de retracto» o «como parte del precio», y hasta cuándo se puede retractar: si no se fijó un plazo, el retracto se acaba a los dos meses del acuerdo, al otorgar la escritura o al empezar la entrega, lo que ocurra primero. Si la venta es un acto mercantil para quien vende, como una constructora, rige el Código de Comercio: celebrado el contrato prometido ya no hay retracto, y las arras se abonan a lo que se debe o se devuelven.",
-        en: "Whether they are called «withdrawal» arras or «part of the price», and until when a party may back out: if no term was set, that right ends two months after the agreement, when the deed is granted or when the handover starts, whichever comes first. If the sale is a commercial act for the seller, such as a developer, the Commercial Code applies: once the promised contract is signed there is no backing out, and the deposit is credited to what is owed or returned.",
+        es: "Si dicen «de retracto» o «como parte del precio», y hasta cuándo se puede retractar: si no se fijó un plazo, el retracto se acaba a los dos meses del acuerdo, al otorgar la escritura o al empezar la entrega, lo que ocurra primero. Si la venta es un acto mercantil para quien vende, como una constructora, rige el Código de Comercio: celebrado el contrato prometido ya no hay retracto, y las arras se abonan a lo que se debe o se devuelven. Los artículos hablan de la venta con arras: si tu promesa las pacta, pide que diga con qué reglas y que un abogado lo confirme.",
+        en: "Whether they are called «withdrawal» arras or «part of the price», and until when a party may back out: if no term was set, that right ends two months after the agreement, when the deed is granted or when the handover starts, whichever comes first. If the sale is a commercial act for the seller, such as a developer, the Commercial Code applies: once the promised contract is signed there is no backing out, and the deposit is credited to what is owed or returned. The articles speak of a sale with arras: if your promise sets one, ask it to say under which rules and have a lawyer confirm it.",
       },
       norma: {
         es: "Código Civil, arts. 1859, 1860 y 1861. Si la venta es un acto mercantil para quien vende: Código de Comercio, arts. 22 y 866.",
@@ -232,8 +232,8 @@ export const PAPELEO_CLAUSULAS = {
         en: "Ownership of real estate is transferred by recording the title at the Public Instruments Registry Office: registration is the means by which ownership passes. With the deed signed but not recorded, ownership has not passed.",
       },
       queMirar: {
-        es: "Pide el registro pronto y, cuando salga, un certificado de tradición nuevo: la última anotación debe ser tu compraventa, a tu nombre.",
-        en: "Ask for registration soon and, once it is done, get a new title record certificate: the last entry should be your purchase, in your name.",
+        es: "Pide el registro pronto y, cuando salga, un certificado de tradición nuevo: tu compraventa debe aparecer como una anotación a tu nombre (si compraste con crédito o la vivienda queda afectada, después pueden venir la hipoteca o la afectación).",
+        en: "Ask for registration soon and, once it is done, get a new title record certificate: your purchase should appear as an entry in your name (if you bought with a loan or the home becomes protected, the mortgage or the protection can come after it).",
       },
       norma: {
         es: "Código Civil, art. 756; Ley 1579 de 2012, art. 2, literal a.",

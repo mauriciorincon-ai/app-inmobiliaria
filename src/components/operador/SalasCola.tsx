@@ -168,6 +168,14 @@ export default function SalasCola({
                     </p>
                   )}
 
+                  {s.visita && s.visita.cancelada_por === "comprador" && (
+                    <p className="mt-2 text-sm font-semibold text-ink">
+                      {rellenar(t.horarios.canceladaComprador, {
+                        horario: formatearHorario(s.visita.inicio, lang),
+                      })}
+                    </p>
+                  )}
+
                   <details className="mt-3">
                     <summary className="cursor-pointer text-sm font-semibold text-purple-600">
                       {s.sala

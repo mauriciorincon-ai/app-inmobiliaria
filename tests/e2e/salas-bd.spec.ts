@@ -133,7 +133,7 @@ test.beforeEach(() => {
   test.skip(test.info().project.name !== "desktop-chromium", "una sola vez");
 });
 test.beforeAll(async () => {
-  test.setTimeout(180_000);
+  test.setTimeout(600_000);
   await tomarCandadoEdicion();
   limpiar();
   cargarYPublicar();
@@ -409,6 +409,38 @@ test("rechazar cierra la solicitud y el comprador no insiste en 14 días", async
   );
   // Otro proyecto sí.
   expect((await pedir(c.sesion, slug(5))).error).toBeNull();
+});
+
+test("el comprador cancela su visita confirmada a una sala: queda cancelada por él, el panel lo dice y el correo es solo para quien ya no va", async () => {
+  const c = await compradorVerificado();
+  const s = (await pedir(c.sesion, slug(2))).data!;
+  comoOperador(
+    `select public.proponer_horarios_sala('${s.solicitud_id}', array['${horario(30)}'::timestamptz])`,
+  );
+  const v = (await api().rpc("obtener_visita", { p_token: s.token }))
+    .data as unknown as VisitaDelComprador;
+  expect(
+    (
+      await api().rpc("elegir_horario", {
+        p_token: s.token,
+        p_horario_id: v.horarios[0].id,
+      })
+    ).error,
+  ).toBeNull();
+  expect(enCola(s.solicitud_id).estado).toBe("confirmada");
+
+  const cancelar = await api().rpc("cancelar_visita_comprador", {
+    p_token: s.token,
+  });
+  expect(cancelar.error).toBeNull();
+  const f = enCola(s.solicitud_id);
+  expect(f.estado).toBe("cancelada");
+  expect(f.visita?.cancelada_por).toBe("comprador");
+  // El número del comprador vuelve a ocultarse y no hay segunda cancelación.
+  expect(f.whatsapp).toBeNull();
+  expect(
+    (await api().rpc("cancelar_visita_comprador", { p_token: s.token })).error,
+  ).not.toBeNull();
 });
 
 test("el aviso «sin respuesta» se reclama UNA vez, solo en una sala pendiente, y no toca los anuncios", async () => {

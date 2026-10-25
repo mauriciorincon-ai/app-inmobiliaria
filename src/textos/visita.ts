@@ -278,8 +278,8 @@ export const VISITA = {
       },
       cancelada: {
         porComprador: {
-          es: "Avisamos a la sala. Puedes pedir otra visita cuando quieras.",
-          en: "We let the sales room know. You can ask for another visit whenever you like.",
+          es: "La visita quedó cancelada. Puedes pedir otra cuando quieras.",
+          en: "The visit is cancelled. You can ask for another whenever you like.",
         },
       },
       rechazada: {
@@ -294,8 +294,8 @@ export const VISITA = {
         buscar: { es: "Ver vivienda nueva", en: "See new homes" },
       },
       cancelarConfirmar: {
-        es: "Le avisamos a la sala de ventas; si ya había un horario, queda sin efecto.",
-        en: "We let the sales room know; if there was a time set, it no longer applies.",
+        es: "Se cancela la visita; si ya había un horario, queda sin efecto.",
+        en: "The visit is cancelled; if a time was set, it no longer applies.",
       },
       ics: {
         titulo: {

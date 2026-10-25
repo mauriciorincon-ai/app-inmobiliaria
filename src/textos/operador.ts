@@ -105,6 +105,10 @@ export const OPERADOR = {
     horarios: {
       propuestos: { es: "Horarios propuestos", en: "Times offered" },
       visita: { es: "Visita: {horario}", en: "Visit: {horario}" },
+      canceladaComprador: {
+        es: "El comprador canceló la visita ({horario}). Si ya avisaste a la sala, avísale que no va.",
+        en: "The buyer cancelled the visit ({horario}). If you already told the sales room, let them know it is off.",
+      },
     },
     contacto: {
       titulo: { es: "Contacto de la sala", en: "Sales-room contact" },

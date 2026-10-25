@@ -16,6 +16,8 @@ import { leerDimensiones, type LeerDimensiones } from "@/lib/leer-dimensiones";
 // presign → PUT directo a R2 → confirma con registrar_foto. La compresión se importa de forma
 // DINÁMICA (solo al elegir la primera foto) para no cargar browser-image-compression en el
 // bundle inicial de /mi-anuncio (presupuesto de script). El lector de dimensiones se inyecta.
+// S15: tras confirmar, la huella perceptual de la miniatura (antifraude: «foto repetida en otro anuncio»). Si falla, la foto
+// ya quedó subida: la huella nunca cambia el resultado de la subida.
 
 // Por qué no se subió una foto: un rechazo del gate (formato, peso, resolución) o un fallo de la
 // cadena. La UI pone la frase en el idioma activo (`MI_ANUNCIO.subidor.errores`); aquí solo códigos.
@@ -46,6 +48,28 @@ async function comprimir(
     initialQuality: 0.8,
     useWebWorker: true,
   });
+}
+
+async function registrarHuella(
+  supabase: ReturnType<
+    (typeof import("@/lib/supabase/client"))["crearClienteNavegador"]
+  >,
+  token: string,
+  fotoId: string,
+  thumb: Blob,
+): Promise<void> {
+  try {
+    const { huellaDeImagen } = await import("@/lib/huella-cliente");
+    const huella = await huellaDeImagen(thumb);
+    if (!huella) return;
+    await supabase.rpc("registrar_huella_foto", {
+      p_token: token,
+      p_foto_id: fotoId,
+      p_huella: huella,
+    });
+  } catch {
+    // La huella es una ayuda para el operador, no parte de la subida.
+  }
 }
 
 export async function subirFoto(
@@ -133,6 +157,7 @@ export async function subirFoto(
     if (error || !data) {
       return { ok: false, razon: "confirmacion" };
     }
+    await registrarHuella(supabase, token, data.id, thumb);
     return { ok: true, fotoId: data.id, orden: data.orden };
   } catch {
     return { ok: false, razon: "red" };

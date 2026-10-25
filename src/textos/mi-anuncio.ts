@@ -230,6 +230,105 @@ export const MI_ANUNCIO = {
     },
     verificado: { es: "WhatsApp verificado", en: "Verified WhatsApp" },
   },
+  // S15 — lo que el equipo hizo con el anuncio. Una pausa o un pedido de CTL los decide una persona del equipo, nunca una regla
+  // sola; el texto dice qué pasa y qué sigue, sin acusar.
+  equipo: {
+    pausado: {
+      titulo: { es: "Tu anuncio está en pausa", en: "Your listing is paused" },
+      texto: {
+        es: "El equipo lo pausó mientras revisa unos datos: durante la pausa no aparece en la búsqueda ni se puede contactar. Si te escribimos por WhatsApp, respóndenos ahí y lo resolvemos contigo.",
+        en: "The team paused it while it checks a few details: during the pause it doesn't show in search and can't be contacted. If we message you on WhatsApp, reply there and we'll sort it out with you.",
+      },
+    },
+    ctlPedido: {
+      titulo: {
+        es: "El equipo te pidió el certificado de tradición",
+        en: "The team asked for your title record",
+      },
+      texto: {
+        es: "Para dejar el anuncio al día, muéstranos un certificado de tradición y libertad (CTL) expedido hace 30 días o menos. Lo vemos y no lo guardamos.",
+        en: "To keep the listing up to date, show us a title record (certificado de tradición y libertad, CTL) issued 30 days ago or less. We look at it and don't keep it.",
+      },
+    },
+  },
+
+  // La sesión de fotos (S15, «fotos que venden»). El dueño la pide y la cancela; el equipo la agenda y le escribe por WhatsApp.
+  sesionFotos: {
+    titulo: { es: "Sesión de fotos", en: "Photo session" },
+    intro: {
+      es: "Si prefieres que las fotos las tome alguien del equipo, pide una sesión. Te escribimos por WhatsApp para acordar el día. Pedirla no te cuesta nada ni te compromete.",
+      en: "If you'd rather have someone from the team take the photos, ask for a session. We message you on WhatsApp to agree on the day. Asking for one costs nothing and doesn't commit you.",
+    },
+    franja: {
+      etiqueta: {
+        es: "¿Qué franja te sirve?",
+        en: "Which time of the week suits you?",
+      },
+      ayuda: {
+        es: "El día y la hora los acordamos contigo por WhatsApp.",
+        en: "We agree the day and time with you on WhatsApp.",
+      },
+      placeholder: { es: "Elige una franja", en: "Pick a slot" },
+      entre_semana: { es: "Entre semana", en: "Weekdays" },
+      sabado: { es: "Sábado", en: "Saturday" },
+      domingo: { es: "Domingo", en: "Sunday" },
+    },
+    estado: {
+      solicitada: { es: "Pedida", en: "Requested" },
+      agendada: { es: "Agendada", en: "Scheduled" },
+      hecha: { es: "Hecha", en: "Done" },
+      cancelada: { es: "Cancelada", en: "Cancelled" },
+    },
+    detalle: {
+      solicitada: {
+        es: "Pediste una sesión (franja: {franja}). El equipo te escribirá por WhatsApp para acordar el día.",
+        en: "You asked for a session (slot: {franja}). The team will message you on WhatsApp to agree on the day.",
+      },
+      agendada: {
+        es: "Tu sesión está agendada para el {cuando}.",
+        en: "Your session is scheduled for {cuando}.",
+      },
+      hecha: {
+        es: "La sesión se hizo el {cuando}. Si quieres otra, puedes pedirla.",
+        en: "The session took place on {cuando}. If you'd like another, you can ask for one.",
+      },
+      cancelada: {
+        es: "La sesión se canceló. Si quieres, puedes pedir otra.",
+        en: "The session was cancelled. If you like, you can ask for another.",
+      },
+    },
+    pedir: { es: "Pedir la sesión", en: "Ask for the session" },
+    pedirOtra: { es: "Pedir otra sesión", en: "Ask for another session" },
+    cancelar: { es: "Cancelar la sesión", en: "Cancel the session" },
+    enviando: { es: "Enviando…", en: "Sending…" },
+    cancelando: { es: "Cancelando…", en: "Cancelling…" },
+    errores: {
+      eligeFranja: {
+        es: "Elige la franja que te sirve.",
+        en: "Pick the slot that suits you.",
+      },
+      ya_solicitada: {
+        es: "Ya tienes una sesión pedida. Recarga la página para verla.",
+        en: "You already have a session requested. Reload the page to see it.",
+      },
+      demasiadas_sesiones: {
+        es: "Ya pediste varias sesiones este mes. Inténtalo de nuevo más adelante.",
+        en: "You've already asked for several sessions this month. Try again later.",
+      },
+      no_disponible: {
+        es: "Tu anuncio venció: renuévalo para pedir la sesión.",
+        en: "Your listing has expired: renew it to ask for the session.",
+      },
+      estado_invalido: {
+        es: "Esa sesión ya cambió. Recarga la página para ver cómo está.",
+        en: "That session has already changed. Reload the page to see where it stands.",
+      },
+      servidor: {
+        es: "No pudimos completar la acción. Inténtalo de nuevo en un momento.",
+        en: "We couldn't complete that. Please try again in a moment.",
+      },
+    },
+  },
 } as const satisfies Arbol;
 
 // Vigencia del anuncio (anti-zombie, ADR 007): se renueva con un clic desde el enlace privado.
@@ -288,6 +387,10 @@ export const VIGENCIA = {
     error: {
       es: "No pudimos renovar. Inténtalo de nuevo en un momento.",
       en: "We couldn't renew it. Try again in a moment.",
+    },
+    pausado: {
+      es: "Tu anuncio se renovó, pero el equipo lo tiene en pausa mientras revisa unos datos: no aparece en la búsqueda hasta que se resuelva.",
+      en: "Your listing was renewed, but the team has it paused while it checks a few details: it doesn't show in search until that's sorted out.",
     },
   },
 } as const satisfies Arbol;

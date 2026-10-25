@@ -30,13 +30,17 @@ export default function RenovarVigencia({
   t,
   token,
   vigenteHastaInicial,
+  pausadoInicial = false,
 }: {
   lang: Idioma;
   t: TextosTarjeta;
   token: string;
   vigenteHastaInicial: string;
+  /** S15 — el equipo lo tiene en pausa: renovar le da más días, pero no lo vuelve a mostrar. */
+  pausadoInicial?: boolean;
 }) {
   const [vigenteHasta, setVigenteHasta] = useState(vigenteHastaInicial);
+  const [pausado, setPausado] = useState(pausadoInicial);
   const [renovando, setRenovando] = useState(false);
   const [error, setError] = useState(false);
 
@@ -55,7 +59,9 @@ export default function RenovarVigencia({
     if (err || !data) {
       setError(true);
     } else {
-      setVigenteHasta((data as RenovacionResult).vigente_hasta);
+      const r = data as RenovacionResult;
+      setVigenteHasta(r.vigente_hasta);
+      setPausado(r.pausado === true);
     }
     setRenovando(false);
   }
@@ -84,6 +90,16 @@ export default function RenovarVigencia({
           t.vencidoTexto
         )}
       </p>
+      {pausado && (
+        <p
+          role="status"
+          data-testid="renovar-pausado"
+          className="mt-3 flex gap-2 text-sm font-semibold text-ink"
+        >
+          <span aria-hidden="true">⏸</span>
+          {t.pausado}
+        </p>
+      )}
       <button
         type="button"
         onClick={() => void renovar()}

@@ -5,6 +5,7 @@ import type {
   TextosClausulas,
   TextosPapeleo,
 } from "@/components/papeleo/Papeleo";
+import type { TextosCtl } from "@/components/papeleo/PapeleoCtl";
 import type { EntradaGastos } from "@/engine/papeleo/gastos";
 import type { Idioma } from "@/i18n/idiomas";
 
@@ -21,6 +22,7 @@ export default function PapeleoCarga(props: {
   inicial: EntradaGastos;
   hoy: string;
   desdeAnuncio: boolean;
+  ctl: TextosCtl | null;
 }) {
   return <Papeleo {...props} />;
 }

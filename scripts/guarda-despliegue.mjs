@@ -3,6 +3,7 @@
 // archivos `.env*` de producción en el paquete y el Worker lee además las `vars` de `wrangler.jsonc`: un `*_SIMULACRO`,
 // un `*_MOCK` o un freno apagado dejado ahí llegaría a producción sin que nadie lo vea (el S12 lo dejó como deuda).
 // Por nombre, no por lista: una perilla nueva que siga la convención (`*_SIMULACRO`, `*_MOCK`) queda cubierta sola.
+// S15: también veta los interruptores de producto sin validar (`SIN_VALIDAR`), que solo se apagan por una decisión del usuario.
 // Imprime SOLO el nombre y el sitio de lo que encuentra, jamás un valor.
 // Uso: `node scripts/guarda-despliegue.mjs` (lo corre `pnpm deploy:cf` antes de construir).
 import { existsSync, readFileSync } from "node:fs";
@@ -20,9 +21,12 @@ export const ARCHIVOS_ENV = [
 const POR_NOMBRE = /(_SIMULACRO|_MOCK)$/;
 // Frenos y esperas que solo se apagan en la CI.
 const FRENOS = new Set(["DISABLE_RATE_LIMIT", "REGISTRO_MIN_MS"]);
+// Interruptores de producto que nacen APAGADOS y solo se encienden con una decisión del usuario (S15): el lector de CTL espera su
+// validación con certificados reales. Encenderlo en producción es quitarlo de esta lista a propósito, no un descuido en un `.env`.
+const SIN_VALIDAR = new Set(["LECTOR_CTL_ACTIVO"]);
 
 export const esPerillaDePrueba = (nombre) =>
-  POR_NOMBRE.test(nombre) || FRENOS.has(nombre);
+  POR_NOMBRE.test(nombre) || FRENOS.has(nombre) || SIN_VALIDAR.has(nombre);
 
 /** `CLAVE=valor` por línea; ignora comentarios y vacías. Devuelve [clave, valor] sin interpretar el valor. */
 export function leerEnv(texto) {

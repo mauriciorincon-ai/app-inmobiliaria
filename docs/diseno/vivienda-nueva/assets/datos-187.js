@@ -213,6 +213,10 @@ window.DATOS_187 = {
       "id": "segmento_no_lo_dice"
      },
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2777700
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -461,6 +465,10 @@ window.DATOS_187 = {
       "id": "segmento_no_lo_dice"
      },
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2591800
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -706,6 +714,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2826400
+     },
      {
       "id": "parqueadero_no_lo_dice"
      },
@@ -2151,6 +2163,10 @@ window.DATOS_187 = {
       "id": "segmento_no_lo_dice"
      },
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2899300
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -2522,6 +2538,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2837900
+     },
      {
       "id": "parqueadero_no_lo_dice"
      },
@@ -3009,6 +3029,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 3028700
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -3250,6 +3274,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2279600
+     },
      {
       "id": "parqueadero_sin_precio"
      },
@@ -3998,6 +4026,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 3028700
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -4618,6 +4650,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2676400
+     },
      {
       "id": "parqueadero_no_lo_dice"
      },
@@ -5597,6 +5633,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2964800
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -5840,6 +5880,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2814800
+     },
      {
       "id": "parqueadero_no_lo_dice"
      },
@@ -6280,6 +6324,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 1561100
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -6399,6 +6447,10 @@ window.DATOS_187 = {
     "faltantes": [
      {
       "id": "segmento_no_lo_dice"
+     },
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 1292500
      },
      {
       "id": "parqueadero_no_lo_dice"
@@ -6649,6 +6701,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2964800
+     },
      {
       "id": "parqueadero_sin_precio"
      },
@@ -7148,6 +7204,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2676400
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -7272,6 +7332,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2759600
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -7394,6 +7458,10 @@ window.DATOS_187 = {
     "faltantes": [
      {
       "id": "segmento_no_lo_dice"
+     },
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 3026100
      },
      {
       "id": "parqueadero_no_lo_dice"
@@ -8116,6 +8184,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2479600
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -8747,6 +8819,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2745600
+     },
      {
       "id": "parqueadero_sin_precio"
      },
@@ -9483,6 +9559,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2388000
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -9857,6 +9937,10 @@ window.DATOS_187 = {
       "id": "segmento_no_lo_dice"
      },
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2989400
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -10100,6 +10184,10 @@ window.DATOS_187 = {
       "id": "segmento_no_lo_dice"
      },
      {
+      "id": "registro_sin_subsidio",
+      "monto": 3022500
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -10217,6 +10305,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2907100
+     },
      {
       "id": "parqueadero_sin_precio"
      },
@@ -10344,6 +10436,10 @@ window.DATOS_187 = {
     "faltantes": [
      {
       "id": "segmento_no_lo_dice"
+     },
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2549500
      },
      {
       "id": "parqueadero_no_lo_dice"
@@ -10720,6 +10816,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2768700
+     },
+     {
       "id": "parqueadero_sin_precio"
      },
      {
@@ -10972,6 +11072,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2921700
+     },
      {
       "id": "parqueadero_no_lo_dice"
      },
@@ -11469,6 +11573,10 @@ window.DATOS_187 = {
     "faltantes": [
      {
       "id": "segmento_no_lo_dice"
+     },
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 3023600
      },
      {
       "id": "parqueadero_no_lo_dice"
@@ -12256,6 +12364,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2595100
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -12738,6 +12850,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2998800
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -13114,6 +13230,10 @@ window.DATOS_187 = {
       "id": "segmento_no_lo_dice"
      },
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2999400
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -13328,6 +13448,10 @@ window.DATOS_187 = {
       "id": "segmento_no_lo_dice"
      },
      {
+      "id": "registro_sin_subsidio",
+      "monto": 450700
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -13451,6 +13575,10 @@ window.DATOS_187 = {
     "faltantes": [
      {
       "id": "segmento_no_lo_dice"
+     },
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2422600
      },
      {
       "id": "parqueadero_no_lo_dice"
@@ -13695,6 +13823,10 @@ window.DATOS_187 = {
     "faltantes": [
      {
       "id": "segmento_no_lo_dice"
+     },
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 416600
      },
      {
       "id": "parqueadero_no_lo_dice"
@@ -14731,6 +14863,10 @@ window.DATOS_187 = {
      }
     ],
     "faltantes": [
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2584100
+     },
      {
       "id": "parqueadero_no_lo_dice"
      },
@@ -16111,6 +16247,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 2653300
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -16567,6 +16707,10 @@ window.DATOS_187 = {
     ],
     "faltantes": [
      {
+      "id": "registro_sin_subsidio",
+      "monto": 1610700
+     },
+     {
       "id": "parqueadero_no_lo_dice"
      },
      {
@@ -16688,6 +16832,10 @@ window.DATOS_187 = {
     "faltantes": [
      {
       "id": "segmento_no_lo_dice"
+     },
+     {
+      "id": "registro_sin_subsidio",
+      "monto": 2434100
      },
      {
       "id": "parqueadero_sin_precio"

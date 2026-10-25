@@ -10,6 +10,7 @@ import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
 import { PRECIO } from "@/textos/precio";
 import { VISITA } from "@/textos/visita";
+import { ANTIFRAUDE } from "@/textos/antifraude";
 import Galeria from "@/components/ficha/Galeria";
 import SelloNivel from "@/components/ficha/SelloNivel";
 import SelloExplicado from "@/components/ficha/SelloExplicado";
@@ -288,6 +289,13 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
             conTexto
           />
           <CompartirCTA t={t.compartir} />
+          {/* S15: reportar va a la cola del operador; no cambia esta ficha. */}
+          <Link
+            href={`/i/${f.slug}/reportar`}
+            className="text-sm font-semibold text-mute underline underline-offset-4 hover:text-ink"
+          >
+            {enIdioma(ANTIFRAUDE.enlace, lang)}
+          </Link>
         </div>
       </main>
     </>

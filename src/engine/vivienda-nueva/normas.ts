@@ -103,6 +103,9 @@ export const TarifasSchema = z
       .object({
         smmlv: z.number().positive(),
         smmlv_aglomeraciones: z.number().positive(),
+        // S15: el tope de la VIP (Ley 1955 de 2019, art. 85), igual en todo el país.
+        smmlv_vip: z.number().positive(),
+        norma_vip: z.string().min(1),
         municipios_aglomeracion_bogota: z.array(z.string()).min(1),
         otras_aglomeraciones: z.array(z.string()).min(1),
         norma: z.string().min(1),

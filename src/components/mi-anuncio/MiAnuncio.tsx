@@ -4,9 +4,12 @@ import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { extraerTokenDeHash } from "@/engine/token/token";
 import { calcularScore, DESCRIPCION_MIN } from "@/engine/score/score";
 import { crearClienteNavegador } from "@/lib/supabase/client";
-import type { MiAnuncioData } from "@/lib/supabase/types";
+import type { MiAnuncioData, MiAnuncioExtra } from "@/lib/supabase/types";
 import ScoreCompletitud from "@/components/mi-anuncio/ScoreCompletitud";
 import SubidorFotos from "@/components/mi-anuncio/SubidorFotos";
+import SesionFotos, {
+  AvisosDelEquipo,
+} from "@/components/mi-anuncio/SesionFotos";
 import GaleriaEditable from "@/components/mi-anuncio/GaleriaEditable";
 import EditorDescripcion from "@/components/mi-anuncio/EditorDescripcion";
 import EditorPrecio from "@/components/mi-anuncio/EditorPrecio";
@@ -64,6 +67,8 @@ export default function MiAnuncio({
 }) {
   const [estado, setEstado] = useState<Estado>("cargando");
   const [anuncio, setAnuncio] = useState<MiAnuncioData | null>(null);
+  // S15 — lo que el equipo hizo con el anuncio y la sesión de fotos. Si no llega, la pantalla sigue sin ello.
+  const [extra, setExtra] = useState<MiAnuncioExtra | null>(null);
   // Largo de la descripción tal como se está escribiendo (para el score en vivo, sin guardar aún).
   const [descripcionLen, setDescripcionLen] = useState(0);
   const [token, setToken] = useState<string | null>(null);
@@ -73,9 +78,10 @@ export default function MiAnuncio({
   // son síncronos dentro de un efecto).
   const cargar = useCallback(async (tok: string) => {
     const supabase = crearClienteNavegador();
-    const { data, error } = await supabase.rpc("obtener_mi_anuncio", {
-      p_token: tok,
-    });
+    const [{ data, error }, { data: extraData }] = await Promise.all([
+      supabase.rpc("obtener_mi_anuncio", { p_token: tok }),
+      supabase.rpc("mi_anuncio_extra", { p_token: tok }),
+    ]);
     if (error) {
       setEstado("error");
       return;
@@ -85,6 +91,7 @@ export default function MiAnuncio({
       return;
     }
     setAnuncio(data);
+    setExtra(extraData ?? null);
     setDescripcionLen((data.descripcion ?? "").length);
     setEstado("listo");
   }, []);
@@ -152,6 +159,14 @@ export default function MiAnuncio({
 
   return (
     <div className="mt-8 space-y-10">
+      {extra && (
+        <AvisosDelEquipo
+          t={t.equipo}
+          pausado={extra.pausado}
+          ctlPedido={extra.ctl_pedido}
+        />
+      )}
+
       <ScoreCompletitud
         t={t.score}
         score={score}
@@ -178,6 +193,21 @@ export default function MiAnuncio({
           onSubida={recargar}
         />
       </section>
+
+      {extra && (
+        <section aria-labelledby="sesion-titulo">
+          <h2 id="sesion-titulo" className="text-xl font-bold text-ink">
+            {t.sesionFotos.titulo}
+          </h2>
+          <SesionFotos
+            lang={lang}
+            t={t.sesionFotos}
+            token={token}
+            sesion={extra.sesion}
+            onCambio={recargar}
+          />
+        </section>
+      )}
 
       <section aria-labelledby="desc-titulo">
         <h2 id="desc-titulo" className="text-xl font-bold text-ink">
@@ -312,6 +342,7 @@ export default function MiAnuncio({
         t={vigencia}
         token={token}
         vigenteHastaInicial={anuncio.vigente_hasta}
+        pausadoInicial={extra?.pausado ?? false}
       />
 
       <InvitaReferido token={token} lang={lang} t={referido} />

@@ -282,6 +282,21 @@
           "VIP: el registro queda exento solo si recibes subsidio.",
           "VIP: registration is exempt only if you get a subsidy.",
         );
+      case "registro_sin_subsidio":
+        if (f.monto === undefined)
+          return par(
+            "VIS: el registro se sumó con la mitad, que es solo con subsidio de vivienda del Estado o de una caja de compensación. Sin subsidio cuesta más; la tarifa general no está verificada para este año.",
+            "VIS: registration was added at half, which only applies with a housing subsidy from the State or a family compensation fund. Without a subsidy it costs more; the general rate is not verified for this year.",
+          );
+        return par(
+          "VIS: el registro se sumó con la mitad, que es solo con subsidio de vivienda del Estado o de una caja de compensación. Sin subsidio, el registro cuesta " +
+            "<span class=num>$" +
+            miles(f.monto, ".") +
+            "</span> (Res. SNR 2026-001726-6, art. 17, parágrafo 2).",
+          "VIS: registration was added at half, which only applies with a housing subsidy from the State or a family compensation fund. Without a subsidy, registration costs <span class=num>COP " +
+            miles(f.monto, ",") +
+            "</span> (SNR Res. 2026-001726-6, art. 17, paragraph 2).",
+        );
       case "supera_tope_vis":
         return par(
           "Se anuncia como VIS, pero su precio pasa el tope VIS de 2026 en " +

@@ -61,8 +61,8 @@
         "en": "DIAN; the seller pays it at the notary's office"
       },
       "norma": {
-        "es": "Estatuto Tributario, art. 398",
-        "en": "Tax Code (Estatuto Tributario), art. 398"
+        "es": "Estatuto Tributario, art. 398 (venta de activos fijos de personas naturales)",
+        "en": "Tax Code (Estatuto Tributario), art. 398 (sale of fixed assets by natural persons)"
       },
       "anio": 2026,
       "consultado": "2026-10-25",
@@ -74,8 +74,8 @@
         "en": "The value of the sale."
       },
       "nota": {
-        "es": "La norma habla de los ingresos de personas naturales. Si vende una empresa o una constructora la retención es otra y no se calcula aquí. La rebaja del art. 399 es solo para casas o apartamentos de habitación adquiridos antes de 1987. No incluye la ganancia ocasional, que depende de cada caso.",
-        "en": "The rule covers income of natural persons. If a company or a developer sells, the withholding is different and is not computed here. The reduction in art. 399 is only for homes acquired before 1987. It does not include the capital-gains tax (ganancia ocasional), which depends on each case."
+        "es": "La norma es la de la venta de activos fijos de personas naturales. Si vende una empresa o una constructora la retención es otra y no se calcula aquí. La rebaja del art. 399 es solo para casas o apartamentos de habitación adquiridos antes de 1987. No incluye la ganancia ocasional, que depende de cada caso.",
+        "en": "The rule is the one for the sale of fixed assets by natural persons. If a company or a developer sells, the withholding is different and is not computed here. The reduction in art. 399 is only for homes acquired before 1987. It does not include the capital-gains tax (ganancia ocasional), which depends on each case."
       },
       "verificada_en": [
         "Texto del art. 398 del Estatuto Tributario, leído en la compilación de la DIAN: retención del uno por ciento del valor de la enajenación, que se cancela antes de la venta ante el notario",
@@ -151,10 +151,6 @@
       "nombre": {
         "es": "IVA de los derechos notariales",
         "en": "VAT on the notary fees"
-      },
-      "cobra": {
-        "es": "La notaría, en su factura",
-        "en": "The notary's office, on its invoice"
       },
       "norma": null,
       "anio": 2026,

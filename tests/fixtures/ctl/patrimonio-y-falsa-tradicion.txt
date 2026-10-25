@@ -1,0 +1,39 @@
+Certificado de tradición y libertad de matrícula inmobiliaria
+(Certificado sintético de prueba: no corresponde a ningún inmueble ni a ninguna persona)
+Nro Matrícula: 000-0000000
+Fecha de expedición: 15/10/2026
+
+Anotación: Nro. 1  Fecha: 04/04/1999  Radicación: 1999-000001
+Doc: Escritura 0001 del 01/04/1999 Notaría Sexta de Ciudad de Prueba
+Especificación: 0607 Compraventa de derechos y acciones (falsa tradición)
+De: PERSONA F
+A: PERSONA G I
+
+Anotación: Nro. 2  Fecha: 09/09/2009  Radicación: 2009-000002
+Doc: Escritura 0002 del 01/09/2009 Notaría Sexta de Ciudad de Prueba
+Especificación: 0315 Constitución de patrimonio de familia inembargable
+De: PERSONA G
+
+Anotación: Nro. 3  Fecha: 12/12/2015  Radicación: 2015-000003
+Doc: Oficio 0003 del 01/12/2015 Entidad de Prueba
+Especificación: 0999 Acto de prueba que el lector no conoce
+De: ENTIDAD DE PRUEBA
+
+Anotación: Nro. 4  Fecha: 05/05/2016  Radicación: 2016-000004
+Doc: Escritura 0004 del 01/05/2016 Notaría Sexta de Ciudad de Prueba
+Especificación: 0315 Constitución de patrimonio de familia inembargable
+De: PERSONA G
+
+Anotación: Nro. 5  Fecha: 06/06/2020  Radicación: 2020-000005
+Doc: Escritura 0005 del 01/06/2020 Notaría Sexta de Ciudad de Prueba
+Se cancela la anotación No. 4
+Especificación: 0844 Cancelación de patrimonio de familia
+De: PERSONA G
+
+Anotación: Nro. 6  Fecha: 07/07/2021  Radicación: 2021-000006
+Doc: Oficio 0006 del 01/07/2021 Entidad de Prueba
+Se cancelan las anotaciones No. 9
+Especificación: 0841 Cancelación de prueba con un número que no existe
+De: ENTIDAD DE PRUEBA
+
+Salvedades: (sin salvedades)

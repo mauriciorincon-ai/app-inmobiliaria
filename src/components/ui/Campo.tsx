@@ -23,7 +23,12 @@ type Props = Base &
         inputMode?: "text" | "numeric" | "decimal" | "tel";
         autoComplete?: string;
       }
-    | { control: "textarea" }
+    | {
+        control: "textarea";
+        filas?: number;
+        // Sin corrector ni autocompletado: lo pegado (p. ej. un certificado) no debe llegar a ningún servicio de ortografía.
+        sinCorrector?: boolean;
+      }
     | {
         control: "select";
         opciones: Opcion[];
@@ -65,7 +70,15 @@ export default function Campo(props: Props) {
     control = (
       <textarea
         {...comun}
-        rows={2}
+        rows={props.filas ?? 2}
+        {...(props.sinCorrector
+          ? {
+              spellCheck: false,
+              autoComplete: "off",
+              autoCorrect: "off",
+              autoCapitalize: "off",
+            }
+          : {})}
         onChange={(e) => onChange(e.target.value)}
       />
     );

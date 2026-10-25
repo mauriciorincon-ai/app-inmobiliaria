@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "consultado": "2026-10-25",
+  "nota": "Registro de los artículos que cita el lector de CTL (S15), cada uno leído en su texto oficial en la fecha de consulta. Una marca solo cita artículos de esta lista; una prueba lo comprueba.",
+  "normas": {
+    "ley_1579_2012": {
+      "nombre": "Ley 1579 de 2012 (Estatuto de Registro de Instrumentos Públicos)",
+      "leida_en": "Texto de la Ley 1579 de 2012 en el gestor normativo de la CRA: art. 8 (parágrafo 2 sobre la falsa tradición y parágrafo 3 con los códigos por naturaleza jurídica: 02 gravámenes, 03 limitaciones y afectaciones, 04 medidas cautelares, 06 falsa tradición, 07/08 cancelaciones) y arts. 61 a 63 (la cancelación de un asiento y sus efectos)",
+      "articulos": [8, 61, 62, 63]
+    },
+    "codigo_civil": {
+      "nombre": "Código Civil (Ley 84 de 1873)",
+      "leida_en": "Texto del Código Civil en el Régimen Legal de Bogotá (Secretaría Jurídica Distrital): art. 1521 (numeral 3, cosas embargadas), art. 2432 (definición de hipoteca) y art. 2452 (persecución del bien hipotecado)",
+      "articulos": [1521, 2432, 2452]
+    },
+    "codigo_general_proceso": {
+      "nombre": "Código General del Proceso (Ley 1564 de 2012)",
+      "leida_en": "Texto de la Ley 1564 de 2012 en el gestor normativo de la CRA: art. 591 (inscripción de la demanda) y art. 593 (embargos, numeral 1: bienes sujetos a registro)",
+      "articulos": [591, 593]
+    },
+    "ley_258_1996": {
+      "nombre": "Ley 258 de 1996 (afectación a vivienda familiar)",
+      "leida_en": "Texto de la Ley 258 de 1996 en el gestor normativo de Función Pública: art. 3 (doble firma)",
+      "articulos": [3]
+    },
+    "ley_70_1931": {
+      "nombre": "Ley 70 de 1931 (patrimonio de familia)",
+      "leida_en": "Texto de la Ley 70 de 1931 en el gestor normativo de Función Pública: art. 21 (no es embargable) y art. 23 (enajenación o cancelación con el consentimiento del cónyuge o de los hijos menores)",
+      "articulos": [21, 23]
+    }
+  }
+}

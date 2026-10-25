@@ -277,12 +277,12 @@ export const PUBLICAR = {
     siguientes: [
       {
         titulo: {
-          es: "Preparamos tus fotos",
-          en: "We prepare your photos",
+          es: "Tus fotos",
+          en: "Your photos",
         },
         texto: {
-          es: "En la próxima etapa te ayudaremos a que tu inmueble se vea espectacular.",
-          en: "In the next stage we'll help your property look its best.",
+          es: "Desde «Mi anuncio» subes tus fotos o pides una sesión de fotos con el equipo.",
+          en: "From My listing you upload your photos or ask for a photo session with the team.",
         },
       },
       {

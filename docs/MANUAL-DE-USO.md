@@ -15,7 +15,7 @@ busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verif
 escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
 visita; desde el Sprint 009 también guarda favoritos, compara, comparte listas con notas y recibe
 alertas por correo; desde el Sprint 010 también decide con números: ve si un precio está en línea con
-su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad; desde el Sprint 013 la compara con un usado, ve qué subsidios le sirven y pide visitar la sala de ventas; desde el Sprint 014 también ve el papeleo de la compra: cuánto paga cada parte, qué pedir y cuánto tarda cada paso) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
+su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad; desde el Sprint 013 la compara con un usado, ve qué subsidios le sirven y pide visitar la sala de ventas; desde el Sprint 014 también ve el papeleo de la compra: cuánto paga cada parte, qué pedir y cuánto tarda cada paso; desde el Sprint 015 también puede reportar un anuncio que le parezca sospechoso) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
 panel privado). El dueño decide si los compradores verificados pueden escribirle y recibir
 solicitudes de visita.
 
@@ -364,7 +364,45 @@ solicitudes de visita.
   cláusula penal pueden regirse por el Código de Comercio: la cláusula lo dice.
 - **Limitaciones conocidas:** es un **estimado** hasta validarlo con el liquidador de la Superintendencia de Notariado y Registro. La tarifa
   notarial única de la VIS no se calcula. Las ciudades salen de las listas del tope de la vivienda de interés social; las demás caen en «Otra
-  ciudad». No hay lector de certificados de tradición: eso no es parte de esta pantalla.
+  ciudad». El lector de certificados de tradición está construido, pero **apagado** hasta validarlo con certificados reales: esta pantalla no lo
+  muestra.
+- **VIS y VIP (desde el Sprint 015):** una **VIP** tiene su propio tope, de **90 salarios mínimos**; por encima se liquida como VIS y lo dice. Una
+  VIS o una VIP **sin subsidio** paga el registro completo (la mitad es solo con subsidio) y la notaría de una VIS, porque el artículo de la
+  resolución que la rebaja no pide subsidio; que una VIP cuente como VIS ahí es nuestra lectura de la norma, y la pantalla te dice que lo confirmes en la notaría.
+
+## Antifraude, reportar y sesión de fotos · desde Sprint 015
+
+- **Qué hace:** cuatro reglas escritas señalan anuncios al equipo, cualquier comprador con el WhatsApp verificado puede **reportar** un anuncio y el
+  dueño puede pedir una **sesión de fotos** desde «Mi anuncio». **Una señal o un reporte jamás ocultan un anuncio**: lo revisa una persona del
+  equipo, que decide.
+- **Las reglas, a la vista:** la página **«Cómo revisamos los anuncios»** (se llega desde la página de reportar) explica en palabras simples las cuatro
+  reglas: un precio **30 % o más por debajo** de la mediana de los anuncios parecidos (con al menos 5 para comparar; con menos, la regla no dice
+  nada), una **foto** que se parece a la de otro anuncio con otro teléfono, la **misma matrícula** con otro teléfono y el **mismo WhatsApp** con dos
+  nombres o más. Un dueño con dos inmuebles y su propio nombre no cuenta.
+- **Reportar un anuncio (el comprador):** en la ficha, **«Reportar este anuncio»**. Hace falta el WhatsApp verificado (si no lo tienes, la página
+  te lleva a verificarlo). Eliges uno o varios motivos de una lista, puedes contar más (hasta 500 caracteres) y envías. Un reporte por anuncio y hasta
+  **5 al día**. **El dueño no sabe quién reportó**, y el equipo tampoco ve tu nombre ni tu número en la cola. El anuncio sigue igual hasta que el
+  equipo decida.
+- **Lo que hace el equipo (el operador):** en el panel, **Antifraude** muestra cada anuncio con sus señales (qué vio cada regla) y los reportes
+  (motivos y detalle). Tres acciones, cada una con el WhatsApp del dueño y el texto **ya escrito, en su idioma** (la app no envía nada sola):
+  **Pausar** (sale de la búsqueda, de su enlace, del contacto y de las visitas; **Reactivar** lo devuelve), **Pedir el CTL al dueño** (el anuncio sigue
+  visible; si era verificado queda en «re-verificación pendiente» hasta que lo verifiques de nuevo con un CTL de 30 días o menos, y se queda en la
+  cola hasta entonces) y **Descartar** con una razón de la lista y una nota opcional (queda el registro y la señal no vuelve). **Revisar reglas ahora**
+  evalúa las reglas en el momento (también corren con el trabajo diario). **Huellar fotos pendientes** calcula en tu navegador la huella de las
+  fotos subidas antes de este sprint.
+- **El dueño (Mi anuncio):** si el equipo **pausó** el anuncio o **pidió el CTL**, «Mi anuncio» lo dice arriba, sin acusar. Renovar un anuncio en
+  pausa le da más días, pero sigue en pausa, y la tarjeta lo dice.
+- **Sesión de fotos (el dueño):** en «Mi anuncio», **Sesión de fotos**: eliges la franja (entre semana, sábado o domingo) y la pides; el equipo te
+  escribe por WhatsApp para acordar el día. Ves el estado con símbolo y texto (**Pedida → Agendada → Hecha**, o **Cancelada**), la fecha en hora de
+  Bogotá y puedes **cancelarla** mientras esté abierta. Una abierta por anuncio y hasta 3 en 30 días. **Pedirla no te cuesta nada ni te compromete.**
+- **Sesión de fotos (el operador):** el panel **Sesiones de fotos** lista las abiertas primero. **Agendar** pide la fecha y la hora (de 6:00 a. m. a
+  9:00 p. m., hasta 60 días), **Marcar como hecha** y **Cancelar** (el dueño puede pedir otra). Cada tarjeta trae el enlace de WhatsApp con el texto
+  ya escrito.
+- **Limitaciones conocidas:** las reglas son señales, no pruebas: pueden marcar un anuncio legítimo y por eso las decide una persona. La regla del
+  precio solo funciona con 5 o más anuncios parecidos. Las fotos subidas antes de este sprint no tienen huella hasta que el operador las procesa. El
+  **lector de certificados de tradición** (pegar el texto del certificado y ver hipotecas, embargos, medidas cautelares, vivienda familiar,
+  patrimonio de familia y falsa tradición, cada una con su norma) está construido, pero **apagado** hasta validarlo con certificados reales; cuando
+  se encienda aparecerá como una quinta sección en **Papeleo** y lo pegado no saldrá de tu teléfono.
 
 ## Features
 
@@ -580,6 +618,9 @@ solicitudes de visita.
   Nosotros solo lo recibimos y nunca respondemos por ahí.
 - **¿Las alertas me escriben por WhatsApp?** No. Solo por correo, con un resumen al día; la alerta
   nunca usa WhatsApp.
+- **¿Reportar un anuncio lo oculta?** No. Lo revisa una persona del equipo, que decide si lo pausa, le pide el CTL al dueño o descarta el reporte.
+  El dueño no sabe quién reportó.
+- **¿Cuesta la sesión de fotos?** Pedirla no te cuesta nada ni te compromete: el equipo te escribe para acordar el día.
 - **¿Cómo dejo de recibir una alerta?** Con el enlace **«Dejar de recibirla: un clic»** que trae cada
   correo (no pide sesión) o desde **Alertas**, con **Borrar**.
 - **¿«¿Está caro?» es un avalúo?** No. Es un rango de lo que piden otros dueños por anuncios
@@ -610,3 +651,4 @@ solicitudes de visita.
 | 012    | Vivienda nueva: pestaña «Nuevos» en Buscar con el índice de la edición vigente (mediana del m² privado, solo con 5 o más proyectos), la lista con «pagas al menos» y filtros, la ficha del proyecto con cada peso y su norma, lo que falta sumar nombrado, «la espera» con tu arriendo solo en el teléfono, la ficha honesta, «lo que puedes pagar» y «mes sin edición»                                                           |
 | 013    | Nuevo o usado: «¿Nuevo o usado?» (apartamentos nuevos frente a usados en venta, mismo presupuesto y zona, con la regla de 5 comparables), «¿Te alcanza con subsidio?» (programas con su norma, año y estado con fecha; «tu hogar» se calcula en el teléfono) y la visita a la sala de ventas (WhatsApp verificado, horarios, confirmación, aviso si la sala no responde en dos días hábiles) con su cola en el panel del operador |
 | 014    | Papeleo sin sorpresas: «Papeleo» en Herramientas (junto al simulador) con los gastos de escriturar por actor y su norma, qué pedir, plazos y qué dice cada documento; el precio se queda en el teléfono; lo no verificado se nombra sin cifra; enlace desde las fichas                                                                                                                                                            |
+| 015    | Antifraude con reglas a la vista: las cuatro reglas en palabras simples, «Reportar este anuncio» (WhatsApp verificado, el dueño no sabe quién reportó), la cola del operador con pausar, reactivar, pedir el CTL y descartar con razón, avisos del equipo en «Mi anuncio» y la sesión de fotos (pedir, agendar, hecha); el lector de certificados queda construido y apagado |

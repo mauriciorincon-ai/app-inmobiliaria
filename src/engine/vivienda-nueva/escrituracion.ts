@@ -39,6 +39,8 @@ export type TarifasEscrituracion = {
   topes_vis: {
     smmlv: number;
     smmlv_aglomeraciones: number;
+    /** S15: el tope de la VIP, igual en todo el país (Ley 1955 de 2019, art. 85). */
+    smmlv_vip: number;
     municipios_aglomeracion_bogota: readonly string[];
     /** Ciudades principales de las otras aglomeraciones con tope de 150 salarios (Medellín, Cali, Barranquilla…). */
     otras_aglomeraciones: readonly string[];
@@ -73,6 +75,11 @@ export function topeVis(ciudad: string, t: TarifasEscrituracion): number {
     ? t.topes_vis.smmlv_aglomeraciones
     : t.topes_vis.smmlv;
   return Math.round(salarios * t.unidades.smmlv.valor);
+}
+
+/** El tope de la VIP en pesos (S15): el mismo en todo el país (Ley 1955 de 2019, art. 85). */
+export function topeVip(t: TarifasEscrituracion): number {
+  return Math.round(t.topes_vis.smmlv_vip * t.unidades.smmlv.valor);
 }
 
 /** Derechos de registro de la compraventa, o `null` si la tarifa no está vigente en el archivo. */

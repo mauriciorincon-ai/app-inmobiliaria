@@ -35,6 +35,7 @@ describe("la estructura y el texto de la guía van de la mano", () => {
     ] as const satisfies readonly IdLinea[];
     const avisos = [
       "supera_tope_vis",
+      "supera_tope_vip",
       "vis_sin_subsidio",
       "vip_sin_subsidio",
       "avaluo_mayor",

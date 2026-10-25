@@ -12,6 +12,9 @@
 //   --salas ausente|presente (S13; por omisión «presente» salvo con `--espera ausente`): la migración 16. «ausente» exige que
 //   la visita a la sala y los usados para comparar NO existan; «presente» exige que existan, que el anónimo no lea ninguna
 //   sala, que las RPC del operador le estén cerradas y que pedir una visita con una sesión falsa se rechace.
+//   --antifraude ausente|presente (S15; mismo default que --salas): la migración 17. «presente» exige que el anónimo no lea
+//   reportes, banderas ni sesiones, que las RPC del operador le estén cerradas, que reportar con una sesión falsa y lo del
+//   dueño con un token falso se rechacen, y que la búsqueda y la ficha reescritas con la pausa sigan respondiendo.
 // Sale con código 1 si algo no es lo esperado. Nunca imprime la URL ni la llave: solo si la base es local o cuál es su inicio.
 import { CLAVES_FILA } from "../src/engine/vivienda-nueva/filas.ts";
 
@@ -23,6 +26,12 @@ const opcion = (nombre) => {
 const espera = opcion("--espera");
 const salas =
   opcion("--salas") ?? (espera === "ausente" ? "ausente" : "presente");
+const antifraude =
+  opcion("--antifraude") ?? (espera === "ausente" ? "ausente" : "presente");
+if (!["ausente", "presente"].includes(antifraude)) {
+  console.error("Uso: --antifraude ausente|presente");
+  process.exit(2);
+}
 if (!["ausente", "presente"].includes(salas)) {
   console.error("Uso: --salas ausente|presente");
   process.exit(2);
@@ -223,6 +232,131 @@ if (salas === "ausente") {
     Array.isArray(usados.json)
       ? `${usados.json.length} anuncios`
       : `HTTP ${usados.estado}`,
+  );
+}
+
+// ── S15 (migración 17): reportar, las reglas antifraude, la pausa y la sesión de fotos ───────────────────────────────
+if (antifraude === "ausente") {
+  const r = await rpc("reportar_anuncio", {
+    p_sesion_hash: "0",
+    p_slug: "x",
+    p_motivos: [],
+    p_detalle: null,
+  });
+  comprobar(
+    "la migración 17 NO está: reportar_anuncio() no existe",
+    r.estado === 404 && r.json?.code === "PGRST202",
+    `HTTP ${r.estado}`,
+  );
+} else {
+  for (const tabla of ["reportes", "banderas", "sesiones_fotos"]) {
+    const t = await pedir(`${tabla}?select=*&limit=1`);
+    comprobar(
+      `el anónimo no lee la tabla ${tabla}`,
+      (t.estado === 200 && Array.isArray(t.json) && t.json.length === 0) ||
+        t.estado === 401 ||
+        t.estado === 403,
+      `HTTP ${t.estado}`,
+    );
+  }
+  // Las RPC del operador y las dos internas: el rechazo ocurre ANTES de ejecutar (sin el permiso), así que no cambia nada.
+  const UUID_NULO = "00000000-0000-0000-0000-000000000000";
+  for (const [nombre, cuerpo] of [
+    ["antifraude_cola", {}],
+    ["pausar_anuncio", { p_inmueble_id: UUID_NULO }],
+    ["reactivar_anuncio", { p_inmueble_id: UUID_NULO }],
+    ["pedir_ctl", { p_inmueble_id: UUID_NULO }],
+    [
+      "descartar_revision",
+      { p_inmueble_id: UUID_NULO, p_razon: "x", p_nota: null },
+    ],
+    ["revisar_banderas", {}],
+    ["anuncios_para_precio", {}],
+    ["guardar_banderas_precio", { p_hallazgos: "x" }],
+    ["fotos_sin_huella", { p_limite: 0 }],
+    ["registrar_huella_operador", { p_foto_id: UUID_NULO, p_huella: "x" }],
+    ["sesiones_panel", {}],
+    [
+      "agendar_sesion_fotos",
+      { p_sesion_id: UUID_NULO, p_para: "2000-01-01T00:00:00Z" },
+    ],
+    ["marcar_sesion_hecha", { p_sesion_id: UUID_NULO }],
+    ["cancelar_sesion_fotos_operador", { p_sesion_id: UUID_NULO }],
+    ["aplicar_banderas", { p_regla: "x", p_hallazgos: "x" }],
+    [
+      "resolver_revision",
+      {
+        p_inmueble_id: UUID_NULO,
+        p_resolucion: "x",
+        p_razon: null,
+        p_nota: null,
+      },
+    ],
+  ]) {
+    const r = await rpc(nombre, cuerpo);
+    comprobar(
+      `el anónimo no puede ejecutar ${nombre}`,
+      r.json?.code === "42501",
+      `HTTP ${r.estado}`,
+    );
+  }
+  // Reportar con una sesión que no existe se rechaza en la primera comprobación, antes de escribir nada.
+  const reportar = await rpc("reportar_anuncio", {
+    p_sesion_hash: "0".repeat(64),
+    p_slug: "anuncio-que-no-existe",
+    p_motivos: ["otra_cosa"],
+    p_detalle: null,
+  });
+  comprobar(
+    "reportar un anuncio con una sesión falsa se rechaza (exige el WhatsApp verificado)",
+    reportar.json?.code === "42501" &&
+      String(reportar.json?.message ?? "").includes("no_verificado"),
+    `HTTP ${reportar.estado}`,
+  );
+  // Lo del dueño exige el token de «Mi anuncio»: con uno falso, nada se lee ni se escribe.
+  const TOKEN_FALSO = "x".repeat(43);
+  for (const [nombre, cuerpo] of [
+    [
+      "registrar_huella_foto",
+      { p_token: TOKEN_FALSO, p_foto_id: UUID_NULO, p_huella: "0".repeat(16) },
+    ],
+    ["solicitar_sesion_fotos", { p_token: TOKEN_FALSO, p_franja: "sabado" }],
+    ["cancelar_sesion_fotos", { p_token: TOKEN_FALSO }],
+  ]) {
+    const r = await rpc(nombre, cuerpo);
+    comprobar(
+      `${nombre} con un token falso se rechaza`,
+      String(r.json?.message ?? "").includes("token_invalido"),
+      `HTTP ${r.estado}`,
+    );
+  }
+  const extra = await rpc("mi_anuncio_extra", { p_token: TOKEN_FALSO });
+  comprobar(
+    "mi_anuncio_extra con un token falso no devuelve nada",
+    extra.estado === 200 && extra.json === null,
+    `HTTP ${extra.estado}`,
+  );
+  // Las funciones reescritas con la pausa siguen respondiendo al anónimo.
+  const busqueda = await rpc("buscar_inmuebles", {
+    p_operacion: null,
+    p_tipo: null,
+    p_localidad: null,
+    p_precio_min: null,
+    p_precio_max: null,
+    p_habitaciones_min: null,
+    p_poligono: null,
+    p_limite: 1,
+  });
+  comprobar(
+    "buscar_inmuebles (sobre inmuebles_que_cumplen, reescrita con la pausa) responde",
+    busqueda.estado === 200 && Array.isArray(busqueda.json),
+    `HTTP ${busqueda.estado}`,
+  );
+  const ficha = await rpc("obtener_ficha", { p_slug: "anuncio-que-no-existe" });
+  comprobar(
+    "obtener_ficha (reescrita con la pausa) responde null a un anuncio que no existe",
+    ficha.estado === 200 && ficha.json === null,
+    `HTTP ${ficha.estado}`,
   );
 }
 

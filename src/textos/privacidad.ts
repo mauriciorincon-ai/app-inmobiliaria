@@ -126,6 +126,19 @@ export const PRIVACIDAD = {
     },
   },
 
+  // Reportes, señales de las reglas, huella de las fotos y sesión de fotos (S15): dice solo lo que el código hace. Los reportes
+  // cuelgan del comprador verificado y del anuncio (`on delete cascade`); la cola del equipo no trae quién reportó.
+  antifraude: {
+    titulo: {
+      es: "Si reportas un anuncio, o pides una sesión de fotos",
+      en: "If you report a listing, or ask for a photo session",
+    },
+    texto: {
+      es: "Para reportar un anuncio hace falta tu WhatsApp verificado. Guardamos el anuncio, los motivos que eliges, lo que cuentas (hasta 500 caracteres), la fecha y cómo lo resolvió el equipo. El reporte queda ligado a tu WhatsApp verificado para limitar los reportes (uno por anuncio y hasta cinco al día), pero el dueño nunca sabe quién reportó y en la cola del equipo no se muestra tu nombre ni tu número. Las reglas de revisión miran los anuncios, no a las personas: guardan, por ejemplo, el porcentaje del precio frente a la mediana o el anuncio con el que se parece una foto. Al subir una foto calculamos en tu dispositivo una huella de la imagen (64 bits) y la guardamos junto a la foto para compararla con las de otros anuncios; con la huella no se puede reconstruir la foto. Una señal o un reporte no ocultan un anuncio: lo decide una persona del equipo y, si lo pausa o le pide un certificado de tradición al dueño, se lo decimos. Si el dueño pide una sesión de fotos, guardamos la franja que elige y su estado. Los reportes se conservan mientras exista el anuncio y tu registro de comprador verificado; se borran con cualquiera de los dos, y puedes pedir que los borremos escribiendo al correo del responsable.",
+      en: "To report a listing you need your verified WhatsApp. We keep the listing, the reasons you pick, what you tell us (up to 500 characters), the date and how the team resolved it. The report is tied to your verified WhatsApp to limit reports (one per listing and up to five a day), but the owner never learns who reported and the team's queue shows neither your name nor your number. The review rules look at listings, not at people: they keep, for example, the percentage of the price against the median or the listing a photo resembles. When you upload a photo we compute a fingerprint of the image (64 bits) on your device and keep it with the photo to compare it with other listings' photos; the photo cannot be rebuilt from the fingerprint. A flag or a report doesn't hide a listing: a person on the team decides, and if they pause it or ask the owner for a title record, we tell the owner. If an owner asks for a photo session, we keep the time slot they choose and its status. Reports are kept while the listing and your verified-buyer record exist; they are deleted with either one, and you can ask us to delete them by writing to the data controller.",
+    },
+  },
+
   // Lo que se queda en tu teléfono (S10 «lo que puedes pagar», S12 el arriendo, S13 el subsidio): dice solo lo que el
   // código hace. Los números viven en `localStorage` y ninguna petición los lleva; solo viaja el precio máximo calculado.
   telefono: {

@@ -307,6 +307,16 @@
           color: #67e8f9;
         }
       }
+      .o-s15 {
+        background: #ffe4e6;
+        color: #9f1239;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s15 {
+          background: #4c0519;
+          color: #fda4af;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -355,21 +365,23 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 014 — El papeleo, sin sorpresas</h1>
+      <h1>Sprint 015 — Aquí nadie te tumba</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s14">Nuevo · S14</span>. Este sprint suma la
-        pantalla <b>Papeleo</b> (en Herramientas, junto al simulador): lo que
-        paga cada parte al escriturar con la norma de cada cifra, qué pedir,
-        cuánto tarda cada paso y qué dice cada documento (bloque Q). Los bloques
-        A a P siguen igual.
+        <span class="origen o-s15">Nuevo · S15</span>. Este sprint suma el
+        <b>antifraude con reglas a la vista</b>: «Reportar este anuncio», la
+        página de las reglas, la cola del operador (pausar, pedir el CTL,
+        descartar) y la <b>sesión de fotos</b> que el dueño pide desde «Mi
+        anuncio» (bloque R). Los bloques A a Q siguen igual; el lector de
+        certificados de tradición está construido pero <b>apagado</b> hasta
+        validarlo con certificados reales.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-014/papeleo-sin-sorpresas</code>. En un teléfono real
+        <code>sprint-015/aqui-nadie-te-tumba</code>. En un teléfono real
         cuando el filtro lo pida.
       </div>
 
@@ -384,8 +396,11 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
+          <button data-filtro="s15" aria-pressed="false">
+            Solo lo nuevo del S15
+          </button>
           <button data-filtro="s14" aria-pressed="false">
-            Solo lo nuevo del S14
+            Solo lo del S14
           </button>
           <button data-filtro="s13" aria-pressed="false">
             Solo lo del S13
@@ -2484,7 +2499,10 @@
                 tiene la mitad de VIS (la notaría sí); al marcar el subsidio el
                 aviso se va y el registro baja. Un precio por encima del tope de
                 la vivienda de interés social de esa ciudad se liquida como
-                vivienda normal y lo dice.
+                vivienda normal y lo dice. Con <b>VIP</b> pasa lo mismo: sin
+                subsidio, la notaría baja a la mitad de VIS pero el registro es
+                el completo; y por encima de los <b>90 salarios mínimos</b> (el
+                tope de la VIP) se liquida como VIS y lo dice.
               </p>
             </div>
           </li>
@@ -2574,8 +2592,173 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE R ================= -->
+      <section class="bloque">
+        <h2><span class="letra">R</span> Antifraude, reportar y sesión de fotos</h2>
+        <p class="intro">
+          Cuatro reglas escritas señalan anuncios al equipo; <b>una señal o un
+          reporte nunca ocultan un anuncio</b>: solo una persona del equipo
+          decide pausar, pedir el CTL o descartar. El dueño, por su parte, puede
+          pedir una sesión de fotos desde «Mi anuncio». Lo que ninguna
+          automatización cubre es tu juicio sobre los textos (que no acusen) y
+          el recorrido en un teléfono real.
+        </p>
+        <ul>
+          <li data-origen="s15 clave">
+            <input type="checkbox" id="r1" />
+            <div>
+              <label for="r1" class="qué"
+                >Abre una ficha, toca <b>«Reportar este anuncio»</b> y, en esa
+                página, <b>«Así revisamos los anuncios»</b>. Lee las cuatro
+                reglas<span class="origen o-s15">Nuevo · S15</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cuatro reglas en palabras simples, cada una con
+                su número (30 % por debajo de la mediana y al menos 5 anuncios
+                para comparar; 6 de 64 puntos de diferencia en una foto;
+                matrícula con otro teléfono; el mismo WhatsApp con 2 nombres), y
+                la frase <b>«una señal no acusa a nadie ni oculta un anuncio»</b>.
+                <b
+                  >Es tu juicio: ¿se entiende sin tecnicismos? ¿Algo suena a
+                  acusación o a promesa que no se cumple?</b
+                >
+              </p>
+              <p class="mal">
+                Mala señal: una regla sin número, una frase que afirme fraude, o
+                cualquier cosa que prometa que el anuncio «se baja solo».
+              </p>
+            </div>
+          </li>
+          <li data-origen="s15 clave">
+            <input type="checkbox" id="r2" />
+            <div>
+              <label for="r2" class="qué"
+                >En tu <b>teléfono</b>, con el WhatsApp ya verificado, reporta
+                un anuncio de prueba: elige un motivo, escribe un detalle y
+                envía<span class="origen o-s15">Nuevo · S15</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Gracias: una persona del equipo lo revisa»; la
+                ficha <b>sigue igual</b> (no desaparece); reportar el mismo
+                anuncio otra vez dice «Ya reportaste este anuncio: el equipo lo
+                tiene». Sin el WhatsApp verificado, la página te invita a
+                verificarlo primero y no muestra el formulario. Nada se sale de
+                la pantalla hacia los lados.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s15 clave">
+            <input type="checkbox" id="r3" />
+            <div>
+              <label for="r3" class="qué"
+                >En el panel, abre <b>Antifraude</b>: mira la tarjeta del
+                anuncio reportado, toca <b>«Pausar el anuncio»</b> y abre el
+                enlace <b>«Escribirle al dueño por WhatsApp»</b
+                ><span class="origen o-s15">Nuevo · S15</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> la tarjeta muestra los motivos y el detalle,
+                <b>sin quién reportó</b>; al pausar, la ficha, la búsqueda y el
+                enlace del anuncio dejan de mostrarlo; WhatsApp se abre con el
+                mensaje ya escrito, en el idioma del dueño, y <b>nada se envía
+                solo</b>.
+                <b
+                  >Es tu juicio: ¿el mensaje al dueño dice qué pasa y qué sigue
+                  sin acusarlo?</b
+                >
+              </p>
+              <p class="mal">
+                Mala señal: que aparezca el nombre o el número de quien
+                reportó, o un mensaje que dé por hecho que el dueño engaña.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s15">
+            <input type="checkbox" id="r4" />
+            <div>
+              <label for="r4" class="qué"
+                >Toca <b>«Reactivar el anuncio»</b>, luego
+                <b>«Pedir el CTL al dueño»</b> y abre «Mi anuncio» del dueño<span
+                  class="origen o-s15"
+                  >Nuevo · S15</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> al reactivar, la ficha vuelve. Al pedir el CTL
+                el anuncio <b>sigue visible</b>, la tarjeta se queda en la cola
+                («CTL pedido el …») hasta que lo verifiques, y si era
+                verificado queda en «re-verificación pendiente». «Mi anuncio»
+                muestra un aviso con el pedido (y otro si está en pausa).
+              </p>
+            </div>
+          </li>
+          <li data-origen="s15">
+            <input type="checkbox" id="r5" />
+            <div>
+              <label for="r5" class="qué"
+                >En una tarjeta con banderas o reportes, toca
+                <b>«Descartar las banderas»</b>: sin elegir razón, y luego con
+                una<span class="origen o-s15">Nuevo · S15</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> sin razón no deja descartar («Elige una
+                razón»); con una de las cuatro, la tarjeta sale de la cola y el
+                registro queda con la razón y la fecha. Una bandera descartada
+                no vuelve a aparecer.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s15 clave">
+            <input type="checkbox" id="r6" />
+            <div>
+              <label for="r6" class="qué"
+                >En «Mi anuncio», desde tu <b>teléfono</b>, pide una
+                <b>sesión de fotos</b> (elige una franja); luego, en el panel,
+                abre <b>Sesiones de fotos</b>, agéndala y márcala como hecha<span
+                  class="origen o-s15"
+                  >Nuevo · S15</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Mi anuncio» pasa por Pedida → Agendada (con la
+                fecha en hora de Bogotá) → Hecha, siempre con símbolo y texto;
+                con una sesión abierta solo se puede cancelar; el enlace de
+                WhatsApp del panel trae el texto ya escrito. Pedirla no cuesta ni
+                compromete, y la pantalla lo dice.
+                <b
+                  >Es tu juicio: ¿se entiende qué pasa después de pedirla?</b
+                >
+              </p>
+            </div>
+          </li>
+          <li data-origen="s15">
+            <input type="checkbox" id="r7" />
+            <div>
+              <label for="r7" class="qué"
+                >En el panel de Antifraude toca <b>«Revisar reglas ahora»</b>
+                y, si hay fotos sin huella, <b>«Huellar fotos pendientes»</b>;
+                abre <b>Papeleo</b> en Herramientas<span class="origen o-s15"
+                  >Nuevo · S15</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> «Revisar reglas ahora» dice cuántas señales
+                encontró por regla y las tarjetas nuevas <b>no ocultan nada</b>;
+                «Huellar fotos» calcula las huellas de las fotos viejas en tu
+                navegador. En Papeleo siguen las <b>cuatro</b> secciones de
+                siempre: el lector de certificados de tradición está apagado y no
+                aparece.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–Q), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–R), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -2603,6 +2786,21 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 015 (2026-10-25):</b><br />
+          <b>Nuevo:</b> bloque R (antifraude con reglas a la vista: las cuatro
+          reglas en palabras simples, reportar un anuncio con el WhatsApp
+          verificado, la cola del operador con pausar, reactivar, pedir el CTL y
+          descartar con razón, lo que el dueño ve cuando el equipo actúa y la
+          sesión de fotos de «Mi anuncio» al panel): 7 pruebas nuevas, 4 del
+          gate mínimo ⭐.<br />
+          <b>Mejorado:</b> la prueba Q3 (la VIP: sin subsidio paga el registro
+          completo y por encima de los 90 salarios mínimos se liquida como VIS).<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 112 pruebas (contadas; el total del S14 decía 103 y eran 105), 41 del gate mínimo ⭐. Los avances
+          guardados en tu navegador empiezan de cero (la guía pasó a la versión
+          12).
+        </p>
         <p>
           <b>Sprint 014 (2026-10-25):</b><br />
           <b>Nuevo:</b> bloque Q (Papeleo sin sorpresas: los gastos de
@@ -2736,7 +2934,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v11:";
+        var CLAVE = "guia-inmobiliaria-v12:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

@@ -10,6 +10,8 @@ import {
 } from "./etiquetas";
 import { formatearCOP } from "@/engine/format/cop";
 import { formatearFecha } from "@/engine/format/fecha";
+import { enlacePapeleo, tipoDeSegmento } from "@/engine/papeleo/formulario";
+import { resolverCiudad } from "@/engine/papeleo/gastos";
 import {
   entregaPartes,
   paramsComparar,
@@ -19,6 +21,7 @@ import {
 } from "@/engine/vivienda-nueva/vista";
 import type { Idioma } from "@/i18n/idiomas";
 import { rellenar } from "@/i18n/textos";
+import { ESCRITURACION, TARIFAS_PAPELEO } from "@/lib/papeleo/datos";
 
 const MARCAS = {
   verificable: "✓",
@@ -80,6 +83,19 @@ export default function FichaNuevo({
         fecha: formatearFecha(n.consultado, lang),
       }),
     );
+
+  // «Lo que te cuesta escriturar este»: el precio «desde» (si está calculado), la ciudad y el tipo del proyecto; vende una constructora.
+  const enlacePap = enlacePapeleo({
+    precio: pv.estado === "calculado" ? pv.desde : null,
+    ciudad: resolverCiudad(
+      esVacio(v.ciudad) ? null : String(v.ciudad),
+      v.region === "sabana",
+      ESCRITURACION,
+      TARIFAS_PAPELEO,
+    ),
+    tipo: tipoDeSegmento(esVacio(v.segmento) ? null : String(v.segmento)),
+    vende: "empresa",
+  });
 
   const m2 = pv.m2;
   const textoM2 = m2.base
@@ -370,6 +386,18 @@ export default function FichaNuevo({
             </Link>
             <p className="mt-1 text-sm text-gray">
               {t.accesos.teAlcanza.detalle}
+            </p>
+          </li>
+          <li className="rounded-2xl border border-purple-200 bg-white p-4">
+            <Link
+              href={enlacePap}
+              prefetch={false}
+              className="font-extrabold text-purple-600 underline underline-offset-4"
+            >
+              {t.accesos.papeleo.titulo}
+            </Link>
+            <p className="mt-1 text-sm text-gray">
+              {t.accesos.papeleo.detalle}
             </p>
           </li>
         </ul>

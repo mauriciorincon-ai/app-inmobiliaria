@@ -35,6 +35,7 @@ import {
 } from "@/lib/precio-datos";
 import { rangoDePrecio } from "@/engine/precio/comparables";
 import { formatearCOP } from "@/engine/format/cop";
+import { enlacePapeleo } from "@/engine/papeleo/formulario";
 import { urlPublicaFoto } from "@/lib/fotos-url";
 import type { FichaData } from "@/lib/supabase/types";
 
@@ -193,6 +194,22 @@ export default async function FichaPage({ params }: { params: ParamsFicha }) {
             )}
           </div>
         )}
+
+        <section
+          aria-labelledby="papeleo-titulo"
+          className="mt-3 rounded-2xl border border-purple-200 bg-white p-4"
+        >
+          <h2 id="papeleo-titulo" className="text-sm font-bold text-ink">
+            <Link
+              href={enlacePapeleo({ precio: f.precio_esperado })}
+              prefetch={false}
+              className="text-purple-600 underline underline-offset-4"
+            >
+              {t.papeleo.titulo}
+            </Link>
+          </h2>
+          <p className="mt-1 text-sm text-gray">{t.papeleo.detalle}</p>
+        </section>
 
         <VivoHace vigenteHasta={f.vigente_hasta} t={t.vivo} />
         <SelloExplicado

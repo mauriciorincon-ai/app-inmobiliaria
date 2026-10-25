@@ -124,6 +124,18 @@ export const FICHA = {
   },
 
   // «Vivo hace N días»: la promesa anti-zombie, visible. N sale de la última confirmación del dueño.
+  // «Lo que te cuesta escriturar este»: manda al asistente del papeleo con el precio del anuncio.
+  papeleo: {
+    titulo: {
+      es: "Lo que te cuesta escriturar este",
+      en: "What it costs to close on this one",
+    },
+    detalle: {
+      es: "Cuánto paga cada parte al escriturar, con la norma de cada cifra. El precio se queda en tu teléfono.",
+      en: "What each party pays at closing, with the rule behind every figure. The price stays on your phone.",
+    },
+  },
+
   vivo: {
     hoy: {
       es: "Vivo: el dueño lo confirmó hoy",

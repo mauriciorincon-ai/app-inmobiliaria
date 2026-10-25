@@ -637,6 +637,14 @@ describe("el formulario: lo que llega de la URL no es confiable", () => {
     ).toBe("/papeleo?precio=1");
   });
 
+  it("una ficha sin precio manda a la pantalla sin él: lleva la ciudad y el tipo, o nada", () => {
+    expect(enlacePapeleo({ precio: null, ciudad: "chia", tipo: "vis" })).toBe(
+      "/papeleo?ciudad=chia&tipo=vis",
+    );
+    expect(enlacePapeleo({ precio: 0 })).toBe("/papeleo");
+    expect(enlacePapeleo({})).toBe("/papeleo");
+  });
+
   it("el segmento de un proyecto nuevo da el tipo de vivienda", () => {
     expect(tipoDeSegmento("VIS")).toBe("vis");
     expect(tipoDeSegmento("VIP")).toBe("vip");

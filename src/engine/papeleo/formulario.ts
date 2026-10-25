@@ -62,7 +62,8 @@ export function tipoDeSegmento(
 }
 
 export type DatosEnlace = {
-  precio: number;
+  /** El precio del inmueble; si la ficha no lo tiene (un proyecto sin «desde»), el enlace no lo lleva y la persona lo escribe. */
+  precio?: number | null;
   ciudad?: string;
   tipo?: TipoVivienda;
   vende?: QuienVende;
@@ -70,10 +71,12 @@ export type DatosEnlace = {
 
 /** La ficha manda a `/papeleo` con el precio del inmueble (lo que vale por omisión no viaja). */
 export function enlacePapeleo(d: DatosEnlace): string {
-  const p = new URLSearchParams({ precio: String(Math.round(d.precio)) });
+  const p = new URLSearchParams();
+  if (d.precio && d.precio > 0) p.set("precio", String(Math.round(d.precio)));
   if (d.ciudad && d.ciudad !== ENTRADA_INICIAL.ciudad)
     p.set("ciudad", d.ciudad);
   if (d.tipo && d.tipo !== ENTRADA_INICIAL.tipo) p.set("tipo", d.tipo);
   if (d.vende && d.vende !== ENTRADA_INICIAL.vende) p.set("vende", d.vende);
-  return `/papeleo?${p.toString()}`;
+  const consulta = p.toString();
+  return consulta ? `/papeleo?${consulta}` : "/papeleo";
 }

@@ -80,6 +80,29 @@ funcionalidad después del S7 lo fija la planeadora.
 - **Las fotos son ilustraciones sintéticas,** para no usar fotos de terceros.
 - **La verificación, la Registraduría y el envío de correos se simulan** con los botones de estado.
 
+## Lo que el producto cambió respecto de la maqueta 11 (Sprint 014)
+
+La maqueta 11 queda como la aprobó el usuario; el producto (`/papeleo`, S14) se construyó contra ella y se apartó en lo que la norma
+primaria leída el 2026-10-25 desmintió o en lo que el plan acordó:
+
+- **Un solo impuesto de registro, por mitades.** La maqueta pone «beneficencia y registro departamental, 1,67 % a 2 %» todo al comprador. La
+  «beneficencia» no es un cobro aparte: es el impuesto de registro y anotación de Cundinamarca (Ordenanza 039 de 2020, arts. 208 a 218, con
+  la tarifa del art. 217 modificada por la Ordenanza 0105 de 2023), **1 %**, que en Bogotá y Cundinamarca se paga **por partes iguales salvo
+  pacto**. Sale una línea, con su norma, y no un rango.
+- **«Registro: dentro de 2 meses»** se separa en lo que dice cada norma: **pedir** el registro dentro de 2 meses (Ordenanza 039, art. 218) y que la
+  oficina **registra en 5 días hábiles** (Ley 1579 de 2012, art. 27). Los 2 meses no son de la Ley 1579.
+- **El IVA de 19 % sobre la notaría** que muestra la maqueta no se muestra: no hay una norma primaria clara (la DIAN se contradice entre
+  conceptos), así que el concepto se nombra **sin cifra**. La ganancia ocasional se nombra sin el 15 %.
+- **«CTL de máximo 30 días»** se rotula como criterio del portal de la SNR, no como ley: la Ley 1579 (art. 72) fija la vigencia del CTL a la
+  fecha y hora de la solicitud.
+- **«Si el vendedor incumple te devuelve el doble»** era impreciso: las arras dobladas son el precio de **retractarse** (Código Civil, art. 1859),
+  no de incumplir; el incumplimiento tiene su cláusula (art. 1546) y, si hay, la cláusula penal.
+- **Más entradas que el precio:** ciudad, tipo (normal, VIS, VIP) y subsidio, quién vende, reparto, avalúo catastral y crédito, porque cada una
+  cambia una norma (tope de la VIS, mitad de la VIS solo con subsidio, base ≥ avalúo, retención solo si vende una persona natural).
+- **Una línea más por actor:** los recaudos de la notaría (Res. SNR 2026-000964-6, art. 50).
+- **La cuarta pestaña** es «Qué dice cada documento» (cláusulas de texto fijo con su artículo) y ocupa el lugar del **lector de CTL**, que pasó
+  al Sprint 15 (decisión 1c del plan).
+
 ## Fuentes, licencias y cómo se regenera
 
 - **Mapa:**

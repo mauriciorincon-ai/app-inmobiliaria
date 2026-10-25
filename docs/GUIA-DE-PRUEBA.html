@@ -297,6 +297,16 @@
           color: #c4b5fd;
         }
       }
+      .o-s14 {
+        background: #cffafe;
+        color: #155e75;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s14 {
+          background: #083344;
+          color: #67e8f9;
+        }
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -345,22 +355,22 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 013 — Nuevo o usado, con la misma plata</h1>
+      <h1>Sprint 014 — El papeleo, sin sorpresas</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s13">Nuevo · S13</span>. Este sprint cierra el
-        módulo de vivienda nueva con tres pantallas: <b>¿Nuevo o usado?</b>,
-        <b>¿Te alcanza con subsidio?</b> y la <b>visita a la sala de ventas</b>
-        con su cola en el panel del operador (bloque P). Los bloques A a O
-        siguen igual.
+        <span class="origen o-s14">Nuevo · S14</span>. Este sprint suma la
+        pantalla <b>Papeleo</b> (en Herramientas, junto al simulador): lo que
+        paga cada parte al escriturar con la norma de cada cifra, qué pedir,
+        cuánto tarda cada paso y qué dice cada documento (bloque Q). Los bloques
+        A a P siguen igual.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-013/nuevo-o-usado</code>. En un teléfono real cuando el
-        filtro lo pida.
+        <code>sprint-014/papeleo-sin-sorpresas</code>. En un teléfono real
+        cuando el filtro lo pida.
       </div>
 
       <div class="barra">
@@ -374,8 +384,11 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
+          <button data-filtro="s14" aria-pressed="false">
+            Solo lo nuevo del S14
+          </button>
           <button data-filtro="s13" aria-pressed="false">
-            Solo lo nuevo del S13
+            Solo lo del S13
           </button>
           <button data-filtro="s12" aria-pressed="false">
             Solo lo del S12
@@ -2394,8 +2407,174 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE Q ================= -->
+      <section class="bloque">
+        <h2><span class="letra">Q</span> Papeleo sin sorpresas</h2>
+        <p class="intro">
+          Una pantalla nueva: <b>Herramientas → Papeleo</b>. Dice, antes de
+          firmar la promesa, cuánto paga el comprador y cuánto el vendedor al
+          escriturar, qué pedir, cuánto tarda cada paso y qué dice cada
+          documento. Todo se calcula en el teléfono. Lo que ninguna
+          automatización cubre es tu juicio: si una cifra cuadra con el
+          liquidador oficial y si una cláusula se entiende y no afirma de más.
+        </p>
+        <ul>
+          <li data-origen="s14 clave">
+            <input type="checkbox" id="q1" />
+            <div>
+              <label for="q1" class="qué"
+                >En <b>Herramientas</b> toca <b>Papeleo</b>, escribe un precio
+                (por ejemplo 450.000.000), deja <b>Bogotá</b> y revisa las
+                tarjetas <b>«Paga el comprador»</b> y <b>«Paga el vendedor»</b>.
+                Compara <b>una cifra</b> (la notaría o el registro) con el
+                liquidador de la Superintendencia de Notariado y Registro<span
+                  class="origen o-s14"
+                  >Nuevo · S14</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> cada línea trae su <b>norma</b> y el año de la
+                tarifa (2026); el impuesto de registro se llama así (la gente lo
+                llama «beneficencia») y se parte por mitades; el vendedor tiene
+                la retención en la fuente de 1 %; el comprador, el certificado
+                de tradición. El IVA de los derechos notariales sale
+                <b>«▲ Sin cifra»</b> y el total dice
+                <b
+                  >«Falta 1 concepto sin verificar: este total es lo mínimo que
+                  pagas»</b
+                >.
+                <b
+                  >Es tu juicio: ¿la cifra que comparaste cuadra con la oficial,
+                  o se acerca como un estimado?</b
+                >
+              </p>
+              <p class="mal">
+                Mala señal: una línea sin norma, una cifra que no se parece en
+                nada a la del liquidador, o un total que no avisa lo que falta.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s14">
+            <input type="checkbox" id="q2" />
+            <div>
+              <label for="q2" class="qué"
+                >Cambia la ciudad a <b>«Otra ciudad»</b> y, en <b>Ajustes</b>,
+                pon que vende <b>una empresa o constructora</b
+                ><span class="origen o-s14">Nuevo · S14</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> el impuesto de registro y la retención quedan
+                <b>«▲ Sin cifra»</b> (con el símbolo y el texto, no solo el
+                color) y un aviso dice por qué: el impuesto depende del
+                departamento y la retención de una empresa es otra. Ningún
+                número inventado.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s14">
+            <input type="checkbox" id="q3" />
+            <div>
+              <label for="q3" class="qué"
+                >Elige <b>VIS</b> con un precio bajo (por ejemplo 200.000.000) y
+                marca y desmarca <b>«Tengo un subsidio…»</b
+                ><span class="origen o-s14">Nuevo · S14</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> sin subsidio, un aviso dice que el registro no
+                tiene la mitad de VIS (la notaría sí); al marcar el subsidio el
+                aviso se va y el registro baja. Un precio por encima del tope de
+                la vivienda de interés social de esa ciudad se liquida como
+                vivienda normal y lo dice.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s14">
+            <input type="checkbox" id="q4" />
+            <div>
+              <label for="q4" class="qué"
+                >En <b>Ajustes</b> marca
+                <b>«Compro con crédito hipotecario»</b> y mira <b>Gastos</b>,
+                <b>Documentos</b> y <b>Plazos</b
+                ><span class="origen o-s14">Nuevo · S14</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> aparece la línea de la hipoteca (sin cifra, a
+                cargo de quien compra con el crédito), el documento de la
+                aprobación del banco y el plazo de <b>90 días hábiles</b> de la
+                hipoteca. En Documentos, cada paso dice si es
+                <b>✓ Norma leída</b> o <b>● Práctica, no norma</b>, y las
+                casillas son solo tuyas: al recargar se borran.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s14 clave">
+            <input type="checkbox" id="q5" />
+            <div>
+              <label for="q5" class="qué"
+                >Abre <b>«Qué dice cada documento»</b> y lee con calma
+                <b>dos cláusulas</b> (por ejemplo las arras y la afectación a
+                vivienda familiar)<span class="origen o-s14">Nuevo · S14</span
+                ><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> tres documentos (promesa, escritura, registro),
+                cada uno con el aviso <b>«no es asesoría legal»</b>; cada
+                cláusula con «Qué dice», «Qué mirar» y «De dónde sale» (el
+                artículo).
+                <b
+                  >Es tu juicio: ¿se entiende en palabras simples? ¿ afirma algo
+                  que no debería, o que no es verdad en tu caso?</b
+                >
+                Si algo te suena a promesa («siempre», «nunca»), es una mala
+                señal.
+              </p>
+              <p class="mal">
+                Mala señal: una cláusula sin artículo, una frase tajante o algo
+                que se lea como una orden y no como lo que dice la norma.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s14">
+            <input type="checkbox" id="q6" />
+            <div>
+              <label for="q6" class="qué"
+                >Desde la ficha de un <b>proyecto nuevo</b> y desde la de un
+                <b>anuncio usado</b> toca
+                <b>«Lo que te cuesta escriturar este»</b
+                ><span class="origen o-s14">Nuevo · S14</span></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> llegas a Papeleo con el precio ya puesto
+                («Viene del anuncio que estabas mirando»). En el proyecto nuevo,
+                además, con la ciudad, el tipo (VIS, VIP o normal) y vende una
+                constructora; en el usado, Bogotá y vende una persona.
+              </p>
+            </div>
+          </li>
+          <li data-origen="s14">
+            <input type="checkbox" id="q7" />
+            <div>
+              <label for="q7" class="qué"
+                >En tu <b>teléfono</b>, recorre las cuatro secciones; luego, en
+                el computador, abre las herramientas del navegador (pestaña
+                Red), escribe un precio y cambia de sección<span
+                  class="origen o-s14"
+                  >Nuevo · S14</span
+                ></label
+              >
+              <p class="esperar">
+                <b>Esperado:</b> nada se sale de la pantalla hacia los lados y
+                los botones se tocan con el dedo; en la pestaña Red, al escribir
+                el precio, <b>no sale ninguna petición</b> (y ninguna lleva el
+                número).
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–P), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–Q), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
@@ -2423,6 +2602,19 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 014 (2026-10-25):</b><br />
+          <b>Nuevo:</b> bloque Q (Papeleo sin sorpresas: los gastos de
+          escriturar por actor con su norma y su año, lo que no se verificó
+          nombrado sin cifra, VIS con y sin subsidio, el crédito, qué dice cada
+          documento, los enlaces desde las fichas y que el precio se queda en el
+          teléfono): 7 pruebas nuevas, 2 del gate mínimo ⭐.<br />
+          <b>Mejorado:</b> —<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 103 pruebas, 37 del gate mínimo ⭐. Los
+          avances guardados en tu navegador empiezan de cero (la guía pasó a la
+          versión 11).
+        </p>
         <p>
           <b>Sprint 013 (2026-10-25):</b><br />
           <b>Nuevo:</b> bloque P (¿Nuevo o usado?, ¿Te alcanza con subsidio? con
@@ -2543,7 +2735,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v10:";
+        var CLAVE = "guia-inmobiliaria-v11:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );

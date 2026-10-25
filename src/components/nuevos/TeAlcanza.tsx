@@ -58,7 +58,12 @@ export default function TeAlcanza({
           </Link>
         ))}
       </nav>
-      <div className="mt-4">
+      <h2 className="mt-6 text-xl font-extrabold text-ink">
+        {rellenar(tt.hogares.etiqueta, {
+          ingresos: formatearCOP(actual.ingresos, lang),
+        })}
+      </h2>
+      <div className="mt-2">
         <HogarResultado
           h={actual}
           ejemplo={v.ejemplo}

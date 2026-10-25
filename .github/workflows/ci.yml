@@ -79,6 +79,9 @@ jobs:
       TASA_SIMULACRO: "1"
       # S12: la fecha de «hoy» de la vivienda nueva se puede fijar con la cabecera `x-hoy-simulado` (solo aquí, nunca en producción).
       NUEVOS_SIMULACRO: "1"
+      # S15: el lector de CTL de /papeleo está APAGADO salvo esta variable (en producción no se define hasta validarlo con certificados
+      # reales). El e2e lo enciende para probarlo con certificados SINTÉTICOS; Lighthouse y el build miden la página tal como se sirve: apagado.
+      LECTOR_CTL_ACTIVO: "1"
       IDENTIDAD_TOPE_DIA: "100000"
       IDENTIDAD_TOPE_MES: "100000"
       # S9: el tope diario de correos de alerta (solo se respeta con Brevo en simulacro).

@@ -37,9 +37,11 @@ const script = (e: Entrada) =>
 
 const GLOBAL = presupuestos.find((e) => e.path === "/*")!;
 const PROPIAS = presupuestos.filter((e) => e.path !== "/*");
-// Las rutas con presupuesto propio: el módulo de vivienda nueva (S12 y S13) y el asistente del papeleo (S14).
+// Las rutas con presupuesto propio: el módulo de vivienda nueva (S12 y S13), el asistente del papeleo (S14) y las dos páginas
+// públicas del antifraude (S15): las reglas y el reporte de un anuncio.
 const DEL_MODULO = (ruta: string) =>
-  /^\/(nuevos\/|nuevo-o-usado|te-alcanza|papeleo)/.test(ruta) ||
+  /^\/(nuevos\/|nuevo-o-usado|te-alcanza|papeleo|antifraude)/.test(ruta) ||
+  /^\/i\/[^/]+\/reportar/.test(ruta) ||
   ruta.startsWith("/buscar?v=nuevos");
 
 describe("presupuesto de Lighthouse por ruta", () => {

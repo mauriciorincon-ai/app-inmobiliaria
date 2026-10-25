@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   MOTIVOS_REPORTE,
   UMBRALES,
@@ -14,46 +14,31 @@ export type TextosReportar = Proyectado<typeof ANTIFRAUDE.reportar>;
 export type TextosMotivos = Proyectado<typeof ANTIFRAUDE.motivos>;
 export type TextosProtegete = Proyectado<typeof ANTIFRAUDE.protegete>;
 
-type Fase = "cargando" | "sin-whatsapp" | "form" | "enviando" | "listo";
+type Fase = "sin-whatsapp" | "form" | "enviando" | "listo";
 
 const BOTON =
   "inline-flex items-center justify-center rounded-full bg-purple px-6 py-3 text-sm font-semibold text-white shadow-card transition-colors hover:bg-purple-600 disabled:opacity-60";
 
-// Reportar un anuncio (S15, maqueta 12). Exige el WhatsApp verificado (la cookie lo dice); el reporte va a la cola del
-// operador y NO cambia lo que ve nadie. Motivos de una lista cerrada (uno o varios) y un detalle opcional.
+// Reportar un anuncio (S15, maqueta 12). Exige el WhatsApp verificado (la página lo resuelve en el servidor con la cookie y el
+// HTML ya trae la pantalla correcta); el reporte va a la cola del operador y NO cambia lo que ve nadie. Motivos de una lista
+// cerrada (uno o varios) y un detalle opcional.
 export default function ReportarAnuncio({
   slug,
+  verificado,
   t,
   motivos,
   protegete,
 }: {
   slug: string;
+  verificado: boolean;
   t: TextosReportar;
   motivos: TextosMotivos;
   protegete: TextosProtegete;
 }) {
-  const [fase, setFase] = useState<Fase>("cargando");
+  const [fase, setFase] = useState<Fase>(verificado ? "form" : "sin-whatsapp");
   const [elegidos, setElegidos] = useState<MotivoReporte[]>([]);
   const [detalle, setDetalle] = useState("");
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let vigente = true;
-    void (async () => {
-      try {
-        const res = await fetch("/api/verificacion/estado", {
-          cache: "no-store",
-        });
-        const e = res.ok ? ((await res.json()) as { estado: string }) : null;
-        if (vigente) setFase(e?.estado === "verificado" ? "form" : "sin-whatsapp");
-      } catch {
-        if (vigente) setFase("sin-whatsapp");
-      }
-    })();
-    return () => {
-      vigente = false;
-    };
-  }, []);
 
   function alternar(m: MotivoReporte) {
     setElegidos((e) => (e.includes(m) ? e.filter((x) => x !== m) : [...e, m]));
@@ -64,7 +49,9 @@ export default function ReportarAnuncio({
     setError(null);
     if (elegidos.length === 0) return setError(t.errores.motivo);
     if (detalle.trim().length > UMBRALES.detalleMax) {
-      return setError(rellenar(t.errores.detalle, { max: UMBRALES.detalleMax }));
+      return setError(
+        rellenar(t.errores.detalle, { max: UMBRALES.detalleMax }),
+      );
     }
     setFase("enviando");
     try {
@@ -95,8 +82,6 @@ export default function ReportarAnuncio({
 
   return (
     <div className="mt-6" aria-live="polite">
-      {fase === "cargando" && <p className="text-sm text-mute">{t.cargando}</p>}
-
       {fase === "sin-whatsapp" && (
         <section
           aria-labelledby="reportar-whatsapp"
@@ -145,7 +130,10 @@ export default function ReportarAnuncio({
             </div>
           </fieldset>
 
-          <label className="mt-5 block text-sm font-semibold text-ink" htmlFor="reportar-detalle">
+          <label
+            className="mt-5 block text-sm font-semibold text-ink"
+            htmlFor="reportar-detalle"
+          >
             {t.detalle}
           </label>
           <textarea
@@ -173,7 +161,11 @@ export default function ReportarAnuncio({
           )}
 
           <div className="mt-5">
-            <button type="submit" disabled={fase === "enviando"} className={BOTON}>
+            <button
+              type="submit"
+              disabled={fase === "enviando"}
+              className={BOTON}
+            >
               {fase === "enviando" ? t.enviando : t.enviar}
             </button>
           </div>

@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import ReportarAnuncio from "@/components/antifraude/ReportarAnuncio";
 import EncabezadoInterior from "@/components/ui/EncabezadoInterior";
 import { formatearCOP } from "@/engine/format/cop";
+import {
+  COOKIE_COMPRADOR,
+  esSesionValida,
+  hashSesion,
+} from "@/engine/verificacion/sesion";
 import { leerIdioma } from "@/i18n/ruta";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { cargarFicha } from "@/lib/ficha-datos";
+import { crearClienteAnon } from "@/lib/supabase/server";
 import { ANTIFRAUDE } from "@/textos/antifraude";
 import { COMUN } from "@/textos/comun";
 import { FICHA } from "@/textos/ficha";
@@ -29,10 +36,24 @@ export async function generateMetadata({
   };
 }
 
+// ¿Este navegador tiene el WhatsApp verificado? Se resuelve en el servidor (la cookie es httpOnly) para que el HTML ya traiga la
+// pantalla correcta: sin esto el formulario aparecía tras hidratar y pedir el estado, y el LCP de la página se iba a 3,5 s.
+async function whatsappVerificado(): Promise<boolean> {
+  const sesion = (await cookies()).get(COOKIE_COMPRADOR)?.value;
+  if (!esSesionValida(sesion)) return false;
+  const { data } = await crearClienteAnon().rpc("estado_verificacion", {
+    p_sesion_hash: await hashSesion(sesion),
+  });
+  return data?.estado === "verificado";
+}
+
 export default async function ReportarPage({ params }: { params: Params }) {
   const lang = await leerIdioma(params);
   const { slug } = await params;
-  const f = await cargarFicha(slug);
+  const [f, verificado] = await Promise.all([
+    cargarFicha(slug),
+    whatsappVerificado(),
+  ]);
   if (!f) notFound();
 
   const t = enIdioma(ANTIFRAUDE, lang);
@@ -64,6 +85,7 @@ export default async function ReportarPage({ params }: { params: Params }) {
         </p>
         <ReportarAnuncio
           slug={f.slug}
+          verificado={verificado}
           t={t.reportar}
           motivos={t.motivos}
           protegete={t.protegete}

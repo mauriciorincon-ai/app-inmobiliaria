@@ -73,7 +73,6 @@ export const ANTIFRAUDE = {
     contador: { es: "{n} de {max} caracteres", en: "{n} of {max} characters" },
     enviar: { es: "Enviar reporte", en: "Send report" },
     enviando: { es: "Enviando…", en: "Sending…" },
-    cargando: { es: "Revisando tu sesión…", en: "Checking your session…" },
     primeroWhatsapp: {
       titulo: {
         es: "Primero, verifica tu WhatsApp",

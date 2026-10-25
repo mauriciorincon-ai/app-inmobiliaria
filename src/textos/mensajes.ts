@@ -16,4 +16,15 @@ export const MENSAJES = {
     en: "Hi {nombre}, this is Innmobiliaria. Your property is already listed as a founding listing. You can now complete it with photos and a description so it looks its best — open it from this link (it's yours alone, keep it safe): {link}",
   },
   sinNombre: { es: "hola", en: "there" },
+  // S15 — lo que el operador le escribe al dueño desde la cola antifraude. Sin acusar: dice qué pasa y qué sigue.
+  // `{nombre}` es el primer nombre; `{inmueble}`, «tu apartamento en El Retiro».
+  pedirCtl: {
+    es: "Hola {nombre}, te saludamos de Innmobiliaria. Para mantener al día el anuncio de {inmueble}, ¿nos muestras un certificado de tradición y libertad expedido hace 30 días o menos? Lo vemos y no lo guardamos.",
+    en: "Hi {nombre}, this is Innmobiliaria. To keep the listing for {inmueble} up to date, could you show us a title record issued 30 days ago or less? We look at it and don't keep it.",
+  },
+  pausa: {
+    es: "Hola {nombre}, te saludamos de Innmobiliaria. Pausamos el anuncio de {inmueble} mientras revisamos unos datos: mientras tanto no aparece en la búsqueda. Respóndenos por aquí y lo resolvemos contigo.",
+    en: "Hi {nombre}, this is Innmobiliaria. We've paused the listing for {inmueble} while we check a few details: in the meantime it doesn't show in search. Reply here and we'll sort it out with you.",
+  },
+  inmueble: { es: "tu {tipo} en {barrio}", en: "your {tipo} in {barrio}" },
 } as const satisfies Arbol;

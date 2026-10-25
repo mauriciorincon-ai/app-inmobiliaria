@@ -6,7 +6,7 @@ import {
   EVENTOS_VISITA,
   necesitaEnlaceComprador,
   planearCorreos,
-  type DatosSolicitud,
+  type DatosAnuncio,
 } from "@/engine/visita/avisos";
 import { armarCorreo } from "@/engine/visita/correos";
 import { respuestaDeError } from "@/engine/visita/errores";
@@ -17,7 +17,7 @@ const AHORA = new Date("2026-10-18T15:00:00Z"); // 10:00 de Bogotá
 const MANANA = "2026-10-19T15:00:00Z";
 const DIRECCION = "Calle 93 # 14-20";
 
-const datos = (cambios: Partial<DatosSolicitud> = {}): DatosSolicitud => ({
+const datos = (cambios: Partial<DatosAnuncio> = {}): DatosAnuncio => ({
   estado: "confirmada",
   intencion: "vivir",
   comprador: {
@@ -89,7 +89,7 @@ describe("planearCorreos: quién recibe qué", () => {
     const conDireccion = {
       ...datos(),
       direccion_aproximada: DIRECCION,
-    } as DatosSolicitud;
+    } as DatosAnuncio;
     for (const evento of EVENTOS_VISITA) {
       for (const c of planearCorreos(evento, conDireccion, ENLACES, AHORA)) {
         expect(c.html + c.asunto, evento).not.toContain(DIRECCION);

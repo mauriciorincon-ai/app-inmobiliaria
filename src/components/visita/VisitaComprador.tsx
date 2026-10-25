@@ -130,15 +130,20 @@ export default function VisitaComprador({
   }
 
   const v = carga.visita;
-  // Una solicitud de sala (`proyecto`, sin `inmueble`) la pinta la F3 del S13; ningún enlace de sala existe antes.
-  if (v.inmueble === null) return null;
-  const slugInmueble = v.inmueble.slug;
-  const dueno = v.inmueble.nombre_publicador;
-  const nombreTipo = tipos[v.inmueble.tipo] ?? tipos.inmueble;
-  const inmueble = rellenar(t.inmueble, {
-    tipo: nombreTipo.toLocaleLowerCase(lang),
-    barrio: v.inmueble.barrio,
-  });
+  // Una solicitud de sala de ventas (S13) trae `proyecto` y no `inmueble`: la coordina el equipo de Innmobiliaria.
+  const sala = v.inmueble === null ? v.proyecto : null;
+  const slugRef = v.inmueble === null ? v.proyecto.slug : v.inmueble.slug;
+  const dueno = sala ? t.sala.equipo : (v.inmueble?.nombre_publicador ?? "");
+  const inmueble = v.inmueble
+    ? rellenar(t.inmueble, {
+        tipo: (tipos[v.inmueble.tipo] ?? tipos.inmueble).toLocaleLowerCase(
+          lang,
+        ),
+        barrio: v.inmueble.barrio,
+      })
+    : rellenar(t.sala.proyecto, { nombre: sala?.nombre ?? "" });
+  const hrefFicha = sala ? `/nuevos/${sala.slug}` : `/i/${slugRef}`;
+  const hrefBuscar = sala ? "/buscar?v=nuevos" : "/buscar";
   const ahora = new Date();
   const acciones = accionesComprador(v, ahora);
   const estado: EstadoSolicitud = v.estado;
@@ -154,10 +159,15 @@ export default function VisitaComprador({
     if (!inicio || !token) return;
     const ics = generarIcs(
       {
-        uid: `visita-${slugInmueble}-${inicio.replace(/\D/g, "")}@innmobiliaria`,
+        uid: `visita-${slugRef}-${inicio.replace(/\D/g, "")}@innmobiliaria`,
         inicio,
-        titulo: rellenar(t.ics.titulo, { inmueble }),
-        descripcion: rellenar(t.ics.descripcion, { dueno }),
+        titulo: sala
+          ? rellenar(t.sala.ics.titulo, { nombre: sala.nombre })
+          : rellenar(t.ics.titulo, { inmueble }),
+        descripcion: rellenar(
+          sala ? t.sala.ics.descripcion : t.ics.descripcion,
+          { dueno },
+        ),
       },
       new Date(),
     );
@@ -211,7 +221,10 @@ export default function VisitaComprador({
             {t.cancelarConfirmar.titulo}
           </p>
           <p className="mt-1 text-sm text-gray">
-            {rellenar(t.cancelarConfirmar.texto, { dueno })}
+            {rellenar(
+              sala ? t.sala.cancelarConfirmar : t.cancelarConfirmar.texto,
+              { dueno },
+            )}
           </p>
           <div className="mt-3 flex flex-wrap gap-3">
             <button
@@ -275,7 +288,9 @@ export default function VisitaComprador({
             {t.estados.pendiente.titulo}
           </h1>
           <p className="mt-2 text-sm text-gray">
-            {rellenar(t.estados.pendiente.texto, { dueno })}
+            {rellenar(sala ? t.sala.pendiente : t.estados.pendiente.texto, {
+              dueno,
+            })}
           </p>
           {cancelarBloque}
         </section>
@@ -353,7 +368,10 @@ export default function VisitaComprador({
           </p>
           <p className="mt-1 text-xs text-mute">{t.horasBogota}</p>
           <p className="mt-3 text-sm text-gray">
-            {rellenar(t.estados.confirmada.con, { inmueble, dueno })}
+            {rellenar(sala ? t.sala.confirmada.con : t.estados.confirmada.con, {
+              inmueble,
+              dueno,
+            })}
           </p>
           {yaPaso ? (
             <p className="mt-3 text-sm text-gray">
@@ -361,7 +379,14 @@ export default function VisitaComprador({
             </p>
           ) : (
             <ul className="mt-3 space-y-1.5 text-sm text-gray">
-              <li>{rellenar(t.estados.confirmada.direccion, { dueno })}</li>
+              <li>
+                {rellenar(
+                  sala
+                    ? t.sala.confirmada.direccion
+                    : t.estados.confirmada.direccion,
+                  { dueno },
+                )}
+              </li>
               <li>
                 {rellenar(t.estados.confirmada.recordatorio, {
                   dia: diaAntes(inicio, lang),
@@ -398,12 +423,14 @@ export default function VisitaComprador({
             {rellenar(
               v.visita?.cancelada_por === "dueno"
                 ? t.estados.cancelada.porDueno
-                : t.estados.cancelada.porComprador,
+                : sala
+                  ? t.sala.cancelada.porComprador
+                  : t.estados.cancelada.porComprador,
               { dueno },
             )}
           </p>
           <div className="mt-4">
-            <Link href={`/i/${slugInmueble}`} className={BOTON}>
+            <Link href={hrefFicha} className={BOTON}>
               {t.estados.cancelada.otros}
             </Link>
           </div>
@@ -416,12 +443,16 @@ export default function VisitaComprador({
             id="visita-titulo"
             className="text-3xl font-extrabold tracking-tight text-ink"
           >
-            {rellenar(t.estados.rechazada.titulo, { dueno })}
+            {sala
+              ? t.sala.rechazada.titulo
+              : rellenar(t.estados.rechazada.titulo, { dueno })}
           </h1>
-          <p className="mt-2 text-sm text-gray">{t.estados.rechazada.texto}</p>
+          <p className="mt-2 text-sm text-gray">
+            {sala ? t.sala.rechazada.texto : t.estados.rechazada.texto}
+          </p>
           <div className="mt-4">
-            <Link href="/buscar" className={BOTON}>
-              {t.estados.rechazada.buscar}
+            <Link href={hrefBuscar} className={BOTON}>
+              {sala ? t.sala.rechazada.buscar : t.estados.rechazada.buscar}
             </Link>
           </div>
         </section>

@@ -16,6 +16,11 @@ export const CORREOS_VISITA = {
     vivir: { es: "para vivir", en: "to live in" },
     invertir: { es: "para invertir", en: "as an investment" },
   },
+  franja: {
+    entre_semana: { es: "entre semana", en: "on weekdays" },
+    sabado: { es: "el sábado", en: "on Saturday" },
+    domingo: { es: "el domingo", en: "on Sunday" },
+  },
   zonaHoraria: { es: "hora de Bogotá", en: "Bogotá time" },
   cuando: {
     hoy: { es: "Hoy", en: "Today" },
@@ -158,6 +163,93 @@ export const CORREOS_VISITA = {
         en: "<p>A reminder that {comprador} is coming to see your {inmueble}: <strong>{horario}</strong> ({zona}).</p><p>If you haven't sent the address yet, message them on WhatsApp from «My listing». After the viewing, mark whether they came.</p>",
       },
       cta: { es: "Abrir Mi anuncio →", en: "Open my listing →" },
+    },
+  },
+
+  // S13 — la visita a la sala de ventas de un proyecto nuevo. Mientras la constructora no esté en la plataforma, el equipo de
+  // Innmobiliaria coordina con la sala: solo el comprador recibe correo (el equipo trabaja desde su panel). Ninguno lleva la
+  // dirección ni el teléfono de la sala: la dirección la manda el equipo por WhatsApp, a mano.
+  sala: {
+    solicitud: {
+      asunto: {
+        es: "Pediste una visita a {proyecto}",
+        en: "You asked to visit {proyecto}",
+      },
+      cuerpo: {
+        es: "<p>Recibimos tu solicitud para visitar la sala de ventas de <strong>{proyecto}</strong> ({franja}).</p><p>Le escribimos a la sala y te proponemos horarios. Si en dos días hábiles no responden, te avisamos por este correo.</p><p>Guarda este correo: el botón abre tu solicitud desde cualquier teléfono o computador.</p>",
+        en: "<p>We got your request to visit the sales room of <strong>{proyecto}</strong> ({franja}).</p><p>We will contact the room and offer you times. If they do not answer within two business days, we will tell you in this email.</p><p>Keep this email: the button opens your request from any phone or computer.</p>",
+      },
+      cta: { es: "Ver mi solicitud →", en: "See my request →" },
+    },
+    horarios: {
+      asunto: {
+        es: "Horarios para tu visita a {proyecto}",
+        en: "Times for your visit to {proyecto}",
+      },
+      cuerpo: {
+        es: "<p>La sala de ventas de <strong>{proyecto}</strong> puede recibirte en estos horarios ({zona}):</p>",
+        en: "<p>The sales room of <strong>{proyecto}</strong> can see you at these times ({zona}):</p>",
+      },
+      cierre: {
+        es: "<p>Elige uno, o dinos que ninguno te sirve y pedimos otros.</p>",
+        en: "<p>Pick one, or tell us none of them work and we will ask for others.</p>",
+      },
+      cta: { es: "Elegir un horario →", en: "Pick a time →" },
+    },
+    confirmada: {
+      asunto: {
+        es: "Visita confirmada: {horario}",
+        en: "Visit confirmed: {horario}",
+      },
+      cuerpo: {
+        es: "<p>Quedó confirmada tu visita a la sala de ventas de <strong>{proyecto}</strong>: <strong>{horario}</strong> ({zona}).</p><p>Innmobiliaria te envía la dirección de la sala por WhatsApp. Desde tu solicitud puedes agregarla a tu calendario o cancelarla.</p>",
+        en: "<p>Your visit to the sales room of <strong>{proyecto}</strong> is confirmed: <strong>{horario}</strong> ({zona}).</p><p>Innmobiliaria sends you the sales room's address on WhatsApp. From your request you can add it to your calendar or cancel it.</p>",
+      },
+      cta: { es: "Ver mi visita →", en: "See my visit →" },
+    },
+    cancelada: {
+      asunto: {
+        es: "Se canceló tu visita a {proyecto}",
+        en: "Your visit to {proyecto} was cancelled",
+      },
+      cuerpo: {
+        es: "<p>Tuvimos que cancelar tu visita a la sala de ventas de <strong>{proyecto}</strong> del {horario} ({zona}). Si te sigue interesando, puedes pedir otra desde la ficha del proyecto.</p>",
+        en: "<p>We had to cancel your visit to the sales room of <strong>{proyecto}</strong> on {horario} ({zona}). If you are still interested, you can ask for another from the project sheet.</p>",
+      },
+      cta: { es: "Ver el proyecto →", en: "See the project →" },
+    },
+    rechazada: {
+      asunto: {
+        es: "No pudimos concretar tu visita a {proyecto}",
+        en: "We could not arrange your visit to {proyecto}",
+      },
+      cuerpo: {
+        es: "<p>No logramos concretar la visita a la sala de ventas de <strong>{proyecto}</strong>. En la edición hay más proyectos: puedes verlos y pedir otra visita.</p>",
+        en: "<p>We could not arrange the visit to the sales room of <strong>{proyecto}</strong>. The edition has more projects: you can browse them and ask for another visit.</p>",
+      },
+      cta: { es: "Ver vivienda nueva →", en: "See new homes →" },
+    },
+    recordatorio: {
+      asunto: {
+        es: "{cuando} es tu visita: {hora}",
+        en: "{cuando} is your visit: {hora}",
+      },
+      cuerpo: {
+        es: "<p>Te recordamos tu visita a la sala de ventas de <strong>{proyecto}</strong>: <strong>{horario}</strong> ({zona}).</p><p>Si aún no tienes la dirección, Innmobiliaria te la envía por WhatsApp. Si no puedes ir, cancélala desde tu solicitud para avisarnos.</p>",
+        en: "<p>A reminder of your visit to the sales room of <strong>{proyecto}</strong>: <strong>{horario}</strong> ({zona}).</p><p>If you do not have the address yet, Innmobiliaria sends it to you on WhatsApp. If you cannot make it, cancel from your request so we know.</p>",
+      },
+      cta: { es: "Ver mi visita →", en: "See my visit →" },
+    },
+    sinRespuesta: {
+      asunto: {
+        es: "Aún sin respuesta de la sala de {proyecto}",
+        en: "No answer yet from the sales room of {proyecto}",
+      },
+      cuerpo: {
+        es: "<p>Pasaron dos días hábiles y la sala de ventas de <strong>{proyecto}</strong> todavía no responde a tu solicitud.</p><p>Tu solicitud sigue abierta: en cuanto tengamos horarios de la sala te escribimos a este correo. Si ya no te interesa, puedes retirarla desde el botón.</p>",
+        en: "<p>Two business days have passed and the sales room of <strong>{proyecto}</strong> has not answered your request yet.</p><p>Your request is still open: as soon as we have times from the room we will write to this email. If you are no longer interested, you can withdraw it from the button.</p>",
+      },
+      cta: { es: "Ver mi solicitud →", en: "See my request →" },
     },
   },
 } as const satisfies Arbol;

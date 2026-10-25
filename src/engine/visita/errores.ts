@@ -11,6 +11,10 @@ const DE_VALIDACION = [
   "mensaje_invalido",
   "horarios_invalidos",
   "asistencia_invalida",
+  // S13: la visita a una sala de ventas y el contacto de la sala (operador).
+  "franja_invalida",
+  "sala_invalida",
+  "proyecto_invalido",
 ] as const;
 
 // La solicitud no está en el estado que la acción necesita, o un tope: 409.

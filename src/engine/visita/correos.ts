@@ -14,6 +14,7 @@ import { COMUN } from "@/textos/comun";
 import { CORREOS_VISITA } from "@/textos/correos-visita";
 
 export type TipoCorreoVisita = keyof typeof CORREOS_VISITA.correos;
+export type TipoCorreoSala = keyof typeof CORREOS_VISITA.sala;
 
 export type DatosCorreo = {
   comprador: string;
@@ -141,4 +142,68 @@ export function armarCorreo(
     `<p><a href="${escaparHtml(enlace)}" style="color:#7B5DD6;font-weight:bold">${cta}</a></p>` +
     `<p style="color:#888;font-size:12px">${t.pie}</p>`;
   return { asunto: plano(rellenar(asunto, valores)), html };
+}
+
+export type DatosCorreoSala = {
+  comprador: string;
+  /** El nombre del proyecto, tal como lo imprime la revista. */
+  proyecto: string;
+  franja: string;
+  horarios: string[];
+  inicio: string | null;
+};
+
+/**
+ * Un correo de la visita a la sala de ventas de un proyecto nuevo (S13): solo el comprador lo recibe. Misma forma que
+ * `armarCorreo`: lo que viene de afuera (el nombre) se ESCAPA antes de entrar al HTML y el asunto es texto plano. Ninguno lleva
+ * la dirección ni el teléfono de la sala: los datos que recibe este módulo no los traen.
+ */
+export function armarCorreoSala(
+  tipo: TipoCorreoSala,
+  datos: DatosCorreoSala,
+  idioma: Idioma,
+  enlace: string,
+  ahora: Date,
+): CorreoArmado {
+  const t = enIdioma(CORREOS_VISITA, idioma);
+  const c = t.sala[tipo];
+  const inicio = datos.inicio;
+  const horario = inicio ? formatearHorario(inicio, idioma) : "";
+  const hora = inicio
+    ? new Intl.DateTimeFormat(localeIntl(idioma), {
+        timeZone: ZONA_BOGOTA,
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(new Date(inicio))
+    : "";
+  const franjas: Record<string, string> = t.franja;
+  const valores = {
+    comprador: plano(datos.comprador),
+    proyecto: plano(datos.proyecto),
+    franja: franjas[datos.franja] ?? "",
+    horario,
+    hora,
+    cuando:
+      inicio && diasHasta(new Date(inicio), ahora) <= 0
+        ? t.cuando.hoy
+        : t.cuando.manana,
+    zona: t.zonaHoraria,
+  };
+  const escapados = Object.fromEntries(
+    Object.entries(valores).map(([k, v]) => [k, escaparHtml(v)]),
+  );
+
+  const partes: string[] = [c.cuerpo];
+  if (tipo === "horarios") {
+    const lista = datos.horarios
+      .map((h) => `<li>${escaparHtml(formatearHorario(h, idioma))}</li>`)
+      .join("");
+    partes.push(`<ul>${lista}</ul>`, t.sala.horarios.cierre);
+  }
+  const html =
+    `<p>${rellenar(t.saludo, { nombre: escapados.comprador })},</p>` +
+    partes.map((p) => rellenar(p, escapados)).join("") +
+    `<p><a href="${escaparHtml(enlace)}" style="color:#7B5DD6;font-weight:bold">${c.cta}</a></p>` +
+    `<p style="color:#888;font-size:12px">${t.pie}</p>`;
+  return { asunto: plano(rellenar(c.asunto, valores)), html };
 }

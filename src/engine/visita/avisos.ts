@@ -2,7 +2,12 @@
 // (`datos_correo_visita`) y los enlaces, y devuelve la lista de correos listos para enviar. Quien no dejó
 // correo no recibe nada (el dueño puede no haberlo dejado al publicar); nadie recibe el correo del otro.
 import { esIdioma, IDIOMA_POR_DEFECTO, type Idioma } from "@/i18n/idiomas";
-import { armarCorreo, type TipoCorreoVisita } from "./correos";
+import {
+  armarCorreo,
+  armarCorreoSala,
+  type TipoCorreoSala,
+  type TipoCorreoVisita,
+} from "./correos";
 
 export type EventoVisita =
   | "solicitud"
@@ -12,7 +17,9 @@ export type EventoVisita =
   | "cancelada_por_comprador"
   | "cancelada_por_dueno"
   | "rechazada"
-  | "recordatorio";
+  | "recordatorio"
+  // S13: la sala de ventas no respondió en el plazo (solo hay correo para solicitudes de sala).
+  | "sin_respuesta";
 
 export const EVENTOS_VISITA: readonly EventoVisita[] = [
   "solicitud",
@@ -23,20 +30,42 @@ export const EVENTOS_VISITA: readonly EventoVisita[] = [
   "cancelada_por_dueno",
   "rechazada",
   "recordatorio",
+  "sin_respuesta",
 ];
 
 type Persona = { nombre: string; email: string | null; idioma: string };
 
-// La forma de `datos_correo_visita` (migración 10). Sin dirección y sin teléfonos.
-export type DatosSolicitud = {
+// La forma de `datos_correo_visita` (migración 10, con la rama de la sala de la migración 16). Sin dirección y sin teléfonos.
+type DatosBase = {
   estado: string;
-  intencion: "vivir" | "invertir";
   comprador: Persona;
   dueno: Persona;
-  inmueble: { slug: string; operacion: string; tipo: string; barrio: string };
   horarios: string[];
   visita: { inicio: string; cancelada_por: string | null } | null;
 };
+
+/** La solicitud de visita a un ANUNCIO de un dueño. */
+export type DatosAnuncio = DatosBase & {
+  intencion: "vivir" | "invertir";
+  inmueble: { slug: string; operacion: string; tipo: string; barrio: string };
+  proyecto?: undefined;
+};
+
+/**
+ * La solicitud de visita a la sala de ventas de un PROYECTO nuevo. El «dueño» es el equipo de Innmobiliaria y no recibe
+ * correo (`email` nulo): su cola es el panel del operador.
+ */
+export type DatosSala = DatosBase & {
+  intencion: null;
+  inmueble: null;
+  proyecto: { slug: string; nombre: string; edicion: number; franja: string };
+};
+
+export type DatosSolicitud = DatosAnuncio | DatosSala;
+
+export function esDeSala(datos: DatosSolicitud): datos is DatosSala {
+  return datos.inmueble === null;
+}
 
 export type Enlaces = {
   /** La solicitud del comprador (`/visita#t=…`), o la ficha si no hay token a mano. */
@@ -75,6 +104,21 @@ const PLAN: Record<EventoVisita, Array<[Rol, TipoCorreoVisita]>> = {
     ["comprador", "recordatorioComprador"],
     ["dueno", "recordatorioDueno"],
   ],
+  // Un anuncio no tiene plazo de respuesta que avisar: este evento solo existe para las salas.
+  sin_respuesta: [],
+};
+
+// Las salas: solo el comprador recibe correo. Cada evento, su correo.
+const PLAN_SALA: Record<EventoVisita, TipoCorreoSala[]> = {
+  solicitud: ["solicitud"],
+  horarios: ["horarios"],
+  ninguno: [],
+  confirmada: ["confirmada"],
+  cancelada_por_comprador: [],
+  cancelada_por_dueno: ["cancelada"],
+  rechazada: ["rechazada"],
+  recordatorio: ["recordatorio"],
+  sin_respuesta: ["sinRespuesta"],
 };
 
 function idiomaDe(p: Persona): Idioma {
@@ -93,6 +137,7 @@ export function planearCorreos(
   enlaces: Enlaces,
   ahora: Date,
 ): CorreoSaliente[] {
+  if (esDeSala(datos)) return planearCorreosSala(evento, datos, enlaces, ahora);
   // Entre el reclamo y el envío la visita pudo cancelarse: un recordatorio jamás sale a una cancelada.
   if (
     evento === "recordatorio" &&
@@ -132,11 +177,66 @@ export function planearCorreos(
   return salida;
 }
 
+function planearCorreosSala(
+  evento: EventoVisita,
+  datos: DatosSala,
+  enlaces: Enlaces,
+  ahora: Date,
+): CorreoSaliente[] {
+  const persona = datos.comprador;
+  if (!persona.email) return [];
+  // Entre el reclamo y el envío la visita pudo cancelarse o la solicitud pudo recibir horarios: ni el recordatorio sale a una
+  // cancelada ni el «aún sin respuesta» a una que ya tiene respuesta.
+  if (
+    evento === "recordatorio" &&
+    (datos.estado !== "confirmada" ||
+      !datos.visita ||
+      datos.visita.cancelada_por !== null)
+  ) {
+    return [];
+  }
+  if (evento === "sin_respuesta" && datos.estado !== "pendiente") return [];
+  return PLAN_SALA[evento].map((tipo) => {
+    const { asunto, html } = armarCorreoSala(
+      tipo,
+      {
+        comprador: persona.nombre,
+        proyecto: datos.proyecto.nombre,
+        franja: datos.proyecto.franja,
+        horarios: datos.horarios,
+        inicio: datos.visita?.inicio ?? null,
+      },
+      idiomaDe(persona),
+      enlaceSala(tipo, enlaces),
+      ahora,
+    );
+    return {
+      para: { email: persona.email as string, nombre: persona.nombre },
+      asunto,
+      html,
+    };
+  });
+}
+
+function enlaceSala(tipo: TipoCorreoSala, e: Enlaces): string {
+  if (tipo === "rechazada") return e.buscar;
+  if (tipo === "cancelada") return e.ficha;
+  return e.comprador;
+}
+
 /**
  * ¿Algún correo de este evento lleva al comprador a SU solicitud? Solo entonces hace falta un enlace con
  * token (los de cancelación y rechazo lo mandan a la ficha o a la búsqueda).
  */
-export function necesitaEnlaceComprador(evento: EventoVisita): boolean {
+export function necesitaEnlaceComprador(
+  evento: EventoVisita,
+  deSala = false,
+): boolean {
+  if (deSala) {
+    return PLAN_SALA[evento].some(
+      (tipo) => enlaceSala(tipo, ENLACES_SONDA) === ENLACES_SONDA.comprador,
+    );
+  }
   return PLAN[evento].some(
     ([rol, tipo]) =>
       rol === "comprador" &&

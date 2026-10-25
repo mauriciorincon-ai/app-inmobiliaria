@@ -46,3 +46,6 @@ scripts/vivienda-nueva/crudo/
 
 # S11 — registro local de las corridas de la bandeja de IA (modelo, fecha, duración): jamás versionado.
 scripts/bandeja/registro/
+
+# S15 — certificados de tradición reales (CTL) y lo que se escriba de ellos: viven solo en esta máquina, jamás versionados.
+privado/

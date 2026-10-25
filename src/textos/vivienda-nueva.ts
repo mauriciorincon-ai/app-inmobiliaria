@@ -547,8 +547,8 @@ export const VIVIENDA_NUEVA = {
         en: "What it costs to close on this one",
       },
       detalle: {
-        es: "Cuánto paga cada parte al escriturar, con la norma de cada cifra y lo que no pudimos verificar. El precio se queda en tu teléfono.",
-        en: "What each party pays at closing, with the rule behind every figure and what we could not verify. The price stays on your phone.",
+        es: "Cuánto paga cada parte al escriturar, con la norma de cada cifra y lo que no pudimos verificar. El precio que escribes se queda en tu teléfono.",
+        en: "What each party pays at closing, with the rule behind every figure and what we could not verify. The price you type stays on your phone.",
       },
     },
   },

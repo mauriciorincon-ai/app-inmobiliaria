@@ -68,12 +68,12 @@ export const PAPELEO = {
       en: "Without a subsidy there is no VIP exemption: it is computed as a regular home.",
     },
     avaluo_mayor: {
-      es: "El avalúo catastral ({avaluo}) es mayor que el precio: notaría, recaudos, registro e impuesto se liquidan sobre el avalúo. La retención, sobre el precio.",
-      en: "The cadastral appraisal ({avaluo}) is higher than the price: notary fees, collections, registration and tax are computed on the appraisal. The withholding is computed on the price.",
+      es: "El avalúo catastral ({avaluo}) es mayor que el precio: notaría, recaudos, registro e impuesto se liquidan sobre el avalúo. La retención la calculamos sobre el precio: la norma habla del «valor de la enajenación» y no dice si el avalúo la sube, pregúntalo en la notaría.",
+      en: "The cadastral appraisal ({avaluo}) is higher than the price: notary fees, collections, registration and tax are computed on the appraisal. We compute the withholding on the price: the rule speaks of the «value of the sale» and does not say whether the appraisal raises it, so ask at the notary's office.",
     },
     vis_tarifa_unica: {
-      es: "Hay una tarifa notarial única y especial para la VIS que cumple los decretos 2158 de 1995 y 371 de 1996 (Res. SNR 2026-000964-6, art. 31, parágrafo 3). No la calculamos: la notaría te dice si aplica.",
-      en: "There is a single special notary fee for VIS that meets Decrees 2158 of 1995 and 371 of 1996 (SNR Res. 2026-000964-6, art. 31, paragraph 3). We do not compute it: the notary's office tells you whether it applies.",
+      es: "Hay una tarifa notarial única y especial para la VIS que cumple los decretos 2158 de 1995 y 371 de 1996 (Res. SNR 2026-000964-6, art. 31, parágrafo 3). No la calculamos: la notaría te dice si aplica y, si aplica, la notaría te cuesta menos y el total de abajo queda por encima.",
+      en: "There is a single special notary fee for VIS that meets Decrees 2158 of 1995 and 371 of 1996 (SNR Res. 2026-000964-6, art. 31, paragraph 3). We do not compute it: the notary's office tells you whether it applies and, if it does, the notary costs you less and the total below ends up higher.",
     },
     vip_notarial_no_verificado: {
       es: "La exención de los derechos notariales de una VIP con subsidio la dice el Decreto 1895 de 2016, que cita la resolución de registro; la resolución notarial no se releyó para ese caso. No se calculan.",
@@ -211,12 +211,12 @@ export const PAPELEO = {
         en: "Deed at the notary's office",
       },
       texto: {
-        es: "Se pagan los derechos notariales, por mitades según el decreto. Si vende una persona natural, antes se paga la retención en la fuente ante el notario.",
-        en: "Notary fees are paid, in halves as the decree says. If a natural person sells, the withholding tax is paid first at the notary's office.",
+        es: "Se pagan los derechos notariales, por mitades según el decreto, salvo que las partes pacten otra cosa. Si vende una persona natural, antes se paga la retención en la fuente ante el notario.",
+        en: "Notary fees are paid, in halves as the decree says, unless the parties agree otherwise. If a natural person sells, the withholding tax is paid first at the notary's office.",
       },
       norma: {
-        es: "Decreto-Ley 960 de 1970, art. 223; Estatuto Tributario, art. 398.",
-        en: "Decree-Law 960 of 1970, art. 223; Tax Code (Estatuto Tributario), art. 398.",
+        es: "Decreto-Ley 960 de 1970, art. 223; Código Civil, art. 1862; Estatuto Tributario, art. 398.",
+        en: "Decree-Law 960 of 1970, art. 223; Civil Code, art. 1862; Tax Code (Estatuto Tributario), art. 398.",
       },
     },
     pedir_registro: {
@@ -281,8 +281,8 @@ export const PAPELEO = {
       en: "The paperwork, with no surprises — Innmobiliaria",
     },
     descripcion: {
-      es: "Cuánto paga el comprador y cuánto el vendedor al escriturar, qué pedir antes de firmar la promesa, cuánto tarda cada paso y qué dice cada documento, con la norma de cada cifra. El precio no sale de tu teléfono.",
-      en: "How much the buyer and the seller each pay at closing, what to ask for before signing the promise, how long each step takes and what each document says, with the rule behind every figure. The price stays on your phone.",
+      es: "Cuánto paga el comprador y cuánto el vendedor al escriturar, qué pedir antes de firmar la promesa, cuánto tarda cada paso y qué dice cada documento, con la norma de cada cifra. El precio que escribes se queda en tu teléfono.",
+      en: "How much the buyer and the seller each pay at closing, what to ask for before signing the promise, how long each step takes and what each document says, with the rule behind every figure. The price you type stays on your phone.",
     },
   },
 
@@ -292,8 +292,8 @@ export const PAPELEO = {
       en: "The paperwork, with no surprises",
     },
     bajada: {
-      es: "Cada peso del cierre con su norma, antes de firmar nada. El precio que escribes se queda en tu teléfono: ninguna petición lo lleva.",
-      en: "Every peso of the closing with the rule behind it, before you sign anything. The price you type stays on your phone: no request carries it.",
+      es: "Cada cifra del cierre con su norma, antes de firmar nada. El precio que escribes se queda en tu teléfono: ninguna petición lo lleva.",
+      en: "Every figure of the closing with the rule behind it, before you sign anything. The price you type stays on your phone: no request carries it.",
     },
   },
 
@@ -381,8 +381,8 @@ export const PAPELEO = {
       comprador: { es: "Todo el comprador", en: "All the buyer" },
       vendedor: { es: "Todo el vendedor", en: "All the seller" },
       ayuda: {
-        es: "Otro reparto es un acuerdo de las partes: debe constar en la promesa. Los derechos de registro y el CTL los paga quien los pide, el comprador.",
-        en: "Any other split is an agreement between the parties and must be in the promise. The registration fees and the CTL are paid by whoever requests them, the buyer.",
+        es: "Otro reparto es un acuerdo de las partes: conviene que conste en la promesa. Los derechos de registro y el CTL los paga quien los pide, el comprador.",
+        en: "Any other split is an agreement between the parties, and it is best to have it in the promise. The registration fees and the CTL are paid by whoever requests them, the buyer.",
       },
     },
     avaluo: {

@@ -199,7 +199,7 @@ solicitudes de visita.
 
 - **Qué hace:** te ayuda a decidir con números y no con corazonadas. En cada ficha ves **si el precio
   está en línea con los anuncios parecidos de su zona** y los **datos de la zona**; en
-  **Herramientas** calculas **cuánto pagarías al mes** y **hasta qué precio puedes comprar**. Es **un
+  **Herramientas** calculas **cuánto pagarías al mes**, **hasta qué precio puedes comprar** y, desde el Sprint 14, qué papeleo trae escriturar (ver «Papeleo sin sorpresas»). Es **un
   rango, no un avalúo**, y **un cálculo, no una aprobación de crédito**.
 - **¿Está caro? (en la ficha):** debajo del precio y del área hay una tarjeta con una de cuatro
   respuestas, siempre con símbolo y texto (nunca solo color): **En rango**, **Por encima del rango**,
@@ -264,8 +264,9 @@ solicitudes de visita.
   - **El precio verdadero.** «Pagas al menos» suma el precio «desde», los **derechos de registro** (Resolución 2026-001726-6 de la
     Superintendencia de Notariado y Registro, a cargo de quien registra) y el **parqueadero que se paga aparte** si el aviso da su
     precio. Cada peso trae su norma y la fecha en que la consultamos. **Es un mínimo, no un total:** lo que falta se **nombra y no
-    se suma** (los derechos notariales, que se reparten como diga la promesa de compraventa; el impuesto de registro y la
-    beneficencia y el IVA de la notaría, que no pudimos verificar; el parqueadero sin precio; que el precio puede subir mientras
+    se suma** (los derechos notariales, que se reparten como diga la promesa de compraventa; el impuesto de registro (la gente lo
+    llama «beneficencia»), que se parte entre comprador y vendedor y se ve con tu precio en **Papeleo**, y el IVA de la notaría, que no
+    pudimos verificar; el parqueadero sin precio; que el precio puede subir mientras
     se construye si el aviso no dice que es fijo; la hipoteca si compras con crédito).
   - **El m² es «aproximado»** y lo dice: el precio «desde» y el área «desde» no siempre son de la misma unidad. Sin área privada se
     usa la construida y también se dice.

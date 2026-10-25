@@ -34,6 +34,7 @@ export const OPERADOR = {
     salas: { es: "Visitas a salas", en: "Sales-room visits" },
     // S15
     antifraude: { es: "Antifraude", en: "Anti-fraud" },
+    sesiones: { es: "Sesiones de fotos", en: "Photo sessions" },
   },
   cerrarSesion: { es: "Cerrar sesión", en: "Sign out" },
 
@@ -240,6 +241,111 @@ export const OPERADOR = {
       horarios_invalidos: {
         es: "Revisa los horarios: deben ser futuros, distintos y de hasta 3.",
         en: "Check the times: they must be in the future, different and up to 3.",
+      },
+      no_autorizado: {
+        es: "Tu sesión terminó. Vuelve a entrar.",
+        en: "Your session ended. Sign in again.",
+      },
+    },
+  },
+
+  // S15 — las sesiones de fotos que piden los dueños desde «Mi anuncio». El equipo las agenda con el dueño por WhatsApp (nada
+  // sale solo: el enlace abre el WhatsApp del operador con el texto ya escrito) y marca «hecha» cuando se tomaron las fotos.
+  sesiones: {
+    titulo: { es: "Sesiones de fotos", en: "Photo sessions" },
+    intro: {
+      es: "Los dueños piden la sesión desde «Mi anuncio». Acuerda el día con ellos por WhatsApp, agéndala aquí y márcala como hecha cuando se tomen las fotos. Primero van las abiertas; las cerradas se ven 30 días.",
+      en: "Owners ask for a session from «My listing». Agree the day with them on WhatsApp, schedule it here and mark it done once the photos are taken. Open ones come first; closed ones stay visible for 30 days.",
+    },
+    vacia: {
+      es: "Ningún dueño ha pedido una sesión de fotos.",
+      en: "No owner has asked for a photo session.",
+    },
+    estado: {
+      solicitada: { es: "Pedida", en: "Requested" },
+      agendada: { es: "Agendada", en: "Scheduled" },
+      hecha: { es: "Hecha", en: "Done" },
+      cancelada: { es: "Cancelada", en: "Cancelled" },
+    },
+    canceladaPor: {
+      dueno: { es: "La canceló el dueño", en: "Cancelled by the owner" },
+      operador: { es: "La cancelaste tú", en: "You cancelled it" },
+    },
+    franja: {
+      etiqueta: { es: "Franja pedida", en: "Requested slot" },
+      entre_semana: { es: "Entre semana", en: "Weekdays" },
+      sabado: { es: "Sábado", en: "Saturday" },
+      domingo: { es: "Domingo", en: "Sunday" },
+    },
+    pedida: { es: "Pedida el {fecha}", en: "Requested on {fecha}" },
+    agendadaPara: {
+      es: "Agendada para el {cuando}",
+      en: "Scheduled for {cuando}",
+    },
+    acciones: {
+      agendar: { es: "Agendar", en: "Schedule" },
+      cambiar: { es: "Cambiar la fecha", en: "Change the date" },
+      hecha: { es: "Marcar como hecha", en: "Mark as done" },
+      cancelar: { es: "Cancelar la sesión", en: "Cancel the session" },
+      verFicha: { es: "Ver la ficha", en: "View the listing" },
+      escribir: { es: "Escribir al dueño", en: "Message the owner" },
+      confirmar: { es: "Confirmar con el dueño", en: "Confirm with the owner" },
+      avisar: { es: "Avisar al dueño", en: "Let the owner know" },
+      ocupado: { es: "Un momento…", en: "One moment…" },
+    },
+    agendar: {
+      titulo: { es: "Fecha y hora de la sesión", en: "Session date and time" },
+      fecha: { es: "Fecha", en: "Date" },
+      hora: { es: "Hora (Bogotá)", en: "Time (Bogotá)" },
+      guardar: { es: "Guardar", en: "Save" },
+      cerrar: { es: "Cerrar", en: "Close" },
+    },
+    confirmar: {
+      cancelar: {
+        es: "¿Cancelar esta sesión? El dueño podrá pedir otra.",
+        en: "Cancel this session? The owner will be able to ask for another.",
+      },
+      hecha: {
+        es: "¿Se tomaron las fotos? La sesión pasa a «hecha».",
+        en: "Were the photos taken? The session moves to «done».",
+      },
+      si: { es: "Sí", en: "Yes" },
+      no: { es: "No, volver", en: "No, go back" },
+    },
+    hechos: {
+      agendada: { es: "Sesión agendada.", en: "Session scheduled." },
+      hecha: {
+        es: "Sesión marcada como hecha.",
+        en: "Session marked as done.",
+      },
+      cancelada: { es: "Sesión cancelada.", en: "Session cancelled." },
+    },
+    problemas: {
+      invalido: {
+        es: "Completa la fecha y la hora.",
+        en: "Fill in the date and the time.",
+      },
+      muy_pronto: {
+        es: "La sesión debe ser al menos una hora después de ahora.",
+        en: "The session must be at least an hour from now.",
+      },
+      muy_lejos: {
+        es: "La sesión puede ser hasta dentro de 60 días.",
+        en: "The session can be up to 60 days from now.",
+      },
+      fuera_de_hora: {
+        es: "Elige una hora entre las 6:00 a. m. y las 9:00 p. m.",
+        en: "Pick a time between 6:00 a.m. and 9:00 p.m.",
+      },
+    },
+    errores: {
+      servidor: {
+        es: "No pudimos completar la acción. Inténtalo de nuevo en un momento.",
+        en: "We couldn't complete that. Please try again in a moment.",
+      },
+      estado_invalido: {
+        es: "Esta sesión cambió. Recarga la página para ver cómo está.",
+        en: "This session changed. Reload the page to see where it stands.",
       },
       no_autorizado: {
         es: "Tu sesión terminó. Vuelve a entrar.",

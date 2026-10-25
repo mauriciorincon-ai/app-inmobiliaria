@@ -32,6 +32,7 @@ export default function RenovarPagina({
   const [estado, setEstado] = useState<Estado>("cargando");
   const [token, setToken] = useState<string | null>(null);
   const [vigenteHasta, setVigenteHasta] = useState<string | null>(null);
+  const [pausado, setPausado] = useState(false);
 
   useEffect(() => {
     const t = extraerTokenDeHash(
@@ -44,20 +45,22 @@ export default function RenovarPagina({
     }
     setToken(t);
     const supabase = crearClienteNavegador();
-    supabase
-      .rpc("obtener_mi_anuncio", { p_token: t })
-      .then(({ data, error }) => {
-        if (error) {
-          setEstado("error");
-          return;
-        }
-        if (!data) {
-          setEstado("sin-token");
-          return;
-        }
-        setVigenteHasta((data as MiAnuncioData).vigente_hasta);
-        setEstado("listo");
-      });
+    Promise.all([
+      supabase.rpc("obtener_mi_anuncio", { p_token: t }),
+      supabase.rpc("mi_anuncio_extra", { p_token: t }),
+    ]).then(([{ data, error }, { data: extra }]) => {
+      if (error) {
+        setEstado("error");
+        return;
+      }
+      if (!data) {
+        setEstado("sin-token");
+        return;
+      }
+      setVigenteHasta((data as MiAnuncioData).vigente_hasta);
+      setPausado(extra?.pausado === true);
+      setEstado("listo");
+    });
   }, []);
 
   if (estado === "cargando") {
@@ -98,6 +101,7 @@ export default function RenovarPagina({
       t={tarjeta}
       token={token}
       vigenteHastaInicial={vigenteHasta}
+      pausadoInicial={pausado}
     />
   );
 }

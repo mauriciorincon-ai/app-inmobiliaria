@@ -26,5 +26,18 @@ export const MENSAJES = {
     es: "Hola {nombre}, te saludamos de Innmobiliaria. Pausamos el anuncio de {inmueble} mientras revisamos unos datos: mientras tanto no aparece en la búsqueda. Respóndenos por aquí y lo resolvemos contigo.",
     en: "Hi {nombre}, this is Innmobiliaria. We've paused the listing for {inmueble} while we check a few details: in the meantime it doesn't show in search. Reply here and we'll sort it out with you.",
   },
+  // La sesión de fotos (S15): lo que el operador le escribe al dueño al agendarla o cancelarla. `{cuando}` ya viene en hora de Bogotá.
+  sesionPedida: {
+    es: "Hola {nombre}, te saludamos de Innmobiliaria. Recibimos tu pedido de sesión de fotos de {inmueble} (franja: {franja}). ¿Qué día y a qué hora te queda bien? Respóndenos por aquí y la agendamos.",
+    en: "Hi {nombre}, this is Innmobiliaria. We got your request for a photo session for {inmueble} (slot: {franja}). What day and time work for you? Reply here and we'll schedule it.",
+  },
+  sesionAgendada: {
+    es: "Hola {nombre}, te saludamos de Innmobiliaria. Agendamos la sesión de fotos de {inmueble} para el {cuando} (hora de Bogotá). ¿Te sirve? Respóndenos por aquí y lo confirmamos.",
+    en: "Hi {nombre}, this is Innmobiliaria. We've scheduled the photo session for {inmueble} for {cuando} (Bogotá time). Does that work for you? Reply here and we'll confirm.",
+  },
+  sesionCancelada: {
+    es: "Hola {nombre}, te saludamos de Innmobiliaria. Cancelamos la sesión de fotos de {inmueble}. Si quieres retomarla, pídela de nuevo desde tu anuncio o respóndenos por aquí.",
+    en: "Hi {nombre}, this is Innmobiliaria. We've cancelled the photo session for {inmueble}. If you'd like to pick it up again, ask for it from your listing or reply here.",
+  },
   inmueble: { es: "tu {tipo} en {barrio}", en: "your {tipo} in {barrio}" },
 } as const satisfies Arbol;

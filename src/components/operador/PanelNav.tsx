@@ -18,6 +18,7 @@ export default function PanelNav({
     { href: "/operador/zonas", etiqueta: t.zonas },
     { href: "/operador/salas", etiqueta: t.salas },
     { href: "/operador/antifraude", etiqueta: t.antifraude },
+    { href: "/operador/sesiones", etiqueta: t.sesiones },
   ] as const;
   return (
     <nav className="mt-6 flex flex-wrap gap-2" aria-label={t.etiqueta}>

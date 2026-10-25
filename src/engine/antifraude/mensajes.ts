@@ -6,7 +6,8 @@ import { construirWaMe } from "@/engine/format/whatsapp";
 import { COMUN } from "@/textos/comun";
 import { MENSAJES } from "@/textos/mensajes";
 
-export type MensajeAlDueno = "pedirCtl" | "pausa";
+export type MensajeAlDueno =
+  "pedirCtl" | "pausa" | "sesionPedida" | "sesionAgendada" | "sesionCancelada";
 
 export type DuenoDelAnuncio = {
   nombre: string;
@@ -18,6 +19,8 @@ export function mensajeAlDueno(
   clave: MensajeAlDueno,
   dueno: Pick<DuenoDelAnuncio, "nombre" | "idioma">,
   anuncio: { tipo: string; barrio: string },
+  // Lo que un mensaje suma a nombre e inmueble: la sesión de fotos agendada trae `cuando`, ya escrito en hora de Bogotá.
+  extra: Record<string, string> = {},
 ): string {
   const idioma = dueno.idioma;
   const tipos: Record<string, string> = enIdioma(COMUN.dominio.tipo, idioma);
@@ -32,6 +35,7 @@ export function mensajeAlDueno(
     barrio: anuncio.barrio,
   });
   return rellenar(enIdioma(MENSAJES[clave], idioma), {
+    ...extra,
     nombre: primerNombre,
     inmueble,
   });
@@ -42,6 +46,10 @@ export function enlaceAlDueno(
   clave: MensajeAlDueno,
   dueno: DuenoDelAnuncio,
   anuncio: { tipo: string; barrio: string },
+  extra: Record<string, string> = {},
 ): string {
-  return construirWaMe(dueno.whatsapp, mensajeAlDueno(clave, dueno, anuncio));
+  return construirWaMe(
+    dueno.whatsapp,
+    mensajeAlDueno(clave, dueno, anuncio, extra),
+  );
 }

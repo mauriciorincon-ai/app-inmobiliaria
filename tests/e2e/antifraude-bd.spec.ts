@@ -392,7 +392,8 @@ test("RLS: nadie lee reportes, banderas ni sesiones de forma directa; cada dueñ
   for (const r of fila?.reportes ?? []) {
     expect(Object.keys(r).sort()).toEqual(["creado", "detalle", "motivos"]);
   }
-  await operador.auth.signOut();
+  // scope «local»: el cierre por defecto es GLOBAL y revocaría también las sesiones del operador de las pruebas de la interfaz que corren en paralelo.
+  await operador.auth.signOut({ scope: "local" });
 });
 
 test("la cola ordena por lo último que pasó: un anuncio recién pausado queda arriba, no al final (2.ª migración)", async () => {
@@ -459,7 +460,7 @@ test("la cola ordena por lo último que pasó: un anuncio recién pausado queda 
     `select public.marcar_verificado_ctl('${d.id}', '50N-9988776', date '${fechaBogota(2)}')`,
   );
   expect(await dEnCola()).toBeUndefined();
-  await operador.auth.signOut();
+  await operador.auth.signOut({ scope: "local" });
 });
 
 // Una huella aleatoria (≈ 32 bits en 1) y la misma con `k` bits volteados desde la posición `desde`.

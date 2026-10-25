@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Locator, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { createClient } from "@supabase/supabase-js";
 import { consultar } from "./utils/bd";
@@ -37,6 +37,34 @@ async function comoComprador(page: Page) {
   ]);
   return { ...c, hash: await hashSesion(c.sesion) };
 }
+
+// La cola entrega las 200 filas más recientes y otras specs (y `revisar_banderas`) crean miles de banderas nuevas en la misma base: sin esto,
+// la fila de la prueba podría quedar fuera de las 200. Se sube a la cima con una fecha futura, sin cambiar de qué se trata.
+function alaCima(a: AnuncioCreado) {
+  consultar(
+    `update public.reportes set created_at = now() + interval '1 day' where inmueble_id = '${a.id}' and resolucion is null`,
+  );
+  consultar(
+    `update public.inmuebles
+        set pausado_at = case when pausado_at is not null then now() + interval '1 day' end,
+            ctl_pedido_at = case when ctl_pedido_at is not null then now() + interval '1 day' end
+      where id = '${a.id}'`,
+  );
+}
+
+const banderasAbiertas = (a: AnuncioCreado) =>
+  Number(
+    consultar(
+      `select count(*) from public.banderas where inmueble_id = '${a.id}' and resolucion is null`,
+    )[0],
+  );
+
+// «Sale de la cola» salvo que, mientras tanto, una regla haya abierto una bandera nueva en este anuncio (otras pruebas corren
+// `revisar_banderas` en paralelo y todos los anuncios de prueba comparten el mismo WhatsApp): entonces la tarjeta se queda, y con razón.
+const saleDeLaCola = (fila: Locator, a: AnuncioCreado) =>
+  expect
+    .poll(async () => (await fila.count()) === 0 || banderasAbiertas(a) > 0)
+    .toBe(true);
 
 const fichaVisible = async (a: AnuncioCreado) =>
   (await api().rpc("obtener_ficha", { p_slug: a.slug })).data !== null;
@@ -166,6 +194,7 @@ test.describe("la cola antifraude del operador", () => {
         })
       ).error,
     ).toBeNull();
+    alaCima(a);
     await entrarOperador(page);
     await page.goto("/operador/antifraude");
     const fila = page.locator(
@@ -206,6 +235,9 @@ test.describe("la cola antifraude del operador", () => {
     ).toBeVisible();
     await expect.poll(() => fichaVisible(a)).toBe(false);
     expect(estadoDelReporte(a)).toBe("pausar:");
+    alaCima(a);
+    await page.reload();
+    await expect(fila).toBeVisible();
 
     // La tarjeta sigue ahí (está pausado) con el WhatsApp del dueño y el texto de la pausa ya escrito.
     const escribir = fila.getByRole("link", {
@@ -219,7 +251,7 @@ test.describe("la cola antifraude del operador", () => {
     await fila.getByRole("button", { name: "Reactivar el anuncio" }).click();
     await expect.poll(() => fichaVisible(a)).toBe(true);
     // Reactivado y sin nada abierto, sale de la cola.
-    await expect(fila).toHaveCount(0);
+    await saleDeLaCola(fila, a);
   });
 
   test("pedir el CTL no oculta nada y la tarjeta se queda, con el texto del CTL, hasta que se verifique", async ({
@@ -232,6 +264,7 @@ test.describe("la cola antifraude del operador", () => {
     ).toBeVisible();
     expect(await fichaVisible(a)).toBe(true);
     expect(estadoDelReporte(a)).toBe("pedir_ctl:");
+    alaCima(a);
 
     // Sigue en la cola, con la marca de que el CTL está pedido y el enlace de WhatsApp con el texto ya escrito.
     await expect(fila).toContainText("CTL pedido el");
@@ -249,7 +282,7 @@ test.describe("la cola antifraude del operador", () => {
       `select public.marcar_verificado_ctl('${a.id}', '50N-1122334', date '${fechaBogota(2)}')`,
     );
     await page.reload();
-    await expect(fila).toHaveCount(0);
+    await saleDeLaCola(fila, a);
   });
 
   test("descartar exige una razón y deja el registro con su razón; el anuncio sigue donde estaba", async ({
@@ -261,7 +294,7 @@ test.describe("la cola antifraude del operador", () => {
     await expect(fila.getByText("Elige una razón.")).toBeVisible();
     await fila.getByLabel("Comprobé que publica el dueño").check();
     await fila.getByRole("button", { name: "Descartar", exact: true }).click();
-    await expect(fila).toHaveCount(0);
+    await saleDeLaCola(fila, a);
     expect(estadoDelReporte(a)).toBe("descartar:es_el_dueno");
     expect(await fichaVisible(a)).toBe(true);
   });

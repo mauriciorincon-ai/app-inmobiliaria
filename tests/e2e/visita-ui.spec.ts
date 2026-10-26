@@ -189,6 +189,7 @@ test.describe("pedir, proponer, confirmar, calendario y asistencia", () => {
         slug: anuncio.slug,
         intencion: "invertir",
         email: CORREO,
+        consentimiento: true,
         formaPago: [],
       },
     });
@@ -339,6 +340,7 @@ test.describe("pedir, proponer, confirmar, calendario y asistencia", () => {
         slug: anuncio.slug,
         intencion: "invertir",
         email: CORREO,
+        consentimiento: true,
         formaPago: [],
       },
     });
@@ -474,6 +476,7 @@ test.describe("accesibilidad de las pantallas nuevas", () => {
         slug: anuncio.slug,
         intencion: "vivir",
         email: CORREO,
+        consentimiento: true,
         formaPago: ["ahorros"],
       },
     });
@@ -499,6 +502,7 @@ test.describe("accesibilidad de las pantallas nuevas", () => {
         slug: anuncio.slug,
         intencion: "vivir",
         email: CORREO,
+        consentimiento: true,
         formaPago: ["ahorros"],
         presupuestoMin: 300_000_000,
       },

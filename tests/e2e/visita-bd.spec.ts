@@ -63,6 +63,7 @@ async function pedir(
     p_forma_pago: ["hipotecario", "ahorros"],
     p_mensaje: "Me interesa verlo con mi familia",
     p_email: CORREO_COMPRADOR,
+    p_consentimiento: true,
     ...extra,
   });
   return { data: data as unknown as ResultadoSolicitud, error };

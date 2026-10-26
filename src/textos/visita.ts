@@ -125,6 +125,14 @@ export const VISITA = {
         es: "Tienes cinco solicitudes abiertas. Espera alguna respuesta o cancela una antes de pedir otra.",
         en: "You have five open requests. Wait for a reply or cancel one before asking for another.",
       },
+      demasiados_ciclos: {
+        es: "Pediste muchas visitas hoy. Inténtalo de nuevo mañana.",
+        en: "You've requested many viewings today. Please try again tomorrow.",
+      },
+      consentimiento_requerido: {
+        es: "Necesitamos tu autorización para coordinar la visita.",
+        en: "We need your authorization to arrange the viewing.",
+      },
       rechazada_reciente: {
         es: "El dueño no pudo recibirte hace poco. Inténtalo de nuevo en unos días.",
         en: "The owner couldn't see you recently. Try again in a few days.",

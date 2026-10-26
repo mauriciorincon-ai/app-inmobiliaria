@@ -28,6 +28,8 @@ const cuerpoSchema = z.object({
     .default([]),
   mensaje: z.string().max(300).nullish(),
   email: z.string().trim().max(254),
+  // S16 (deuda del S8): el consentimiento viaja y la base también lo exige.
+  consentimiento: z.literal(true),
 });
 
 export async function POST(req: NextRequest) {
@@ -49,6 +51,7 @@ export async function POST(req: NextRequest) {
     p_forma_pago: b.formaPago,
     p_mensaje: b.mensaje ?? null,
     p_email: b.email,
+    p_consentimiento: b.consentimiento,
   });
   if (error || !data) {
     return responderError(error ?? {}, log, {

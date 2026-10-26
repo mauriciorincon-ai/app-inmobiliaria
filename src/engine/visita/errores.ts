@@ -15,12 +15,16 @@ const DE_VALIDACION = [
   "franja_invalida",
   "sala_invalida",
   "proyecto_invalido",
+  // S16: el consentimiento también lo exige la base.
+  "consentimiento_requerido",
 ] as const;
 
 // La solicitud no está en el estado que la acción necesita, o un tope: 409.
 const DE_ESTADO = [
   "ya_solicitada",
   "demasiadas_solicitudes",
+  // S16: más de 10 solicitudes en 24 h (pedir, cancelar y volver a pedir).
+  "demasiados_ciclos",
   "rechazada_reciente",
   "sin_contacto",
   "estado_invalido",

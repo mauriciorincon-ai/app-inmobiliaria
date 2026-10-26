@@ -17868,7 +17868,7 @@ window.DATOS_187 = {
    "estado": "vigente",
    "estadoAl": "2026-06-01",
    "normas": [
-    "Decreto Distrital 653 de 2025",
+    "Decreto Distrital 653 de 2025, artículo 158 (modificado por el Decreto Distrital 386 de 2026, artículo 3)",
     "Resolución 836 de 2025 (Secretaría Distrital del Hábitat), artículo 23"
    ],
    "consultado": "2026-10-21",
@@ -17885,7 +17885,7 @@ window.DATOS_187 = {
    "estado": "vigente",
    "estadoAl": "2026-08-11",
    "normas": [
-    "Decreto Distrital 653 de 2025, artículo 159",
+    "Decreto Distrital 653 de 2025, artículos 159, 161 y 162",
     "Resolución 676 de 2024 (Secretaría Distrital del Hábitat)"
    ],
    "consultado": "2026-10-21",

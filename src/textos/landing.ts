@@ -285,8 +285,8 @@ export const LANDING = {
       {
         titulo: { es: "Guía fotográfica", en: "Photo guide" },
         desc: {
-          es: "Fotos que venden cerca de un tercio más rápido.",
-          en: "Photos that sell about a third faster.",
+          es: "Cada espacio con buena luz y orden, desde tu teléfono.",
+          en: "Every room in good light and tidy, shot on your phone.",
         },
       },
       {

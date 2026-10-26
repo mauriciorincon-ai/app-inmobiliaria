@@ -27,8 +27,8 @@ export const CORREOS = {
         en: "Your listing looks better with photos",
       },
       cuerpo: {
-        es: "<p>Los inmuebles con buenas fotos se venden más rápido: <strong>89 días en el mercado frente a 123</strong> sin buenas fotos (Redfin).</p><p>Abre tu anuncio con el enlace privado que te dimos al publicar y súbele fotos desde el teléfono.</p>",
-        en: "<p>Properties with good photos sell faster: <strong>89 days on the market versus 123</strong> without good photos (Redfin).</p><p>Open your listing with the private link we gave you when you listed it, and upload photos from your phone.</p>",
+        es: "<p>Las fotos son lo primero que mira un interesado: un anuncio con buenas fotos se entiende de un vistazo.</p><p>Abre tu anuncio con el enlace privado que te dimos al publicar y súbele fotos desde el teléfono.</p>",
+        en: "<p>Photos are the first thing a buyer looks at: a listing with good photos makes sense at a glance.</p><p>Open your listing with the private link we gave you when you listed it, and upload photos from your phone.</p>",
       },
       cta: {
         es: "Completar mi anuncio →",

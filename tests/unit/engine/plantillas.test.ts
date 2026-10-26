@@ -63,11 +63,11 @@ describe("plantillas de envío (deterministas, cifras citables)", () => {
       PLANTILLAS.map((p) => asuntoDe(p.id, i) + cuerpoHtml(p.id, i, "X", "u")),
     ).join(" ");
     // Las citables canónicas están, en cada idioma:
-    expect(todo).toMatch(/89 días|\$23\.000|7 a 7,5 meses/);
-    expect(todo).toMatch(/89 days|COP 23,000|7 to 7\.5 months/);
+    expect(todo).toMatch(/\$23\.000|7 a 7,5 meses/);
+    expect(todo).toMatch(/COP 23,000|7 to 7\.5 months/);
     // Las prohibidas (evidencia débil / fabricadas) JAMÁS:
     expect(todo).not.toMatch(
-      /3×|118%|32% más|Matterport|9% mayor|\+118|Camacol/,
+      /3×|118%|32% más|Matterport|9% mayor|\+118|Camacol|89 d[ií]as|89 days|tercio más|third faster/,
     );
   });
 

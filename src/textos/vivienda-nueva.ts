@@ -658,8 +658,8 @@ export const VIVIENDA_NUEVA = {
         en: "A new home costs the same per m²",
       },
       detalle: {
-        es: "Medianas de lo que cabe en {presupuesto}. Lo nuevo se entrega después y calla datos; lo usado se ve hoy.",
-        en: "Medians of what fits in {presupuesto}. New homes are handed over later and leave facts out; resale homes can be seen today.",
+        es: "Medianas de lo que cabe en {presupuesto}. Lo nuevo se mide por m² privado y lo usado por el área que declara el dueño, que puede ser la construida. Lo nuevo se entrega después y calla datos; lo usado se ve hoy.",
+        en: "Medians of what fits in {presupuesto}. New homes are measured by private m² and resale homes by the area the owner declares, which may be the built area. New homes are handed over later and leave facts out; resale homes can be seen today.",
       },
       sin: {
         titulo: {

@@ -572,6 +572,21 @@ describe("compararLecturas (doble lectura)", () => {
     ).toBe(true);
   });
 
+  it("marca el parqueadero y el precio fijo distintos: cambian el «pagas al menos» (S16)", () => {
+    const segunda = [
+      pag(5, [
+        { nombre: "A", parqueadero: "adicional", parqueadero_precio: 20_000_000 },
+        { nombre: "B", precio_desde: 250_000_000, precio_fijo: "si" },
+      ]),
+    ];
+    const d = compararLecturas(primera, segunda);
+    expect(d.map((x) => x.campo).sort()).toEqual([
+      "parqueadero",
+      "parqueadero_precio",
+      "precio_fijo",
+    ]);
+  });
+
   it("marca una página que la primera lectura no trae", () => {
     const d = compararLecturas(primera, [pag(9, [{ nombre: "Z" }])]);
     expect(d).toHaveLength(1);

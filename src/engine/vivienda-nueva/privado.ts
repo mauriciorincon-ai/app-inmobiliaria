@@ -56,6 +56,9 @@ const CAMPOS_DE_NOMBRE = ["nombre", "constructora", "sector", "ciudad"];
 
 const RE_WEB = /https?:\/\/|www\.|\b[\w-]+\.(com|co|net|org|io|app|info)\b/i;
 const RE_CORREO = /[^\s@]+@[^\s@]+/;
+// Un celular (3xx) o un fijo (60x) de Colombia, con o sin +57 y separadores (S16; deuda del S11: el gate de texto no buscaba
+// teléfonos). Más estrecho que `RE_TELEFONO` de los datos, que en un archivo cualquiera atraparía fechas y cifras.
+const RE_TELEFONO_CO = /(?:\+?57[\s.-]?)?\b(?:3\d{2}|60\d)[\s.-]?\d{3}[\s.-]?\d{4}\b/;
 
 const IMAGEN = /\.(png|jpe?g|webp|gif|svg|tiff?|heic|avif|bmp)$/i;
 const CRUDO = /(^|\/)crudo\//;
@@ -76,11 +79,12 @@ function* cadenas(valor: unknown, ruta: string): Generator<[string, string]> {
   }
 }
 
-/** Web y correo: valen para cualquier texto del repo. */
+/** Web, correo y teléfono: valen para cualquier texto del repo. */
 export function hallazgosDeTexto(texto: string, ruta: string): Hallazgo[] {
   const salida: Hallazgo[] = [];
   if (RE_WEB.test(texto)) salida.push({ codigo: "web", ruta });
   if (RE_CORREO.test(texto)) salida.push({ codigo: "correo", ruta });
+  if (RE_TELEFONO_CO.test(texto)) salida.push({ codigo: "telefono", ruta });
   return salida;
 }
 

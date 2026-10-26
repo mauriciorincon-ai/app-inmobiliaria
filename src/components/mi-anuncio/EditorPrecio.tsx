@@ -36,7 +36,7 @@ export default function EditorPrecio({
     ev.preventDefault();
     setError(null);
     if (valor === null || valor === valorInicial) {
-      return setError(valor === null ? t.errores.invalido : null);
+      return setError(valor === null ? t.errores.invalido : t.errores.igual);
     }
     setGuardando(true);
     const { error: e } = await crearClienteNavegador().rpc("guardar_precio", {

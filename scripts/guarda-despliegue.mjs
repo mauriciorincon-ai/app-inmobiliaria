@@ -4,8 +4,11 @@
 // un `*_MOCK` o un freno apagado dejado ahí llegaría a producción sin que nadie lo vea (el S12 lo dejó como deuda).
 // Por nombre, no por lista: una perilla nueva que siga la convención (`*_SIMULACRO`, `*_MOCK`) queda cubierta sola.
 // S15: también veta los interruptores de producto sin validar (`SIN_VALIDAR`), que solo se apagan por una decisión del usuario.
+// S16: el lector de CTL pasa SOLO si `scripts/ctl-validar.mjs` sale 0 en ese momento (los certificados de `privado/ctl`, con su
+// lectura a mano y cero desacuerdos); la guarda no lee ningún certificado: corre el validador, que imprime solo conteos.
 // Imprime SOLO el nombre y el sitio de lo que encuentra, jamás un valor.
 // Uso: `node scripts/guarda-despliegue.mjs` (lo corre `pnpm deploy:cf` antes de construir).
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -62,11 +65,26 @@ export function varsDeWrangler(texto) {
  * Lo que impediría desplegar: `[{ nombre, donde }]`. `entorno` es el de este proceso; `archivos` es `{ ruta: texto }`
  * (los `.env*` y, con la clave `wrangler.jsonc`, su texto).
  */
-export function revisar({ entorno = {}, archivos = {} }) {
+export function revisar({
+  entorno = {},
+  archivos = {},
+  // ¿El lector de CTL está validado ahora mismo? Por omisión NO: sin la prueba, el interruptor se veta.
+  ctlValidado = () => false,
+}) {
   const hallazgos = [];
+  let validado = null;
+  const permitido = (nombre) => {
+    if (nombre !== "LECTOR_CTL_ACTIVO") return false;
+    validado ??= ctlValidado();
+    return validado;
+  };
   const ver = (pares, donde) => {
     for (const [nombre, valor] of pares) {
-      if (esPerillaDePrueba(nombre) && encendida(nombre, valor)) {
+      if (
+        esPerillaDePrueba(nombre) &&
+        encendida(nombre, valor) &&
+        !permitido(nombre)
+      ) {
         hallazgos.push({ nombre, donde });
       }
     }
@@ -100,6 +118,21 @@ if (
   const hallazgos = revisar({
     entorno: process.env,
     archivos: leerArchivos(process.cwd()),
+    ctlValidado: () => {
+      try {
+        execFileSync(
+          process.execPath,
+          [
+            "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+            "scripts/ctl-validar.mjs",
+          ],
+          { stdio: "inherit" },
+        );
+        return true;
+      } catch {
+        return false;
+      }
+    },
   });
   if (hallazgos.length > 0) {
     console.error(

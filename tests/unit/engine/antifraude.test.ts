@@ -179,10 +179,21 @@ describe("la cola del operador", () => {
   it("pausar o reactivar según el estado; descartar solo si hay algo abierto", () => {
     expect(
       accionesPosibles({ pausado_at: null, banderas: [1], reportes: [] }),
-    ).toEqual({ pausar: true, reactivar: false, pedirCtl: true, descartar: true });
+    ).toEqual({ pausar: true, reactivar: false, pedirCtl: true, cerrarCtl: false, descartar: true });
     expect(
       accionesPosibles({ pausado_at: "2026-10-25T10:00:00Z", banderas: [], reportes: [] }),
-    ).toEqual({ pausar: false, reactivar: true, pedirCtl: true, descartar: false });
+    ).toEqual({ pausar: false, reactivar: true, pedirCtl: true, cerrarCtl: false, descartar: false });
+  });
+
+  it("un CTL pedido no se vuelve a pedir: se cierra si el dueño no lo entregó (S16)", () => {
+    expect(
+      accionesPosibles({
+        pausado_at: null,
+        ctl_pedido_at: "2026-10-01T10:00:00Z",
+        banderas: [],
+        reportes: [],
+      }),
+    ).toEqual({ pausar: true, reactivar: false, pedirCtl: false, cerrarCtl: true, descartar: false });
   });
 
   it("la frase del precio lleva el umbral de la regla; las demás, solo su evidencia", () => {

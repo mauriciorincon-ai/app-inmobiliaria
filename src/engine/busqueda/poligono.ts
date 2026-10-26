@@ -59,7 +59,21 @@ function cruce(a: Punto, b: Punto, c: Punto, d: Punto): boolean {
     Math.sign(
       (q.lng - p.lng) * (r.lat - p.lat) - (q.lat - p.lat) * (r.lng - p.lng),
     );
-  return giro(a, b, c) * giro(a, b, d) < 0 && giro(c, d, a) * giro(c, d, b) < 0;
+  // ¿`q`, alineado con p–r, cae dentro de ese lado?
+  const sobre = (p: Punto, q: Punto, r: Punto) =>
+    Math.min(p.lng, r.lng) <= q.lng &&
+    q.lng <= Math.max(p.lng, r.lng) &&
+    Math.min(p.lat, r.lat) <= q.lat &&
+    q.lat <= Math.max(p.lat, r.lat);
+  const [g1, g2, g3, g4] = [giro(a, b, c), giro(a, b, d), giro(c, d, a), giro(c, d, b)];
+  if (g1 * g2 < 0 && g3 * g4 < 0) return true;
+  // Lados alineados que se tocan o se montan (antes pasaban: deuda del S6).
+  return (
+    (g1 === 0 && sobre(a, c, b)) ||
+    (g2 === 0 && sobre(a, d, b)) ||
+    (g3 === 0 && sobre(c, a, d)) ||
+    (g4 === 0 && sobre(c, b, d))
+  );
 }
 
 // ¿Algún lado cruza a otro que no es su vecino? Una zona en moño da resultados que nadie espera.

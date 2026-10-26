@@ -67,7 +67,20 @@ export async function POST(req: NextRequest) {
       // Un idioma que no sea es/en (no debería ocurrir: la columna lo impide) cae en el español.
       idioma: esIdioma(d.idioma) ? d.idioma : IDIOMA_POR_DEFECTO,
     }));
-    const tanda = destinatarios.slice(0, TANDA_MAX);
+    // S16 (deuda del S9): la campaña no pasa del cupo diario de correos que comparten visitas, alertas y campañas (ADR 017).
+    // Si no se puede leer el cupo, no se manda nada: mejor un lote de cero que tumbar los correos de las visitas.
+    const { data: libres, error: errCupo } = await supabase.rpc(
+      "correos_libres_hoy",
+      {},
+    );
+    if (errCupo || typeof libres !== "number") {
+      reportError("envios_cupo_error", {
+        requestId,
+        code: errCupo?.code ?? "desconocido",
+      });
+      return json(500, { error: "servidor" });
+    }
+    const tanda = destinatarios.slice(0, Math.min(TANDA_MAX, libres));
 
     const urlApp = process.env.NEXT_PUBLIC_APP_URL ?? "";
     const { enviados, mock } = await enviarLote(plantilla, tanda, urlApp);
@@ -101,7 +114,7 @@ export async function POST(req: NextRequest) {
       enviados,
       porIdioma,
       mock,
-      quedanHoy: Math.max(0, TANDA_MAX - tanda.length),
+      quedanHoy: Math.max(0, Math.min(TANDA_MAX, libres) - tanda.length),
     });
   } catch (e) {
     reportError("envios_excepcion", {

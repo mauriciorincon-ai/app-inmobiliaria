@@ -937,10 +937,12 @@ test("una baja de precio entra al resumen; una subida no; bajar y volver a subir
   const bajador = await crearAnuncio();
   const subidor = await crearAnuncio();
   const vaiven = await crearAnuncio();
+  // S16: «bajó de precio» pide al menos un 1 %. El bajador baja un 2 %; la banda de su alerta va alrededor del precio NUEVO.
+  const bajado = bajador.precio - Math.round(bajador.precio * 0.02);
   // Tres alertas con la banda de cada anuncio (nada de lo de otros cae dentro).
   const aBaja = alertaConfirmada({
-    precioMin: bajador.precio - 5000,
-    precioMax: bajador.precio + 5000,
+    precioMin: bajado - 5000,
+    precioMax: bajado + 5000,
   });
   const aSube = alertaConfirmada({
     precioMin: subidor.precio - 5000,
@@ -951,9 +953,7 @@ test("una baja de precio entra al resumen; una subida no; bajar y volver a subir
     precioMax: vaiven.precio + 5000,
   });
 
-  expect(
-    (await guardarPrecio(bajador, bajador.precio - 2000)).error,
-  ).toBeNull();
+  expect((await guardarPrecio(bajador, bajado)).error).toBeNull();
   expect(
     (await guardarPrecio(subidor, subidor.precio + 2000)).error,
   ).toBeNull();
@@ -966,7 +966,7 @@ test("una baja de precio entra al resumen; una subida no; bajar y volver a subir
   expect(mio.bajas[0]).toMatchObject({
     slug: bajador.slug,
     precio_anterior: bajador.precio,
-    precio_esperado: bajador.precio - 2000,
+    precio_esperado: bajado,
   });
 
   // Una subida no es una baja.
@@ -975,13 +975,24 @@ test("una baja de precio entra al resumen; una subida no; bajar y volver a subir
   expect(reclamar(aVaiven.alerta_id).alertas).toEqual([]);
 });
 
+test("bajar menos del 1 % no es una noticia: no entra al resumen (S16)", async () => {
+  const x = await crearAnuncio();
+  const casi = x.precio - Math.round(x.precio * 0.005);
+  const a = alertaConfirmada({ precioMin: casi - 5000, precioMax: casi + 5000 });
+  expect((await guardarPrecio(x, casi)).error).toBeNull();
+  expect(reclamar(a.alerta_id).alertas).toEqual([]);
+});
+
 test("las bajas se miden contra el precio al empezar la ventana, no contra el último resumen", async () => {
   const x = await crearAnuncio();
+  // S16: cada baja de al menos un 1 % (2 % y luego 4 % del original); la banda cubre los dos precios nuevos.
+  const uno = x.precio - Math.round(x.precio * 0.02);
+  const dos = x.precio - Math.round(x.precio * 0.04);
   const a = alertaConfirmada({
-    precioMin: x.precio - 9000,
-    precioMax: x.precio + 9000,
+    precioMin: dos - 5000,
+    precioMax: uno + 5000,
   });
-  await guardarPrecio(x, x.precio - 1000);
+  await guardarPrecio(x, uno);
   expect(miResumen(reclamar(a.alerta_id), a.alerta_id)!.bajas[0]).toMatchObject(
     {
       precio_anterior: x.precio,
@@ -991,11 +1002,11 @@ test("las bajas se miden contra el precio al empezar la ventana, no contra el ú
   consultar(
     `update public.alertas set ultimo_envio_at = now() - interval '1 day' where id = '${a.alerta_id}'`,
   );
-  await guardarPrecio(x, x.precio - 2500);
+  await guardarPrecio(x, dos);
   const r = miResumen(reclamar(a.alerta_id), a.alerta_id)!;
   expect(r.bajas[0]).toMatchObject({
-    precio_anterior: x.precio - 1000,
-    precio_esperado: x.precio - 2500,
+    precio_anterior: uno,
+    precio_esperado: dos,
   });
 });
 

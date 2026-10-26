@@ -81,7 +81,7 @@ describe("webhook de WhatsApp: las salidas de error", () => {
     const req = new NextRequest(URL_WEBHOOK, {
       method: "POST",
       body: flujo,
-      // @ts-expect-error -- `duplex` es obligatorio en Node para un cuerpo en flujo y aún no está en los tipos de RequestInit.
+      // `duplex` es obligatorio en Node para un cuerpo en flujo.
       duplex: "half",
     });
     expect((await POST(req)).status).toBe(413);

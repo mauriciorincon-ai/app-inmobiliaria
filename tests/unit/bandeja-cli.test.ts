@@ -110,7 +110,8 @@ const escribirUnida = (numero: number, contenido: unknown) =>
   );
 const pdf = (nombre: string) => writeFileSync(join(fuentes, nombre), "");
 
-describe("la CLI de la bandeja con una edición nueva", () => {
+// Cada prueba lanza la CLI varias veces (un proceso de Node por llamada): con la suite entera en paralelo pasaba de los 5 s.
+describe("la CLI de la bandeja con una edición nueva", { timeout: 30_000 }, () => {
   it("el PDF sin transcripción es pendiente; unir las lecturas no lo entrega; entregar sí", () => {
     pdf("2026-11-edicion-188.pdf");
     expect(bandeja("listar", "--hoy", "2026-11-16").texto).toContain(

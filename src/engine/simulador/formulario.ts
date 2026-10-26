@@ -118,6 +118,15 @@ export function leerFormulario(
 }
 
 /** Lo que se guarda en el teléfono, o null si todavía no hay ingresos o algo no se puede leer. */
+/** ¿Lo escrito ya no dice un ingreso legible? Entonces la capacidad guardada se olvida (S16; antes solo al vaciar el campo, y un
+ * ingreso ilegible dejaba vivo el de antes en la búsqueda y en «¿te alcanza?»). */
+export function ingresoIlegible(
+  c: CamposSimulador,
+  tasaReferencia: number | null,
+): boolean {
+  return leerFormulario(c, tasaReferencia).entrada.ingresos === null;
+}
+
 export function capacidadDe(
   c: CamposSimulador,
   tasaReferencia: number | null,

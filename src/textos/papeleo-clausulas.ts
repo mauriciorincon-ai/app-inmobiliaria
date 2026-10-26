@@ -123,8 +123,8 @@ export const PAPELEO_CLAUSULAS = {
         en: "If one party does not perform",
       },
       queDice: {
-        es: "En un contrato entre dos partes va implícita esta condición: si una no cumple lo pactado, la otra puede pedir a su elección que se cumpla o que se resuelva, en los dos casos con indemnización de perjuicios.",
-        en: "A contract between two parties carries this implied condition: if one does not do what was agreed, the other may choose to demand performance or to have the contract terminated, with compensation for damages either way.",
+        es: "En un contrato en que las dos partes se obligan (bilateral) va implícita esta condición: si una no cumple lo pactado, la otra puede pedir a su elección que se cumpla o que se resuelva, en los dos casos con indemnización de perjuicios.",
+        en: "A contract in which both parties take on obligations (bilateral) carries this implied condition: if one does not do what was agreed, the other may choose to demand performance or to have the contract terminated, with compensation for damages either way.",
       },
       queMirar: {
         es: "Que la promesa diga qué cuenta como incumplir (no pagar a tiempo, no ir a la notaría, no entregar) y cómo se avisa. Si trae cláusula penal, léelas juntas.",

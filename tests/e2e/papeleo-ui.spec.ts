@@ -464,7 +464,7 @@ test.describe("desde las fichas", () => {
     await page.setExtraHTTPHeaders({ "x-hoy-simulado": DIA_DE_FICHAS });
     await page.goto(`/nuevos/${proyecto.f.slug}`);
     const enlace = page.getByRole("link", {
-      name: "Lo que te cuesta escriturar este",
+      name: "Lo que costaría escriturar al precio «desde»",
     });
     await expect(enlace).toBeVisible();
     const href = (await enlace.getAttribute("href")) ?? "";
@@ -482,6 +482,11 @@ test.describe("desde las fichas", () => {
     await expect(
       page.getByText(/Si vende una empresa o una constructora/),
     ).toBeVisible();
+    // Editado el precio, ya no «viene del anuncio» (S16).
+    await page.getByLabel("Precio de la compraventa (COP)").fill("123000000");
+    await expect(
+      page.getByText("Viene del anuncio que estabas mirando."),
+    ).toHaveCount(0);
   });
 
   test("la ficha de un anuncio usado manda con el precio del anuncio", async ({

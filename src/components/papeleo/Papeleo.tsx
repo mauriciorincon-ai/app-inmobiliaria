@@ -142,7 +142,12 @@ export default function Papeleo({
           value={campos.precio}
           onChange={(v) => cambiar("precio", v)}
           error={invalido(campos.precio, precio)}
-          hint={desdeAnuncio ? t.campos.precio.ayudaAnuncio : undefined}
+          // «Viene del anuncio» solo mientras el precio siga siendo el del anuncio (S16; deuda del S14: seguía tras editarlo).
+          hint={
+            desdeAnuncio && campos.precio === texto(inicial.precio)
+              ? t.campos.precio.ayudaAnuncio
+              : undefined
+          }
           placeholder={t.campos.precio.ejemplo}
         />
         <div className="grid gap-4 sm:grid-cols-2">

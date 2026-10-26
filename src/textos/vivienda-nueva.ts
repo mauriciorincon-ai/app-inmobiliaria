@@ -550,9 +550,10 @@ export const VIVIENDA_NUEVA = {
       },
     },
     papeleo: {
+      // S16 (deuda del S14): el enlace lleva el «desde» de la unidad más barata, no el precio de «este» apartamento.
       titulo: {
-        es: "Lo que te cuesta escriturar este",
-        en: "What it costs to close on this one",
+        es: "Lo que costaría escriturar al precio «desde»",
+        en: "What closing would cost at the «from» price",
       },
       detalle: {
         es: "Cuánto paga cada parte al escriturar, con la norma de cada cifra y lo que no pudimos verificar. El precio que escribes se queda en tu teléfono.",
@@ -732,6 +733,11 @@ export const VIVIENDA_NUEVA = {
     resumen: {
       es: "Hogar de ejemplo con {ingresos} al mes: puede pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa de referencia {tasa} E. A. con corte al {fecha}).",
       en: "Sample household earning {ingresos} a month: can afford up to {tope} ({inicial}% down, {plazo} years, reference rate {tasa} effective annual as of {fecha}).",
+    },
+    // S16 (deuda del S13): el tope salía sin su norma; el simulador la cita y aquí faltaba.
+    normaTope: {
+      es: "El tope sale de la regla de la cuota frente al ingreso: {norma}.",
+      en: "The cap follows the payment-to-income rule: {norma}.",
     },
     resumenTuyo: {
       es: "Con {ingresos} al mes puedes pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa de referencia {tasa} E. A. con corte al {fecha}).",

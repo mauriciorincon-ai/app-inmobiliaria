@@ -65,6 +65,8 @@ const PROHIBIDOS_CODIGO: readonly [string, RegExp][] = [
   ["indexedDB", /\bindexedDB\b/],
   ["cookie", /\bdocument\.cookie\b/],
   ["form", /<form\b/],
+  // S16 (deuda del S15): un `console.*` del lector podría llevar el texto pegado del certificado a la consola o a un registro.
+  ["console", /\bconsole\.(log|info|warn|error|debug|trace)\s*\(/],
 ];
 
 function problemasDe(c: Cierre): string[] {
@@ -138,6 +140,7 @@ describe("la isla del papeleo no manda nada afuera", () => {
         indexedDB: "indexedDB.open(a)",
         cookie: "document.cookie = a",
         form: "<form onSubmit={f}>",
+        console: "console.log(texto)",
       };
       expect(re.test(muestra[nombre]), nombre).toBe(true);
     }

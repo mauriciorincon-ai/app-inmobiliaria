@@ -530,6 +530,15 @@ describe("la espera", () => {
     expect(r).toMatchObject({ estado: "calculada", meses: 0, vencida: true });
   });
 
+  it("la entrega de ESTE mes ya «llegó»: se dice igual que una pasada (S16: el texto pide preguntar si ya entregaron)", () => {
+    const r = espera(
+      { entrega: "2026-10", entrega_precision: "mes", etapa: NO_LO_DICE },
+      "2026-10-20",
+      1_800_000,
+    );
+    expect(r).toMatchObject({ estado: "calculada", meses: 0, vencida: true });
+  });
+
   it("entrega inmediata y sin fecha", () => {
     expect(
       espera(

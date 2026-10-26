@@ -360,8 +360,8 @@ describe("vistaLista", () => {
     expect(de({ lugar: "bogota:Kennedy" })).toEqual(["medio"]);
     expect(de({ franja: "hasta_150" })).toEqual(["barato", "vip"]);
     expect(de({ franja: "mas_de_400" })).toEqual(["caro"]);
-    // «Sin precio» incluye el precio en conflicto (S13): ninguna de las dos páginas decide la franja.
-    expect(de({ franja: "sin_precio" })).toEqual(["conflicto", "sin-precio"]);
+    // «Sin precio» es solo lo que no imprime precio: el precio en conflicto cuenta en su franja (S16, como el índice).
+    expect(de({ franja: "sin_precio" })).toEqual(["sin-precio"]);
     expect(de({ segmento: "no_vis" })).toEqual(["caro"]);
     expect(de({ segmento: "no_lo_dice" })).toEqual(["ilegible", "ya"]);
     expect(de({ segmento: "vip" })).toEqual(["vip"]);
@@ -377,7 +377,7 @@ describe("vistaLista", () => {
     ).toEqual([]);
   });
 
-  it("un precio o una entrega en conflicto no ubica al proyecto en ninguna franja ni cumple ningún filtro de entrega (S13)", () => {
+  it("un precio en conflicto cuenta en su franja (S16); una entrega en conflicto no cumple ningún filtro de entrega (S13)", () => {
     const con = [
       pp("precio-dudoso", {
         precio_desde: 100_000_000,
@@ -400,9 +400,12 @@ describe("vistaLista", () => {
         .map((t) => t.slug)
         .sort();
     };
-    // Su «desde» impreso estaría en «hasta 150»: con el precio en disputa cae en «sin precio».
-    expect(de({ franja: "hasta_150" })).toEqual([]);
-    expect(de({ franja: "sin_precio" })).toEqual(["precio-dudoso"]);
+    // Su «desde» impreso está en «hasta 150»: ahí cuenta, con la tarjeta «en conflicto» (no en «sin precio»).
+    expect(de({ franja: "hasta_150" })).toEqual(["precio-dudoso"]);
+    expect(de({ franja: "sin_precio" })).toEqual([]);
+    expect(
+      vistaLista(con, tarifas, f({ franja: "hasta_150" })).sinPrecio[0].precio.estado,
+    ).toBe("en_conflicto");
     // Ni «inmediata» ni «hasta 2027» los da por cumplidos, aunque cada página imprima una fecha.
     expect(de({ entrega: "inmediata" })).toEqual([]);
     expect(de({ entrega: 2027 })).toEqual(["limpio"]);

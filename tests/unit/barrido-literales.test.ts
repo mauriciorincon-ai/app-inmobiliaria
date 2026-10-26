@@ -12,6 +12,9 @@ describe("barrido de literales — lo que DEBE marcar", () => {
     ["texto entre etiquetas", jsx("<p>Hola mundo</p>"), "texto-jsx"],
     ["texto con acentos", jsx("<h1>Cómo funciona</h1>"), "texto-jsx"],
     ["cadena en una expresión", jsx('<p>{"Hola"}</p>'), "texto-jsx"],
+    // S16 (deuda del S5): las ramas de un ternario o de un `&&` que se pintan como texto.
+    ["rama de un ternario", jsx('<p>{abierto ? "Cerrar" : t.abrir}</p>'), "texto-jsx"],
+    ["rama de un &&", jsx('<p>{vacio && "No hay nada"}</p>'), "texto-jsx"],
     ["plantilla con parte fija", jsx("<p>{`Foto ${1}`}</p>"), "texto-jsx"],
     ["aria-label literal", jsx('<button aria-label="Cerrar" />'), "atributo"],
     ["alt literal", jsx('<img alt="Fachada" src="/x.png" />'), "atributo"],

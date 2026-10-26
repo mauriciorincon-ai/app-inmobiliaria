@@ -89,7 +89,8 @@ const LLAMADAS_INTERNAS =
   /^(logger|log|console|reportError|Sentry|Error|TypeError)\b/;
 
 // Nombres propios que no se traducen.
-const NO_TRADUCIBLES = new Set(["Innmobiliaria", "WhatsApp"]);
+// «i» es el símbolo de información de los avisos (como «▲» o «✓»), no una palabra.
+const NO_TRADUCIBLES = new Set(["Innmobiliaria", "WhatsApp", "i"]);
 
 const TIENE_LETRAS = /\p{L}/u;
 
@@ -145,6 +146,23 @@ function textoEstatico(expr: ts.Expression): string | null {
   return null;
 }
 
+// Las expresiones que terminan pintándose como texto dentro de un ternario o de un `&&`/`||` (entre paréntesis también).
+function ramasDeTexto(expr: ts.Expression): ts.Expression[] {
+  if (ts.isParenthesizedExpression(expr)) return ramasDeTexto(expr.expression);
+  if (ts.isConditionalExpression(expr)) {
+    return [expr.whenTrue, expr.whenFalse].flatMap((r) => [r, ...ramasDeTexto(r)]);
+  }
+  if (
+    ts.isBinaryExpression(expr) &&
+    (expr.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken ||
+      expr.operatorToken.kind === ts.SyntaxKind.BarBarToken ||
+      expr.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken)
+  ) {
+    return [expr.right, ...ramasDeTexto(expr.right)];
+  }
+  return [];
+}
+
 export function barrer(
   nombre: string,
   fuente: string,
@@ -195,6 +213,12 @@ export function barrer(
     ) {
       const texto = textoEstatico(nodo.expression);
       if (texto !== null && esVisible(texto)) agregar(nodo, "texto-jsx", texto);
+      // S16 (deuda del S5): <p>{abierto ? "Cerrar" : "Abrir"}</p> y <p>{x && "Hola"}</p>: las ramas de un ternario o de un
+      // `&&`/`||` que se pintan como texto también son texto de la interfaz.
+      for (const rama of ramasDeTexto(nodo.expression)) {
+        const t = textoEstatico(rama);
+        if (t !== null && esVisible(t)) agregar(rama, "texto-jsx", t);
+      }
     }
     // <img alt="Foto" /> · aria-label="Cerrar" · placeholder={"Ej: Cedritos"}
     if (

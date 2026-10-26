@@ -38,7 +38,7 @@ const PUBLICAS = [
   "registrar_foto(text,text,integer,integer,integer)",
   "registrar_fundador(text,text,text,text,text,operacion,tipo_inmueble,text,text,integer,smallint,bigint,boolean,text,text,text)",
   "renovar_vigencia(text)",
-  "solicitar_visita(text,text,text,bigint,bigint,text[],text,text)",
+  "solicitar_visita(text,text,text,bigint,bigint,text[],text,text,boolean)",
   // S9: favoritos, listas con notas, alertas por correo y el precio del dueño (migración 12).
   "agregar_a_lista(text,uuid,text)",
   "baja_alerta(text)",
@@ -79,6 +79,8 @@ const PUBLICAS = [
 
 // Cron e internas: ni `anon` ni `authenticated` (solo service_role / otras funciones SECURITY DEFINER).
 const SOLO_SERVIDOR = [
+  // S16: el dato que disparó una bandera; solo la llaman `aplicar_banderas` y `resolver_revision`.
+  "dato_de_bandera",
   "marcar_vencidos",
   "generar_slug",
   "tocar_updated_at",
@@ -291,6 +293,26 @@ test("S15 · la cola antifraude, las reglas, las huellas y las sesiones de fotos
     );
     expect(fila, f).toBe("true,true,false");
   }
+});
+
+test("S16 · cerrar un CTL pedido y el cupo de correos de las campañas: authenticated y el servidor, jamás anon", async () => {
+  for (const f of ["cerrar_ctl_pedido(uuid)", "correos_libres_hoy(integer)"]) {
+    const [fila] = consultar(
+      `select has_function_privilege('service_role', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('authenticated', 'public.${f}', 'execute')::text
+          || ',' || has_function_privilege('anon', 'public.${f}', 'execute')::text`,
+    );
+    expect(fila, f).toBe("true,true,false");
+  }
+});
+
+test("S16 · la firma vieja de solicitar_visita (sin consentimiento) ya no existe", async () => {
+  expect(
+    consultar(
+      `select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+        where n.nspname = 'public' and p.proname = 'solicitar_visita' and p.pronargs = 8`,
+    ),
+  ).toEqual(["0"]);
 });
 
 test("S13 · el aviso «sin respuesta» lo ejecuta solo service_role", async () => {

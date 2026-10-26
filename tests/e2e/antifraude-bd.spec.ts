@@ -193,6 +193,7 @@ test("la pausa cierra la ficha, la búsqueda, los resúmenes, los favoritos, las
     p_forma_pago: [],
     p_mensaje: null,
     p_email: "comprador.sintetico@ejemplo.test",
+    p_consentimiento: true,
   });
   expect(visita.error?.message).toContain("no_disponible");
   expect(await enComparables()).not.toContain(a.slug);
@@ -647,6 +648,77 @@ test("el operador: pedir el CTL deja «re-verificación pendiente»; descartar p
   expect(() => pausar(a)).toThrow(/estado_invalido/);
   reactivar(a);
   expect(() => reactivar(a)).toThrow(/estado_invalido/);
+});
+
+test("S16 · una bandera resuelta con «pausar» vuelve tras reactivar SOLO si cambió el dato que la disparó (decisión 1b)", async () => {
+  const [a, b, c] = await Promise.all(
+    [1, 2, 3].map(() => crearAnuncio({ precio: precioUnico() })),
+  );
+  for (const x of [a, b, c]) conTelefono(x, telefonoNuevo());
+  const uno = `${(Date.now() + 11) % 1e8}`;
+  const dos = `${(Date.now() + 13) % 1e8}`;
+  for (const [x, n] of [
+    [a, uno],
+    [b, uno],
+    [c, dos],
+  ] as const) {
+    consultar(
+      `select public.marcar_verificado_ctl('${x.id}', '50N-${n}', date '${fechaBogota(2)}')`,
+    );
+  }
+  revisar();
+  expect(banderaDe(a, "matricula")?.resolucion).toBeNull();
+
+  // Pausar resuelve la bandera y guarda el dato (la matrícula); reactivar con la MISMA matrícula no la reabre.
+  pausar(a);
+  expect(banderaDe(a, "matricula")?.resolucion).toBe("pausar");
+  reactivar(a);
+  revisar();
+  expect(banderaDe(a, "matricula")?.resolucion).toBe("pausar");
+
+  // Cambia el dato (otra matrícula, también repetida en otro anuncio): la bandera vuelve a la cola como nueva.
+  consultar(`update public.inmuebles set matricula = '50N-${dos}' where id = '${a.id}'`);
+  revisar();
+  expect(banderaDe(a, "matricula")).toMatchObject({
+    resolucion: null,
+    evidencia: { slug: c.slug },
+  });
+
+  // Mientras está pausado no se reabre, aunque el dato cambie.
+  pausar(a);
+  consultar(`update public.inmuebles set matricula = '50N-${uno}' where id = '${a.id}'`);
+  revisar();
+  expect(banderaDe(a, "matricula")?.resolucion).toBe("pausar");
+  reactivar(a);
+});
+
+test("S16 · el CTL pedido que no llega se cierra: sale de la cola y un verificado sin CTL vuelve a fundador", async () => {
+  const a = await crearAnuncio({ precio: precioUnico() });
+  conTelefono(a, telefonoNuevo());
+  consultar(
+    `select public.marcar_verificado_ctl('${a.id}', '50N-${(Date.now() + 17) % 1e8}', date '${fechaBogota(2)}')`,
+  );
+  // Sin pedido no hay qué cerrar.
+  expect(() => consultar(`select public.cerrar_ctl_pedido('${a.id}')`)).toThrow(
+    /estado_invalido/,
+  );
+  consultar(`select public.pedir_ctl('${a.id}')`);
+  const enCola = () =>
+    json<{ id: string }[]>("select public.antifraude_cola()::text").some(
+      (f) => f.id === a.id,
+    );
+  expect(enCola()).toBe(true);
+  consultar(`select public.cerrar_ctl_pedido('${a.id}')`);
+  expect(
+    consultar(
+      `select nivel_verificacion || ',' || (ctl_pedido_at is null) || ',' || (ctl_no_entregado_at is not null)
+         from public.inmuebles where id = '${a.id}'`,
+    )[0],
+  ).toBe("fundador,true,true");
+  expect(enCola()).toBe(false);
+  expect(() => consultar(`select public.cerrar_ctl_pedido('${a.id}')`)).toThrow(
+    /estado_invalido/,
+  );
 });
 
 test("la sesión de fotos: una abierta por anuncio, 3 en 30 días, y el operador la agenda y la marca hecha en orden", async () => {

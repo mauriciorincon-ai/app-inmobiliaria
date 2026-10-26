@@ -1,5 +1,5 @@
 // Navegación del comprador (S9–S10, maqueta 07/08/10, decisión de diseño 6): Buscar · Guardados · Alertas ·
-// Herramientas (el simulador de cuota). En el teléfono es una barra inferior.
+// Herramientas (el simulador de cuota y, desde el S14, el papeleo). En el teléfono es una barra inferior.
 import type { Arbol } from "@/i18n/textos";
 
 export const NAV_COMPRADOR = {

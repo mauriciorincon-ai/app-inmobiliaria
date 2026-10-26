@@ -72,6 +72,10 @@ Cada página leída lleva su `tipo`: `portada` · `indice` · `aviso_constructor
 entidad, banco: sin proyectos) · `otro`. Una página sin proyectos va con `proyectos: []`. Si encuentras una página en la
 que no puedes leer nada, regístrala con `observaciones` y no inventes proyectos.
 
+**La vigencia de la edición no la escribe el lector.** Si la portada imprime fechas («del 15 de octubre al 15 de noviembre»),
+anótalas tal cual en las `observaciones` de la página `portada`: quien entrega la edición las compara con la que sale del
+nombre del PDF y, si no coinciden, la da a mano con `--desde`/`--hasta` (S16; antes este documento no la pedía).
+
 ## Formato del archivo
 
 ```json

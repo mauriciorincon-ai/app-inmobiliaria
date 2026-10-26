@@ -5,7 +5,7 @@
 //   al menos = precio desde + derechos de registro (a cargo del comprador que registra) + parqueadero aparte con precio
 //
 // Lo que queda nombrado y sin sumar: los derechos notariales (se reparten según la promesa: se da su total), el impuesto
-// de registro y la beneficencia y el IVA notarial (no verificados), el parqueadero sin precio, lo que puede subir durante
+// de registro y la beneficencia y el IVA notarial (se nombran sin monto), el parqueadero sin precio, lo que puede subir durante
 // la obra si el precio no es fijo, la hipoteca si compras con crédito y que el registro de la VIS (la mitad) y el de la VIP (exento)
 // exigen subsidio: la VIS nombra cuánto cuesta el registro sin él (S15).
 // Un campo que dos páginas de la revista contradicen jamás entra a la cuenta (ni el precio ni el parqueadero), ni decide la

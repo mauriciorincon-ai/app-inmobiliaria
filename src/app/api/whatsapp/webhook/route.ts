@@ -6,6 +6,7 @@ import {
   tokenSuscripcionValido,
 } from "@/engine/verificacion/firma";
 import { extraerMensajes } from "@/engine/verificacion/webhook";
+import { leerConTope } from "@/lib/cuerpo-con-tope";
 import { crearClienteServicio } from "@/lib/supabase/servicio";
 import type { ResultadoCanje } from "@/lib/supabase/types";
 import { logger } from "@/lib/logger";
@@ -57,11 +58,8 @@ export async function POST(req: NextRequest) {
     log.error({ evento: "sin_secreto" }, "WHATSAPP_APP_SECRET no configurado");
     return vacio(503);
   }
-  if (Number(req.headers.get("content-length") ?? "0") > LIMITE_CUERPO) {
-    return vacio(413);
-  }
-  const cuerpo = await req.text();
-  if (cuerpo.length > LIMITE_CUERPO) return vacio(413);
+  const cuerpo = await leerConTope(req, LIMITE_CUERPO);
+  if (cuerpo === null) return vacio(413);
 
   // 1. Firma sobre el cuerpo crudo. Sin firma válida, el cuerpo no se interpreta.
   if (!(await firmaValida(req.headers.get(CABECERA_FIRMA), secreto, cuerpo))) {

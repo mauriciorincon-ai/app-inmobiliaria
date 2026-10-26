@@ -70,6 +70,8 @@ describe("código", () => {
     ["INN_4KQ2ZX", "INN-4KQ2ZX"],
     ["INN4KQ2ZX", "INN-4KQ2ZX"],
     ["INN–4KQ2ZX", "INN-4KQ2ZX"],
+    // Una coincidencia inválida antes no tapa al código válido después (deuda del S7).
+    ["Me salió INN-4KQ2Z0, no: INN-4KQ2ZX", "INN-4KQ2ZX"],
   ])("extrae el código de «%s»", (texto, esperado) => {
     expect(extraerCodigo(texto)).toBe(esperado);
   });

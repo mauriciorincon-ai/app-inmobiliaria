@@ -18,18 +18,19 @@ export function esCodigo(valor: unknown): valor is string {
 
 // Un mensaje real trae el código dentro de una frase, y la gente lo reescribe: minúsculas, espacio o
 // guion bajo en vez del guion. Se busca «INN» seguido de 6 símbolos que no sigan pegados a más letras.
-const EN_TEXTO = /(?:^|[^A-Z0-9])INN[\s\-_–—]*([A-Z0-9]{6})(?![A-Z0-9])/;
+const EN_TEXTO = /(?:^|[^A-Z0-9])INN[\s\-_–—]*([A-Z0-9]{6})(?![A-Z0-9])/g;
 
 /** El código normalizado (`INN-XXXXXX`) que trae un mensaje, o `null` si no trae uno válido. */
 export function extraerCodigo(texto: unknown): string | null {
   if (typeof texto !== "string" || texto.length > 1000) return null;
-  const encontrado = texto.toUpperCase().match(EN_TEXTO);
-  if (!encontrado) return null;
-  const cuerpo = encontrado[1];
-  for (const simbolo of cuerpo) {
-    if (!ALFABETO_CODIGO.includes(simbolo)) return null;
+  // Gana la primera coincidencia VÁLIDA: una inválida antes (p. ej. con una O o un 0) ya no tapa al código real (deuda del S7).
+  for (const encontrado of texto.toUpperCase().matchAll(EN_TEXTO)) {
+    const cuerpo = encontrado[1];
+    if ([...cuerpo].every((s) => ALFABETO_CODIGO.includes(s))) {
+      return PREFIJO_CODIGO + cuerpo;
+    }
   }
-  return PREFIJO_CODIGO + cuerpo;
+  return null;
 }
 
 /** El hash con que la base guarda el código (SHA-256 hex del código normalizado). */

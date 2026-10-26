@@ -449,6 +449,14 @@ export const OPERADOR = {
       es: "No se pudo verificar. Intenta de nuevo.",
       en: "Verification failed. Try again.",
     },
+    sinSesion: {
+      es: "Tu sesión de operador se cerró. Vuelve a entrar y repite la verificación.",
+      en: "Your operator session ended. Sign in again and repeat the verification.",
+    },
+    noEncontrado: {
+      es: "Ese anuncio ya no existe.",
+      en: "That listing no longer exists.",
+    },
   },
 
   // S6 — asignar a mano un barrio del catálogo a un anuncio de antes del catálogo.

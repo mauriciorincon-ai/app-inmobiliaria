@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --coverage --passWithNoTests",
     "test:e2e": "playwright test --pass-with-no-tests",
+    "sonda:nube": "vitest run --config vitest.nube.config.ts",
     "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy:cf": "node scripts/guarda-despliegue.mjs && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "prepare": "git config core.hooksPath githooks",

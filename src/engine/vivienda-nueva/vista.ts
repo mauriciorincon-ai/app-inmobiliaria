@@ -641,6 +641,8 @@ export type ProgramaVisible = {
   ingresoMaximo: number | null;
   /** Solo un subsidio de compra baja el precio al firmar; el de la cuota alivia después. */
   restaAlPrecio: boolean;
+  /** La salvedad del programa tal como la leímos (S16; deuda del S13: la tabla la omitía): cupos, concurrencia, montos. */
+  nota: { es: string; en: string } | null;
 };
 
 export type VistaTeAlcanza = {
@@ -705,6 +707,7 @@ export function vistaTeAlcanza(
     maximo: p.monto.pesos_2026.maximo,
     ingresoMaximo: p.ingreso_maximo_pesos_2026,
     restaAlPrecio: p.destino === "compra",
+    nota: p.nota ?? null,
   }));
   const paraElMotor: Programa[] = visibles.map((p) => ({
     id: p.id,

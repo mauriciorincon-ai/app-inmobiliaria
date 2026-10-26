@@ -158,6 +158,28 @@ export type DatosCorreoSala = {
  * `armarCorreo`: lo que viene de afuera (el nombre) se ESCAPA antes de entrar al HTML y el asunto es texto plano. Ninguno lleva
  * la dirección ni el teléfono de la sala: los datos que recibe este módulo no los traen.
  */
+/** El aviso al operador de una solicitud nueva a una sala (S16). Solo el proyecto y la franja: nada del comprador. */
+export function armarAvisoOperadorSala(
+  datos: Pick<DatosCorreoSala, "proyecto" | "franja">,
+  idioma: Idioma,
+  enlacePanel: string,
+): CorreoArmado {
+  const t = enIdioma(CORREOS_VISITA, idioma);
+  const c = t.operadorSala;
+  const franjas: Record<string, string> = t.franja;
+  const valores = {
+    proyecto: plano(datos.proyecto),
+    franja: franjas[datos.franja] ?? "",
+  };
+  const escapados = Object.fromEntries(
+    Object.entries(valores).map(([k, v]) => [k, escaparHtml(v)]),
+  );
+  const html =
+    rellenar(c.cuerpo, escapados) +
+    `<p><a href="${escaparHtml(enlacePanel)}" style="color:#7B5DD6;font-weight:bold">${c.cta}</a></p>`;
+  return { asunto: plano(rellenar(c.asunto, valores)), html };
+}
+
 export function armarCorreoSala(
   tipo: TipoCorreoSala,
   datos: DatosCorreoSala,

@@ -9,6 +9,8 @@ import {
   type DatosSolicitud,
   type EventoVisita,
 } from "@/engine/visita/avisos";
+import { armarAvisoOperadorSala } from "@/engine/visita/correos";
+import { IDIOMA_POR_DEFECTO } from "@/i18n/idiomas";
 import { enviarCorreo } from "@/lib/brevo";
 import { crearClienteServicio } from "@/lib/supabase/servicio";
 import { reportError } from "@/lib/observability";
@@ -70,6 +72,16 @@ export async function avisarVisita(
     );
     let enviados = 0;
     let fallidos = 0;
+    // Una solicitud nueva a una sala: el operador la coordina, así que también le llega un aviso (S16). Sin datos del comprador.
+    const operador = process.env.OPERADOR_EMAIL?.trim();
+    if (evento === "solicitud" && deSala && operador) {
+      const { asunto, html } = armarAvisoOperadorSala(
+        { proyecto: datos.proyecto.nombre, franja: datos.proyecto.franja },
+        IDIOMA_POR_DEFECTO,
+        `${base}/operador/salas`,
+      );
+      correos.push({ para: { email: operador, nombre: "" }, asunto, html });
+    }
     for (const correo of correos) {
       const r = await enviarCorreo(correo);
       if (r.ok) enviados++;

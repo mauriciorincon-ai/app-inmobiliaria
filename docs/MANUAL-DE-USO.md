@@ -330,7 +330,8 @@ solicitudes de visita.
   5. Si en **dos días hábiles** (hora de Bogotá, sin contar festivos) la sala no responde, te avisamos por correo. La solicitud sigue abierta.
 - **Mes sin edición:** con la edición vencida la pantalla dice **«Mes sin edición»** y **no ofrece** pedir la visita: los datos pueden haber cambiado.
 - **Limitaciones conocidas:** hasta 5 solicitudes abiertas a la vez; una por proyecto; si no se pudo concretar, puedes pedirla de nuevo pasados 14 días.
-  El plazo de dos días hábiles no descuenta festivos (el aviso puede llegar un día antes, nunca después). Aún no hay botón para marcar que fuiste.
+  El plazo de dos días hábiles no descuenta festivos (el aviso puede llegar un día antes) y el aviso sale con el trabajo diario de las 8:00
+  de Bogotá (puede llegar hasta un día después del plazo). Aún no hay botón para marcar que fuiste.
 
 ## Papeleo sin sorpresas · desde Sprint 014
 
@@ -591,6 +592,8 @@ solicitudes de visita.
 - **Qué hace:** la pestaña **«Visitas a salas»** (`/operador/salas`) es la cola de las solicitudes de visita a salas de ventas de vivienda nueva.
   Cada solicitud trae el **proyecto**, la **página de la revista** donde aparece, el comprador como en el panel de los anuncios (**nombre y los
   4 últimos dígitos** de su WhatsApp hasta que la visita se confirma), la **franja** que pidió y **cuándo vence el plazo** de dos días hábiles.
+  **Desde el Sprint 016 te llega un correo** (al correo del operador) con cada solicitud nueva: solo el proyecto, la franja y el enlace a esta pestaña,
+  ningún dato del comprador.
 - **Cómo se usa:**
   1. **Guarda el contacto de la sala** (una vez por proyecto): toca la línea «Falta el contacto de la sala» y escribe el teléfono (con indicativo,
      solo números) y la dirección que encuentres en la revista o en su página. **Solo tú lo ves**; no está en el repositorio ni en ningún lugar público.

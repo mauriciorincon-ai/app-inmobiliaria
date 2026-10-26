@@ -9,9 +9,11 @@ import {
   type DatosAnuncio,
   type DatosSala,
 } from "@/engine/visita/avisos";
+import { armarAvisoOperadorSala } from "@/engine/visita/correos";
 
-// S13 — los correos de la visita a la sala de ventas. Datos sintéticos; correos de dominio reservado. Solo el comprador recibe
-// correo (el equipo trabaja desde el panel); ninguno lleva la dirección ni el teléfono de la sala.
+// S13 — los correos de la visita a la sala de ventas. Datos sintéticos; correos de dominio reservado. Al comprador le llegan los
+// de su solicitud; desde el S16 el operador recibe además un aviso de cada solicitud nueva (sin datos del comprador). Ninguno lleva
+// la dirección ni el teléfono de la sala.
 
 const AHORA = new Date("2026-10-26T15:00:00Z"); // 10:00 de Bogotá
 const MANANA = "2026-10-27T15:00:00Z";
@@ -230,5 +232,22 @@ describe("correos de la visita a una sala de ventas", () => {
     expect(planearCorreos("sin_respuesta", anuncio, ENLACES, AHORA)).toEqual(
       [],
     );
+  });
+});
+
+describe("el aviso al operador de una solicitud nueva a una sala (S16)", () => {
+  it("lleva el proyecto, la franja y el enlace al panel; nada del comprador; en los dos idiomas", () => {
+    for (const idioma of ["es", "en"] as const) {
+      const { asunto, html } = armarAvisoOperadorSala(
+        { proyecto: "Proyecto <Sintético>", franja: "sabado" },
+        idioma,
+        "https://ejemplo.test/operador/salas",
+      );
+      expect(asunto).toContain("Proyecto <Sintético>");
+      expect(html).toContain("Proyecto &lt;Sintético&gt;");
+      expect(html).toContain("https://ejemplo.test/operador/salas");
+      expect(html).not.toMatch(/\{[a-z]+\}/);
+      expect(html).not.toMatch(/@|\+57|whatsapp/i);
+    }
   });
 });

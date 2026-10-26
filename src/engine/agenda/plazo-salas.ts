@@ -2,8 +2,9 @@
 //
 // La maqueta promete «si en dos días hábiles no responden, te lo decimos». «Dos días hábiles» = 48 horas de lunes a
 // viernes en hora de Bogotá (UTC−5 todo el año): el sábado y el domingo no corren. Una solicitud del viernes a las 3 p. m.
-// vence el martes a las 3 p. m.; una del sábado, el miércoles a la medianoche. Los festivos NO se descuentan (declarado:
-// el aviso puede llegar un día antes de lo debido, nunca después).
+// vence el martes a las 3 p. m.; una del sábado, el miércoles a la medianoche. Los festivos NO se descuentan (el aviso puede
+// llegar un día antes de lo debido) y el aviso sale con el trabajo diario de las 8:00 de Bogotá, así que también puede llegar
+// hasta un día DESPUÉS del vencimiento (S16: el comentario y el manual decían «nunca después»).
 //
 // La base reclama las solicitudes vencidas con `reclamar_sin_respuesta_salas(p_antes_de)`: entra toda solicitud cuya espera
 // empezó en o antes de ese instante. `corteSinRespuesta` es ese instante; `venceSala` es su inversa, para que el panel diga

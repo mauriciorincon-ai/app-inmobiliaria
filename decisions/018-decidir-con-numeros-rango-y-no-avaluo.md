@@ -62,7 +62,9 @@ data of a zone, and a monthly-payment simulator. Constraints:
    (`inn:capacidad:v1`, like favorites): the mockup said «it is not saved», the product now says «it does **not
    leave your phone**». It filters `/buscar` through `max=<maximum price>` (a price, not an income), shows on each
    listing «≈ $X a month · fits / does not fit your capacity», and prefills the maximum price of a new alert. **No
-   request ever carries the income**; an e2e intercepts every request and looks for it.
+   request ever carries the income**; an e2e intercepts every request and looks for it. *Known limit (noted in S16):*
+   the maximum price is derived from the income, so whoever sees a `/buscar?max=…` URL (in the server's access log, or a
+   link the person shares by hand) can infer its order of magnitude. The app never shares that URL on its own.
 8. **Reads, not writes.** Migration 14 is additive: the `tasas_vivienda` table (closed, RLS without policies),
    `tasa_vivienda()` (public: an open-data rate is not personal data), `guardar_tasa_vivienda()` (server only) and
    `comparables_precio(operation, type, localidad)` (public: reuses `inmuebles_que_cumplen`, the same visibility

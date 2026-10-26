@@ -38,6 +38,15 @@ const ATRIBUTOS_VISIBLES = new Set([
   "placeholder",
   "label",
   "hint",
+  // S16 (deuda del S5): las props de texto de los componentes propios (en español, como el resto de la app).
+  "etiqueta",
+  "titulo",
+  "texto",
+  "mensaje",
+  "ayuda",
+  "error",
+  "aviso",
+  "descripcion",
 ]);
 
 // Claves de objeto que en esta app guardan texto de la interfaz.
@@ -232,6 +241,19 @@ export function barrer(
         texto = textoEstatico(ini.expression);
       }
       if (texto !== null && esVisible(texto)) agregar(nodo, "atributo", texto);
+    }
+    // S16 (deuda del S5): const AVISO = "Guardado con éxito" en un .tsx (fuera de toda función): una frase de dos palabras o
+    // más que no es una lista de clases se pintará en algún lado.
+    if (
+      esTsx &&
+      ts.isVariableDeclaration(nodo) &&
+      ts.isSourceFile(nodo.parent.parent.parent) &&
+      nodo.initializer
+    ) {
+      const texto = textoEstatico(nodo.initializer);
+      if (texto !== null && esVisible(texto) && palabras(texto) >= 2) {
+        agregar(nodo, "texto-jsx", texto);
+      }
     }
     // export const metadata = { title: "…" }: el título y la descripción dependen del idioma, así
     // que deben salir de `generateMetadata`.

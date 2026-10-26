@@ -15,6 +15,7 @@ describe("barrido de literales — lo que DEBE marcar", () => {
     // S16 (deuda del S5): las ramas de un ternario o de un `&&` que se pintan como texto.
     ["rama de un ternario", jsx('<p>{abierto ? "Cerrar" : t.abrir}</p>'), "texto-jsx"],
     ["rama de un &&", jsx('<p>{vacio && "No hay nada"}</p>'), "texto-jsx"],
+    ["constante con una frase en un .tsx", 'const AVISO = "Guardado con éxito";', "texto-jsx"],
     ["plantilla con parte fija", jsx("<p>{`Foto ${1}`}</p>"), "texto-jsx"],
     ["aria-label literal", jsx('<button aria-label="Cerrar" />'), "atributo"],
     ["alt literal", jsx('<img alt="Fachada" src="/x.png" />'), "atributo"],
@@ -29,6 +30,7 @@ describe("barrido de literales — lo que DEBE marcar", () => {
       "atributo",
     ],
     ["hint literal", jsx('<Campo hint="Tu localidad" />'), "atributo"],
+    ["prop de texto de un componente propio", jsx('<Aviso texto="Guardado con éxito" />'), "atributo"],
     [
       "metadata exportada",
       'export const metadata = { title: "Hola" };',

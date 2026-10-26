@@ -288,6 +288,30 @@ test("el mapa: dibujar una zona de 3 esquinas filtra la lista y la URL recibe zo
   await expect(page).not.toHaveURL(/zona=/);
 });
 
+test("el mapa con teclado: las flechas mueven el mapa y cada esquina cae en la cruz del centro", async ({
+  page,
+}) => {
+  await estiloVacio(page);
+  await page.goto("/buscar");
+  await abrirMapa(page);
+  await expect(page.locator('[data-mapa-listo="true"]')).toBeVisible({
+    timeout: 30000,
+  });
+  await page.getByRole("button", { name: /Dibujar zona/ }).click();
+  const lienzo = page.locator("canvas.maplibregl-canvas");
+  const esquina = page.getByRole("button", { name: "Esquina en la cruz" });
+  // Tres esquinas, moviendo el mapa con el teclado entre una y otra (sin un solo clic sobre el lienzo).
+  for (const flecha of ["ArrowRight", "ArrowDown", ""]) {
+    await esquina.press("Enter");
+    if (!flecha) break;
+    await lienzo.focus();
+    for (let i = 0; i < 2; i++) await lienzo.press(flecha);
+  }
+  await expect(page.getByText("3 esquinas marcadas")).toBeVisible();
+  await page.getByRole("button", { name: "Listo" }).press("Enter");
+  await expect(page).toHaveURL(/zona=/);
+});
+
 test("el mapa caído no tumba la búsqueda: aviso, lista viva y reintentar", async ({
   page,
 }) => {

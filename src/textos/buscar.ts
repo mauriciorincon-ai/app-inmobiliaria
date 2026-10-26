@@ -70,6 +70,13 @@ export const BUSCAR = {
       en: "Tap the map to mark the corners of your area (at least 3).",
     },
     puntos: { es: "{n} esquinas marcadas", en: "{n} corners marked" },
+    // S16 — dibujar sin tocar el mapa (teclado o lector de pantalla): las flechas mueven el mapa y el botón pone la esquina en
+    // la cruz del centro.
+    esquinaCentro: { es: "Esquina en la cruz", en: "Corner at the cross" },
+    guiaTeclado: {
+      es: "Con teclado: mueve el mapa con las flechas y pon cada esquina en la cruz del centro.",
+      en: "With a keyboard: move the map with the arrow keys and drop each corner on the cross in the middle.",
+    },
     cargando: { es: "Cargando el mapa…", en: "Loading the map…" },
     atribucionCatastro: {
       es: "Barrios: Catastro Bogotá (CC BY 4.0)",

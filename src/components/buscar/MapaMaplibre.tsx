@@ -303,6 +303,15 @@ export default function MapaMaplibre({
     if (cancelar) setPuntos([]);
   }
 
+  // La esquina en el centro del mapa: el camino del teclado (las flechas mueven el mapa; deuda del S6).
+  function esquinaEnCentro() {
+    const m = mapa.current;
+    if (!m) return;
+    const c = m.getCenter();
+    setAviso(null);
+    setPuntos((prev) => [...prev, { lat: c.lat, lng: c.lng }]);
+  }
+
   function listoClick() {
     const veredicto = validarZona(puntos);
     if (!veredicto.ok) {
@@ -360,15 +369,32 @@ export default function MapaMaplibre({
       </div>
 
       {dibujando && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-purple-600"
+        >
+          +
+        </span>
+      )}
+
+      {dibujando && (
         <div
           role="status"
           className="absolute inset-x-3 top-16 z-10 rounded-2xl bg-white p-3 shadow-card"
         >
           <p className="text-sm font-semibold text-ink">{t.guia}</p>
-          <div className="mt-2 flex items-center justify-between gap-3">
+          <p className="mt-1 text-xs text-mute">{t.guiaTeclado}</p>
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
             <span className="text-xs text-mute">
               {rellenar(t.puntos, { n: puntos.length })}
             </span>
+            <button
+              type="button"
+              onClick={esquinaEnCentro}
+              className="rounded-full border border-purple-200 bg-white px-4 py-1.5 text-sm font-semibold text-purple-600"
+            >
+              {t.esquinaCentro}
+            </button>
             <button
               type="button"
               onClick={listoClick}

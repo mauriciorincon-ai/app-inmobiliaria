@@ -15,7 +15,6 @@ export const MENSAJES = {
     es: "Hola {nombre}, te saludamos de Innmobiliaria. Tu inmueble ya está publicado como fundador. Ahora puedes completarlo con fotos y descripción para que luzca mejor — entra desde este enlace (es solo tuyo, guárdalo): {link}",
     en: "Hi {nombre}, this is Innmobiliaria. Your property is already listed as a founding listing. You can now complete it with photos and a description so it looks its best — open it from this link (it's yours alone, keep it safe): {link}",
   },
-  sinNombre: { es: "hola", en: "there" },
   // S15 — lo que el operador le escribe al dueño desde la cola antifraude. Sin acusar: dice qué pasa y qué sigue.
   // `{nombre}` es el primer nombre; `{inmueble}`, «tu apartamento en El Retiro».
   pedirCtl: {

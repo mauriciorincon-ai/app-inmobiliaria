@@ -2,7 +2,11 @@
 // para abrirlo en el WhatsApp del operador. La app no envía nada sola. La redacción vive en `src/textos/mensajes.ts`.
 import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma, rellenar } from "@/i18n/textos";
-import { construirWaMe } from "@/engine/format/whatsapp";
+import {
+  construirWaMe,
+  primerNombreDe,
+  saludoSinNombre,
+} from "@/engine/format/whatsapp";
 import { COMUN } from "@/textos/comun";
 import { MENSAJES } from "@/textos/mensajes";
 
@@ -24,8 +28,7 @@ export function mensajeAlDueno(
 ): string {
   const idioma = dueno.idioma;
   const tipos: Record<string, string> = enIdioma(COMUN.dominio.tipo, idioma);
-  const primerNombre =
-    dueno.nombre.trim().split(/\s+/)[0] || enIdioma(MENSAJES.sinNombre, idioma);
+  const primerNombre = primerNombreDe(dueno.nombre);
   const inmueble = rellenar(enIdioma(MENSAJES.inmueble, idioma), {
     // «tu otro en …» no se lee: un tipo «otro» se nombra «inmueble».
     tipo: (anuncio.tipo !== "otro" && tipos[anuncio.tipo]
@@ -34,7 +37,7 @@ export function mensajeAlDueno(
     ).toLowerCase(),
     barrio: anuncio.barrio,
   });
-  return rellenar(enIdioma(MENSAJES[clave], idioma), {
+  return rellenar(saludoSinNombre(enIdioma(MENSAJES[clave], idioma), primerNombre), {
     ...extra,
     nombre: primerNombre,
     inmueble,

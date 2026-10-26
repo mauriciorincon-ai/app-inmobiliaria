@@ -38,8 +38,8 @@ export const PRIVACIDAD = {
       en: "What data we collect and why",
     },
     texto: {
-      es: "Recogemos únicamente lo necesario para registrar tu inmueble y contactarte: tu nombre, tu número de WhatsApp, tu ciudad y los datos básicos del inmueble (tipo, zona, área, habitaciones y precio esperado). Los usamos para que el equipo de Innmobiliaria pueda escribirte a mano por WhatsApp sobre tu publicación y las siguientes etapas hacia el lanzamiento; Innmobiliaria no envía mensajes automáticos por WhatsApp. No los vendemos ni los compartimos con terceros con fines comerciales.",
-      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, locality, size, bedrooms and expected price). We use them so the Innmobiliaria team can write to you by hand on WhatsApp about your listing and the next stages toward launch; Innmobiliaria does not send automatic WhatsApp messages. We don't sell them or share them with third parties for commercial purposes.",
+      es: "Recogemos únicamente lo necesario para registrar tu inmueble y contactarte: tu nombre, tu número de WhatsApp, tu ciudad y los datos básicos del inmueble (tipo, zona, área, habitaciones y precio esperado). Los usamos para que el equipo de Innmobiliaria pueda escribirte a mano por WhatsApp sobre tu publicación; Innmobiliaria no envía mensajes automáticos por WhatsApp. No los vendemos ni los compartimos con terceros con fines comerciales.",
+      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, locality, size, bedrooms and expected price). We use them so the Innmobiliaria team can write to you by hand on WhatsApp about your listing; Innmobiliaria does not send automatic WhatsApp messages. We don't sell them or share them with third parties for commercial purposes.",
     },
     // Dice solo lo que el código hace: el correo del paso 3 sirve para los avisos de campaña
     // (`engine/envios/plantillas.ts`: fotos, sello, vigencia) y los envía un proveedor de correo

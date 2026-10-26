@@ -55,8 +55,8 @@ export const PUBLICAR = {
   paso2: {
     titulo: { es: "Sobre tu inmueble", en: "About your property" },
     subtitulo: {
-      es: "Solo lo básico. Las fotos llegan en la próxima etapa.",
-      en: "Just the basics. Photos come in the next stage.",
+      es: "Solo lo básico. Las fotos las subes al terminar, desde tu teléfono.",
+      en: "Just the basics. You add photos right after, from your phone.",
     },
     operacion: {
       etiqueta: {
@@ -297,13 +297,12 @@ export const PUBLICAR = {
       },
       {
         titulo: {
-          es: "Abrimos a compradores",
-          en: "We open to buyers",
+          es: "Te encuentran compradores",
+          en: "Buyers find you",
         },
-        // Sin fecha: no hay una fecha comprometida (decisión del S5).
         texto: {
-          es: "Si dejaste tu correo, te avisamos cuando llegue el momento.",
-          en: "If you left your email, we'll let you know when the time comes.",
+          es: "Tu anuncio sale en la búsqueda. Si activaste el contacto, te escriben por WhatsApp los compradores que verificaron su número.",
+          en: "Your listing shows up in the search. If you turned on contact, buyers who verified their number write to you on WhatsApp.",
         },
       },
     ],

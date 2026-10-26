@@ -23,8 +23,8 @@ export const LANDING = {
     },
     subtitulo: {
       antes: {
-        es: "Publícala hoy como fundador —verificada y bien presentada— y que te espere lista el día que abramos las puertas a los compradores. Publicar tu inmueble ",
-        en: "List it today as a founding seller — verified and well presented — so it's ready the day we open the doors to buyers. Listing your property ",
+        es: "Publícala hoy como fundador —verificada y bien presentada— para que los compradores la encuentren y te escriban directo. Publicar tu inmueble ",
+        en: "List it today as a founding seller — verified and well presented — so buyers find it and write to you directly. Listing your property ",
       },
       resaltado: { es: "es", en: "is" },
       despues: { es: " tu registro.", en: " your sign-up." },
@@ -138,8 +138,8 @@ export const LANDING = {
           en: "Describe your property",
         },
         texto: {
-          es: "Lo esencial: dónde queda, cuánto mide y cuánto esperas por él. Las fotos llegan en la siguiente etapa.",
-          en: "The essentials: where it is, how big it is and what you expect for it. Photos come in the next stage.",
+          es: "Lo esencial: dónde queda, cuánto mide y cuánto esperas por él. Las fotos las subes al terminar, desde tu teléfono.",
+          en: "The essentials: where it is, how big it is and what you expect for it. You add photos right after, from your phone.",
         },
       },
       {
@@ -148,8 +148,8 @@ export const LANDING = {
           en: "Done: you're registered",
         },
         texto: {
-          es: "Tu inmueble queda publicado como fundador. Si dejaste tu correo, te avisamos en cada paso hacia el lanzamiento.",
-          en: "Your property is listed as a founding listing. If you left your email, we'll let you know at each step toward launch.",
+          es: "Tu inmueble queda publicado como fundador y los compradores lo encuentran en la búsqueda.",
+          en: "Your property is listed as a founding listing, and buyers find it in the search.",
         },
       },
     ],
@@ -241,8 +241,8 @@ export const LANDING = {
           en: "When can I start receiving buyers?",
         },
         a: {
-          es: "Estamos preparando la apertura a compradores y, si dejaste tu correo, te avisamos cuando llegue. Publicar hoy te deja listo y de primero.",
-          en: "We're preparing to open to buyers, and if you left your email we'll let you know when it happens. Listing today gets you ready and first in line.",
+          es: "Desde que publicas: tu anuncio sale en la búsqueda y, si activas el contacto, los compradores que verificaron su WhatsApp te escriben. Tú decides si reciben solicitudes de visita.",
+          en: "From the moment you list: your listing shows up in the search and, if you turn on contact, buyers who verified their WhatsApp write to you. You decide whether they can request visits.",
         },
       },
       {

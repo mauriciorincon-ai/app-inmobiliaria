@@ -220,6 +220,7 @@ describe("lo que el operador le escribe al dueño", () => {
       { tipo: "otro", barrio: "Usaquén" },
     );
     expect(m).toContain("tu inmueble en Usaquén");
+    expect(m).toMatch(/^Hola, te saludamos/);
   });
 
   it("el enlace abre WhatsApp al número del dueño con el texto ya escrito", () => {

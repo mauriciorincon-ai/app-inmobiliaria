@@ -43,6 +43,8 @@ export const LANDING = {
       en: "Illustration of a house",
     },
     comision: { es: "Comisión", en: "Commission" },
+    // Cero pesos con la moneda como la escribe el resto de la app en cada idioma («$» en español, «COP» en inglés).
+    cero: { es: "$0", en: "COP 0" },
     paraTi: { es: "para ti", en: "for you" },
   },
 

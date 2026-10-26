@@ -31,7 +31,7 @@ export default function Navbar({ lang }: { lang: Idioma }) {
             {t.nav.buscar}
           </Link>
           <SelectorIdioma idioma={lang} etiqueta={t.selector.etiqueta} />
-          <Boton href="/publicar" className="!px-5 !py-2.5 text-sm">
+          <Boton href="/publicar" className="!px-5 !py-2.5 text-sm whitespace-nowrap">
             {t.nav.publicar}
           </Boton>
         </div>

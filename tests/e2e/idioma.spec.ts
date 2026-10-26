@@ -36,6 +36,11 @@ test.describe("reescrituras de idioma (HTTP)", () => {
       "en",
     ],
     [
+      "navegador en francés que prefiere español a inglés: español",
+      { "Accept-Language": "fr,es;q=0.8,en;q=0.5" },
+      "es-CO",
+    ],
+    [
       "navegador en portugués sin inglés: español (el mercado es Bogotá)",
       { "Accept-Language": "pt-BR,pt;q=0.9" },
       "es-CO",

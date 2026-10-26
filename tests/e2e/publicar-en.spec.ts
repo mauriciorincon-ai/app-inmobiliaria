@@ -49,7 +49,7 @@ test.describe("publicar en inglés", () => {
     await page.getByLabel("Property type").selectOption("apartaestudio");
     await expect(
       page.getByRole("option", {
-        name: "Studio apartment (apartaestudio)",
+        name: "Studio (apartaestudio)",
       }),
     ).toBeAttached();
     await page.getByLabel("Locality (localidad)").selectOption("Chapinero");
@@ -66,7 +66,7 @@ test.describe("publicar en inglés", () => {
     ).toBeVisible();
     await expect(page.getByText("COP 420,000,000")).toBeVisible();
     await expect(
-      page.getByText("Studio apartment (apartaestudio)").first(),
+      page.getByText("Studio (apartaestudio)").first(),
     ).toBeVisible();
     await page.getByRole("checkbox").check();
     await page.getByRole("button", { name: "List my property" }).click();

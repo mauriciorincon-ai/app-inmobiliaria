@@ -60,7 +60,7 @@ export const COMUN = {
       casa: { es: "Casa", en: "House" },
       apartaestudio: {
         es: "Apartaestudio",
-        en: "Studio apartment (apartaestudio)",
+        en: "Studio (apartaestudio)",
       },
       otro: { es: "Otro", en: "Other" },
       inmueble: { es: "Inmueble", en: "Property" },

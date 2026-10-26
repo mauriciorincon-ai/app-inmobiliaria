@@ -122,7 +122,7 @@ export default function Hero({ lang }: { lang: Idioma }) {
           <div className="flota absolute -bottom-3 -left-2 rotate-[-2.5deg] rounded-2xl bg-white px-5 py-3 shadow-card">
             <p className="text-xs font-medium text-mute">{t.comision}</p>
             <p className="text-xl font-bold text-ink">
-              $0{" "}
+              {t.cero}{" "}
               <span className="text-sm font-medium text-purple-600">
                 {t.paraTi}
               </span>

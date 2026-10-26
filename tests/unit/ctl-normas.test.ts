@@ -32,6 +32,8 @@ const NOMBRE: Record<IdNormaCtl, Texto> = {
   },
   ley_258_1996: { es: "Ley 258 de 1996", en: "Law 258 of 1996" },
   ley_70_1931: { es: "Ley 70 de 1931", en: "Law 70 of 1931" },
+  ley_1537_2012: { es: "Ley 1537 de 2012", en: "Law 1537 of 2012" },
+  ley_2079_2021: { es: "Ley 2079 de 2021", en: "Law 2079 of 2021" },
 };
 
 const ordenar = (xs: readonly number[]) => [...xs].sort((a, b) => a - b);

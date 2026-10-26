@@ -43,6 +43,7 @@ describe("los certificados sintéticos", () => {
         anotacion: 2,
         fecha: "2010-01-11",
         codigo: "0204",
+        codigoFueraDeCatalogo: false,
         vigente: false,
         canceladaPor: 3,
       },
@@ -51,6 +52,7 @@ describe("los certificados sintéticos", () => {
         anotacion: 4,
         fecha: "2021-03-03",
         codigo: "0205",
+        codigoFueraDeCatalogo: false,
         vigente: true,
         canceladaPor: null,
       },
@@ -71,7 +73,7 @@ describe("los certificados sintéticos", () => {
     expect(l.diasDesdeExpedicion).toBeNull();
   });
 
-  it("falsa tradición, patrimonio de familia (uno cancelado), una anotación desconocida y una referencia rota; formato con tildes", () => {
+  it("falsa tradición, patrimonio de familia (uno cancelado), un código fuera del catálogo y una referencia rota; formato con tildes", () => {
     const l = leido(leerCtl(fixture("patrimonio-y-falsa-tradicion"), HOY));
     expect(l.anotaciones).toBe(6);
     expect(
@@ -79,15 +81,13 @@ describe("los certificados sintéticos", () => {
     ).toEqual([
       ["falsa_tradicion", 1, true, null],
       ["patrimonio_familia", 2, true, null],
+      // S16: el 0999 no está en el catálogo de 2016; su grupo (09, «otros») lo lee como una limitación que se pregunta, y la
+      // marca dice que el código no está en el catálogo.
+      ["limitacion_dominio", 3, true, null],
       ["patrimonio_familia", 4, false, 5],
     ]);
-    expect(l.noReconocidas).toEqual([
-      {
-        anotacion: 3,
-        codigo: "0999",
-        especificacion: "0999 ACTO DE PRUEBA QUE EL LECTOR NO CONOCE",
-      },
-    ]);
+    expect(l.marcas[2].codigoFueraDeCatalogo).toBe(true);
+    expect(l.noReconocidas).toEqual([]);
     expect(l.referenciasRotas).toEqual([6]);
     expect(l.marcas[0].fecha).toBe("1999-04-04");
     expect(l.diasDesdeExpedicion).toBe(10);
@@ -221,6 +221,7 @@ describe("los bordes del texto", () => {
         anotacion: 1,
         fecha: null,
         codigo: "0315",
+        codigoFueraDeCatalogo: false,
         vigente: true,
         canceladaPor: null,
       },
@@ -247,5 +248,55 @@ describe("los bordes del texto", () => {
     );
     expect(fechaDeExpedicion("Impreso el 3 de Brumario de 2026")).toBeNull();
     expect(fechaDeExpedicion("sin fecha")).toBeNull();
+  });
+});
+
+describe("¿está completo el texto? (S16)", () => {
+  const anotacion = (n: number) =>
+    `ANOTACION: Nro ${n} Fecha: 01-02-2020\nESPECIFICACION: 0125 COMPRAVENTA`;
+  const cierre = (total: number) => `NRO TOTAL DE ANOTACIONES: *${total}*`;
+
+  it("cuadra con el total impreso y la numeración: completo", () => {
+    const l = leido(leerCtl([1, 2, 3].map(anotacion).join("\n") + "\n" + cierre(3), HOY));
+    expect(l.completitud).toEqual({ estado: "si", total: 3, faltan: [] });
+  });
+
+  it("le falta una anotación (la del medio o la última): incompleto, y dice cuáles", () => {
+    const sinMedio = leido(leerCtl([1, 3].map(anotacion).join("\n") + "\n" + cierre(3), HOY));
+    expect(sinMedio.completitud).toEqual({ estado: "no", total: 3, faltan: [2] });
+    const sinUltima = leido(leerCtl([1, 2].map(anotacion).join("\n") + "\n" + cierre(3), HOY));
+    expect(sinUltima.completitud).toEqual({ estado: "no", total: 3, faltan: [3] });
+  });
+
+  it("sin el total impreso: si la numeración salta es incompleto; si no, no se puede comprobar", () => {
+    expect(leido(leerCtl([1, 3].map(anotacion).join("\n"), HOY)).completitud).toEqual({
+      estado: "no",
+      total: null,
+      faltan: [2],
+    });
+    expect(leido(leerCtl([1, 2].map(anotacion).join("\n"), HOY)).completitud).toEqual({
+      estado: "sin_total",
+      total: null,
+      faltan: [],
+    });
+  });
+});
+
+describe("sin código decide la palabra, y como palabra (S16)", () => {
+  const marcaDe = (especificacion: string) => {
+    const l = leido(leerCtl(`ANOTACION: Nro 1 Fecha: 01-02-2020\nESPECIFICACION: ${especificacion}`, HOY));
+    return [l.marcas.map((m) => [m.tipo, m.codigo]), l.noReconocidas.length];
+  };
+  it("«hipotecada», «hipotecarse» o «hipotecaria» no son una hipoteca; «hipoteca» sí", () => {
+    expect(marcaDe("ADJUDICACION DE LA COSA HIPOTECADA")).toEqual([[], 0]);
+    expect(marcaDe("HIPOTECA ABIERTA SIN LIMITE DE CUANTIA")).toEqual([[["hipoteca", null]], 0]);
+    expect(marcaDe("EMBARGO EJECUTIVO CON ACCION REAL HIPOTECARIA")).toEqual([[["embargo", null]], 0]);
+  });
+  it("con código manda el grupo: un 04 con «hipotecaria» es un embargo y un 02 sin «hipoteca» es otro gravamen", () => {
+    expect(marcaDe("MEDIDA CAUTELAR: 0429 EMBARGO EJECUTIVO CON ACCION REAL HIPOTECARIA")).toEqual([
+      [["embargo", "0429"]],
+      0,
+    ]);
+    expect(marcaDe("GRAVAMEN: 0212 VALORIZACION")).toEqual([[["gravamen", "0212"]], 0]);
   });
 });

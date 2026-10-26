@@ -17,7 +17,7 @@ import {
 } from "@/engine/vivienda-nueva/vista";
 import type { Idioma } from "@/i18n/idiomas";
 import { rellenar } from "@/i18n/textos";
-import { TARIFAS, type LecturaNuevos } from "@/lib/vivienda-nueva/datos";
+import { tarifasPara, type LecturaNuevos } from "@/lib/vivienda-nueva/datos";
 
 type Entrada = Record<string, string | string[] | undefined>;
 
@@ -80,9 +80,10 @@ export default function BuscarNuevos({
 
   const { edicion, proyectos } = lectura.leida;
   const vigencia = edicionVigente([edicion], hoy);
-  const indice = vistaIndice(proyectos, TARIFAS);
-  const vista = vistaLista(proyectos, TARIFAS, filtros);
-  const topeVisBogota = topeVis("Bogotá", TARIFAS);
+  const tarifas = tarifasPara(hoy);
+  const indice = vistaIndice(proyectos, tarifas);
+  const vista = vistaLista(proyectos, tarifas, filtros);
+  const topeVisBogota = topeVis("Bogotá", tarifas);
   return (
     <>
       <h1 className="text-2xl font-extrabold tracking-tight text-ink">

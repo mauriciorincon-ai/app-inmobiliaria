@@ -9,6 +9,7 @@ import {
 import {
   derechosNotariales,
   derechosRegistro,
+  tarifasDelAnio,
   topeVis,
   type TarifasEscrituracion,
 } from "../../../src/engine/vivienda-nueva/escrituracion";
@@ -269,6 +270,22 @@ describe("precio verdadero", () => {
     const r = precioVerdadero(entrada({ ciudad: ILEGIBLE }), tarifas);
     if (r.estado !== "calculado") throw new Error("debía calcular");
     expect(ids(r.faltantes)).toContain("supera_tope_vis");
+  });
+
+  it("«en su año» (S16): el 31 de diciembre valen las tarifas del año; el 1 de enero siguiente se nombran sin monto", () => {
+    expect(tarifas.vigencia).toBe(2026);
+    const ultimoDia = precioVerdadero(entrada(), tarifasDelAnio(tarifas, "2026-12-31"));
+    const primerDia = precioVerdadero(entrada(), tarifasDelAnio(tarifas, "2027-01-01"));
+    if (ultimoDia.estado !== "calculado" || primerDia.estado !== "calculado") {
+      throw new Error("debía calcular");
+    }
+    expect(ids(ultimoDia.partidas)).toContain("derechos_registro");
+    expect(ids(primerDia.partidas)).toEqual(["precio_desde", "parqueadero"]);
+    for (const id of ["derechos_registro", "derechos_notariales"]) {
+      expect(primerDia.faltantes.find((f) => f.id === id)).toEqual({ id });
+    }
+    // Las mismas tarifas, no una copia, mientras valen.
+    expect(tarifasDelAnio(tarifas, "2026-06-01")).toBe(tarifas);
   });
 
   it("si las tarifas no están vigentes, el «al menos» es el precio y el parqueadero; registro y notaría se NOMBRAN sin monto", () => {

@@ -134,7 +134,9 @@ function naturalezaPorGrupo(especificacion: string, grupo: string): Naturaleza {
       }
       if (ES_VIVIENDA_FAMILIAR.test(especificacion)) return "vivienda_familiar";
       if (ES_PATRIMONIO.test(especificacion)) return "patrimonio_familia";
-      return ES_NEUTRA_03.test(especificacion) ? "neutra" : "limitacion_dominio";
+      return ES_NEUTRA_03.test(especificacion)
+        ? "neutra"
+        : "limitacion_dominio";
     case "04":
       // Un embargo «con acción real hipotecaria» o «de derechos y acciones» es un embargo: el grupo manda.
       return ES_EMBARGO.test(especificacion) ? "embargo" : "medida_cautelar";
@@ -147,10 +149,11 @@ function naturalezaPorGrupo(especificacion: string, grupo: string): Naturaleza {
       // Una cancelación PARCIAL deja viva parte de la anotación: no la da por cancelada, y como no sabemos cuánto queda, la
       // lista como «no reconocida» en vez de callarla.
       return ES_PARCIAL.test(especificacion) ? "desconocida" : "cancelacion";
-    case "09":
-      return ES_NEUTRA_09.test(especificacion) ? "neutra" : "limitacion_dominio";
     default:
-      return "desconocida";
+      // «09 otros»: `CODIGO` solo deja pasar los grupos 01 a 09, así que el resto del switch es este.
+      return ES_NEUTRA_09.test(especificacion)
+        ? "neutra"
+        : "limitacion_dominio";
   }
 }
 
@@ -193,7 +196,7 @@ function fechaIso(m: RegExpExecArray | null): string | null {
 }
 
 function numerosDe(lista: string): number[] {
-  return (lista.match(/\d{1,4}/g) ?? []).map(Number);
+  return [...lista.matchAll(/\d{1,4}/g)].map((x) => Number(x[0]));
 }
 
 /** Las anotaciones del texto, en el orden en que aparecen. */
@@ -203,11 +206,8 @@ export function partirAnotaciones(texto: string): Anotacion[] {
   const cuerpo = fin >= 0 ? t.slice(0, fin) : t;
   const inicios = [...cuerpo.matchAll(INICIO_ANOTACION)];
   return inicios.map((m, i) => {
-    const desde = m.index ?? 0;
-    const hasta =
-      i + 1 < inicios.length
-        ? (inicios[i + 1].index ?? cuerpo.length)
-        : cuerpo.length;
+    const desde = m.index;
+    const hasta = i + 1 < inicios.length ? inicios[i + 1].index : cuerpo.length;
     const bloque = cuerpo.slice(desde, hasta);
     const especificacion = (ESPECIFICACION.exec(bloque)?.[1] ?? "").trim();
     const codigo = CODIGO.exec(especificacion)?.[1] ?? null;
@@ -335,7 +335,10 @@ export function leerCtl(texto: string, hoy: string): Lectura {
 
   const expedicion = fechaDeExpedicion(texto);
   return {
-    completitud: completitudDe(texto, anotaciones.map((a) => a.numero)),
+    completitud: completitudDe(
+      texto,
+      anotaciones.map((a) => a.numero),
+    ),
     estado: "leido",
     anotaciones: anotaciones.length,
     marcas,

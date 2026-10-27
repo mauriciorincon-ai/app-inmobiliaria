@@ -299,4 +299,20 @@ describe("sin código decide la palabra, y como palabra (S16)", () => {
     ]);
     expect(marcaDe("GRAVAMEN: 0212 VALORIZACION")).toEqual([[["gravamen", "0212"]], 0]);
   });
+  it("sin código: «prohibición de transferencia» es su marca y una cancelación parcial no se entiende; un 05 es limitación, fuera del catálogo", () => {
+    expect(marcaDe("PROHIBICION DE TRANSFERENCIA")).toEqual([[["prohibicion_transferencia", null]], 0]);
+    expect(marcaDe("CANCELACION PARCIAL HIPOTECA")).toEqual([[], 1]);
+    expect(marcaDe("LIMITACION AL DOMINIO: 0501 ACTO DEL GRUPO CINCO")).toEqual([[["limitacion_dominio", "0501"]], 0]);
+    const l = leido(leerCtl("ANOTACION: Nro 1 Fecha: 01-02-2020\nESPECIFICACION: 0501 ACTO DEL GRUPO CINCO", HOY));
+    expect(l.marcas[0].codigoFueraDeCatalogo).toBe(true);
+  });
+  it("sin código, cada palabra con su marca; una cancelación completa no marca nada y una anotación sin especificación no se entiende", () => {
+    expect(marcaDe("CANCELACION HIPOTECA")).toEqual([[], 0]);
+    expect(marcaDe("COMPRAVENTA DERECHOS Y ACCIONES")).toEqual([[["falsa_tradicion", null]], 0]);
+    expect(marcaDe("AFECTACION A VIVIENDA FAMILIAR")).toEqual([[["vivienda_familiar", null]], 0]);
+    expect(marcaDe("CONSTITUCION PATRIMONIO DE FAMILIA")).toEqual([[["patrimonio_familia", null]], 0]);
+    expect(marcaDe("DEMANDA EN PROCESO DE PERTENENCIA")).toEqual([[["medida_cautelar", null]], 0]);
+    const sinEspecificacion = leido(leerCtl("ANOTACION: Nro 1 Fecha: 01-02-2020\nDE: PERSONA A", HOY));
+    expect(sinEspecificacion.noReconocidas).toEqual([{ anotacion: 1, codigo: null, especificacion: "" }]);
+  });
 });

@@ -15,7 +15,7 @@ busca y mira los anuncios vivos, sin crear cuenta; desde el Sprint 007, si verif
 escribe al dueño con un toque; desde el Sprint 008 también se identifica con su cédula y pide una
 visita; desde el Sprint 009 también guarda favoritos, compara, comparte listas con notas y recibe
 alertas por correo; desde el Sprint 010 también decide con números: ve si un precio está en línea con
-su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad; desde el Sprint 013 la compara con un usado, ve qué subsidios le sirven y pide visitar la sala de ventas; desde el Sprint 014 también ve el papeleo de la compra: cuánto paga cada parte, qué pedir y cuánto tarda cada paso; desde el Sprint 015 también puede reportar un anuncio que le parezca sospechoso) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
+su zona y calcula cuánto puede pagar; desde el Sprint 012 también mira vivienda nueva con lo que paga de verdad; desde el Sprint 013 la compara con un usado, ve qué subsidios le sirven y pide visitar la sala de ventas; desde el Sprint 014 también ve el papeleo de la compra: cuánto paga cada parte, qué pedir y cuánto tarda cada paso; desde el Sprint 015 también puede reportar un anuncio que le parezca sospechoso; desde el Sprint 016 todo esto queda en papel como producto completo: la guía de prueba trae el ensayo general de las tres rutas) y el del **operador** (el equipo de Innmobiliaria, que ve los registros en un
 panel privado). El dueño decide si los compradores verificados pueden escribirle y recibir
 solicitudes de visita.
 
@@ -27,7 +27,9 @@ solicitudes de visita.
   tienes **Guardados**, **Alertas** y **Herramientas** (en el teléfono, una barra abajo).
 - **Operador:** entra a `/operador`, inicia sesión con el correo y la contraseña del equipo.
 
-## Español e inglés (toda la app) · desde Sprint 005
+## Español e inglés
+
+### Español e inglés en toda la app · desde Sprint 005
 
 - **Qué hace:** toda la app —la página principal, el registro, la confirmación, tu anuncio, la
   ficha pública, la renovación, la política de privacidad y el panel del equipo— existe en
@@ -49,7 +51,9 @@ solicitudes de visita.
   `COP 420,000,000` en inglés). Un navegador en otro idioma (francés, portugués…) que no acepte
   inglés ve el español, porque el mercado es Bogotá.
 
-## Buscar inmuebles (el comprador) · desde Sprint 006
+## Buscar inmuebles (el comprador)
+
+### Búsqueda con filtros y mapa de zona dibujada · desde Sprint 006
 
 - **Qué hace:** deja buscar los anuncios **vivos** de dueños directos en Bogotá, por filtros o
   dibujando tu zona en un mapa. No pide cuenta ni datos.
@@ -61,7 +65,8 @@ solicitudes de visita.
      activo aparece como una pastilla con una ✕ que lo quita.
   3. **Dibujar tu zona:** en el mapa toca **"Dibujar zona"**, marca al menos 3 esquinas tocando el
      mapa y toca **"Listo"**: la lista se queda solo con lo que está dentro. **"Borrar zona"** la
-     quita. En el teléfono la lista va primero; el mapa se abre con el botón **"Mapa"**.
+     quita. **Sin tocar el mapa:** mueve el mapa con las flechas del teclado, pon cada esquina en la cruz del
+     centro con **"Esquina en la cruz"** y toca **"Listo"**. En el teléfono la lista va primero; el mapa se abre con el botón **"Mapa"**.
   4. **Cada tarjeta** muestra el precio, el tipo y el barrio, el área, las habitaciones, el sello
      (⭐ con la fecha del CTL, "re-verificación pendiente" o "fundador") y **"Vivo hace N días"**.
      Tócala para abrir la ficha.
@@ -77,8 +82,19 @@ solicitudes de visita.
   avisos de tu búsqueda, mira **«Guardar y avisar»** abajo. Para escribirle a un dueño, mira
   **«Escribirle a un dueño»** abajo. Los mapas usan datos de OpenStreetMap
   (calles) y de Catastro Bogotá (barrios, licencia CC BY 4.0).
+### Sello del propietario visible para el comprador · desde Sprint 006
 
-## Escribirle a un dueño (el comprador verifica su WhatsApp) · desde Sprint 007
+- **Qué hace:** en cada tarjeta y en cada ficha ves **un solo sello** del dueño, con símbolo y texto (nunca solo color): **⭐ Propietario verificado** con
+  la **fecha de su CTL**, **«re-verificación pendiente»** o **«Fundador: aún sin CTL verificado»**. Es el único sello: no hay colección de insignias.
+- **Qué significa:** el ⭐ lo gana el dueño al mostrarle al equipo un certificado de tradición y libertad (CTL) de **30 días o menos**; el equipo lo ve y
+  **jamás se guarda**, solo la matrícula y la fecha. «Re-verificación pendiente» es un dueño que se verificó antes de que el sello mostrara la fecha, o
+  a quien el equipo le pidió un CTL nuevo (ver «Antifraude»); con un CTL nuevo vuelve a mostrarse completo. «Fundador» es el nivel sin papeles.
+- **Limitaciones conocidas:** el sello dice que el dueño mostró un CTL en esa fecha, **no que el inmueble esté libre de cargas**: eso lo dice el CTL, y
+  para leerlo está el lector de «Papeleo». El sello solo lo escribe el equipo al registrar el CTL, nunca la app sola.
+
+## Escribirle a un dueño (el comprador verifica su WhatsApp)
+
+### Comprador verificado por WhatsApp · desde Sprint 007
 
 - **Qué hace:** antes de escribirle a un dueño, pruebas que tu WhatsApp es tuyo. Así el dueño sabe
   que le escribe una persona real con un número real. Verificar el WhatsApp **no prueba quién
@@ -93,18 +109,22 @@ solicitudes de visita.
      sin cambiarlo**. Vuelve a la página: en unos segundos dice **«Tu WhatsApp quedó verificado»**.
      Si WhatsApp no se abrió, toca **«No se abrió WhatsApp»**: ahí está el número de Innmobiliaria y
      un botón para copiar el código.
-  4. De vuelta en la ficha, **«Escribirle por WhatsApp»** te muestra el mensaje que se abrirá y
-     **«Abrir WhatsApp»** abre el chat con el dueño. El contacto queda registrado.
-- **Qué ve el dueño:** en **Mi anuncio**, **«Compradores que abrieron tu chat»**: tu nombre, los
-  últimos 4 dígitos de tu número y la fecha. Tu número completo no sale en ninguna página pública.
 - **Reglas del código:** dura **10 minutos**, sirve **una sola vez** y debe llegar **desde el mismo
   número** que escribiste (si llega de otro, la página lo dice y pides uno nuevo). Si se vence, te
   damos otro. La verificación queda en este navegador: no te la volvemos a pedir.
-- **Limitaciones conocidas:** por ahora solo celulares de Colombia. Si borras los datos del
-  navegador, hay que verificar de nuevo. Si el dueño no activó el contacto, la ficha lo dice y no
-  hay botón. Un anuncio vencido ya no recibe contactos.
+- **Limitaciones conocidas:** solo celulares de Colombia. Si borras los datos del navegador, hay que verificar de nuevo.
+### Contacto por WhatsApp con un toque · desde Sprint 007
 
-## Identificarte, pedir una visita y agendarla · desde Sprint 008
+- **Qué hace:** con tu WhatsApp verificado, un toque abre el chat con el dueño con un mensaje ya escrito sobre el anuncio; el contacto queda registrado
+  para los dos.
+- **Cómo se usa:** en la ficha de un anuncio toca **«Escribirle por WhatsApp»** (si aún no verificaste, te lleva a verificarlo; ver arriba) →
+  1. **«Escribirle por WhatsApp»** te muestra el mensaje que se abrirá y
+     **«Abrir WhatsApp»** abre el chat con el dueño. El contacto queda registrado.
+- **Qué ve el dueño:** en **Mi anuncio**, **«Compradores que abrieron tu chat»**: tu nombre, los
+  últimos 4 dígitos de tu número y la fecha. Tu número completo no sale en ninguna página pública.
+- **Limitaciones conocidas:** si el dueño no activó el contacto, la ficha lo dice y no hay botón. Un anuncio vencido ya no recibe contactos.
+
+## Identificarte, pedir una visita y agendarla
 
 - **Qué hace:** el comprador puede **identificarse** con su cédula (opcional), **pedir una visita** a
   un inmueble contando para qué lo busca, cuánto dice tener y cómo pagaría, y **agendarla** con el
@@ -112,19 +132,19 @@ solicitudes de visita.
   confirma uno y a los dos les llega un **recordatorio por correo el día antes**. Todas las horas son
   de Bogotá. **Innmobiliaria no envía mensajes por WhatsApp:** los avisos van por correo y la
   dirección exacta la da el dueño por su propio WhatsApp.
+### Comprador identificado (opcional) · desde Sprint 008
+
 - **Cómo se identifica el comprador:** en **`/identificarse`** (después de verificar su WhatsApp)
   escribe su número de cédula, la fecha de expedición y su nombre completo como en la cédula, acepta
   y toca **«Validar mi cédula»**. Se contrasta con la Registraduría por un proveedor. Si todo
   coincide queda **«Identificado»**; si no, se le dice cómo corregir. Tiene **3 intentos**, y si el
   servicio no responde no se le descuenta ninguno. El número de cédula y la fecha **no se guardan**:
   solo que salió bien y cuándo. Puede **borrar su identificación** cuando quiera desde la misma
-  pantalla. Por ahora, solo cédula de ciudadanía colombiana.
-- **Cómo pide la visita:** en la ficha, **«Pedir una visita»** (aparece si el dueño activó el
-  contacto) → si no ha verificado su WhatsApp, se le lleva a verificarlo → elige **para vivir** o
-  **para invertir**, su presupuesto en millones (opcional; lo declara él y no se verifica), cómo
-  pagaría (opcional), un mensaje de hasta 300 caracteres y **su correo**, que se usa solo para los
-  avisos de esa visita. Al enviar recibe el enlace a **su solicitud**, que también le llega por correo
-  y funciona desde cualquier navegador.
+  pantalla.
+- **Limitaciones conocidas:** solo cédula de ciudadanía colombiana. La validación real depende de la llave del proveedor en el servidor; sin ella,
+  «Identificarse» responde que no pudo consultar la Registraduría (el simulador es solo de desarrollo y pruebas).
+### Tarjeta del comprador para el dueño · desde Sprint 008
+
 - **Qué ve el dueño:** en **Mi anuncio → «Solicitudes de visita»**, una tarjeta por comprador con su
   nombre, los últimos 4 dígitos de su WhatsApp, si está **identificado**, para qué busca, lo que
   declaró y **«Asistió a N de M visitas»** en Innmobiliaria. **Nunca ve su correo.** Puede **proponer
@@ -134,6 +154,15 @@ solicitudes de visita.
   ella, la solicitud de quien solo verificó su WhatsApp queda **en espera** hasta que el dueño la
   acepte; quien se identificó entra directo. Quien solo verificó su WhatsApp puede seguir
   escribiéndole.
+### Agenda de visita · desde Sprint 008
+
+- **Cómo pide la visita:** en la ficha, **«Pedir una visita»** (aparece si el dueño activó el
+  contacto) → si no ha verificado su WhatsApp, se le lleva a verificarlo → elige **para vivir** o
+  **para invertir**, su presupuesto en millones (opcional; lo declara él y no se verifica), cómo
+  pagaría (opcional), un mensaje de hasta 300 caracteres y **su correo**, que se usa solo para los
+  avisos de esa visita. Hay que marcar la casilla de **autorización de datos** (Ley 1581): sin ella no se envía, y el servidor también lo exige
+  (desde el Sprint 016). Pedir, cancelar y volver a pedir tiene tope: **«Pediste muchas visitas hoy»** después de 10 solicitudes en 24 horas. Al enviar recibe el enlace a **su solicitud**, que también le llega por correo
+  y funciona desde cualquier navegador.
 - **Cómo se agenda:** el comprador abre su solicitud, elige uno de los horarios (o **«Ninguno me
   sirve»**, y el dueño propone otros) y **«Confirmar la visita»**. Desde ahí puede **«Agregar a mi
   calendario»** (baja un archivo `.ics` en hora de Bogotá) o cancelar. Solo cuando confirma, el dueño
@@ -144,12 +173,10 @@ solicitudes de visita.
   correo al publicar, no recibe avisos: ve todo al abrir **Mi anuncio**.
 - **Después de la visita:** el dueño marca **«Sí, vino»** o **«No vino»**. Lo que marca aparece en la
   tarjeta del comprador solo como un conteo; nadie ve el detalle.
-- **Limitaciones conocidas:** la validación real de cédula y el recordatorio en producción se prueban
-  en el ensayo general; hasta entonces, en producción, «Identificarse» responde que no pudo consultar la Registraduría (el simulador es solo de desarrollo y pruebas). No hay selector visual de
-  calendario: el dueño escribe la fecha y elige la hora. Si no se identifica con una cédula
-  colombiana, no puede identificarse. Un dueño sin correo no recibe avisos.
+- **Limitaciones conocidas:** el recordatorio sale con el trabajo diario del servidor y el servicio de correo. No hay selector visual de calendario: el dueño escribe la fecha y
+  elige la hora. Un dueño sin correo no recibe avisos.
 
-## Guardar y avisar: favoritos, comparar, listas y alertas · desde Sprint 009
+## Guardar y avisar: favoritos, comparar, listas y alertas
 
 - **Qué hace:** el comprador guarda anuncios con un corazón (sin cuenta), compara hasta 4, arma
   **listas** para decidir con otra persona (con notas) y recibe por **correo** un resumen diario de
@@ -157,6 +184,8 @@ solicitudes de visita.
   los avisos van por correo y, para compartir una lista, tú eliges a quién se la mandas.
 - **Navegación:** **Buscar · Guardados · Alertas** (y, desde el Sprint 010, **Herramientas**), arriba
   en el computador y como barra de abajo en el teléfono.
+### Favoritos, comparar hasta 4 y listas compartidas con notas · desde Sprint 009
+
 - **Favoritos:** toca el **corazón** de una tarjeta o de la ficha; tócalo de nuevo para quitarlo. No
   necesitas cuenta: se guardan **en este teléfono** (hasta 100). Al **verificar tu WhatsApp** pasan
   a tu cuenta, sin repetirse, y los ves desde cualquier dispositivo donde lo verifiques. Los ves en
@@ -164,8 +193,8 @@ solicitudes de visita.
 - **Comparar hasta 4:** en **Guardados → Favoritos** marca **«Comparar»** en los anuncios que quieras
   (máximo 4; el quinto avisa que hay que quitar uno) y toca **«Comparar»**. La tabla muestra una
   columna por anuncio con **precio, área, precio por m², habitaciones, el sello del dueño y cuánto
-  hace que está vivo**. En el teléfono se desliza de lado. La fila **«¿Está caro?»** llega más
-  adelante, con su propia función.
+  hace que está vivo**. En el teléfono se desliza de lado. La fila **«¿Está caro?»** dice, de cada
+  anuncio, si su precio está en rango frente a los parecidos de su zona.
 - **Listas compartidas con notas:** en **Guardados → Listas** (pide el WhatsApp verificado) crea una
   lista, agrégale anuncios de tus favoritos y toca **«Compartir por WhatsApp»**: se abre WhatsApp con
   el enlace ya escrito, **sin número** (tú eliges a quién). **Quien abre el enlace ve la lista y las
@@ -173,6 +202,8 @@ solicitudes de visita.
   **primer nombre**. Tú puedes **«Dejar de compartir»** cuando quieras y el enlace deja de funcionar
   para todos; si compartes de nuevo, el enlace anterior también deja de funcionar. Hasta 10 listas de
   hasta 30 anuncios cada una.
+### Alertas de coincidencia · desde Sprint 009
+
 - **Alertas por correo:** en **Buscar** pon tus filtros (o dibuja tu zona) y toca **«Guardar como
   alerta»**. Elige el nombre, qué quieres que te avisemos (**anuncios nuevos** y/o **bajas de
   precio**), escribe tu correo y acepta. **Te llega un correo con «Confirmar»: el enlace te lleva a
@@ -185,22 +216,23 @@ solicitudes de visita.
   «gestionar» de un correo): **pausar y reanudar**, encender o apagar **«anuncios nuevos»** y
   **«bajas de precio»** (siempre queda al menos uno) y **borrar**. Hasta 3 alertas nuevas por correo
   al día.
-- **Si eres dueño, el precio:** en **Mi anuncio → Precio** puedes cambiarlo. Si lo **bajas**, quienes
-  tienen una alerta que coincide lo reciben en su resumen; si lo subes, no avisamos a nadie. Hasta 5
+- **Si eres dueño, el precio:** en **Mi anuncio → Precio** puedes cambiarlo. Si lo **bajas un 1 % o más**,
+  quienes tienen una alerta que coincide lo reciben en su resumen; si lo subes, o la baja es menor, no avisamos a nadie. Hasta 5
   cambios por día.
 - **Limitaciones conocidas:** el aviso es **un resumen al día**, no «en cuanto aparezca». Es **solo
   por correo**. Las alertas no están en una cuenta: viven en el teléfono que las creó y en el enlace
   «gestionar» de cada correo. Hay un tope diario de correos de alertas; los correos de las visitas
-  siempre salen primero. En producción las alertas funcionan cuando están puestas las llaves del servicio de correo y del
-  servidor (se prueba en el ensayo general); mientras no lo estén, crear una alerta responde que no está
-  disponible y no se guarda nada.
+  siempre salen primero. En producción las alertas necesitan las llaves del servicio de correo y del
+  servidor; sin ellas, crear una alerta responde que no está disponible y no se guarda nada.
 
-## Decidir con números: ¿está caro?, datos de la zona y simulador · desde Sprint 010
+## Decidir con números: ¿está caro?, datos de la zona y simulador
 
 - **Qué hace:** te ayuda a decidir con números y no con corazonadas. En cada ficha ves **si el precio
   está en línea con los anuncios parecidos de su zona** y los **datos de la zona**; en
   **Herramientas** calculas **cuánto pagarías al mes**, **hasta qué precio puedes comprar** y, desde el Sprint 14, qué papeleo trae escriturar (ver «Papeleo sin sorpresas»). Es **un
   rango, no un avalúo**, y **un cálculo, no una aprobación de crédito**.
+### ¿Está caro este anuncio? · desde Sprint 010
+
 - **¿Está caro? (en la ficha):** debajo del precio y del área hay una tarjeta con una de cuatro
   respuestas, siempre con símbolo y texto (nunca solo color): **En rango**, **Por encima del rango**,
   **Sospechosamente barato** o **Sin datos suficientes**. Toca **«Ver el detalle»** para ver la barra
@@ -213,11 +245,20 @@ solicitudes de visita.
   piden los dueños, no el de cierre, y no es un avalúo.**
 - **Sospechosamente barato:** es un precio 30 % o más por debajo de la mediana de su zona. Te lo
   avisamos con el consejo de siempre: visita antes de pagar, pide el CTL y nunca des anticipos.
+- **Si eres dueño:** al **publicar** (paso 2) y en **Mi anuncio → Precio** ves el mismo rango de tu
+  zona y si tu precio queda dentro, por encima o muy por debajo, para poner un precio con datos. No
+  es un avalúo.
+- **Limitaciones conocidas:** el rango sale **solo de los anuncios de Innmobiliaria**, no de todo el mercado, y mejora con la cantidad de anuncios: al
+  comienzo muchas zonas dirán «sin datos suficientes».
+### Datos de tu zona · desde Sprint 010
+
 - **Datos de la zona:** el **m² mediano de oferta** (de los anuncios de Innmobiliaria), la **oferta
   activa** (cuántos anuncios vivos hay) y el **valor de referencia del m² de terreno** de Catastro
   Bogotá (mediana de las manzanas del barrio, vigencia 2026). **El de Catastro es solo del terreno:**
   sirve de referencia, no es el precio de un apartamento ni de una casa. Cada cifra trae su fuente,
   su fecha y su licencia.
+### Simulador de cuota y capacidad de endeudamiento · desde Sprint 010
+
 - **Herramientas → simulador de cuota:** escribe el **precio**, la **cuota inicial** (%), el **plazo**
   (5 a 30 años), la **tasa** (déjala vacía para usar la de referencia, o escribe la que te ofrece tu
   banco) y los **ingresos del hogar**. Te dice la **cuota mensual**, el crédito, cuánto pagas en total
@@ -238,15 +279,10 @@ solicitudes de visita.
 - **En la ficha de una venta:** la tarjeta **«Tu cuota»** usa ese cálculo guardado y dice cuánto sería
   la cuota de ese anuncio y si **cabe** o **pasa** de lo que puedes pagar. Si aún no has calculado,
   **«Calcula tu cuota»** te lleva a Herramientas con el precio ya puesto.
-- **Si eres dueño:** al **publicar** (paso 2) y en **Mi anuncio → Precio** ves el mismo rango de tu
-  zona y si tu precio queda dentro, por encima o muy por debajo, para poner un precio con datos. No
-  es un avalúo.
-- **Limitaciones conocidas:** el rango sale **solo de los anuncios de Innmobiliaria**, no de todo el
-  mercado, y mejora con la cantidad de anuncios: al comienzo muchas zonas dirán «sin datos
-  suficientes». El simulador no incluye subsidios, UVR ni leasing, y no es una oferta ni una
-  aprobación. Las normas se verificaron en octubre de 2026; si cambian, el simulador se actualiza.
+- **Limitaciones conocidas:** el simulador no incluye subsidios, UVR ni leasing, y no es una oferta ni una aprobación. Las normas se verificaron en octubre
+  de 2026; si cambian, el simulador se actualiza.
 
-## Vivienda nueva: lo que pagas de verdad · desde Sprint 012
+## Vivienda nueva: lo que pagas de verdad
 
 - **Qué hace:** en **Buscar** hay dos pestañas, **Usados** y **Nuevos**. «Nuevos» muestra los proyectos de vivienda
   nueva de Bogotá y la Sabana de la edición vigente de la revista Estrenar Vivienda, con **lo que pagas de verdad**: el
@@ -255,38 +291,46 @@ solicitudes de visita.
   revista de donde sale el proyecto. Solo mostramos lo que la revista **imprime** (nombre, constructora, zona y cifras): no
   hay fotos, logos, textos de avisos, teléfonos ni direcciones. Una edición se publica solo cuando una persona del equipo
   revisó una muestra de cinco proyectos contra sus páginas.
+### El índice de vivienda nueva · desde Sprint 012
+
 - **El índice:** arriba, la **mediana del m² privado** de Bogotá y de la Sabana, y en «Por zona, franja de precio y
   segmento» el detalle. **Con menos de 5 proyectos no damos mediana** y te decimos cuántos hay: hoy casi ninguna localidad los
   tiene porque los avisos rara vez imprimen el barrio. Un proyecto cuyas páginas imprimen cifras distintas no entra al m².
 - **La lista:** cada tarjeta trae el **«desde»** del aviso y, más grande, **«Pagas al menos»**. Filtra por zona, franja de
   precio, VIS o No VIS, etapa y año de entrega; «Ver más proyectos» es un enlace y los filtros funcionan sin JavaScript.
-- **La ficha del proyecto** (toca una tarjeta):
-  - **El precio verdadero.** «Pagas al menos» suma el precio «desde», los **derechos de registro** (Resolución 2026-001726-6 de la
-    Superintendencia de Notariado y Registro, a cargo de quien registra) y el **parqueadero que se paga aparte** si el aviso da su
-    precio. Cada peso trae su norma y la fecha en que la consultamos. **Es un mínimo, no un total:** lo que falta se **nombra y no
-    se suma** (los derechos notariales, que se reparten como diga la promesa de compraventa; el impuesto de registro (la gente lo
-    llama «beneficencia»), que se parte entre comprador y vendedor y se ve con tu precio en **Papeleo**, y el IVA de la notaría, que no
-    pudimos verificar; el parqueadero sin precio; que el precio puede subir mientras
-    se construye si el aviso no dice que es fijo; la hipoteca si compras con crédito).
-  - **El m² es «aproximado»** y lo dice: el precio «desde» y el área «desde» no siempre son de la misma unidad. Sin área privada se
-    usa la construida y también se dice.
-  - **La espera.** Mientras construyen sigues pagando arriendo: te decimos los **meses hasta la entrega** y, si escribes tu
-    arriendo, cuánto cuesta esa espera. **Tu arriendo se guarda solo en este teléfono** y ninguna petición lo lleva; «Borrar mi
-    arriendo de este teléfono» lo quita cuando quieras.
-  - **La ficha honesta.** Cada dato que necesitas para decidir (precio, áreas, VIS o No VIS, etapa, entrega, parqueadero, precio
-    fijo, subsidio) aparece como **«Lo dice»**, **«No lo dice»**, **«Ilegible en la revista»** o **«Dos páginas imprimen cifras
-    distintas»**. Lo que el aviso no dice **no se adivina**. Los mensajes de venta («Lanzamiento», «Últimas unidades»…) van aparte
-    porque no son datos.
-- **Lo que puedes pagar también filtra los nuevos:** en **Herramientas** calculas tu precio máximo y, con la pestaña «Nuevos», la
-  lista se separa en lo que **cabe**, lo que **no cabe** y lo que **no trae precio**. Se compara con «pagas al menos», no con el
-  «desde». Tus ingresos no salen de tu teléfono: solo viaja el tope.
 - **Mes sin edición:** las ediciones tienen vigencia (la del 15 de un mes al 15 del siguiente). Pasada la fecha, la pantalla dice
   **«Mes sin edición»**, cuántos días lleva vencida y que los precios pueden haber cambiado; el índice no se presenta como de hoy.
 - **Limitaciones conocidas:** solo la revista de un mes, solo Bogotá y la Sabana en el índice, y los proyectos que la revista no
   imprime no existen aquí. Las cifras son un **estimado**: la escritura real la liquidan la notaría y la oficina de registro. Si la
   editorial pide retirar los nombres, la edición se retira de inmediato (un índice sin nombres está pensado, pero no construido).
+### El precio verdadero, no el «desde» · desde Sprint 012
 
-#### ¿Nuevo o usado? · desde Sprint 013
+- **Qué hace:** en la ficha de un proyecto (toca una tarjeta) calcula **lo que pagas de verdad** y no el «desde» del aviso.
+- **El precio verdadero.** «Pagas al menos» suma el precio «desde», los **derechos de registro** (Resolución 2026-001726-6 de la
+  Superintendencia de Notariado y Registro, a cargo de quien registra) y el **parqueadero que se paga aparte** si el aviso da su
+  precio. Cada peso trae su norma y la fecha en que la consultamos. **Las tarifas son las de 2026: desde el 1 de enero de 2027 la ficha no suma ningún derecho de
+  registro ni notarial**, los nombra sin cifra y manda a la notaría (desde el Sprint 016). **Es un mínimo, no un total:** lo que falta se **nombra y no
+  se suma** (los derechos notariales, que se reparten como diga la promesa de compraventa; el impuesto de registro (la gente lo
+  llama «beneficencia»), que se parte entre comprador y vendedor y se ve con tu precio en **Papeleo**, y el IVA de la notaría, que no
+  pudimos verificar; el parqueadero sin precio; que el precio puede subir mientras
+  se construye si el aviso no dice que es fijo; la hipoteca si compras con crédito).
+- **El m² es «aproximado»** y lo dice: el precio «desde» y el área «desde» no siempre son de la misma unidad. Sin área privada se
+  usa la construida y también se dice.
+- **Lo que puedes pagar también filtra los nuevos:** en **Herramientas** calculas tu precio máximo y, con la pestaña «Nuevos», la
+  lista se separa en lo que **cabe**, lo que **no cabe** y lo que **no trae precio**. Se compara con «pagas al menos», no con el
+  «desde». Tus ingresos no salen de tu teléfono: solo viaja el tope.
+### La espera cuesta · desde Sprint 012
+
+- **La espera.** Mientras construyen sigues pagando arriendo: te decimos los **meses hasta la entrega** y, si escribes tu
+  arriendo, cuánto cuesta esa espera. **Tu arriendo se guarda solo en este teléfono** y ninguna petición lo lleva; «Borrar mi
+  arriendo de este teléfono» lo quita cuando quieras.
+### La ficha honesta del aviso · desde Sprint 012
+
+- **La ficha honesta.** Cada dato que necesitas para decidir (precio, áreas, VIS o No VIS, etapa, entrega, parqueadero, precio
+  fijo, subsidio) aparece como **«Lo dice»**, **«No lo dice»**, **«Ilegible en la revista»** o **«Dos páginas imprimen cifras
+  distintas»**. Lo que el aviso no dice **no se adivina**. Los mensajes de venta («Lanzamiento», «Últimas unidades»…) van aparte
+  porque no son datos.
+### Nuevo o usado, con la misma plata · desde Sprint 013
 
 - **Qué hace:** con **tu presupuesto** y en la **misma zona** (Bogotá o la Sabana), compara los **apartamentos nuevos** que caben, por su
   precio verdadero («pagas al menos»), con los **apartamentos usados en venta** de Innmobiliaria: cuántos hay, el **m² mediano** de cada
@@ -298,15 +342,14 @@ solicitudes de visita.
   pudimos leer los usados («No pudimos leer los usados»: eso no quiere decir que no haya).
 - **Los usados son anuncios vivos hoy** en Innmobiliaria (su área y su precio), con la fecha de la lectura; no son una tasación. Solo se
   comparan apartamentos con apartamentos. La cuota inicial durante la obra **no** la imprime la revista y no se inventa.
-
-#### ¿Te alcanza con subsidio? · desde Sprint 013
+### Te alcanza, con subsidio · desde Sprint 013
 
 - **Qué hace:** muestra **qué subsidios existen** para comprar vivienda nueva y si **te sirven**, con tres hogares de ejemplo ($4 M, $6 M y $8 M
   al mes) y **«Tu hogar»**, que se calcula con lo que guardaste en «lo que puedes pagar». Entras desde un botón en la pestaña **Nuevos** o
   desde la ficha de un proyecto.
 - **Cómo leerlo:** arriba, cuántos proyectos de Bogotá y la Sabana te alcanzan **sin subsidio** y cuántos con **el mejor caso** (el mayor
   subsidio de compra que aplica; queda **por confirmar** porque el proyecto debe estar inscrito en el programa). **Los programas jamás se
-  suman entre sí.** La tabla muestra cada programa con su **norma**, su **monto**, lo que dice para el hogar (**Aplica**, **Por confirmar**,
+  suman entre sí.** Cada programa cita el artículo de la norma que lo regula, leído en su texto oficial en octubre de 2026 (por ejemplo, «Oferta Preferente»: Decreto Distrital 653 de 2025, art. 158, según el Decreto 386 de 2026; «Reduce tu Cuota» muestra los 12 salarios que anunció la Alcaldía, dentro de los 14 que permite el decreto). La tabla muestra cada programa con su **norma**, su **monto**, lo que dice para el hogar (**Aplica**, **Por confirmar**,
   **No aplica** o **Sin cupos**, siempre con símbolo y texto) y la **fecha de su estado**. «Reduce tu Cuota» alivia la cuota, no el precio.
 - **Lo que no mostramos:** un programa que no pudimos verificar en la norma primaria **solo se nombra**, sin monto ni estado.
   Un programa **sin cupos** se dice como tal y no suma.
@@ -314,8 +357,7 @@ solicitudes de visita.
   petición lleva tus ingresos. Si no has calculado «lo que puedes pagar», la sección te invita a hacerlo.
 - **Limitaciones conocidas:** las cifras son las de 2026 y las normas se verificaron en octubre de 2026; si un programa cambia, la
   pantalla se actualiza con la nueva fecha. Es un cálculo, **no una aprobación** del subsidio ni del crédito.
-
-#### Visitar la sala de ventas de un proyecto nuevo · desde Sprint 013
+### Visita a la sala de ventas desde Innmobiliaria · desde Sprint 013
 
 - **Qué hace:** en la ficha de un proyecto, **«Pedir una visita»** lleva a la pantalla de la sala de ventas. Mientras la constructora no esté en
   Innmobiliaria, **coordinamos nosotros**: le escribimos a la sala, te proponemos horarios y te confirmamos por WhatsApp. **Ningún dato tuyo
@@ -331,9 +373,11 @@ solicitudes de visita.
 - **Mes sin edición:** con la edición vencida la pantalla dice **«Mes sin edición»** y **no ofrece** pedir la visita: los datos pueden haber cambiado.
 - **Limitaciones conocidas:** hasta 5 solicitudes abiertas a la vez; una por proyecto; si no se pudo concretar, puedes pedirla de nuevo pasados 14 días.
   El plazo de dos días hábiles no descuenta festivos (el aviso puede llegar un día antes) y el aviso sale con el trabajo diario de las 8:00
-  de Bogotá (puede llegar hasta un día después del plazo). Aún no hay botón para marcar que fuiste.
+  de Bogotá (puede llegar hasta un día después del plazo). No hay botón para marcar que fuiste.
 
-## Papeleo sin sorpresas · desde Sprint 014
+## Papeleo sin sorpresas
+
+### Asistente del papeleo · desde Sprint 014
 
 - **Qué hace:** en **Herramientas** hay un selector **Simulador | Papeleo**. «Papeleo» te dice, **antes de firmar la promesa**, cuánto paga el
   comprador y cuánto el vendedor al escriturar, qué documentos pedir, cuánto tarda cada paso y qué dice cada documento. No necesitas cuenta.
@@ -365,17 +409,35 @@ solicitudes de visita.
   cláusula penal pueden regirse por el Código de Comercio: la cláusula lo dice.
 - **Limitaciones conocidas:** es un **estimado** hasta validarlo con el liquidador de la Superintendencia de Notariado y Registro. La tarifa
   notarial única de la VIS no se calcula. Las ciudades salen de las listas del tope de la vivienda de interés social; las demás caen en «Otra
-  ciudad». El lector de certificados de tradición está construido, pero **apagado** hasta validarlo con certificados reales: esta pantalla no lo
-  muestra.
+  ciudad».
 - **VIS y VIP (desde el Sprint 015):** una **VIP** tiene su propio tope, de **90 salarios mínimos**; por encima se liquida como VIS y lo dice. Una
   VIS o una VIP **sin subsidio** paga el registro completo (la mitad es solo con subsidio) y la notaría de una VIS, porque el artículo de la
   resolución que la rebaja no pide subsidio; que una VIP cuente como VIS ahí es nuestra lectura de la norma, y la pantalla te dice que lo confirmes en la notaría.
+### Lector de CTL (en prueba, apagado) · desde Sprint 015
 
-## Antifraude, reportar y sesión de fotos · desde Sprint 015
+- **Qué hace:** en «Papeleo» habrá una quinta sección, **«Certificado (CTL)»**, donde pegas el texto del certificado de tradición y libertad y te marca,
+  anotación por anotación, **hipotecas y otros gravámenes, embargos, demandas y otras medidas cautelares, limitaciones del dominio, la prohibición de
+  transferir una vivienda con subsidio, la afectación a vivienda familiar, el patrimonio de familia y la falsa tradición**. Cada marca dice qué es, qué
+  hacer y de qué norma sale; una anotación cancelada se separa de las vigentes. **El texto se lee en tu teléfono: no sale de ahí, no se guarda y no se ve.**
+- **Cómo decide:** cuando la anotación trae su **código de especificación** (4 o 5 cifras) manda el **grupo** que fija el artículo 8 de la Ley 1579 de 2012
+  y la palabra solo afina dentro del grupo; sin código la lee por sus palabras y lo dice («Sin código: la leímos por sus palabras»). Un código que no está en
+  el catálogo de la Resolución 11885 de 2016 de la Superintendencia de Notariado y Registro se lee por su grupo y también lo dice. Una anotación que no
+  entiende **se lista aparte**: no se da por buena.
+- **Si el texto está incompleto:** compara las anotaciones con el «número total de anotaciones» del certificado y con la numeración; si falta alguna dice
+  **«El texto parece incompleto»** y cuáles faltan, y **no pinta ningún ✓**. Sin ese total, también lo dice.
+- **Siempre «lectura en prueba»:** la sección lo dice arriba, a la vista: *validada con la tabla oficial de códigos y pocos certificados reales; confírmala en
+  tu certificado; no reemplaza el estudio de títulos*. Es una lectura del texto, **no un estudio de títulos**.
+- **Limitaciones conocidas:** hoy está **construido y apagado**: solo se enciende cuando se valida con certificados reales (la carpeta privada del equipo aún
+  no tiene ninguno) y con la confirmación del equipo, y la guarda de despliegue lo impide si esa validación no pasa. Lee texto pegado, no el PDF, y no consulta
+  la Superintendencia de Notariado y Registro.
+
+## Antifraude, reportar y sesión de fotos
 
 - **Qué hace:** cuatro reglas escritas señalan anuncios al equipo, cualquier comprador con el WhatsApp verificado puede **reportar** un anuncio y el
   dueño puede pedir una **sesión de fotos** desde «Mi anuncio». **Una señal o un reporte jamás ocultan un anuncio**: lo revisa una persona del
   equipo, que decide.
+### Reglas antifraude visibles · desde Sprint 015
+
 - **Las reglas, a la vista:** la página **«Cómo revisamos los anuncios»** (se llega desde la página de reportar) explica en palabras simples las cuatro
   reglas: un precio **30 % o más por debajo** de la mediana de los anuncios parecidos (con al menos 5 para comparar; con menos, la regla no dice
   nada), una **foto** que se parece a la de otro anuncio con otro teléfono, la **misma matrícula** con otro teléfono y el **mismo WhatsApp** con dos
@@ -385,25 +447,26 @@ solicitudes de visita.
   **5 al día**. **El dueño no sabe quién reportó**, y el equipo tampoco ve tu nombre ni tu número en la cola. El anuncio sigue igual hasta que el
   equipo decida.
 - **Lo que hace el equipo (el operador):** en el panel, **Antifraude** muestra cada anuncio con sus señales (qué vio cada regla) y los reportes
-  (motivos y detalle). Tres acciones, cada una con el WhatsApp del dueño y el texto **ya escrito, en su idioma** (la app no envía nada sola):
+  (motivos y detalle). Cuatro acciones, cada una con el WhatsApp del dueño y el texto **ya escrito, en su idioma** (la app no envía nada sola):
   **Pausar** (sale de la búsqueda, de su enlace, del contacto y de las visitas; **Reactivar** lo devuelve), **Pedir el CTL al dueño** (el anuncio sigue
   visible; si era verificado queda en «re-verificación pendiente» hasta que lo verifiques de nuevo con un CTL de 30 días o menos, y se queda en la
-  cola hasta entonces) y **Descartar** con una razón de la lista y una nota opcional (queda el registro y la señal no vuelve). **Revisar reglas ahora**
+  cola hasta entonces; la tarjeta dice hace cuántos días se pidió), **«El dueño no entregó el CTL»** (cierra el pedido con fecha: un anuncio que
+  quedó en «re-verificación pendiente» vuelve a «fundador»; el sello ni se otorga ni se quita solo) y **Descartar** con una razón de la lista y una nota opcional (queda el registro y la señal no vuelve). Una bandera que resolviste con **Pausar** y luego reactivaste **solo vuelve a la cola si cambió el dato que la disparó**
+  (el precio, la foto, la matrícula o el teléfono); si no cambió nada, no te la repite. **Revisar reglas ahora**
   evalúa las reglas en el momento (también corren con el trabajo diario). **Huellar fotos pendientes** calcula en tu navegador la huella de las
   fotos subidas antes de este sprint.
 - **El dueño (Mi anuncio):** si el equipo **pausó** el anuncio o **pidió el CTL**, «Mi anuncio» lo dice arriba, sin acusar. Renovar un anuncio en
   pausa le da más días, pero sigue en pausa, y la tarjeta lo dice.
+- **Limitaciones conocidas:** las reglas son señales, no pruebas: pueden marcar un anuncio legítimo y por eso las decide una persona. La regla del
+  precio solo funciona con 5 o más anuncios parecidos. Las fotos subidas antes de este sprint no tienen huella hasta que el operador las procesa.
+### «Fotos que venden»: solicita tu sesión · desde Sprint 015
+
 - **Sesión de fotos (el dueño):** en «Mi anuncio», **Sesión de fotos**: eliges la franja (entre semana, sábado o domingo) y la pides; el equipo te
   escribe por WhatsApp para acordar el día. Ves el estado con símbolo y texto (**Pedida → Agendada → Hecha**, o **Cancelada**), la fecha en hora de
   Bogotá y puedes **cancelarla** mientras esté abierta. Una abierta por anuncio y hasta 3 en 30 días. **Pedirla no te cuesta nada ni te compromete.**
 - **Sesión de fotos (el operador):** el panel **Sesiones de fotos** lista las abiertas primero. **Agendar** pide la fecha y la hora (de 6:00 a. m. a
   9:00 p. m., hasta 60 días), **Marcar como hecha** y **Cancelar** (el dueño puede pedir otra). Cada tarjeta trae el enlace de WhatsApp con el texto
   ya escrito.
-- **Limitaciones conocidas:** las reglas son señales, no pruebas: pueden marcar un anuncio legítimo y por eso las decide una persona. La regla del
-  precio solo funciona con 5 o más anuncios parecidos. Las fotos subidas antes de este sprint no tienen huella hasta que el operador las procesa. El
-  **lector de certificados de tradición** (pegar el texto del certificado y ver hipotecas, embargos, medidas cautelares, vivienda familiar,
-  patrimonio de familia y falsa tradición, cada una con su norma) está construido, pero **apagado** hasta validarlo con certificados reales; cuando
-  se encienda aparecerá como una quinta sección en **Papeleo** y lo pegado no saldrá de tu teléfono.
 
 ## Features
 
@@ -623,6 +686,10 @@ solicitudes de visita.
   nunca usa WhatsApp.
 - **¿Reportar un anuncio lo oculta?** No. Lo revisa una persona del equipo, que decide si lo pausa, le pide el CTL al dueño o descarta el reporte.
   El dueño no sabe quién reportó.
+- **¿Puedo leer mi certificado de tradición en la app?** El lector está construido pero apagado: se enciende cuando se valide con certificados reales. Cuando
+  esté, siempre dirá «lectura en prueba» y no reemplazará el estudio de títulos de un abogado.
+- **El equipo me pidió el CTL y no lo tengo, ¿qué pasa?** Nada se quita solo. Tu anuncio sigue visible; si no lo entregas, el equipo puede cerrar el pedido
+  («el dueño no entregó el CTL») y tu anuncio vuelve a «fundador», con la fecha anotada.
 - **¿Cuesta la sesión de fotos?** Pedirla no te cuesta nada ni te compromete: el equipo te escribe para acordar el día.
 - **¿Cómo dejo de recibir una alerta?** Con el enlace **«Dejar de recibirla: un clic»** que trae cada
   correo (no pide sesión) o desde **Alertas**, con **Borrar**.
@@ -655,3 +722,4 @@ solicitudes de visita.
 | 013    | Nuevo o usado: «¿Nuevo o usado?» (apartamentos nuevos frente a usados en venta, mismo presupuesto y zona, con la regla de 5 comparables), «¿Te alcanza con subsidio?» (programas con su norma, año y estado con fecha; «tu hogar» se calcula en el teléfono) y la visita a la sala de ventas (WhatsApp verificado, horarios, confirmación, aviso si la sala no responde en dos días hábiles) con su cola en el panel del operador |
 | 014    | Papeleo sin sorpresas: «Papeleo» en Herramientas (junto al simulador) con los gastos de escriturar por actor y su norma, qué pedir, plazos y qué dice cada documento; el precio se queda en el teléfono; lo no verificado se nombra sin cifra; enlace desde las fichas                                                                                                                                                            |
 | 015    | Antifraude con reglas a la vista: las cuatro reglas en palabras simples, «Reportar este anuncio» (WhatsApp verificado, el dueño no sabe quién reportó), la cola del operador con pausar, reactivar, pedir el CTL y descartar con razón, avisos del equipo en «Mi anuncio» y la sesión de fotos (pedir, agendar, hecha); el lector de certificados queda construido y apagado |
+| 016    | Cierre del hito H-2: el manual con las 37 funciones, la visita pide tu autorización y tiene tope, «bajó de precio» exige 1 % o más, el equipo puede cerrar un CTL no entregado y una bandera resuelta vuelve solo si cambia el dato, el lector de certificados lee por el código del registro, avisa si el texto está incompleto y dice «lectura en prueba» (sigue apagado), la ficha de vivienda nueva respeta el año de las tarifas, los subsidios citan su artículo y el mapa se dibuja también con el teclado |

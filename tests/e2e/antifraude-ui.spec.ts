@@ -294,8 +294,10 @@ test.describe("la cola antifraude del operador", () => {
     await expect(fila.getByText("Elige una razón.")).toBeVisible();
     await fila.getByLabel("Comprobé que publica el dueño").check();
     await fila.getByRole("button", { name: "Descartar", exact: true }).click();
+    // Primero el efecto en la base: `saleDeLaCola` también se cumple si el cron de otra spec le abre una bandera al anuncio,
+    // y entonces leía el reporte antes de que el descarte llegara (S16, con datos acumulados).
+    await expect.poll(() => estadoDelReporte(a)).toBe("descartar:es_el_dueno");
     await saleDeLaCola(fila, a);
-    expect(estadoDelReporte(a)).toBe("descartar:es_el_dueno");
     expect(await fichaVisible(a)).toBe(true);
   });
 });

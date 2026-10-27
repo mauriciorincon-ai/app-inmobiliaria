@@ -265,11 +265,13 @@ test.describe("POST /api/identidad", () => {
       `select tablename from pg_tables where schemaname = 'public' order by 1`,
     );
     expect(tablas.length).toBeGreaterThan(10);
+    // La cédula como número entero, sin dígitos pegados: la huella de una foto es una cadena de 64 ceros y unos, y «1000000001»
+    // aparece dentro de una de cada veinte al azar (S16; la prueba fallaba con fotos acumuladas sin que hubiera cédula).
     for (const tabla of tablas) {
       for (const cedula of Object.values(CEDULAS_PRUEBA)) {
         expect(
           consultar(
-            `select count(*) from public."${tabla}" t where t::text like '%${cedula}%'`,
+            `select count(*) from public."${tabla}" t where t::text ~ '(^|[^0-9])${cedula}([^0-9]|$)'`,
           ),
           `${tabla} · ${cedula}`,
         ).toEqual(["0"]);

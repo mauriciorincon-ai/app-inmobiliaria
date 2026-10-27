@@ -140,7 +140,7 @@ export function armarCorreo(
     `<p>${rellenar(t.saludo, { nombre: destinatario })},</p>` +
     partes.map((p) => rellenar(p, escapados)).join("") +
     `<p><a href="${escaparHtml(enlace)}" style="color:#7B5DD6;font-weight:bold">${cta}</a></p>` +
-    `<p style="color:#888;font-size:12px">${t.pie}</p>`;
+    `<p style="color:#6b7280;font-size:12px">${t.pie}</p>`;
   return { asunto: plano(rellenar(asunto, valores)), html };
 }
 
@@ -226,6 +226,6 @@ export function armarCorreoSala(
     `<p>${rellenar(t.saludo, { nombre: escapados.comprador })},</p>` +
     partes.map((p) => rellenar(p, escapados)).join("") +
     `<p><a href="${escaparHtml(enlace)}" style="color:#7B5DD6;font-weight:bold">${c.cta}</a></p>` +
-    `<p style="color:#888;font-size:12px">${t.pie}</p>`;
+    `<p style="color:#6b7280;font-size:12px">${t.pie}</p>`;
   return { asunto: plano(rellenar(c.asunto, valores)), html };
 }

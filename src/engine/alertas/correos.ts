@@ -44,7 +44,7 @@ export type EnlacesResumen = EnlacesBaja & {
 };
 
 const ESTILO_CTA = "color:#7B5DD6;font-weight:bold";
-const ESTILO_PIE = "color:#888;font-size:12px";
+const ESTILO_PIE = "color:#6b7280;font-size:12px";
 // La miniatura del anuncio: decorativa (el precio y el lugar van al lado), por eso `alt` vacío.
 const ATRIBUTOS_FOTO = 'width="160" alt=""';
 const ESTILO_FOTO = "border-radius:8px;display:block";
@@ -138,7 +138,7 @@ function itemHtml(
   const precio = `<strong>${escaparHtml(formatearCOP(a.precio_esperado, idioma))}</strong>`;
   const anterior =
     a.precio_anterior !== undefined
-      ? ` <s style="color:#888">${escaparHtml(formatearCOP(a.precio_anterior, idioma))}</s>`
+      ? ` <s style="color:#6b7280">${escaparHtml(formatearCOP(a.precio_anterior, idioma))}</s>`
       : "";
   const lugar = escaparHtml(
     rellenar(r.lugar, {

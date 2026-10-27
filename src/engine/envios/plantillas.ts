@@ -69,7 +69,7 @@ export function cuerpoHtml(
     `<p>${saludo},</p>` +
     plantilla.cuerpo +
     `<p><a href="${escaparHtml(urlApp)}" style="color:#7B5DD6;font-weight:bold">${plantilla.cta}</a></p>` +
-    `<p style="color:#888;font-size:12px">${t.pie}</p>`
+    `<p style="color:#6b7280;font-size:12px">${t.pie}</p>`
   );
 }
 

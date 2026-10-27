@@ -9,6 +9,8 @@
 --  7. «Bajó de precio» pide al menos un 1 % (S9 M).
 --  8. Las campañas del operador no pasan del cupo diario de correos (S9 M): `correos_libres_hoy`.
 --  9. Asignar un barrio de otra localidad mueve también la zona del anuncio (S6 M).
+-- ORDEN: el bloque 1 retira la firma de 8 argumentos de `solicitar_visita`, y la ruta nueva llama a la de 9. Entre aplicar esta migración y
+-- desplegar la app la solicitud de visita falla (en un orden o en el otro): aplicar y desplegar en seguida, sin esperar entre un paso y otro.
 -- 1. La solicitud de visita, con el consentimiento en la RPC y un tope de ciclos. La firma anterior se retira.
 drop function public.solicitar_visita(text, text, text, bigint, bigint, text[], text, text);
 CREATE FUNCTION public.solicitar_visita(p_sesion_hash text, p_slug text, p_intencion text, p_presupuesto_min bigint, p_presupuesto_max bigint, p_forma_pago text[], p_mensaje text, p_email text, p_consentimiento boolean)
@@ -192,15 +194,21 @@ stable
 security definer
 set search_path = ''
 as $$
-  select case p_regla
-    when 'precio' then i.precio_esperado::text
-    when 'matricula' then upper(btrim(i.matricula))
-    when 'telefono' then (select regexp_replace(v.whatsapp, '\D', '', 'g') from public.vendedores v where v.id = i.vendedor_id)
-    when 'foto' then (select string_agg(f.huella::text, ',' order by f.huella::text)
-                        from public.fotos f where f.inmueble_id = i.id and f.huella is not null)
-  end
-  from public.inmuebles i
-  where i.id = p_inmueble_id
+  -- Solo se compara por igualdad: se guarda la huella (sha256), nunca el teléfono ni la matrícula en claro (regla 2 y 17-bis).
+  -- No es anonimato fuerte (un teléfono tiene pocas combinaciones), pero la tabla no deja el dato legible a simple vista.
+  select encode(sha256(convert_to(d.dato, 'UTF8')), 'hex')
+  from (
+    select case p_regla
+      when 'precio' then i.precio_esperado::text
+      when 'matricula' then upper(btrim(i.matricula))
+      when 'telefono' then (select regexp_replace(v.whatsapp, '\D', '', 'g') from public.vendedores v where v.id = i.vendedor_id)
+      when 'foto' then (select string_agg(f.huella::text, ',' order by f.huella::text)
+                          from public.fotos f where f.inmueble_id = i.id and f.huella is not null)
+    end as dato
+    from public.inmuebles i
+    where i.id = p_inmueble_id
+  ) d
+  where d.dato is not null
 $$;
 revoke all on function public.dato_de_bandera(uuid, text) from public, anon, authenticated;
 
@@ -284,6 +292,55 @@ $$;
 revoke all on function public.cerrar_ctl_pedido(uuid) from public;
 grant execute on function public.cerrar_ctl_pedido(uuid) to authenticated, service_role;
 
+-- La fecha de «no lo entregó» solo vale mientras no haya un pedido nuevo ni un CTL verificado: ambas funciones la limpian.
+CREATE OR REPLACE FUNCTION public.marcar_verificado_ctl(p_inmueble_id uuid, p_matricula text, p_ctl_expedido_el date)
+ RETURNS void
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO ''
+AS $function$
+declare
+  v_hoy date := (now() at time zone 'America/Bogota')::date;
+begin
+  if p_ctl_expedido_el is null
+     or p_ctl_expedido_el > v_hoy
+     or p_ctl_expedido_el < v_hoy - 30 then
+    raise exception 'ctl_fuera_de_plazo' using errcode = 'check_violation';
+  end if;
+  update public.inmuebles
+    set nivel_verificacion = 'verificado',
+        matricula = nullif(btrim(p_matricula), ''),
+        verificado_at = now(),
+        ctl_expedido_el = p_ctl_expedido_el,
+        -- S15: el CTL que el operador pidió ya llegó.
+        ctl_pedido_at = null,
+        ctl_no_entregado_at = null
+    where id = p_inmueble_id;
+  if not found then
+    raise exception 'inmueble_no_encontrado';
+  end if;
+end;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.pedir_ctl(p_inmueble_id uuid)
+ RETURNS void
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO ''
+AS $function$
+begin
+  update public.inmuebles
+     set ctl_pedido_at = now(),
+         ctl_no_entregado_at = null,
+         ctl_expedido_el = case when nivel_verificacion = 'verificado' then null else ctl_expedido_el end
+   where id = p_inmueble_id;
+  if not found then
+    raise exception 'no_disponible' using errcode = 'P0002';
+  end if;
+  perform public.resolver_revision(p_inmueble_id, 'pedir_ctl', null, null);
+end;
+$function$;
+
 -- 5. La purga de compradores sin verificar mira también su último intento, no solo cuándo se crearon.
 CREATE OR REPLACE FUNCTION public.purgar_vencidos()
  RETURNS jsonb
@@ -308,7 +365,7 @@ begin
   with b as (
     delete from public.compradores c
      where c.verificado_at is null and c.created_at < now() - interval '30 days'
-       -- Quien pidió un código en los últimos 30 días se está verificando: su intento no se borra a mitad (S8 B10).
+       -- Quien tiene un intento aún no purgado (los sin usar se borran 7 días después de vencer, arriba) se está verificando: no se le borra a mitad (S8 B10).
        and not exists (select 1 from public.verificaciones v
                         where v.comprador_id = c.id and v.created_at > now() - interval '30 days')
     returning 1
@@ -453,10 +510,13 @@ begin
   end if;
   select telefono into v_telefono from public.compradores where id = v.comprador_id;
   if v_telefono is distinct from p_telefono then
-    update public.verificaciones set otro_numero_at = now() where id = v.id;
+    -- El nombre de quien no es el dueño del número no se guarda: ni al fijarlo ni los días que el intento espera su purga.
+    update public.verificaciones set otro_numero_at = now(), nombre = null where id = v.id;
     return 'otro_numero';
   end if;
-  update public.verificaciones set usado_at = now() where id = v.id;
+  -- Verificado el número, ningún intento suyo (este ni los de otras sesiones que aún esperan su purga) conserva un nombre.
+  update public.verificaciones set usado_at = case when id = v.id then now() else usado_at end, nombre = null
+    where comprador_id = v.comprador_id and (id = v.id or nombre is not null);
   update public.compradores
     set nombre = case when verificado_at is null then coalesce(v.nombre, nombre) else nombre end,
         verificado_at = coalesce(verificado_at, now())

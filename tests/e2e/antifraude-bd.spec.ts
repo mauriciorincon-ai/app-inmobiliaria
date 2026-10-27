@@ -672,6 +672,13 @@ test("S16 · una bandera resuelta con «pausar» vuelve tras reactivar SOLO si c
   // Pausar resuelve la bandera y guarda el dato (la matrícula); reactivar con la MISMA matrícula no la reabre.
   pausar(a);
   expect(banderaDe(a, "matricula")?.resolucion).toBe("pausar");
+  // El dato se guarda como huella, no en claro (ni la matrícula ni el teléfono quedan legibles en la bandera).
+  const guardado = consultar(
+    `select dato_al_resolver from public.banderas where inmueble_id = '${a.id}' and regla = 'matricula'`,
+  )[0];
+  expect(guardado).toMatch(/^[0-9a-f]{64}$/);
+  const huellaTelefono = consultar(`select public.dato_de_bandera('${a.id}', 'telefono')`)[0];
+  expect(huellaTelefono).toMatch(/^[0-9a-f]{64}$/);
   reactivar(a);
   revisar();
   expect(banderaDe(a, "matricula")?.resolucion).toBe("pausar");
@@ -719,6 +726,19 @@ test("S16 · el CTL pedido que no llega se cierra: sale de la cola y un verifica
   expect(() => consultar(`select public.cerrar_ctl_pedido('${a.id}')`)).toThrow(
     /estado_invalido/,
   );
+  // La fecha de «no lo entregó» no sobrevive a un pedido nuevo ni a un CTL verificado.
+  const noEntregado = () =>
+    consultar(
+      `select (ctl_no_entregado_at is not null)::text from public.inmuebles where id = '${a.id}'`,
+    )[0];
+  consultar(`select public.pedir_ctl('${a.id}')`);
+  expect(noEntregado()).toBe("false");
+  consultar(`select public.cerrar_ctl_pedido('${a.id}')`);
+  expect(noEntregado()).toBe("true");
+  consultar(
+    `select public.marcar_verificado_ctl('${a.id}', '50N-${(Date.now() + 19) % 1e8}', date '${fechaBogota(2)}')`,
+  );
+  expect(noEntregado()).toBe("false");
 });
 
 test("la sesión de fotos: una abierta por anuncio, 3 en 30 días, y el operador la agenda y la marca hecha en orden", async () => {

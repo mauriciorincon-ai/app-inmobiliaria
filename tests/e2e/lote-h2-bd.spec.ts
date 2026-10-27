@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
-import { consultar } from "./utils/bd";
+import { consultar, ejecutar } from "./utils/bd";
 import { conContactoPublico, crearAnuncio, precioUnico } from "./utils/anuncios";
 import {
   canjear,
@@ -85,6 +85,13 @@ test("el nombre de un número que nadie ha verificado es el de la sesión que lo
   expect(
     consultar(`select nombre from public.compradores where telefono = '${telefono}'`),
   ).toEqual(["Ana Sintetica"]);
+  // Verificado el número, ningún intento (ni el canjeado ni el del impostor, que espera su purga) conserva el nombre.
+  expect(
+    consultar(
+      `select count(*) from public.verificaciones v join public.compradores c on c.id = v.comprador_id
+        where c.telefono = '${telefono}' and v.nombre is not null`,
+    ),
+  ).toEqual(["0"]);
 });
 
 test("la purga no se lleva a un comprador sin verificar que pidió un código hace poco; al viejo de verdad, sí", async () => {
@@ -136,4 +143,39 @@ test("asignar un barrio de otra localidad mueve también la zona del anuncio", a
   expect(
     consultar(`select zona_id::text from public.inmuebles where id = '${a.id}'`),
   ).toEqual([zona]);
+});
+
+test("salas_panel: las solicitudes abiertas salen todas; las cerradas, solo las 100 más recientes", async () => {
+  const { telefono } = await compradorVerificado();
+  const PREFIJO = "s16-panel";
+  const limpiar = () =>
+    consultar(`delete from public.solicitudes_visita where proyecto_slug like '${PREFIJO}-%'`);
+  limpiar();
+  try {
+    // Tres abiertas (tres proyectos: un pedido vivo por comprador y proyecto) y 105 cerradas, todas con fecha futura para ser
+    // las más recientes de la base aunque otras pruebas dejen cerradas propias en paralelo.
+    consultar(
+      `insert into public.solicitudes_visita (comprador_id, estado, proyecto_edicion, proyecto_slug, proyecto_nombre, franja, token_hash, created_at)
+       select c.id, 'pendiente', 9602, '${PREFIJO}-abierta-' || g, 'Proyecto sintetico ' || g, 'sabado',
+              encode(sha256(convert_to('abierta' || random()::text || g::text, 'UTF8')), 'hex'), now() + interval '2 days'
+         from public.compradores c, generate_series(1, 3) g where c.telefono = '${telefono}'`,
+    );
+    consultar(
+      `insert into public.solicitudes_visita (comprador_id, estado, proyecto_edicion, proyecto_slug, proyecto_nombre, franja, token_hash, created_at)
+       select c.id, 'cancelada', 9602, '${PREFIJO}-cerrada', 'Proyecto sintetico cerrado', 'sabado',
+              encode(sha256(convert_to('cerrada' || random()::text || g::text, 'UTF8')), 'hex'), now() + interval '1 day' + g * interval '1 second'
+         from public.compradores c, generate_series(1, 105) g where c.telefono = '${telefono}'`,
+    );
+    const lineas = ejecutar(
+      "begin; set local role authenticated; select public.salas_panel(); commit;",
+    );
+    const json = lineas.find((l) => l.startsWith("["))!;
+    const filas = (JSON.parse(json) as Array<{ estado: string; proyecto: { slug: string } }>).filter(
+      (f) => f.proyecto.slug.startsWith(`${PREFIJO}-`),
+    );
+    expect(filas.filter((f) => f.estado === "pendiente")).toHaveLength(3);
+    expect(filas.filter((f) => f.estado === "cancelada")).toHaveLength(100);
+  } finally {
+    limpiar();
+  }
 });

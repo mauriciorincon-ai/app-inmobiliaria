@@ -184,14 +184,14 @@ export function precioVerdadero(
     partidas.push({ id: "derechos_registro", monto: registro });
   }
   // S15 (deuda del S14): la mitad de la VIS en el registro exige el subsidio (Res. SNR 2026-001726-6, art. 17, parágrafo 2). La
-  // cota inferior sigue siendo el caso con subsidio; lo que cuesta sin él se nombra con su monto.
-  if (clase === "vis") {
-    const sinSubsidio = derechosRegistro(desde, "general", tarifas);
-    faltantes.push(
-      sinSubsidio === null
-        ? { id: "registro_sin_subsidio" }
-        : { id: "registro_sin_subsidio", monto: sinSubsidio },
-    );
+  // cota inferior sigue siendo el caso con subsidio; lo que cuesta sin él se nombra con su monto. Solo si el registro se sumó:
+  // sin tarifa del año, `derechos_registro` ya lo nombra y «se sumó con la mitad» sería falso (S16).
+  const sinSubsidio =
+    clase === "vis" && registro !== null
+      ? derechosRegistro(desde, "general", tarifas)
+      : null;
+  if (sinSubsidio !== null) {
+    faltantes.push({ id: "registro_sin_subsidio", monto: sinSubsidio });
   }
 
   if (enConflicto(p, "parqueadero", "parqueadero_precio")) {

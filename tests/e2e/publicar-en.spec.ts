@@ -78,10 +78,10 @@ test.describe("publicar en inglés", () => {
         name: /registered as a founding listing/i,
       }),
     ).toBeVisible();
-    // «Sin fecha»: promete el aviso por WhatsApp, no un mes.
+    // Los compradores ya están: el paso dice qué pasa hoy, sin promesa de apertura.
     await expect(
       page.getByText(
-        "If you left your email, we'll let you know when the time comes.",
+        "Your listing shows up in the search. If you turned on contact, buyers who verified their number write to you on WhatsApp.",
       ),
     ).toBeVisible();
 

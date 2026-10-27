@@ -183,6 +183,24 @@ test.describe("selector de idioma (navegador)", () => {
     ).toHaveAttribute("aria-pressed", "false");
   });
 
+  // WCAG 2.2 AA 2.5.8 (tamaño del objetivo, mínimo): cada botón mide al menos 24 × 24 px, en la
+  // portada y en una pantalla interior, en escritorio y en móvil.
+  for (const ruta of ["/", "/privacidad"]) {
+    test(`en ${ruta} cada botón mide al menos 24 × 24 px`, async ({ page }) => {
+      await page.goto(ruta);
+      const botones = page
+        .getByRole("group", { name: "Idioma" })
+        .getByRole("button");
+      await expect(botones).toHaveCount(2);
+      for (const boton of await botones.all()) {
+        const caja = await boton.boundingBox();
+        expect(caja, "el botón se pinta").not.toBeNull();
+        expect(caja!.width).toBeGreaterThanOrEqual(24);
+        expect(caja!.height).toBeGreaterThanOrEqual(24);
+      }
+    });
+  }
+
   test("cambiar de idioma en /mi-anuncio conserva el token del fragmento", async ({
     page,
   }) => {

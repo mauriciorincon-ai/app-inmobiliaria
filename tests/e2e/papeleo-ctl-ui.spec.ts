@@ -143,11 +143,17 @@ test("un certificado limpio lo dice, y lo que no entiende lo nombra sin darlo po
     page.getByText("no encontramos nada de lo que este lector marca"),
   ).toBeVisible();
 
-  // Una anotación con un código que el lector no conoce queda como «no reconocida». Va ANTES del cierre del certificado.
+  // Una anotación sin código y con un acto que el lector no conoce queda como «no reconocida» (con código, el grupo del
+  // art. 8 decide). Va ANTES del cierre del certificado, numerada en orden y contada en el total: el texto está completo.
   const extra =
-    "ANOTACION: Nro 099 Fecha: 01-09-2026 Radicacion: 2026-000099\nESPECIFICACION: 0999 ACTO NUEVO QUE NADIE CONOCE\nDE: PERSONA Z\n\n";
+    "ANOTACION: Nro 003 Fecha: 01-09-2026 Radicacion: 2026-000099\nESPECIFICACION: ACTO NUEVO QUE NADIE CONOCE\nDE: PERSONA Z\n\n";
   await campo.fill(
-    certificado("limpio").replace("NRO TOTAL", `${extra}NRO TOTAL`),
+    certificado("limpio")
+      .replace("NRO TOTAL", `${extra}NRO TOTAL`)
+      .replace(
+        "NRO TOTAL DE ANOTACIONES: *2*",
+        "NRO TOTAL DE ANOTACIONES: *3*",
+      ),
   );
   await leer(page);
   await expect(page.getByTestId("ctl-no-reconocida")).toHaveCount(1);
@@ -159,8 +165,9 @@ test("un certificado limpio lo dice, y lo que no entiende lo nombra sin darlo po
     page.getByText("no encontramos nada de lo que este lector marca"),
   ).toHaveCount(0);
   await expect(page.getByTestId("ctl-no-reconocida")).toContainText(
-    "Anotación 99",
+    "Anotación 3",
   );
+  await expect(page.getByTestId("ctl-incompleto")).toHaveCount(0);
   await expect(
     page.getByText(
       "No sabemos qué dicen: pregúntale al dueño o a un abogado antes de firmar.",

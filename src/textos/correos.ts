@@ -1,6 +1,6 @@
 // Correos de campaña por lotes (C8). Cada vendedor recibe el suyo en el idioma que guardó al publicar
 // (`vendedores.idioma`). Redactados en cada idioma, no traducidos; cifras EXCLUSIVAMENTE citables
-// (comisión 3 % · fotos 89 vs 123 días, Redfin · CTL $23.000, SNR · 7–7,5 meses de venta). En inglés, el
+// (comisión 3 % · CTL $23.000, SNR · 7–7,5 meses de venta; la de Redfin está prohibida, ver design-system.md). En inglés, el
 // término local se nombra y se explica en una línea.
 //
 // Los cuerpos son HTML propio (solo `<p>`, `<strong>`): `{nombre}` y `{url}` los pone el motor ya

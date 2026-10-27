@@ -14,7 +14,7 @@ logged or searched.
 Sprint 015 classified an annotation **by its words**. The investigation behind it had mis-classified 6 of 26 codes, and
 Sprint 016 wrote the test the reader should have had first: every code of the official table (Resolución 11885 de 2016 of
 the Superintendencia de Notariado y Registro, art. 4, read in two reproductions that agree; **the primary source was not
-reached** and `src/data/normas-ctl.json` says so). The test was born red: **200 of its 391 cases failed**.
+reached**; the header of `src/engine/ctl/codigos.ts` and the test fixture say so). The test was born red: **200 of its 391 cases failed**.
 
 ## Decision
 

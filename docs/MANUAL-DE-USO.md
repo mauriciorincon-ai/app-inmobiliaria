@@ -427,8 +427,8 @@ solicitudes de visita.
   **«El texto parece incompleto»** y cuáles faltan, y **no pinta ningún ✓**. Sin ese total, también lo dice.
 - **Siempre «lectura en prueba»:** la sección lo dice arriba, a la vista: *validada con la tabla oficial de códigos y pocos certificados reales; confírmala en
   tu certificado; no reemplaza el estudio de títulos*. Es una lectura del texto, **no un estudio de títulos**.
-- **Limitaciones conocidas:** hoy está **construido y apagado**: solo se enciende cuando se valida con certificados reales (la carpeta privada del equipo aún
-  no tiene ninguno) y con la confirmación del equipo, y la guarda de despliegue lo impide si esa validación no pasa. Lee texto pegado, no el PDF, y no consulta
+- **Limitaciones conocidas:** hoy está **construido y apagado**: solo se enciende cuando se valida con certificados reales
+  y con la confirmación del equipo, y la guarda de despliegue lo impide si esa validación no pasa. Lee texto pegado, no el PDF, y no consulta
   la Superintendencia de Notariado y Registro.
 
 ## Antifraude, reportar y sesión de fotos
@@ -450,15 +450,15 @@ solicitudes de visita.
   (motivos y detalle). Cuatro acciones, cada una con el WhatsApp del dueño y el texto **ya escrito, en su idioma** (la app no envía nada sola):
   **Pausar** (sale de la búsqueda, de su enlace, del contacto y de las visitas; **Reactivar** lo devuelve), **Pedir el CTL al dueño** (el anuncio sigue
   visible; si era verificado queda en «re-verificación pendiente» hasta que lo verifiques de nuevo con un CTL de 30 días o menos, y se queda en la
-  cola hasta entonces; la tarjeta dice hace cuántos días se pidió), **«El dueño no entregó el CTL»** (cierra el pedido con fecha: un anuncio que
+  cola hasta entonces; la tarjeta dice hace cuántos días se pidió), **«El dueño no entregó el CTL»** (cierra el pedido y queda registrado: un anuncio que
   quedó en «re-verificación pendiente» vuelve a «fundador»; el sello ni se otorga ni se quita solo) y **Descartar** con una razón de la lista y una nota opcional (queda el registro y la señal no vuelve). Una bandera que resolviste con **Pausar** y luego reactivaste **solo vuelve a la cola si cambió el dato que la disparó**
   (el precio, la foto, la matrícula o el teléfono); si no cambió nada, no te la repite. **Revisar reglas ahora**
   evalúa las reglas en el momento (también corren con el trabajo diario). **Huellar fotos pendientes** calcula en tu navegador la huella de las
-  fotos subidas antes de este sprint.
+  fotos subidas antes de que existiera la huella (Sprint 015).
 - **El dueño (Mi anuncio):** si el equipo **pausó** el anuncio o **pidió el CTL**, «Mi anuncio» lo dice arriba, sin acusar. Renovar un anuncio en
   pausa le da más días, pero sigue en pausa, y la tarjeta lo dice.
 - **Limitaciones conocidas:** las reglas son señales, no pruebas: pueden marcar un anuncio legítimo y por eso las decide una persona. La regla del
-  precio solo funciona con 5 o más anuncios parecidos. Las fotos subidas antes de este sprint no tienen huella hasta que el operador las procesa.
+  precio solo funciona con 5 o más anuncios parecidos. Las fotos subidas antes de que existiera la huella (Sprint 015) no la tienen hasta que el operador las procesa.
 ### «Fotos que venden»: solicita tu sesión · desde Sprint 015
 
 - **Sesión de fotos (el dueño):** en «Mi anuncio», **Sesión de fotos**: eliges la franja (entre semana, sábado o domingo) y la pides; el equipo te
@@ -473,8 +473,8 @@ solicitudes de visita.
 ### Landing de expectativa (seller-first) · desde Sprint 001
 
 - **Qué hace:** presenta la propuesta a vendedores directos de Bogotá (vender sin comisión), con
-  los dolores reales del mercado, cómo funciona el registro, lo que ya funciona y lo que sigue
-  (compradores verificados, visitas, fotos) y preguntas frecuentes.
+  los dolores reales del mercado, cómo funciona el registro, lo que ya funciona
+  (compradores verificados, visitas, sesión de fotos) y preguntas frecuentes.
 - **Cómo se usa:** es la página principal (`/`). Desplázate para conocer la propuesta; los botones
   **"Publica tu inmueble como fundador"** (arriba y al final) llevan al registro.
 - **Limitaciones conocidas:** solo Bogotá en esta etapa. Está en español y en inglés (ver «Español e inglés (toda la app)»).
@@ -636,8 +636,9 @@ solicitudes de visita.
      español y cuántos la inglesa), y toca **"Enviar lote"**. Cada vendedor recibe el correo en el
      idioma en que publicó; la vista previa se ve en el idioma del panel.
   3. Abajo queda el registro de los envíos hechos.
-- **Limitaciones conocidas:** se envía por tandas de máximo 300 al día (límite del proveedor de
-  correo) y la pantalla indica cuántos quedan. Solo reciben quienes dejaron correo (es opcional).
+- **Limitaciones conocidas:** la app envía hasta **250 correos al día** en total, repartidos entre las campañas, los avisos de visita y los
+  resúmenes de alertas (el proveedor de correo permite 300; la diferencia es margen). Las visitas y las alertas van primero: una campaña solo
+  usa lo que ellas dejan libre, y la pantalla indica cuántos quedan. Solo reciben quienes dejaron correo (es opcional).
 
 ### Zonas, cupos y densidad · desde Sprint 003
 
@@ -689,7 +690,7 @@ solicitudes de visita.
 - **¿Puedo leer mi certificado de tradición en la app?** El lector está construido pero apagado: se enciende cuando se valide con certificados reales. Cuando
   esté, siempre dirá «lectura en prueba» y no reemplazará el estudio de títulos de un abogado.
 - **El equipo me pidió el CTL y no lo tengo, ¿qué pasa?** Nada se quita solo. Tu anuncio sigue visible; si no lo entregas, el equipo puede cerrar el pedido
-  («el dueño no entregó el CTL») y tu anuncio vuelve a «fundador», con la fecha anotada.
+  («el dueño no entregó el CTL») y tu anuncio vuelve a «fundador». Queda registrado que no lo entregaste; si el equipo te lo pide otra vez o lo verificas, ese registro se borra.
 - **¿Cuesta la sesión de fotos?** Pedirla no te cuesta nada ni te compromete: el equipo te escribe para acordar el día.
 - **¿Cómo dejo de recibir una alerta?** Con el enlace **«Dejar de recibirla: un clic»** que trae cada
   correo (no pide sesión) o desde **Alertas**, con **Borrar**.
@@ -722,4 +723,4 @@ solicitudes de visita.
 | 013    | Nuevo o usado: «¿Nuevo o usado?» (apartamentos nuevos frente a usados en venta, mismo presupuesto y zona, con la regla de 5 comparables), «¿Te alcanza con subsidio?» (programas con su norma, año y estado con fecha; «tu hogar» se calcula en el teléfono) y la visita a la sala de ventas (WhatsApp verificado, horarios, confirmación, aviso si la sala no responde en dos días hábiles) con su cola en el panel del operador |
 | 014    | Papeleo sin sorpresas: «Papeleo» en Herramientas (junto al simulador) con los gastos de escriturar por actor y su norma, qué pedir, plazos y qué dice cada documento; el precio se queda en el teléfono; lo no verificado se nombra sin cifra; enlace desde las fichas                                                                                                                                                            |
 | 015    | Antifraude con reglas a la vista: las cuatro reglas en palabras simples, «Reportar este anuncio» (WhatsApp verificado, el dueño no sabe quién reportó), la cola del operador con pausar, reactivar, pedir el CTL y descartar con razón, avisos del equipo en «Mi anuncio» y la sesión de fotos (pedir, agendar, hecha); el lector de certificados queda construido y apagado |
-| 016    | Cierre del hito H-2: el manual con las 37 funciones, la visita pide tu autorización y tiene tope, «bajó de precio» exige 1 % o más, el equipo puede cerrar un CTL no entregado y una bandera resuelta vuelve solo si cambia el dato, el lector de certificados lee por el código del registro, avisa si el texto está incompleto y dice «lectura en prueba» (sigue apagado), la ficha de vivienda nueva respeta el año de las tarifas, los subsidios citan su artículo y el mapa se dibuja también con el teclado |
+| 016    | Sprint de cierre del hito H-2 (el ensayo general decide si cierra): el manual con las 37 funciones, la visita pide tu autorización y tiene tope, «bajó de precio» exige 1 % o más, el equipo puede cerrar un CTL no entregado y una bandera resuelta vuelve solo si cambia el dato, el lector de certificados lee por el código del registro, avisa si el texto está incompleto y dice «lectura en prueba» (sigue apagado), la ficha de vivienda nueva respeta el año de las tarifas, los subsidios citan su artículo y el mapa se dibuja también con el teclado |

@@ -57,5 +57,5 @@ a «report» button and an operator queue. Three constraints shape how:
 - The price rule only speaks with 5 or more comparables; with fewer it says nothing.
 - **Known limits, for H-3:** the photo fingerprint is computed by the client (an operator button processes the photos
   uploaded before Sprint 015); the 6-bit threshold was not validated with real photos; the price rule is O(n²) per group
-  (measured: 13.4 s with 17,000 listings in one group in a local database; milliseconds with dozens).
+  (measured in Sprint 016 on the rule alone: 13.4 s with 17,000 listings in one group, on a local database; the Sprint 015 daily job took 67 s end to end with about 17,000 local listings; milliseconds with dozens).
 - The WhatsApp message the operator sends goes out from their own phone: Innmobiliaria still never sends one (ADR 015).

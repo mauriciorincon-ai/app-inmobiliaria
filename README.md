@@ -4,7 +4,7 @@ Marketplace inmobiliario del **dueño directo** para Colombia (Bogotá primero).
 comercial del pipeline AI-APPs; cero IA, todo determinista. Publicar el inmueble ES el registro, y
 los compradores verificados lo buscan, le escriben al dueño, agendan la visita y deciden con números
 (el rango de su zona, la cuota, el papeleo con su norma y la vivienda nueva con lo que de verdad se
-paga). Producto completo del hito H-2: 37 funcionalidades, en español y en inglés.
+paga). Producto completo del hito H-2, a la espera del ensayo general del equipo: 37 funcionalidades, en español y en inglés.
 
 > El plan del producto vive en la casa planeadora (`~/Code/hr01-develop-ai-apps`). Este repo es
 > solo la implementación. Ver `CLAUDE.md` para las reglas de las dos casas.

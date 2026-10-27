@@ -167,9 +167,8 @@ export const LANDING = {
       en: "On the buyer's side there is already search, verification and visits, and you can ask for a photo session from your listing.",
     },
     ya: { es: "Ya disponible", en: "Available now" },
-    pronto: { es: "Próximamente", en: "Coming soon" },
     // Cada tarjeta dice la verdad de HOY. Cualitativo y sin cifras (las de fotos están prohibidas por
-    // evidencia débil — design-system.md). `estrella` y «ya / próximamente» los pone el componente.
+    // evidencia débil — design-system.md). La estrella y «Ya disponible» los pone el componente.
     tarjetas: [
       {
         titulo: {
@@ -187,8 +186,8 @@ export const LANDING = {
           en: "Visits without the back-and-forth",
         },
         texto: {
-          es: "El comprador te propone cuándo y tú eliges la hora. A los dos les llega un recordatorio por correo el día antes.",
-          en: "The buyer suggests times and you pick one. Both of you get an email reminder the day before.",
+          es: "Tú propones hasta tres horarios y el comprador elige uno. A los dos les llega un recordatorio por correo el día antes.",
+          en: "You offer up to three times and the buyer picks one. Both of you get an email reminder the day before.",
         },
       },
       {
@@ -262,8 +261,8 @@ export const LANDING = {
 
   ctaFinal: {
     titulo: {
-      es: "Tu inmueble, listo antes que los demás",
-      en: "Your property, ready before everyone else's",
+      es: "Tu inmueble, listo hoy",
+      en: "Your property, ready today",
     },
     texto: {
       es: "Publícalo hoy como fundador. Sin comisión, sin intermediarios y en menos de tres minutos.",
@@ -271,8 +270,8 @@ export const LANDING = {
     },
   },
 
-  // Paquete fundador (4 guías gratuitas). Las guías siguen en español (decisión del S5): en inglés cada
-  // tarjeta lo avisa. Se redactan con el brochure, al cierre de H-2.
+  // Paquete fundador (4 guías gratuitas). Las guías siguen en español (decisión del S5, vigente): en inglés cada
+  // tarjeta lo avisa y el manual lo declara en «Limitaciones».
   paquete: {
     titulo: {
       es: "Tu paquete de fundador",

@@ -3,11 +3,8 @@ import type { Idioma } from "@/i18n/idiomas";
 import { enIdioma } from "@/i18n/textos";
 import { LANDING } from "@/textos/landing";
 
-// Las tarjetas ya construidas llevan la estrella de calidad y «Ya disponible»; una que falte llevaría «Próximamente». Desde el S15
-// las tres están construidas (la tercera: la sesión de fotos que el dueño pide desde «Mi anuncio»).
-const YA_DISPONIBLE = [true, true, true] as const;
-
-// Honesto: dice lo que ya funciona. Cualitativo, sin cifras (las de fotos están
+// Honesto: dice lo que ya funciona (las tres tarjetas están construidas; la tercera, la sesión de fotos que el dueño pide desde
+// «Mi anuncio», desde el S15). Una tarjeta de algo que aún no exista no se pinta: no hay etiqueta de «próximamente». Cualitativo, sin cifras (las de fotos están
 // prohibidas por evidencia débil — design-system.md).
 export default function QueViene({ lang }: { lang: Idioma }) {
   const t = enIdioma(LANDING.queViene, lang);
@@ -21,22 +18,20 @@ export default function QueViene({ lang }: { lang: Idioma }) {
       </div>
 
       <Reveal stagger className="mt-12 grid gap-6 sm:grid-cols-3">
-        {t.tarjetas.map((c, i) => (
+        {t.tarjetas.map((c) => (
           <div
             key={c.titulo}
             className="rounded-[2rem] border border-purple-200 bg-white p-7"
           >
             <div className="flex items-center gap-2">
-              {YA_DISPONIBLE[i] && (
-                <span aria-hidden="true" className="text-lg text-purple">
-                  ★
-                </span>
-              )}
+              <span aria-hidden="true" className="text-lg text-purple">
+                ★
+              </span>
               <h3 className="text-lg font-bold text-ink">{c.titulo}</h3>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-gray">{c.texto}</p>
             <p className="mt-4 inline-block rounded-full bg-purple-tint px-3 py-1 text-xs font-semibold text-purple-600">
-              {YA_DISPONIBLE[i] ? t.ya : t.pronto}
+              {t.ya}
             </p>
           </div>
         ))}

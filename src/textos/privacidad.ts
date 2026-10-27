@@ -210,8 +210,8 @@ export const PRIVACIDAD = {
       en: "Security and retention",
     },
     texto: {
-      es: "Tus datos se almacenan con controles de acceso: solo el operador autorizado de Innmobiliaria puede consultarlos, salvo lo que cada ficha o solicitud muestra a quien corresponde (por ejemplo, el dueño de un anuncio ve las solicitudes de visita de ese anuncio). Los conservamos mientras dure la campaña de expectativa y el proceso de lanzamiento, salvo que solicites su supresión antes.",
-      en: "Your data is stored with access controls: only Innmobiliaria's authorized operator can view it, apart from what each listing or request shows to the person it concerns (for example, a listing's owner sees the viewing requests for that listing). We keep it for as long as the pre-launch campaign and the launch process last, unless you ask us to delete it sooner.",
+      es: "Tus datos se almacenan con controles de acceso: solo el operador autorizado de Innmobiliaria puede consultarlos, salvo lo que cada ficha o solicitud muestra a quien corresponde (por ejemplo, el dueño de un anuncio ve las solicitudes de visita de ese anuncio). Los conservamos hasta que pidas su supresión: un anuncio que vence deja de mostrarse, pero no lo borramos solos. Lo temporal sí se borra solo, al cabo de unos días o semanas: los códigos de verificación sin usar, las verificaciones de WhatsApp que nadie terminó, las alertas que nadie confirmó o que se dieron de baja y el historial de cambios de precio.",
+      en: "Your data is stored with access controls: only Innmobiliaria's authorized operator can view it, apart from what each listing or request shows to the person it concerns (for example, a listing's owner sees the viewing requests for that listing). We keep it until you ask us to delete it: a listing that expires stops being shown, but we don't delete it on our own. Temporary data does get deleted automatically, after a few days or weeks: unused verification codes, WhatsApp verifications nobody finished, alerts nobody confirmed or that were cancelled, and the price-change history.",
     },
   },
 } as const satisfies Arbol;

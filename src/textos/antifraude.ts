@@ -334,8 +334,8 @@ export const ANTIFRAUDE = {
         en: 'Title record requested. Message the owner: the listing stays visible and, if it was verified, shows "re-check pending" until they show a title record 30 days old or less.',
       },
       ctlCerrado: {
-        es: "Pedido cerrado: el anuncio sale de la cola y, si era verificado sin CTL vigente, vuelve a «fundador». Queda la fecha.",
-        en: 'Request closed: the listing leaves the queue and, if it was verified without a current title record, goes back to "founder". The date is kept.',
+        es: "Pedido cerrado: el anuncio sale de la cola y, si era verificado sin CTL vigente, vuelve a «fundador». Queda registrado.",
+        en: 'Request closed: the listing leaves the queue and, if it was verified without a current title record, goes back to "founder". It is on record.',
       },
       descartado: {
         es: "Banderas descartadas, con la razón y la fecha en el registro de la revisión.",

@@ -132,6 +132,20 @@ Desde el S13, `--salas ausente` (antes de la migración 16) comprueba que las fu
 (después) que el anónimo no lee `salas_ventas`, que las funciones del operador y la del servidor le responden 401, que pedir una visita
 a una sala con una sesión falsa se rechaza y que `usados_para_comparar` devuelve solo área y precio.
 
+### 1.8 [CLAUDE] La sonda de las migraciones (desde el S16: se corre tras cada `supabase db push`)
+
+`supabase migration list --linked` dice que una migración **está registrada**; la sonda comprueba por **comportamiento** que su
+cuerpo **quedó aplicado** (en el S15 solo se pudo verificar la lista de versiones: `supabase db query --linked` respondía 401 y no había forma de leer el cuerpo de una función en la nube). Conecta con la URL del pooler que deja el
+CLI (`supabase/.temp/`, ignorada por git) y `SUPABASE_DB_PASSWORD`, corre cada caso dentro de `BEGIN … ROLLBACK` (no cambia ningún
+dato) y **no entra a la CI** (no hay base real en ella):
+
+```bash
+pnpm sonda:nube
+```
+
+Una función que debe rechazar lo inválido lo rechaza; una columna nueva existe; una función retirada ya no está. Una migración sin
+sonda no se da por verificada: el cierre del sprint dice cuántas pasan.
+
 ---
 
 ## Bloque 2 — Secrets del keep-alive en GitHub
@@ -308,6 +322,11 @@ pnpm exec wrangler secret put SUPABASE_SERVICE_ROLE_KEY  # la «service_role» d
 Cada comando pide el valor por la terminal. Sin ellos la verificación responde «no disponible» y el
 webhook rechaza todo; nada más de la app se afecta. Después, `pnpm deploy:cf`.
 
+**Estado (2026-10-26, leído con `wrangler secret list`, solo nombres):** `SUPABASE_SERVICE_ROLE_KEY` **está puesta**;
+`WHATSAPP_APP_SECRET`, `WHATSAPP_VERIFY_TOKEN` y `WHATSAPP_NUMERO` **faltan**. Sin ellas, en producción «verificar tu WhatsApp»
+responde «no disponible» y el comprador no puede contactar ni agendar: **el ensayo general de esas paradas no se puede hacer
+hasta ponerlas** (y hace falta un segundo teléfono para hacer de comprador). Un valor nunca se escribe en este archivo.
+
 ### 5.2 [TÚ] Suscribir el webhook en Meta y probar
 
 1. En Meta, pega la dirección del webhook y el token de verificación: Meta debe aceptarla («verificado y
@@ -327,6 +346,8 @@ Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la 
 | `CRON_SECRET`                                                   | antes del deploy                                                                                                                           | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker   |
 | Brevo                                                           | **hecho el 2026-10-19 (S9)**: cuenta, dominio autenticado, remitente verificado y llave; los secretos están en el Worker (ver 6.1 y 6.4)   | el mismo remitente verificado sirve para los avisos de la visita y las alertas   |
 | Migraciones 10, 11 y 12                                         | ya aplicadas en la nube con tu «sí»                                                                                                        | nada                                                                             |
+| Migración 19 (S16, el lote del hito: consentimiento y tope de la visita, bandera que vuelve solo si cambia el dato, cerrar un CTL no entregado, sala sin corte, aviso de baja desde 1 %, cupo de correos) | **SOLO local hasta tu «sí»** (`db push --dry-run` la lista como la única pendiente; después `migration list --linked`, el humo `--lote` y `pnpm sonda:nube`) | tu «sí» |
+| Migraciones 17 y 18 (S15, antifraude y sesiones; el orden de la cola)  | **ya aplicadas en la nube el 2026-10-25** con tu «sí» (18/18; humo anónimo `--antifraude`: 44 de 44) | nada |
 | Migración 16 (S13, visita a salas de ventas y muestra validada) | **ya aplicada en la nube el 2026-10-22** con tu «sí» (16/16; humo anónimo con `--salas presente`: 18 de 18; la 187 intacta, 0 solicitudes) | nada; el operador escribe el contacto de cada sala en el panel, jamás en el repo |
 | Migración 15 (S12, la edición de vivienda nueva en la base)     | **ya aplicada en la nube el 2026-10-21** con tu «sí» (15/15; humo anónimo antes, después y con la edición 187 publicada: 9 de 9)           | nada; cada mes, revisar la muestra de 5 antes de publicar (`/bandeja`)           |
 | Migración 14 (S10, tasa de vivienda y comparables de precio)    | **ya aplicada en la nube el 2026-10-19** con tu «sí» (14/14, `migration list --linked`)                                                    | nada                                                                             |
@@ -356,7 +377,7 @@ pnpm exec wrangler secret list                          # comprueba que los nomb
 resúmenes de alertas salen. Sin `DIDIT_API_KEY` (y sin el simulador) «Identificarse» responde «no
 disponible»: **nunca simula en silencio**. Sin `CRON_SECRET` el trabajo diario responde 503 y no manda
 nada. Sin la llave de servicio, crear una alerta responde «no disponible» y el cron no reclama resúmenes.
-Los pone **la persona dueña de la cuenta**, a mano: la herramienta de construcción no escribe secretos en
+**Estado (2026-10-26): `DIDIT_API_KEY` falta**; los otros tres siguen puestos. Los pone **la persona dueña de la cuenta**, a mano: la herramienta de construcción no escribe secretos en
 la nube. Después, `pnpm deploy:cf`: el Worker queda con el Cron Trigger `0 13 * * *` (las 8:00 de
 Bogotá).
 

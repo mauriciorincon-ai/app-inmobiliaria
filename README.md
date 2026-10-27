@@ -1,8 +1,10 @@
 # Innmobiliaria
 
-Marketplace inmobiliario **seller-first** para Colombia (Bogotá primero). Primera app 100%
-comercial del pipeline AI-APPs. Fase 1 (cero IA, todo determinista): captar **vendedores directos**
-— publicar el inmueble ES el registro a la campaña de expectativa.
+Marketplace inmobiliario del **dueño directo** para Colombia (Bogotá primero). Primera app 100%
+comercial del pipeline AI-APPs; cero IA, todo determinista. Publicar el inmueble ES el registro, y
+los compradores verificados lo buscan, le escriben al dueño, agendan la visita y deciden con números
+(el rango de su zona, la cuota, el papeleo con su norma y la vivienda nueva con lo que de verdad se
+paga). Producto completo del hito H-2: 37 funcionalidades, en español y en inglés.
 
 > El plan del producto vive en la casa planeadora (`~/Code/hr01-develop-ai-apps`). Este repo es
 > solo la implementación. Ver `CLAUDE.md` para las reglas de las dos casas.
@@ -39,7 +41,8 @@ pnpm test:e2e       # e2e (Playwright): happy path por la UI, validaciones, RLS,
 pnpm typecheck      # tsc --noEmit
 pnpm lint           # eslint
 pnpm build          # next build
-pnpm deploy:cf      # build + deploy a Cloudflare Workers (requiere cuenta CF configurada)
+pnpm deploy:cf      # guarda de despliegue + build + deploy a Cloudflare Workers (requiere cuenta CF configurada)
+pnpm sonda:nube     # tras cada `supabase db push`: comprueba por comportamiento que la migración quedó aplicada (no entra a la CI)
 ```
 
 ## Estructura
@@ -60,6 +63,8 @@ design-system.md       fuente de verdad visual
 ## Documentación
 
 - **Manual de uso:** [`docs/MANUAL-DE-USO.md`](docs/MANUAL-DE-USO.md)
+- **Arquitectura as-built:** [`docs/BLUEPRINT.html`](docs/BLUEPRINT.html)
+- **Aprovisionamiento (cuentas, secretos, migraciones):** [`docs/APROVISIONAMIENTO.md`](docs/APROVISIONAMIENTO.md)
 - **Guía de prueba:** [`docs/GUIA-DE-PRUEBA.html`](docs/GUIA-DE-PRUEBA.html)
 - **Sistema de diseño:** [`design-system.md`](design-system.md)
 - **Decisiones:** [`decisions/`](decisions/)

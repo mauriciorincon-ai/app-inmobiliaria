@@ -154,17 +154,26 @@ function Resultado({
       </p>
 
       {incompleto && (
-        <div data-testid="ctl-incompleto">
-          <Aviso clase={AVISO} simbolo="▲">
-            {completitud.total !== null
-              ? rellenar(t.incompleto, {
-                  total: completitud.total,
-                  faltan: completitud.faltan.join(", "),
-                })
-              : rellenar(t.incompletoSinTotal, {
-                  faltan: completitud.faltan.join(", "),
-                })}
-          </Aviso>
+        <div data-testid="ctl-incompleto" className="space-y-2">
+          {completitud.faltan.length > 0 && (
+            <Aviso clase={AVISO} simbolo="▲">
+              {completitud.total !== null
+                ? rellenar(t.incompleto, {
+                    total: completitud.total,
+                    faltan: completitud.faltan.join(", "),
+                  })
+                : rellenar(t.incompletoSinTotal, {
+                    faltan: completitud.faltan.join(", "),
+                  })}
+            </Aviso>
+          )}
+          {completitud.sobran && (
+            <Aviso clase={AVISO} simbolo="▲">
+              {completitud.total !== null
+                ? rellenar(t.sobran, { total: completitud.total })
+                : t.sobranSinTotal}
+            </Aviso>
+          )}
         </div>
       )}
       {completitud.estado === "sin_total" && (

@@ -24,7 +24,7 @@ export type Marca = {
   anotacion: number;
   fecha: string | null;
   codigo: string | null;
-  /** S16: el código no está en el catálogo de 2016; se leyó por su grupo. */
+  /** S16: el código no está en la tabla de 2016 con la que se revisa (grupos 01, 02, 03, 04, 06, 08 y 09; el 05 no se leyó); se leyó por su grupo. */
   codigoFueraDeCatalogo: boolean;
   vigente: boolean;
   /** La anotación que la canceló, si alguna la nombra. */
@@ -61,6 +61,8 @@ export type Completitud = {
   total: number | null;
   /** Los números que faltan entre 1 y el mayor (o el total). */
   faltan: number[];
+  /** Trae más de las que dice el total, o repite un número: lo habitual es haber pegado dos certificados. */
+  sobran: boolean;
 };
 
 type Naturaleza = TipoMarca | "cancelacion" | "neutra" | "desconocida";
@@ -141,6 +143,7 @@ function naturalezaPorGrupo(especificacion: string, grupo: string): Naturaleza {
       // Un embargo «con acción real hipotecaria» o «de derechos y acciones» es un embargo: el grupo manda.
       return ES_EMBARGO.test(especificacion) ? "embargo" : "medida_cautelar";
     case "05":
+      // El grupo 05 (tenencia, art. 8) no está en la tabla leída: no se sabe qué códigos trae. Se pregunta como limitación genérica, sin acusar.
       return "limitacion_dominio";
     case "06":
       return "falsa_tradicion";
@@ -275,13 +278,24 @@ export function completitudDe(
   const hasta = Math.max(total ?? 0, ...numeros, 0);
   const faltan: number[] = [];
   for (let n = 1; n <= hasta; n++) if (!leidos.has(n)) faltan.push(n);
+  // Un número repetido, o uno mayor que el total, o más anotaciones que el total: no es «falta», es «sobra».
+  const sobran =
+    leidos.size !== numeros.length ||
+    (total !== null && (leidos.size > total || numeros.some((n) => n > total)));
   if (total === null) {
-    return { estado: faltan.length > 0 ? "no" : "sin_total", total, faltan };
+    return {
+      estado: faltan.length > 0 || sobran ? "no" : "sin_total",
+      total,
+      faltan,
+      sobran,
+    };
   }
   return {
-    estado: faltan.length === 0 && leidos.size === total ? "si" : "no",
+    estado:
+      faltan.length === 0 && leidos.size === total && !sobran ? "si" : "no",
     total,
     faltan,
+    sobran,
   };
 }
 

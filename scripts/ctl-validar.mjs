@@ -9,7 +9,8 @@
 // Un desacuerdo es una marca (tipo, anotación, vigencia) o una «no reconocida» que el lector y la lectura a mano no comparten.
 // Sale con 1 si `privado/ctl` no está ignorada, si hay desacuerdos o si hay menos de 2 certificados con su lectura a mano (S16,
 // pregunta 1a del usuario: antes 3): el lector se enciende (`LECTOR_CTL_ACTIVO=1`) solo con una salida 0, y la guarda de
-// despliegue corre este script antes de dejarlo pasar. También cuenta los textos que el lector ve incompletos.
+// despliegue corre este script antes de dejarlo pasar. Un certificado que el lector no lee (sin anotaciones) o ve incompleto
+// también impide el 0: es un caso real en que falla, no un archivo que se pueda ignorar.
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -77,10 +78,15 @@ for (const f of archivos) {
 }
 
 console.log(JSON.stringify({ ...cuenta, marcas: porTipo }, null, 2));
-const listo = cuenta.conLecturaAMano >= MINIMO && cuenta.desacuerdos === 0;
+// Un certificado que el lector no pudo leer o vio incompleto es evidencia EN CONTRA: no se descarta en silencio, bloquea.
+const listo =
+  cuenta.conLecturaAMano >= MINIMO &&
+  cuenta.desacuerdos === 0 &&
+  cuenta.sinAnotaciones === 0 &&
+  cuenta.incompletos === 0;
 console.log(
   listo
     ? "VALIDADO: el lector puede encenderse (LECTOR_CTL_ACTIVO=1)."
-    : `SIN VALIDAR: hacen falta ${MINIMO} certificados con su lectura a mano y cero desacuerdos. El lector queda apagado.`,
+    : `SIN VALIDAR: hacen falta ${MINIMO} certificados con su lectura a mano, cero desacuerdos y ninguno ilegible o incompleto. El lector queda apagado.`,
 );
 process.exit(listo ? 0 : 1);

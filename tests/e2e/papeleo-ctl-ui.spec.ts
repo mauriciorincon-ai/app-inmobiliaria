@@ -177,6 +177,27 @@ test("un certificado limpio lo dice, y lo que no entiende lo nombra sin darlo po
   ).toBeVisible();
 });
 
+test("más anotaciones que el total impreso: dice que SOBRAN (¿dos certificados?), no que faltan, y no pinta el ✓ verde", async ({
+  page,
+}) => {
+  const campo = await abrirLector(page);
+  await campo.fill(
+    certificado("limpio").replace(
+      "NRO TOTAL DE ANOTACIONES: *2*",
+      "NRO TOTAL DE ANOTACIONES: *1*",
+    ),
+  );
+  await leer(page);
+  const aviso = page.getByTestId("ctl-incompleto");
+  await expect(aviso).toContainText(
+    "más anotaciones de las que el certificado dice (1)",
+  );
+  await expect(aviso).not.toContainText("faltan las número");
+  await expect(
+    page.getByText("no encontramos nada de lo que este lector marca"),
+  ).toHaveCount(0);
+});
+
 test("sin texto o sin anotaciones lo dice; borrar vacía el campo y el resultado", async ({
   page,
 }) => {

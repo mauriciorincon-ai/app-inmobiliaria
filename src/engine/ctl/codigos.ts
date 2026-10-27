@@ -1,5 +1,6 @@
 // Los códigos de naturaleza jurídica VIGENTES del catálogo oficial (Res. SNR 11885 de 2016, art. 4), grupos 01, 02, 03, 04, 06,
-// 08 y 09, leídos el 2026-10-25 en dos reproducciones que coinciden (la fuente primaria —SNR, Diario Oficial— no se alcanzó).
+// 08 y 09, leídos el 2026-10-25 en dos reproducciones que coinciden (la fuente primaria —SNR, Diario Oficial— no se alcanzó). El grupo 05
+// (tenencia) no se leyó: un código 05xx cae «fuera de la tabla» sin que eso diga que no exista en el catálogo oficial.
 // Solo los números: con ellos el lector dice si un código NO está en el catálogo y entonces lo lee por su grupo. Las
 // descripciones y el tipo esperado de cada uno viven en `tests/fixtures/ctl/catalogo-snr-11885.json` (S16). Generado de ese
 // archivo; si el catálogo cambia, se regeneran los dos.

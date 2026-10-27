@@ -258,14 +258,14 @@ describe("¿está completo el texto? (S16)", () => {
 
   it("cuadra con el total impreso y la numeración: completo", () => {
     const l = leido(leerCtl([1, 2, 3].map(anotacion).join("\n") + "\n" + cierre(3), HOY));
-    expect(l.completitud).toEqual({ estado: "si", total: 3, faltan: [] });
+    expect(l.completitud).toEqual({ estado: "si", total: 3, faltan: [], sobran: false });
   });
 
   it("le falta una anotación (la del medio o la última): incompleto, y dice cuáles", () => {
     const sinMedio = leido(leerCtl([1, 3].map(anotacion).join("\n") + "\n" + cierre(3), HOY));
-    expect(sinMedio.completitud).toEqual({ estado: "no", total: 3, faltan: [2] });
+    expect(sinMedio.completitud).toEqual({ estado: "no", total: 3, faltan: [2], sobran: false });
     const sinUltima = leido(leerCtl([1, 2].map(anotacion).join("\n") + "\n" + cierre(3), HOY));
-    expect(sinUltima.completitud).toEqual({ estado: "no", total: 3, faltan: [3] });
+    expect(sinUltima.completitud).toEqual({ estado: "no", total: 3, faltan: [3], sobran: false });
   });
 
   it("sin el total impreso: si la numeración salta es incompleto; si no, no se puede comprobar", () => {
@@ -273,12 +273,33 @@ describe("¿está completo el texto? (S16)", () => {
       estado: "no",
       total: null,
       faltan: [2],
+      sobran: false,
     });
     expect(leido(leerCtl([1, 2].map(anotacion).join("\n"), HOY)).completitud).toEqual({
       estado: "sin_total",
       total: null,
       faltan: [],
+      sobran: false,
     });
+  });
+
+  it("más anotaciones que el total, o un número repetido: no falta nada, SOBRA (¿dos certificados pegados?)", () => {
+    const masQueElTotal = leido(
+      leerCtl([1, 2, 3, 4].map(anotacion).join("\n") + "\n" + cierre(3), HOY),
+    );
+    expect(masQueElTotal.completitud).toEqual({
+      estado: "no",
+      total: 3,
+      faltan: [],
+      sobran: true,
+    });
+    const repetida = leido(
+      leerCtl([1, 2, 2, 3].map(anotacion).join("\n") + "\n" + cierre(3), HOY),
+    );
+    expect(repetida.completitud).toMatchObject({ estado: "no", faltan: [], sobran: true });
+    // Sin total impreso, el repetido también avisa.
+    const sinTotal = leido(leerCtl([1, 2, 2].map(anotacion).join("\n"), HOY));
+    expect(sinTotal.completitud).toMatchObject({ estado: "no", total: null, sobran: true });
   });
 });
 
@@ -299,7 +320,7 @@ describe("sin código decide la palabra, y como palabra (S16)", () => {
     ]);
     expect(marcaDe("GRAVAMEN: 0212 VALORIZACION")).toEqual([[["gravamen", "0212"]], 0]);
   });
-  it("sin código: «prohibición de transferencia» es su marca y una cancelación parcial no se entiende; un 05 es limitación, fuera del catálogo", () => {
+  it("sin código: «prohibición de transferencia» es su marca y una cancelación parcial no se entiende; un 05 se pregunta como limitación y queda fuera de la tabla leída", () => {
     expect(marcaDe("PROHIBICION DE TRANSFERENCIA")).toEqual([[["prohibicion_transferencia", null]], 0]);
     expect(marcaDe("CANCELACION PARCIAL HIPOTECA")).toEqual([[], 1]);
     expect(marcaDe("LIMITACION AL DOMINIO: 0501 ACTO DEL GRUPO CINCO")).toEqual([[["limitacion_dominio", "0501"]], 0]);

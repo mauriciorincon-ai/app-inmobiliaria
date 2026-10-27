@@ -278,6 +278,14 @@ export const CTL = {
       es: "El texto parece incompleto: faltan las anotaciones número {faltan}. Copia el certificado entero.",
       en: "The text looks incomplete: entries {faltan} are missing. Copy the whole record.",
     },
+    sobran: {
+      es: "El texto trae más anotaciones de las que el certificado dice ({total}) o repite números: ¿pegaste dos certificados? Copia uno solo, entero.",
+      en: "The text has more entries than the record says ({total}) or repeats numbers: did you paste two records? Copy a single one, whole.",
+    },
+    sobranSinTotal: {
+      es: "El texto repite números de anotación: ¿pegaste dos certificados? Copia uno solo, entero.",
+      en: "The text repeats entry numbers: did you paste two records? Copy a single one, whole.",
+    },
     sinTotal: {
       es: "El texto no trae el «número total de anotaciones»: no podemos comprobar que esté completo.",
       en: "The text doesn't include the «total number of entries»: we can't check that it's complete.",
@@ -287,8 +295,8 @@ export const CTL = {
       en: "No code: we read it by its words.",
     },
     fueraDeCatalogo: {
-      es: "El código {codigo} no está en el catálogo de 2016: la leímos por su grupo.",
-      en: "Code {codigo} isn't in the 2016 table: we read it by its group.",
+      es: "El código {codigo} no está en la tabla de 2016 con la que revisamos: lo leímos por su grupo.",
+      en: "Code {codigo} isn't in the 2016 table we checked against: we read it by its group.",
     },
   },
 } as const satisfies Arbol;

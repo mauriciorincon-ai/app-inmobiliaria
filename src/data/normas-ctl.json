@@ -1,7 +1,7 @@
 {
   "version": 1,
   "consultado": "2026-10-25",
-  "nota": "Registro de los artículos que cita el lector de CTL (S15), cada uno leído en su texto oficial en la fecha de consulta. Una marca solo cita artículos de esta lista; una prueba lo comprueba.",
+  "nota": "Registro de los artículos que cita el lector de CTL (S15), cada uno leído en la fecha de consulta en el gestor normativo de una entidad pública (CRA, Función Pública o el Régimen Legal de Bogotá), que reproduce el texto: ninguno se contrastó con el Diario Oficial. Una marca solo cita artículos de esta lista; una prueba lo comprueba.",
   "normas": {
     "ley_1579_2012": {
       "nombre": "Ley 1579 de 2012 (Estatuto de Registro de Instrumentos Públicos)",

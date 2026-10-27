@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
@@ -6,7 +7,10 @@ import AxeBuilder from "@axe-core/playwright";
 // reduced-motion como experiencia COMPLETA, lo cerrado fuera del árbol de accesibilidad,
 // teclado, y que el mapa de rutas no mienta.
 
-const CONTEO_ESPERADO = 13; // cuadra 1:1 con las secciones "###" de docs/MANUAL-DE-USO.md
+// Cuadra 1:1 con las secciones "###" de docs/MANUAL-DE-USO.md (la fuente del conteo): se lee de ahí, no se escribe a mano.
+const CONTEO_ESPERADO = (
+  readFileSync("docs/MANUAL-DE-USO.md", "utf8").match(/^### /gm) ?? []
+).length;
 
 test("la ruta /conoce sirve el brochure y declara su estado inicial", async ({
   page,

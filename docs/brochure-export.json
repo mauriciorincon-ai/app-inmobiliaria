@@ -12,24 +12,24 @@
     "enlaces.produccion": "null cuando la app no tiene URL pública. `razon` explica por qué, y es lo que la vitrina muestra en lugar del enlace. Nunca se rellena con un enlace de repositorio ni con una promesa."
   },
   "schema_version": "1.0.0",
-  "actualizado": "2026-10-17",
+  "actualizado": "2026-10-26",
   "app": {
     "slug": "inmobiliaria",
     "nombre": "Innmobiliaria",
-    "ciclo": "H1",
+    "ciclo": "H2",
     "estado": "inicial",
     "sellado_en": null,
-    "sprints_cerrados": 3,
+    "sprints_cerrados": 16,
     "version_repo": "0.1.0"
   },
   "promesa": {
     "tagline": "Vende tu casa directo, sin comisión.",
-    "intro": "El marketplace del dueño que vende solo, no de la inmobiliaria: publicas tu inmueble hoy como fundador —sin comisión y sin intermediarios— y queda listo, verificado y esperando el día que la plataforma abra a los compradores.",
+    "intro": "El marketplace del dueño que vende solo, no de la inmobiliaria: publicas tu inmueble como fundador —sin comisión y sin intermediarios— y compradores verificados lo encuentran, le escriben al dueño con un toque y agendan la visita, con el precio explicado y el papeleo a la vista.",
     "para_quien": "Para el propietario en Bogotá que quiere vender o arrendar directo y hoy enfrenta solo una comisión del 3% —unos $12 millones en una vivienda de $400 millones—, entre 7 y 7,5 meses de espera promedio, anuncios clonados y un papeleo que nadie le explica.",
-    "diferencial": "Todos los portales colombianos le venden el vendedor a alguien más. Aquí publicar ES unirse, y nada se declara sin comprobarse: el sello de propietario se gana mostrando el certificado (que se ve y nunca se almacena), los anuncios vencen si nadie los renueva, y los cupos por zona salen de la base de datos o simplemente no se muestran. Cero contadores inventados y cero inteligencia artificial: todo es código determinista."
+    "diferencial": "Todos los portales colombianos le venden el vendedor a alguien más. Aquí publicar ES unirse, y nada se declara sin comprobarse: el dueño gana su sello mostrando el certificado (que se ve y nunca se almacena), el comprador prueba su WhatsApp antes de escribir, los anuncios vencen si nadie los renueva, las reglas antifraude se leen y el precio de cada anuncio se compara con su zona con su fuente. Cero contadores inventados y cero inteligencia artificial: todo es código determinista."
   },
   "funcionalidades": {
-    "total": 13,
+    "total": 37,
     "fuente_del_conteo": "docs/MANUAL-DE-USO.md",
     "descartadas": [],
     "grupos": [
@@ -85,7 +85,7 @@
           },
           {
             "id": "A3",
-            "nombre": "Confirmación y enlace privado",
+            "nombre": "Confirmación y tu enlace privado",
             "que_hace": "Al terminar muestra qué sigue y entrega el enlace privado «mi anuncio», que es la única llave para editarlo después. El token viaja en el fragmento de la URL, nunca al servidor.",
             "seccion_manual": "Confirmación de fundador"
           }
@@ -142,57 +142,249 @@
             "seccion_manual": "Zonas, cupos y densidad"
           }
         ]
+      },
+      {
+        "orden": 5,
+        "estrella": false,
+        "nombre": "Encontrar",
+        "linea": "Filtros, un mapa donde dibujas tu zona y lo que guardas para decidir.",
+        "features": [
+          {
+            "id": "H2-01",
+            "nombre": "Búsqueda con filtros y mapa de zona dibujada",
+            "que_hace": "El comprador busca anuncios vivos de dueños directos en Bogotá por tipo, localidad, precio y habitaciones, o dibuja su zona en el mapa tocando al menos tres esquinas; también se puede dibujar solo con el teclado. La búsqueda queda en el enlace y funciona sin cuenta.",
+            "seccion_manual": "Búsqueda con filtros y mapa de zona dibujada"
+          },
+          {
+            "id": "H2-02",
+            "nombre": "Sello del propietario visible para el comprador",
+            "que_hace": "Cada tarjeta y cada ficha muestran un solo sello del dueño, con símbolo y texto: Propietario verificado con la fecha de su CTL, re-verificación pendiente, o Fundador. El certificado se ve y nunca se guarda.",
+            "seccion_manual": "Sello del propietario visible para el comprador"
+          },
+          {
+            "id": "H2-03",
+            "nombre": "Favoritos, comparar hasta 4 y listas compartidas con notas",
+            "que_hace": "El corazón guarda un anuncio sin cuenta (en el teléfono, hasta 100); al verificar el WhatsApp pasan a la cuenta. Se comparan hasta 4 en una tabla y se arman listas para decidir con otra persona, con notas; la lista se comparte con un enlace que mandas a quien quieras.",
+            "seccion_manual": "Favoritos, comparar hasta 4 y listas compartidas con notas"
+          },
+          {
+            "id": "H2-04",
+            "nombre": "Alertas de coincidencia",
+            "que_hace": "Guardas tu búsqueda como alerta y recibes por correo un resumen al día, solo si hay algo: anuncios nuevos y bajas de precio de un 1 % o más. Confirmas el correo con un enlace y cada correo trae «Dejar de recibirla» en un clic.",
+            "seccion_manual": "Alertas de coincidencia"
+          },
+          {
+            "id": "H2-05",
+            "nombre": "Datos de tu zona",
+            "que_hace": "En la ficha se ven el m² mediano de oferta de la zona, la oferta activa y el valor de referencia del m² de terreno de Catastro Bogotá, cada cifra con su fecha y su fuente.",
+            "seccion_manual": "Datos de tu zona"
+          }
+        ]
+      },
+      {
+        "orden": 6,
+        "estrella": false,
+        "nombre": "Confianza de los dos lados",
+        "linea": "El dueño con su CTL, el comprador con su WhatsApp, y reglas que se ven.",
+        "features": [
+          {
+            "id": "H2-06",
+            "nombre": "Comprador verificado por WhatsApp",
+            "que_hace": "Navegar y guardar es libre; contactar o agendar exige probar que el WhatsApp es tuyo. El comprador toca «verificar», WhatsApp se abre con un código ya escrito hacia el número de Innmobiliaria y lo envía: recibir ese mensaje no le cuesta nada a la plataforma.",
+            "seccion_manual": "Comprador verificado por WhatsApp"
+          },
+          {
+            "id": "H2-07",
+            "nombre": "Comprador identificado (opcional)",
+            "que_hace": "Con la cédula, la fecha de expedición y el nombre, se contrasta con la Registraduría por medio de un proveedor. El número de cédula no se guarda: solo queda que salió bien y cuándo.",
+            "seccion_manual": "Comprador identificado (opcional)"
+          },
+          {
+            "id": "H2-08",
+            "nombre": "Tarjeta del comprador para el dueño",
+            "que_hace": "Antes de decir que sí, el dueño ve el nombre del comprador, los últimos 4 dígitos de su WhatsApp, su nivel de verificación, para qué busca, lo que declaró y a cuántas visitas asistió. Nunca ve su correo. Puede activar «solo compradores identificados».",
+            "seccion_manual": "Tarjeta del comprador para el dueño"
+          },
+          {
+            "id": "H2-09",
+            "nombre": "Reglas antifraude visibles",
+            "que_hace": "Cuatro reglas escritas señalan anuncios al equipo: un precio 30 % o más por debajo de la mediana de su zona, una foto parecida a la de otro anuncio con otro teléfono, la misma matrícula con otro teléfono y el mismo WhatsApp con dos nombres. Cualquier comprador verificado puede reportar; una persona del equipo decide.",
+            "seccion_manual": "Reglas antifraude visibles"
+          }
+        ]
+      },
+      {
+        "orden": 7,
+        "estrella": false,
+        "nombre": "Contactar y visitar",
+        "linea": "Un toque para escribir, y una visita agendada de punta a punta.",
+        "features": [
+          {
+            "id": "H2-10",
+            "nombre": "Contacto por WhatsApp con un toque",
+            "que_hace": "Con el WhatsApp verificado, un toque abre el chat con el dueño con un mensaje ya escrito sobre el anuncio. El contacto queda registrado para los dos: el dueño lo ve en «Compradores que abrieron tu chat».",
+            "seccion_manual": "Contacto por WhatsApp con un toque"
+          },
+          {
+            "id": "H2-11",
+            "nombre": "Agenda de visita",
+            "que_hace": "El comprador pide una visita contando para qué busca; el dueño le propone hasta tres horarios, el comprador confirma uno y a los dos les llega un recordatorio por correo el día antes. Después, el dueño marca si asistió. Todas las horas son de Bogotá.",
+            "seccion_manual": "Agenda de visita"
+          }
+        ]
+      },
+      {
+        "orden": 8,
+        "estrella": false,
+        "nombre": "Decidir con números",
+        "linea": "Un rango, no un avalúo; una cuota, no una aprobación; el papeleo con su norma.",
+        "features": [
+          {
+            "id": "H2-12",
+            "nombre": "¿Está caro este anuncio?",
+            "que_hace": "Compara el precio por m² del anuncio con el de anuncios parecidos de su zona y responde con símbolo y texto: en rango, por encima, sospechosamente barato o sin datos suficientes. El rango va del percentil 25 al 75, con su N, su fecha y su fuente; con menos de 5 comparables no da rango.",
+            "seccion_manual": "¿Está caro este anuncio?"
+          },
+          {
+            "id": "H2-13",
+            "nombre": "Simulador de cuota y capacidad de endeudamiento",
+            "que_hace": "Con el precio, la cuota inicial, el plazo, la tasa y los ingresos calcula la cuota mensual, el costo del crédito y si cabe en el 40 % de los ingresos (Decreto 583 de 2025); también calcula hasta qué precio se puede comprar y abre «Buscar» ya filtrado.",
+            "seccion_manual": "Simulador de cuota y capacidad de endeudamiento"
+          },
+          {
+            "id": "H2-14",
+            "nombre": "Asistente del papeleo",
+            "que_hace": "Antes de firmar la promesa, dice cuánto paga el comprador y cuánto el vendedor al escriturar, qué documentos pedir, cuánto tarda cada paso y qué dice cada cláusula, con las tarifas de la norma primaria de su año. Lo que no se pudo verificar se nombra sin cifra.",
+            "seccion_manual": "Asistente del papeleo"
+          },
+          {
+            "id": "H2-15",
+            "nombre": "Lector de CTL",
+            "que_hace": "Se pega el texto del certificado de tradición y libertad y el lector marca hipotecas y otros gravámenes, embargos, medidas cautelares, limitaciones del dominio, prohibición de transferir una vivienda con subsidio, vivienda familiar, patrimonio de familia y falsa tradición, por el código del registro. Avisa si el texto parece incompleto y siempre dice «lectura en prueba». Está construido y apagado hasta validarlo con certificados reales.",
+            "seccion_manual": "Lector de CTL"
+          }
+        ]
+      },
+      {
+        "orden": 9,
+        "estrella": false,
+        "nombre": "Vivienda nueva real",
+        "linea": "Lo que el aviso de la revista no dice, con la fuente de cada cifra.",
+        "features": [
+          {
+            "id": "H2-16",
+            "nombre": "El precio verdadero, no el «desde»",
+            "que_hace": "Para cada proyecto de la edición del mes de Estrenar Vivienda suma el precio «desde», los derechos de registro y el parqueadero que se paga aparte, cada peso con su norma y la fecha de consulta. Es un mínimo: lo que falta (derechos notariales, impuesto de registro, IVA, subidas en obra, hipoteca) se nombra y no se suma.",
+            "seccion_manual": "El precio verdadero, no el «desde»"
+          },
+          {
+            "id": "H2-17",
+            "nombre": "Nuevo o usado, con la misma plata",
+            "que_hace": "Con tu presupuesto y en la misma zona, compara los apartamentos nuevos que caben, por su precio verdadero, con los usados en venta de Innmobiliaria: cuántos hay, el m² mediano de cada lado y cuánto más o menos cuesta el m² estrenando.",
+            "seccion_manual": "Nuevo o usado, con la misma plata"
+          },
+          {
+            "id": "H2-18",
+            "nombre": "La espera cuesta",
+            "que_hace": "Mientras construyen se sigue pagando arriendo: cuenta los meses hasta la entrega y, si escribes tu arriendo, lo que cuesta esa espera, al lado del precio fijo o del que sube.",
+            "seccion_manual": "La espera cuesta"
+          },
+          {
+            "id": "H2-19",
+            "nombre": "Te alcanza, con subsidio",
+            "que_hace": "Del ingreso del hogar a los subsidios que aplican (el nacional y los del Distrito), cada uno con su norma, su monto, su año y la fecha de su estado, al precio que de verdad se paga y a los proyectos VIS que entran.",
+            "seccion_manual": "Te alcanza, con subsidio"
+          },
+          {
+            "id": "H2-20",
+            "nombre": "El índice de vivienda nueva",
+            "que_hace": "Cada mes, la mediana del m² privado de Bogotá y de la Sabana, por zona, franja de precio y segmento VIS o No VIS, con cuántos proyectos hay; un mes sin edición se dice y no se rellena.",
+            "seccion_manual": "El índice de vivienda nueva"
+          },
+          {
+            "id": "H2-21",
+            "nombre": "La ficha honesta del aviso",
+            "que_hace": "Por proyecto, lo que el aviso promete separado en dato que dice, dato que no dice, dato ilegible o dos páginas con cifras distintas. No acusa a nadie: nombra lo que no dice.",
+            "seccion_manual": "La ficha honesta del aviso"
+          },
+          {
+            "id": "H2-22",
+            "nombre": "Visita a la sala de ventas desde Innmobiliaria",
+            "que_hace": "El comprador que ya hizo sus números pide la visita a la sala con su WhatsApp verificado, eligiendo entre semana, sábado o domingo. El equipo coordina con la sala, propone horarios y confirma; si en dos días hábiles la sala no responde, se avisa por correo.",
+            "seccion_manual": "Visita a la sala de ventas desde Innmobiliaria"
+          }
+        ]
+      },
+      {
+        "orden": 10,
+        "estrella": false,
+        "nombre": "Para el dueño y el equipo",
+        "linea": "Fotos con ayuda del equipo, y todo en español y en inglés.",
+        "features": [
+          {
+            "id": "H2-23",
+            "nombre": "«Fotos que venden»: solicita tu sesión",
+            "que_hace": "Desde «Mi anuncio» el dueño pide una sesión de fotos eligiendo la franja (entre semana, sábado o domingo) y el equipo le escribe por WhatsApp para acordar el día. Ve el estado: pedida, agendada, hecha o cancelada. El servicio lo presta una persona; la app gestiona la solicitud.",
+            "seccion_manual": "«Fotos que venden»: solicita tu sesión"
+          },
+          {
+            "id": "H2-24",
+            "nombre": "Español e inglés en toda la app",
+            "que_hace": "Toda la app existe en español y en inglés con la misma dirección: la página elige el idioma del navegador, el selector ES/EN lo cambia y lo recuerda, y los correos y mensajes salen en el idioma en que el dueño publicó.",
+            "seccion_manual": "Español e inglés en toda la app"
+          }
+        ]
       }
     ]
   },
   "metricas": [
     {
       "clave": "funcionalidades",
-      "etiqueta": "Funcionalidades del MVP",
-      "valor": 13,
+      "etiqueta": "Funcionalidades del producto",
+      "valor": 37,
       "unidad": "funcionalidades",
       "fuente": "medido",
-      "detalle": "Una por sección de feature de docs/MANUAL-DE-USO.md (encabezados de tercer nivel). El brochure declara el mismo número en su pie."
+      "detalle": "Una por sección de feature de docs/MANUAL-DE-USO.md (encabezados de tercer nivel): 13 del ciclo 1 y 24 del producto completo (VISION v2.1.0). El brochure declara el mismo número en su pie."
     },
     {
       "clave": "pantallas",
       "etiqueta": "Pantallas de la app",
-      "valor": 11,
+      "valor": 33,
       "unidad": "pantallas",
       "fuente": "medido",
-      "detalle": "Archivos page.tsx bajo src/app/: 7 del vendedor o públicas y 4 del operador. La ruta /conoce sirve este brochure y no es una pantalla del producto."
+      "detalle": "Archivos page.tsx bajo src/app/: 26 del vendedor, el comprador o públicas y 7 del operador. La ruta /conoce sirve este brochure y no es una pantalla del producto."
     },
     {
       "clave": "pruebas_unitarias",
       "etiqueta": "Pruebas unitarias y de componente",
-      "valor": 318,
+      "valor": 1840,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm test` el 2026-10-17: 33 archivos, 318 pruebas (incluye el test del contrato de este export, los del kit v2.3.0 y las guardas de idioma del S5: paridad es/en y barrido de literales)."
+      "detalle": "Salida de `pnpm test` el 2026-10-26: 98 archivos, 1840 pruebas (incluye el contrato de este export, la paridad es/en, el barrido de literales, el catálogo de códigos del lector y los gates de cifras prohibidas)."
     },
     {
       "clave": "pruebas_e2e",
-      "etiqueta": "Pruebas end-to-end",
-      "valor": 168,
+      "etiqueta": "Pruebas de punta a punta",
+      "valor": 814,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm exec playwright test --list` el 2026-10-17: 168 pruebas en 13 archivos y dos navegadores (móvil y escritorio) contra Postgres; 138 corren y 30 se omiten a propósito en móvil (el catálogo de permisos de funciones, las reescrituras de idioma y la publicación en inglés se comprueban una sola vez), incluidas las de este brochure."
+      "detalle": "Salida de `pnpm exec playwright test --list` el 2026-10-26: 814 pruebas en 36 archivos y dos navegadores (móvil y escritorio) contra Postgres; parte corre solo en escritorio a propósito (catálogos de permisos y pruebas de base)."
     },
     {
       "clave": "cobertura_lineas",
       "etiqueta": "Cobertura de líneas del motor",
-      "valor": 98.42,
+      "valor": 99.73,
       "unidad": "%",
       "fuente": "medido",
-      "detalle": "v8 sobre src/engine (la lógica pura), con umbrales por CI en vitest.config.ts."
+      "detalle": "v8 sobre src/engine (la lógica pura), con umbrales por CI en vitest.config.ts; los motores del lector de CTL y de antifraude están al 100 % de ramas."
     },
     {
       "clave": "decisiones_registradas",
-      "etiqueta": "Decisiones de arquitectura registradas",
-      "valor": 13,
-      "unidad": "ADR",
+      "etiqueta": "Decisiones registradas",
+      "valor": 19,
+      "unidad": "decisiones",
       "fuente": "medido",
-      "detalle": "Archivos de decisions/."
+      "detalle": "Archivos numerados de decisions/."
     },
     {
       "clave": "modelos_de_ia",
@@ -200,7 +392,7 @@
       "valor": 0,
       "unidad": "modelos",
       "fuente": "declarado",
-      "detalle": "Regla de producto de la fase 1: toda la funcionalidad es determinista. Activar cualquier IA exigiría un ADR de «código primero»."
+      "detalle": "Regla de producto: toda la funcionalidad es determinista. Activar cualquier IA exigiría un ADR de «código primero»."
     },
     {
       "clave": "costo_operacion_mensual",
@@ -208,15 +400,15 @@
       "valor": 0,
       "unidad": "USD",
       "fuente": "calculada",
-      "detalle": "Suma de los planes contratados: Cloudflare Workers, Cloudflare R2, Supabase, Brevo y PostHog, todos en su capa gratuita a este volumen. No incluye el dominio propio, que se paga aparte."
+      "detalle": "Suma de los planes contratados: Cloudflare Workers, Cloudflare R2, Supabase, Brevo y PostHog, todos en su capa gratuita a este volumen; la verificación por WhatsApp es por mensaje entrante y no cuesta, y la identificación opcional va dentro del nivel gratuito del proveedor, con tope. No incluye el dominio propio, que se paga aparte."
     },
     {
       "clave": "peso_brochure",
-      "etiqueta": "Peso de este brochure",
-      "valor": 263580,
+      "etiqueta": "Peso del brochure",
+      "valor": 288702,
       "unidad": "bytes",
       "fuente": "medido",
-      "detalle": "Archivo autocontenido, sin una sola petición externa: incluye las cuatro capturas reales de la app embebidas como data: URIs en WebP. `wc -c docs/BROCHURE.html`."
+      "detalle": "Archivo autocontenido, sin una sola petición externa: incluye las capturas reales de la app embebidas como data: URIs en WebP. `wc -c docs/BROCHURE.html`."
     }
   ],
   "stack": [
@@ -243,17 +435,29 @@
     {
       "nombre": "Brevo y PostHog",
       "papel": "los correos de campaña por lotes y la analítica del embudo, sin datos personales"
+    },
+    {
+      "nombre": "MapLibre",
+      "papel": "el mapa de zona dibujada, con los barrios de Catastro Bogotá"
+    },
+    {
+      "nombre": "WhatsApp Cloud API",
+      "papel": "recibe el mensaje con el código de verificación del comprador; la app no envía mensajes por ahí"
+    },
+    {
+      "nombre": "Didit",
+      "papel": "contrasta la cédula opcional con la Registraduría; el número no se guarda"
     }
   ],
   "privacidad": {
     "local_only": false,
     "usa_ia": false,
     "consentimiento_explicito": true,
-    "detalle": "Sin autorización expresa no hay registro: la ley colombiana 1581 se cumple por construcción, con la fecha de consentimiento guardada en la misma fila. Se pide el mínimo dato necesario y el WhatsApp del dueño solo es público si él lo activa. El Certificado de Tradición y Libertad se VE una vez y jamás se almacena: solo persisten la matrícula y la fecha. El enlace privado de cada anuncio viaja en el fragmento de la URL, así que el token nunca llega al servidor ni a sus registros. La analítica no captura datos personales, no graba la pantalla y no rastrea la navegación."
+    "detalle": "Sin autorización expresa no hay registro: la ley colombiana 1581 se cumple por construcción, con la fecha de consentimiento guardada en la misma fila. Se pide el mínimo dato necesario y el WhatsApp del dueño solo es público si él lo activa. El Certificado de Tradición y Libertad se VE una vez y jamás se almacena: solo persisten la matrícula y la fecha. El enlace privado de cada anuncio viaja en el fragmento de la URL, así que el token nunca llega al servidor ni a sus registros. La analítica no captura datos personales, no graba la pantalla y no rastrea la navegación. El comprador prueba su WhatsApp enviando un código —la plataforma solo recibe el mensaje—; su cédula, si la usa, se contrasta con la Registraduría y el número no se guarda; el precio y los ingresos que escribe en las herramientas se quedan en su teléfono. El comprador prueba su WhatsApp enviando un código —la plataforma solo recibe el mensaje—; su cédula, si la usa, se contrasta con la Registraduría y el número no se guarda; el precio y los ingresos que escribe en las herramientas se quedan en su teléfono. El comprador prueba su WhatsApp enviando un código —la plataforma solo recibe el mensaje—; su cédula, si la usa, se contrasta con la Registraduría y el número no se guarda; el precio y los ingresos que escribe en las herramientas se quedan en su teléfono."
   },
   "enlaces": {
     "produccion": null,
-    "razon": "La app está desplegada y funcionando, pero la campaña todavía no se ha encendido: el acceso es por lista de espera hasta que se publique la landing.",
+    "razon": "La app está desplegada pero es privada y no se indexa: no hay una URL pública que mostrar hasta el hito de producción. El acceso a la vitrina se da por este brochure.",
     "repositorio": null,
     "razon_repositorio": "El repositorio no se enlaza desde la vitrina (regla de cero enlaces del portafolio).",
     "brochure_archivo": "docs/BROCHURE.html",

@@ -317,9 +317,31 @@
           color: #fda4af;
         }
       }
+      .o-s16 {
+        background: #e0e7ff;
+        color: #3730a3;
+      }
+      .o-clave2 {
+        background: #fde68a;
+        color: #78350f;
+      }
+      .ruta {
+        margin: 22px 0 4px;
+        font-size: 16px;
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
+      }
+      @media (prefers-color-scheme: dark) {
+        .o-s16 {
+          background: #1e1b4b;
+          color: #a5b4fc;
+        }
+        .o-clave2 {
+          background: #5a3a05;
+          color: #fde68a;
+        }
       }
       @media (prefers-color-scheme: dark) {
         .o-clave {
@@ -365,23 +387,22 @@
   <body>
     <div class="wrap">
       <p class="eyebrow">Innmobiliaria · Guía de prueba viva</p>
-      <h1>Sprint 015 — Aquí nadie te tumba</h1>
+      <h1>Sprint 016 — Listo para abrir</h1>
       <p class="lede">
         Qué probar, cómo y qué esperar. Esta guía es <b>acumulativa</b>: cada
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
-        <span class="origen o-s15">Nuevo · S15</span>. Este sprint suma el
-        <b>antifraude con reglas a la vista</b>: «Reportar este anuncio», la
-        página de las reglas, la cola del operador (pausar, pedir el CTL,
-        descartar) y la <b>sesión de fotos</b> que el dueño pide desde «Mi
-        anuncio» (bloque R). Los bloques A a Q siguen igual; el lector de
+        <span class="origen o-s16">Nuevo · S16</span>. Este sprint cierra el
+        hito del producto completo y suma el <b>bloque S: tu ensayo
+        general</b>, con las tres rutas (dueño, comprador y operador) contra
+        servicios reales. Los bloques A a R siguen igual; el lector de
         certificados de tradición está construido pero <b>apagado</b> hasta
         validarlo con certificados reales.
       </p>
       <div class="urlbox">
         Pruébalo con la app de esta rama, en local o ya desplegada (el
         despliegue es manual). Rama:
-        <code>sprint-015/aqui-nadie-te-tumba</code>. En un teléfono real
+        <code>sprint-016/listo-para-abrir</code>. En un teléfono real
         cuando el filtro lo pida.
       </div>
 
@@ -396,8 +417,14 @@
           <button data-filtro="clave" aria-pressed="false">
             ⭐ Solo el gate mínimo
           </button>
+          <button data-filtro="clave2" aria-pressed="false">
+            ⭐⭐ Solo servicios reales
+          </button>
+          <button data-filtro="s16" aria-pressed="false">
+            Solo el ensayo del S16
+          </button>
           <button data-filtro="s15" aria-pressed="false">
-            Solo lo nuevo del S15
+            Solo lo del S15
           </button>
           <button data-filtro="s14" aria-pressed="false">
             Solo lo del S14
@@ -1691,7 +1718,7 @@
             <input type="checkbox" id="m3" />
             <div>
               <label for="m3" class="qué"
-                >Con una alerta confirmada, <b>baja el precio</b> de un anuncio
+                >Con una alerta confirmada, <b>baja el precio al menos un 1 %</b> de un anuncio
                 que coincida (Mi anuncio → Precio) o publica uno nuevo, y espera
                 al resumen de las <b>8:00 a. m.</b> (hora de Bogotá)<span
                   class="origen o-s9"
@@ -1702,7 +1729,7 @@
                 <b>Esperado:</b> llega <b>un solo correo</b> con el anuncio
                 nuevo y/o el que bajó de precio (precio anterior tachado). Si el
                 cron corre dos veces, no llega un segundo correo. Si
-                <b>subes</b> el precio, no llega nada. Necesita el servidor
+                <b>subes</b> el precio, o lo bajas menos de un 1 %, no llega nada. Necesita el servidor
                 desplegado con el cron y el secreto.
               </p>
               <p class="mal">
@@ -2757,13 +2784,245 @@
         </ul>
       </section>
 
+      <!-- ================= BLOQUE S ================= -->
+      <section class="bloque">
+        <h2><span class="letra">S</span> Ensayo general del H-2</h2>
+        <p class="intro">
+          Este es <b>tu ensayo general</b>: recorres la app como lo hará un
+          cliente, con los servicios reales (correo, WhatsApp, fotos, mapa,
+          cédula), y <b>lo que no ves no cuenta</b>. Lo que una máquina ya
+          comprueba no está aquí. <b>No hay pasos de preparación:</b> los
+          anuncios, la edición de vivienda nueva y los enlaces de prueba ya
+          están en la rama. <span class="origen o-clave">⭐ gate mínimo</span> es
+          lo que el hito exige; <span class="origen o-clave2">⭐⭐ servicio real</span>
+          solo se prueba con un servicio de verdad: si el ensayo no lo vio, no
+          está probado. Dos paradas necesitan una segunda sentada (los correos
+          de las 8:00 del día siguiente).
+        </p>
+        <h3 class="ruta">Como dueño</h3>
+        <ul>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s1" />
+            <div>
+              <label for="s1" class="qué"
+                >Desde tu <b>teléfono</b>, publica un anuncio con tu <b>correo real</b> en el paso 3. Abre el correo que llega y toca el enlace privado<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el correo llega en minutos, del remitente de Innmobiliaria, con un texto legible y en el idioma con que publicaste; el enlace abre «Mi anuncio» con tu anuncio. La confirmación dice «Tu inmueble quedó registrado como fundador» y que los compradores lo encuentran en la búsqueda: <b>ninguna frase promete una apertura futura</b>.</p>
+              <p class="mal">Mala señal: el correo no llega (o llega a spam con el enlace roto), el enlace no abre tu anuncio, o algún texto habla de «cuando abramos» a los compradores.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s2" />
+            <div>
+              <label for="s2" class="qué"
+                >En «Mi anuncio», sube <b>3 fotos de la cámara de tu teléfono</b> y marca una portada<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> se comprimen antes de subir (con datos móviles, en segundos), aparecen en la ficha pública y la barra de completitud sube. La ficha dice cuántas fotos tiene y muestra la portada en la vista previa de la búsqueda.</p>
+              <p class="mal">Mala señal: una espera larga sin avisar, una foto girada, o un error que no dice qué hacer.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s3" />
+            <div>
+              <label for="s3" class="qué"
+                >Llévale al equipo un <b>CTL de 30 días o menos</b>: como operador, regístralo en el panel (matrícula y fecha). Después abre tu ficha como comprador<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> la ficha muestra <b>«⭐ Propietario verificado»</b> con la fecha del CTL; el documento no quedó guardado en ningún lado (solo la matrícula y la fecha). Si el CTL tiene más de 30 días, el panel lo rechaza con un mensaje que lo explica: eso también es lo esperado.</p>
+              <p class="mal">Mala señal: el sello sale sin fecha, el panel acepta un CTL viejo, o te pide subir el PDF.</p>
+            </div>
+          </li>
+        </ul>
+        <h3 class="ruta">Como comprador (con tu segundo teléfono)</h3>
+        <p class="intro">Usa el anuncio que acabas de publicar, con el contacto activado en «Mi anuncio». Nada de esta ruta necesita preparación.</p>
+        <ul>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s4" />
+            <div>
+              <label for="s4" class="qué"
+                >En la ficha toca <b>«Escribirle por WhatsApp»</b> y verifica tu WhatsApp con <b>WhatsApp real</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> WhatsApp se abre con un código <code>INN-…</code> ya escrito hacia el número de Innmobiliaria; lo envías sin cambiarlo y en unos segundos la página dice <b>«Tu WhatsApp quedó verificado»</b>. Innmobiliaria no te escribe nada.</p>
+              <p class="mal">Mala señal: la página dice «no disponible» (faltan secretos del servicio), se queda esperando, o el código llega y no se reconoce.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s5" />
+            <div>
+              <label for="s5" class="qué"
+                >Toca <b>«Abrir WhatsApp»</b> y envía el mensaje. Con tu teléfono de dueño, abre «Mi anuncio» → <b>«Compradores que abrieron tu chat»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el chat se abre con el mensaje del anuncio ya escrito; el dueño ve tu nombre, los últimos 4 dígitos de tu número y la fecha. Tu número completo no aparece en ninguna página pública.</p>
+              <p class="mal">Mala señal: el número completo a la vista, o el contacto sin registrar en «Mi anuncio».</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s6" />
+            <div>
+              <label for="s6" class="qué"
+                >Opcional: en <b>«Identificarse»</b> valida tu cédula real<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> dice <b>«Identificado»</b>; la tarjeta que ve el dueño lo muestra; el número de cédula no aparece en ninguna pantalla ni en los correos. Si escribes un dato mal, dice qué corregir y no te descuenta el intento cuando el servicio no responde.</p>
+              <p class="mal">Mala señal: un error del proveedor sin explicación, o que tu cédula se vea después en cualquier parte.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s7" />
+            <div>
+              <label for="s7" class="qué"
+                >Pide una <b>visita</b> a tu anuncio (marca la casilla de autorización), propón un horario como dueño, confírmalo como comprador y toca <b>«Agregar a mi calendario»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> llega un correo real a cada parte en cada paso; el dueño ve tu WhatsApp completo <b>solo después</b> de confirmar; el archivo del calendario abre en hora de Bogotá. Sin la casilla de autorización el formulario no se envía.</p>
+              <p class="mal">Mala señal: un correo que no llega, una hora corrida, o el WhatsApp del comprador visible antes de confirmar.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s8" />
+            <div>
+              <label for="s8" class="qué"
+                ><b>Segunda sentada:</b> la mañana anterior a esa visita, a las <b>8:00 (hora de Bogotá)</b>, revisa tu correo y el del dueño<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> llega <b>un recordatorio por visita</b> a cada uno, ninguno si la cancelaste; no se repite si el trabajo diario corre dos veces. Mira también en Cloudflare que exista el cron de las 13:00 UTC.</p>
+              <p class="mal">Mala señal: a las 9:00 no llegó nada: revisa en el Worker los registros de la línea «cron» con sus conteos.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s9" />
+            <div>
+              <label for="s9" class="qué"
+                >En <b>«Buscar»</b>, con el dedo, toca <b>«Dibujar zona»</b> y marca 3 esquinas alrededor de tu barrio<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el mapa real carga con las calles de Bogotá; al tocar «Listo» la lista se queda con lo de adentro y la dirección guarda la zona; «Borrar zona» la quita. Si el mapa no carga, una nota lo dice y la lista sigue viva con «Reintentar».</p>
+              <p class="mal">Mala señal: el mapa en blanco sin aviso, esquinas que no se marcan, o una zona que no filtra.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s10" />
+            <div>
+              <label for="s10" class="qué"
+                >Guarda una <b>alerta</b> con tu correo real, confírmala con el enlace del correo y, como dueño, baja el precio de tu anuncio <b>al menos un 1 %</b>. A las 8:00 del día siguiente revisa el correo<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el correo de confirmación llega y la alerta queda activa solo después de confirmar; el resumen trae el anuncio con el precio anterior tachado; <b>«Dejar de recibirla: un clic»</b> funciona sin sesión. Una baja menor de 1 % no avisa a nadie.</p>
+              <p class="mal">Mala señal: una alerta que avisa sin confirmar, un resumen duplicado, o un enlace de baja que pide iniciar sesión.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s11" />
+            <div>
+              <label for="s11" class="qué"
+                >En <b>«Buscar → Nuevos»</b> abre un proyecto de la edición del mes y compara <b>una cifra con la página de la revista</b> que tienes en la mano<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el «desde» coincide con la página impresa; la ficha dice «Fuente: Estrenar Vivienda, edición N, p. X»; «Pagas al menos» trae sus pesos con su norma; lo que el aviso no dice se nombra y no se adivina. <b>Es tu juicio:</b> ¿se entiende sin ser experto?</p>
+              <p class="mal">Mala señal: una cifra distinta de la página, un «pagas» sin norma, o una frase que acuse a la constructora.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s12" />
+            <div>
+              <label for="s12" class="qué"
+                >En la ficha de un proyecto toca <b>«Pedir una visita»</b> (con tu WhatsApp verificado) y, como operador, atiende la solicitud en <b>«Visitas a salas»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> al operador le llega un correo con solo el proyecto, la franja y el enlace (ningún dato del comprador); guardas el contacto de la sala, abres su WhatsApp con el mensaje ya escrito, propones horarios y el comprador elige; la dirección de la sala le llega por WhatsApp al confirmar.</p>
+              <p class="mal">Mala señal: el correo no llega, el comprador ve el teléfono de la sala, o algún dato del comprador viaja a la sala sin que lo haya aceptado.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s13" />
+            <div>
+              <label for="s13" class="qué"
+                >Cambia a <b>EN</b> y recorre portada → buscar → una ficha → pedir una visita<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> todo está redactado en inglés (no traducido palabra por palabra), los precios salen como «COP 420,000,000», los términos de Bogotá se explican en una línea y no queda un fragmento en español. El selector ES | EN se toca con el pulgar sin fallar.</p>
+              <p class="mal">Mala señal: español mezclado, un «$» suelto, o un botón demasiado pequeño para el dedo.</p>
+            </div>
+          </li>
+        </ul>
+        <h3 class="ruta">Como operador</h3>
+        
+        <ul>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s14" />
+            <div>
+              <label for="s14" class="qué"
+                >Envía un <b>lote de campaña de 1 correo</b> a tu propio correo (plantilla de bienvenida)<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el correo llega con el remitente verificado, en el idioma guardado, con texto legible y <b>sin datos de nadie más</b>; el registro de envíos lo anota. Un lote nunca pasa de 300 al día.</p>
+              <p class="mal">Mala señal: llega a spam por el remitente, sin versión de texto, o se envía a alguien que no eligió.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s15" />
+            <div>
+              <label for="s15" class="qué"
+                >En <b>«Antifraude»</b>, reporta un anuncio desde tu teléfono de comprador y, como operador: <b>pausa</b> el anuncio, comprueba que sale de la búsqueda y de su enlace, <b>reactívalo</b>, pide el CTL y cierra el pedido con <b>«El dueño no entregó el CTL»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> la tarjeta muestra el motivo <b>sin nombre ni número</b> de quien reportó; pausar saca el anuncio de la búsqueda, de su enlace y del contacto; reactivar lo devuelve; pedir el CTL lo deja visible y «re-verificación pendiente», y cerrarlo lo devuelve a «fundador» con la fecha. Ningún texto acusa: dice «una señal», no «una estafa».</p>
+              <p class="mal">Mala señal: el reporte revela quién lo hizo, una señal que oculta el anuncio sin que una persona lo decida, o un texto que afirma fraude.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s16" />
+            <div>
+              <label for="s16" class="qué"
+                >Como dueño, pide una <b>sesión de fotos</b>; como operador, agéndala y toca el enlace de WhatsApp<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el estado pasa de «Pedida» a «Agendada» con la fecha en hora de Bogotá; el enlace abre <b>tu</b> WhatsApp con el texto ya escrito en el idioma del dueño; la app no envía nada sola; el dueño puede cancelarla mientras esté abierta.</p>
+              <p class="mal">Mala señal: la app manda un mensaje por su cuenta, o la hora sale en otra zona.</p>
+            </div>
+          </li>
+        </ul>
+        <h3 class="ruta">Tu juicio y tu cuerpo</h3>
+        
+        <ul>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s17" />
+            <div>
+              <label for="s17" class="qué"
+                >En «Herramientas → <b>Papeleo</b>», escribe el precio de tu anuncio y compáralo con lo que sabes de tu notaría<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> cada cifra dice la norma de donde sale y el año de la tarifa; lo que no se pudo verificar se nombra con <b>▲ No verificado</b> y sin cifra; el total dice cuántos conceptos faltan; cada documento repite que <b>no es asesoría legal</b>. <b>Es tu juicio:</b> ¿te dice más de lo que sabías antes de firmar?</p>
+              <p class="mal">Mala señal: una cifra sin norma, un «no verificado» con número, o un texto que suene a asesoría.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s18" />
+            <div>
+              <label for="s18" class="qué"
+                >Con el sistema en <b>tema claro</b> (sin «forzar oscuro» del navegador), recorre portada, ficha y Papeleo en el teléfono<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> el texto se lee, el color nunca es la única señal (✓ ● ▲ siempre con texto), nada se sale por los lados ni se solapa con la barra de abajo.</p>
+              <p class="mal">Mala señal: texto gris sobre fondo claro que no se alcanza a leer, o un estado que solo se distingue por el color.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s19" />
+            <div>
+              <label for="s19" class="qué"
+                >Con <b>VoiceOver</b> encendido, abre la ficha de un anuncio y el formulario de «Pedir una visita»<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> cada control se anuncia con su nombre (corazón, «Escribirle por WhatsApp», la casilla de autorización con su texto completo); «¿Está caro?» se lee con su estado en palabras; el foco no queda atrapado y se puede cerrar todo.</p>
+              <p class="mal">Mala señal: un botón anunciado como «botón» sin nombre, o una casilla de autorización que VoiceOver no lee entera.</p>
+            </div>
+          </li>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s20" />
+            <div>
+              <label for="s20" class="qué"
+                ><b>Solo si la pestaña «Certificado (CTL)» aparece en Papeleo:</b> pega el texto de tu CTL real y compara marca por marca con tu lectura. Si no aparece, el lector está apagado y esta parada se salta<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
+              >
+              <p class="esperar"><b>Esperado:</b> cada anotación sale con su tipo y su norma; una cancelada se separa de las vigentes; si copiaste solo parte del texto dice <b>«El texto parece incompleto»</b> y no pinta ningún ✓; arriba dice siempre <b>«lectura en prueba»</b>; lo pegado no sale de tu teléfono.</p>
+              <p class="mal">Mala señal: una marca que no está en tu certificado (o una que falta), un ✓ con texto incompleto, o que pida subir el PDF.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–R), qué pasó. En especial
+        <b>Qué mandarme al terminar:</b> por bloque (A–S), qué pasó. En especial
         las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
         cubre): el recorrido real en tu teléfono (registro y
         <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
         ver su vista previa, tu juicio del copy y las cifras, la aprobación
-        visual, y la verificación del CTL desde el panel. El resto (axe, tests
+        visual, y la verificación del CTL desde el panel; y, del <b>bloque S</b>, cada parada con una fila: lo que viste, lo que no viste y qué dijo cada servicio real (<b>lo no visto no cuenta</b>). El resto (axe, tests
         unitarios, e2e, Lighthouse) ya lo cubre la CI.
       </div>
 
@@ -2786,6 +3045,22 @@
           ⭐ del teléfono usa una foto real de tu cámara.
         </p>
         <h3>Historial</h3>
+        <p>
+          <b>Sprint 016 (2026-10-26):</b><br />
+          <b>Nuevo:</b> bloque S (tu ensayo general del H-2): 20 paradas en
+          tres rutas (dueño, comprador y operador) más tu juicio y tu cuerpo
+          (papeleo, tema claro, VoiceOver y el lector de CTL si está
+          encendido); 10 son <b>⭐⭐ servicio real</b>, que solo se prueban con
+          correo, WhatsApp, cédula o el cron de verdad. Dos paradas necesitan
+          una segunda sentada (los correos de las 8:00 del día siguiente).<br />
+          <b>Mejorado:</b> M3 (la baja de precio avisa solo desde un 1 %); el
+          filtro «Solo lo del S1» ya no muestra también S10 a S16 (compara la
+          etiqueta entera); el filtro nuevo «⭐⭐ Solo servicios reales».<br />
+          <b>Eliminado:</b> —<br />
+          <b>Total acumulado:</b> 130 pruebas, 61 del gate mínimo ⭐. Los
+          avances guardados en tu navegador empiezan de cero (la guía pasó a la
+          versión 13).
+        </p>
         <p>
           <b>Sprint 015 (2026-10-25):</b><br />
           <b>Nuevo:</b> bloque R (antifraude con reglas a la vista: las cuatro
@@ -2934,7 +3209,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v12:";
+        var CLAVE = "guia-inmobiliaria-v13:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );
@@ -2974,7 +3249,7 @@
           });
           document.querySelectorAll("li[data-origen]").forEach(function (li) {
             var orig = li.getAttribute("data-origen");
-            var mostrar = f === "todo" || orig.indexOf(f) !== -1;
+            var mostrar = f === "todo" || orig.split(" ").indexOf(f) !== -1;
             li.classList.toggle("oculto", !mostrar);
           });
           document.querySelectorAll("section.bloque").forEach(function (sec) {

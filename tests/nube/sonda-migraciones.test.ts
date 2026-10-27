@@ -12,13 +12,20 @@ const RAIZ = join(__dirname, "..", "..");
 function conexion(): string {
   const url = readFileSync(join(RAIZ, "supabase", ".temp", "pooler-url"), "utf8").trim();
   const clave = process.env.SUPABASE_DB_PASSWORD;
-  if (!clave) throw new Error("falta SUPABASE_DB_PASSWORD (está en .env.local)");
+  if (!clave) throw new Error("falta SUPABASE_DB_PASSWORD (en .env.local o exportada)");
   const u = new URL(url);
   u.password = clave;
   return u.toString();
 }
 
-const db = new Client({ connectionString: conexion(), ssl: { rejectUnauthorized: false } });
+// TLS: con `SUPABASE_DB_CA` (ruta al certificado raíz de Supabase, bajado del panel y fuera de git) se verifica el servidor. Sin ella
+// la conexión va cifrada pero SIN verificar el certificado: quien se interpusiera entre esta máquina y el pooler vería la contraseña
+// de la base. Riesgo aceptado para una sonda que corre a mano desde la máquina del builder; con la CA puesta, desaparece.
+const ca = process.env.SUPABASE_DB_CA ? readFileSync(process.env.SUPABASE_DB_CA, "utf8") : null;
+const db = new Client({
+  connectionString: conexion(),
+  ssl: ca ? { ca } : { rejectUnauthorized: false },
+});
 // La definición de una función, o «» si no existe (un punto de guardado: una función que falta no tumba las demás pruebas).
 async function definicion(firma: string): Promise<string> {
   await db.query("savepoint d");
@@ -88,6 +95,8 @@ describe("migración 19 (S16): el lote de la base", () => {
     expect(await definicion("public.aplicar_banderas(text,jsonb)")).toContain(
       "public.dato_de_bandera(b.inmueble_id, b.regla)",
     );
+    // El dato se guarda como huella, no en claro.
+    expect(await definicion("public.dato_de_bandera(uuid,text)")).toContain("sha256");
   });
 
   it("cerrar_ctl_pedido existe y no cierra lo que no se pidió", async () => {
@@ -95,6 +104,10 @@ describe("migración 19 (S16): el lote de la base", () => {
       "00000000-0000-4000-8000-000000000000",
     ]);
     expect(msg).toContain("estado_invalido");
+    // Un pedido nuevo y un CTL verificado borran la fecha de «no lo entregó».
+    for (const f of ["public.pedir_ctl(uuid)", "public.marcar_verificado_ctl(uuid,text,date)"]) {
+      expect(await definicion(f)).toContain("ctl_no_entregado_at = null");
+    }
   });
 
   it("correos_libres_hoy nunca es negativo y salas_panel no corta las abiertas", async () => {
@@ -107,7 +120,9 @@ describe("migración 19 (S16): el lote de la base", () => {
     expect(await definicion("public.purgar_vencidos()")).toContain(
       "v.created_at > now() - interval '30 days'",
     );
-    expect(await definicion("public.canjear_codigo_whatsapp(text,text)")).toContain("v.nombre");
+    const canje = await definicion("public.canjear_codigo_whatsapp(text,text)");
+    expect(canje).toContain("v.nombre");
+    expect(canje).toContain("nombre = null");
     expect(await definicion("public.reclamar_resumenes(integer,uuid)")).toContain(
       "p.anterior * 0.99",
     );

@@ -87,7 +87,7 @@ pnpm exec supabase link --project-ref <ref>   # pide la Database password de 1.1
 pnpm exec supabase db push
 ```
 
-Esto aplica a la base cloud TODAS las migraciones de `supabase/migrations/` que aún no estén (hasta el S12 son 15; la primera es `20260715000001_captacion_fundadores.sql`). Antes, `supabase db push --dry-run` lista lo pendiente, y después `supabase migration list --linked` debe salir sin diferencias. La primera migración crea:
+Esto aplica a la base cloud TODAS las migraciones de `supabase/migrations/` que aún no estén (hoy son 19, hasta la del S16; la primera es `20260715000001_captacion_fundadores.sql`). Antes, `supabase db push --dry-run` lista lo pendiente, y después `supabase migration list --linked` debe salir sin diferencias. La primera migración crea:
 crea tablas, enums, RLS, grants y las RPC `registrar_fundador`/`ping`. Verificación: en el
 dashboard → **Table Editor** deben aparecer `vendedores`, `inmuebles`, `registro_intentos`.
 
@@ -120,7 +120,7 @@ Verifica también en el dashboard de Supabase (Table Editor → `inmuebles`).
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=… NEXT_PUBLIC_SUPABASE_ANON_KEY=… \
-  node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/humo-anonimo.mjs --espera ausente|vacia|publicada [--salas ausente|presente]
+  node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/humo-anonimo.mjs --espera ausente|vacia|publicada [--salas ausente|presente] [--antifraude ausente|presente] [--lote ausente|presente]
 ```
 
 `--espera ausente` antes de aplicar la migración 15 (la RPC pública aún no existe), `vacia` después de aplicarla y antes de
@@ -132,16 +132,24 @@ Desde el S13, `--salas ausente` (antes de la migración 16) comprueba que las fu
 (después) que el anónimo no lee `salas_ventas`, que las funciones del operador y la del servidor le responden 401, que pedir una visita
 a una sala con una sesión falsa se rechaza y que `usados_para_comparar` devuelve solo área y precio.
 
+Desde el S15, `--antifraude ausente|presente` (migración 17) comprueba que el anónimo no lee reportes, banderas ni sesiones y que las
+funciones del operador le están cerradas; desde el S16, `--lote ausente|presente` (migración 19) comprueba lo suyo: la visita con consentimiento,
+las funciones nuevas cerradas al anónimo. Los dos valen `presente` por omisión salvo con `--espera ausente`.
+
 ### 1.8 [CLAUDE] La sonda de las migraciones (desde el S16: se corre tras cada `supabase db push`)
 
 `supabase migration list --linked` dice que una migración **está registrada**; la sonda comprueba por **comportamiento** que su
 cuerpo **quedó aplicado** (en el S15 solo se pudo verificar la lista de versiones: `supabase db query --linked` respondía 401 y no había forma de leer el cuerpo de una función en la nube). Conecta con la URL del pooler que deja el
-CLI (`supabase/.temp/`, ignorada por git) y `SUPABASE_DB_PASSWORD`, corre cada caso dentro de `BEGIN … ROLLBACK` (no cambia ningún
+CLI (`supabase/.temp/`, ignorada por git) y `SUPABASE_DB_PASSWORD` (la lee de `.env.local`, sola; si la exportas, gana la exportada), corre cada caso dentro de `BEGIN … ROLLBACK` (no cambia ningún
 dato) y **no entra a la CI** (no hay base real en ella):
 
 ```bash
 pnpm sonda:nube
 ```
+
+La conexión va cifrada, pero **sin verificar el certificado del servidor** salvo que pongas `SUPABASE_DB_CA` (la ruta al certificado raíz de
+Supabase, bajado del panel y guardado fuera de git): sin ella, alguien que se interpusiera entre tu máquina y el pooler vería la contraseña de la
+base. Es un riesgo aceptado para una sonda que corres a mano; con la CA puesta, desaparece.
 
 Una función que debe rechazar lo inválido lo rechaza; una columna nueva existe; una función retirada ya no está. Una migración sin
 sonda no se da por verificada: el cierre del sprint dice cuántas pasan.
@@ -346,7 +354,7 @@ Cron Trigger que manda los recordatorios (ADR 016). Costo: **US$0** (tope de la 
 | `CRON_SECRET`                                                   | antes del deploy                                                                                                                           | inventas un texto largo (≥ 16 caracteres) y lo guardas como secreto del Worker   |
 | Brevo                                                           | **hecho el 2026-10-19 (S9)**: cuenta, dominio autenticado, remitente verificado y llave; los secretos están en el Worker (ver 6.1 y 6.4)   | el mismo remitente verificado sirve para los avisos de la visita y las alertas   |
 | Migraciones 10, 11 y 12                                         | ya aplicadas en la nube con tu «sí»                                                                                                        | nada                                                                             |
-| Migración 19 (S16, el lote del hito: consentimiento y tope de la visita, bandera que vuelve solo si cambia el dato, cerrar un CTL no entregado, sala sin corte, aviso de baja desde 1 %, cupo de correos) | **SOLO local hasta tu «sí»** (`db push --dry-run` la lista como la única pendiente; después `migration list --linked`, el humo `--lote` y `pnpm sonda:nube`) | tu «sí» |
+| Migración 19 (S16, el lote del hito: consentimiento y tope de la visita, bandera que vuelve solo si cambia el dato, cerrar un CTL no entregado, sala sin corte, aviso de baja desde 1 %, cupo de correos) | **SOLO local hasta tu «sí»** (`db push --dry-run` la lista como la única pendiente; después `migration list --linked`, el humo `--lote` y `pnpm sonda:nube`). **Orden:** aplicarla y desplegar la app en seguida: la firma vieja de la visita se retira, y entre un paso y otro la solicitud de visita falla | tu «sí» |
 | Migraciones 17 y 18 (S15, antifraude y sesiones; el orden de la cola)  | **ya aplicadas en la nube el 2026-10-25** con tu «sí» (18/18; humo anónimo `--antifraude`: 44 de 44) | nada |
 | Migración 16 (S13, visita a salas de ventas y muestra validada) | **ya aplicada en la nube el 2026-10-22** con tu «sí» (16/16; humo anónimo con `--salas presente`: 18 de 18; la 187 intacta, 0 solicitudes) | nada; el operador escribe el contacto de cada sala en el panel, jamás en el repo |
 | Migración 15 (S12, la edición de vivienda nueva en la base)     | **ya aplicada en la nube el 2026-10-21** con tu «sí» (15/15; humo anónimo antes, después y con la edición 187 publicada: 9 de 9)           | nada; cada mes, revisar la muestra de 5 antes de publicar (`/bandeja`)           |

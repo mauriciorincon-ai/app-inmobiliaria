@@ -3,7 +3,7 @@ import { z } from "zod";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { agruparPorIdioma, plantillaPorId } from "@/engine/envios/plantillas";
 import { esIdioma, IDIOMA_POR_DEFECTO } from "@/i18n/idiomas";
-import { enviarLote, type Destinatario } from "@/lib/brevo";
+import { brevoEnMock, enviarLote, type Destinatario } from "@/lib/brevo";
 import { logger } from "@/lib/logger";
 import { reportError } from "@/lib/observability";
 
@@ -81,6 +81,22 @@ export async function POST(req: NextRequest) {
       return json(500, { error: "servidor" });
     }
     const tanda = destinatarios.slice(0, Math.min(TANDA_MAX, libres));
+    if (tanda.length === 0) {
+      // Cupo agotado (o lote vacío): no se llama a Brevo ni se registra un envío «enviado» de cero.
+      log.info(
+        { evento: "envio_sin_cupo", libres, ms: Date.now() - t0 },
+        "sin cupo",
+      );
+      return json(200, {
+        ok: true,
+        total: destinatarios.length,
+        tanda: 0,
+        enviados: 0,
+        porIdioma: { es: 0, en: 0 },
+        mock: brevoEnMock(),
+        quedanHoy: 0,
+      });
+    }
 
     const urlApp = process.env.NEXT_PUBLIC_APP_URL ?? "";
     const { enviados, mock } = await enviarLote(plantilla, tanda, urlApp);

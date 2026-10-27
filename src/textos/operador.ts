@@ -531,8 +531,8 @@ export const OPERADOR = {
     nombreEjemplo: { es: "Vendedor", en: "Seller" },
     // La vista previa se muestra en el idioma del panel; los destinatarios reciben el suyo.
     vistaPreviaNota: {
-      es: "Vista previa en español.",
-      en: "Preview in English.",
+      es: "Se muestra en español; cada destinatario lo recibe en su idioma.",
+      en: "Shown in English; each recipient gets it in their own language.",
     },
     verDestinatarios: { es: "Ver destinatarios", en: "View recipients" },
     destinatarioUno: {

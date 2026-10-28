@@ -5,7 +5,7 @@ hito: H-2
 opened: 2026-10-25
 closed: 2026-10-27
 branch: sprint-016/listo-para-abrir
-pr: "pendiente"
+pr: "#42"
 ---
 
 # Sprint 016 «Listo para abrir» — cierre ejecutivo (cierre del hito H-2)
@@ -28,13 +28,13 @@ pr: "pendiente"
 
 | Commits | Sesiones | Horas activas | Span (primer → último commit) |
 |---:|---:|---:|---|
-| 62 | 3 | 5,6 h | 2026-10-25 20:09 → 2026-10-27 20:11 (48,0 h) |
+| 63 | 3 | 5,6 h | 2026-10-25 20:09 → 2026-10-27 20:11 (48,0 h) |
 
 | Fase | Commits | Horas activas |
 |---|---:|---:|
 | F1 | 38 | 2,6 h |
 | F2 | 21 | 1,9 h |
-| F3 | 2 | 0,5 h |
+| F3 | 3 | 0,5 h |
 | sin fase | 1 | 0,5 h |
 
 **Para mergear:** squash y borrar la rama · el producto cambia (`src/`) y la nube ya lleva la 19 · después yo corro, en orden, `git pull && pnpm deploy:cf` · luego `/cierre-sprint inmobiliaria` (S9–S16).

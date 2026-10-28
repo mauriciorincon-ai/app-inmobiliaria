@@ -357,18 +357,18 @@
     {
       "clave": "pruebas_unitarias",
       "etiqueta": "Pruebas unitarias y de componente",
-      "valor": 1840,
+      "valor": 1959,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm test` el 2026-10-26: 98 archivos, 1840 pruebas (incluye el contrato de este export, la paridad es/en, el barrido de literales, el catálogo de códigos del lector y los gates de cifras prohibidas)."
+      "detalle": "Salida de `pnpm test` el 2026-10-26: 101 archivos, 1959 pruebas (incluye el contrato de este export, la paridad es/en, el barrido de literales, el catálogo de códigos del lector y los gates de cifras prohibidas)."
     },
     {
       "clave": "pruebas_e2e",
       "etiqueta": "Pruebas de punta a punta",
-      "valor": 814,
+      "valor": 836,
       "unidad": "pruebas",
       "fuente": "medido",
-      "detalle": "Salida de `pnpm exec playwright test --list` el 2026-10-26: 814 pruebas en 36 archivos y dos navegadores (móvil y escritorio) contra Postgres; parte corre solo en escritorio a propósito (catálogos de permisos y pruebas de base)."
+      "detalle": "Salida de `pnpm exec playwright test --list` el 2026-10-26: 836 pruebas en 38 archivos y dos navegadores (móvil y escritorio) contra Postgres; parte corre solo en escritorio a propósito (catálogos de permisos y pruebas de base)."
     },
     {
       "clave": "cobertura_lineas",
@@ -381,7 +381,7 @@
     {
       "clave": "decisiones_registradas",
       "etiqueta": "Decisiones registradas",
-      "valor": 19,
+      "valor": 21,
       "unidad": "decisiones",
       "fuente": "medido",
       "detalle": "Archivos numerados de decisions/."
@@ -405,7 +405,7 @@
     {
       "clave": "peso_brochure",
       "etiqueta": "Peso del brochure",
-      "valor": 288702,
+      "valor": 290422,
       "unidad": "bytes",
       "fuente": "medido",
       "detalle": "Archivo autocontenido, sin una sola petición externa: incluye las capturas reales de la app embebidas como data: URIs en WebP. `wc -c docs/BROCHURE.html`."
@@ -453,7 +453,7 @@
     "local_only": false,
     "usa_ia": false,
     "consentimiento_explicito": true,
-    "detalle": "Sin autorización expresa no hay registro: la ley colombiana 1581 se cumple por construcción, con la fecha de consentimiento guardada en la misma fila. Se pide el mínimo dato necesario y el WhatsApp del dueño solo es público si él lo activa. El Certificado de Tradición y Libertad se VE una vez y jamás se almacena: solo persisten la matrícula y la fecha. El enlace privado de cada anuncio viaja en el fragmento de la URL, así que el token nunca llega al servidor ni a sus registros. La analítica no captura datos personales, no graba la pantalla y no rastrea la navegación. El comprador prueba su WhatsApp enviando un código —la plataforma solo recibe el mensaje—; su cédula, si la usa, se contrasta con la Registraduría y el número no se guarda; el precio y los ingresos que escribe en las herramientas se quedan en su teléfono. El comprador prueba su WhatsApp enviando un código —la plataforma solo recibe el mensaje—; su cédula, si la usa, se contrasta con la Registraduría y el número no se guarda; el precio y los ingresos que escribe en las herramientas se quedan en su teléfono. El comprador prueba su WhatsApp enviando un código —la plataforma solo recibe el mensaje—; su cédula, si la usa, se contrasta con la Registraduría y el número no se guarda; el precio y los ingresos que escribe en las herramientas se quedan en su teléfono."
+    "detalle": "Sin autorización expresa no hay registro: la ley colombiana 1581 se cumple por construcción, con la fecha de consentimiento guardada en la misma fila. Se pide el mínimo dato necesario y el WhatsApp del dueño solo es público si él lo activa. El Certificado de Tradición y Libertad se VE una vez y jamás se almacena: solo persisten la matrícula y la fecha. El enlace privado de cada anuncio viaja en el fragmento de la URL, así que el token nunca llega al servidor ni a sus registros. La analítica no captura datos personales, no graba la pantalla y no rastrea la navegación. El comprador prueba su WhatsApp enviando un código —la plataforma solo recibe el mensaje—; su cédula, si la usa, se contrasta con la Registraduría y el número no se guarda; el precio y los ingresos que escribe en las herramientas se quedan en su teléfono."
   },
   "enlaces": {
     "produccion": null,

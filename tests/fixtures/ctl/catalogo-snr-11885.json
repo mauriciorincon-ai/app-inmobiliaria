@@ -1,0 +1,1953 @@
+{
+ "_que_es": "Catálogo de códigos de naturaleza jurídica vigentes (Res. SNR 11885 de 2016, art. 4), grupos 01, 02, 03, 04, 06, 08 y 09, con el tipo que el lector de CTL debe dar a cada uno. Datos públicos de la norma: ningún dato de nadie.",
+ "fuente_leida": "Dos reproducciones que coinciden (normograma.com, compilación de Keralty; y la página de la Notaría 19 de Bogotá). La fuente primaria (SNR, Diario Oficial) no se alcanzó.",
+ "consultado": "2026-10-25",
+ "regla_del_tipo": "Con código manda el grupo del art. 8 de la Ley 1579; la palabra solo afina dentro del grupo: 02 hipoteca o gravamen; 03 vivienda familiar, patrimonio de familia, prohibición de transferencia, régimen de propiedad horizontal (neutra) o limitación; 04 embargo o medida cautelar; 06 falsa tradición; 08 cancelación (la parcial no se da por cancelada); 09 neutra o limitación.",
+ "codigos": [
+  {
+   "codigo": "0101",
+   "descripcion": "ACCESION DEL SUELO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0102",
+   "descripcion": "ACTA ENTREGA DE INMUEBLES A ENTIDAD",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0103",
+   "descripcion": "ADJUDICACIÓN BALDÍOS",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0104",
+   "descripcion": "ADJUDICACIÓN BALDÍOS EN PROPIEDAD COLECTIVA A COMUNIDADES NEGRAS",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0105",
+   "descripcion": "ADJUDICACIÓN BALDÍOS RESGUARDOS INDÍGENAS",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0106",
+   "descripcion": "ADJUDICACIÓN DE BIENES VACANTES",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0107",
+   "descripcion": "ADJUDICACIÓN DE LA COSA HIPOTECADA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0108",
+   "descripcion": "ADJUDICACIÓN EN REMATE",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0109",
+   "descripcion": "ADJUDICACIÓN EN SUCESIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0110",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN DE LA COMUNIDAD",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0111",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD COMERCIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0112",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD CONYUGAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0113",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD PATRIMONIAL DE HECHO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0114",
+   "descripcion": "ADJUDICACIÓN POR EXPROPIACIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0115",
+   "descripcion": "ADJUDICACIÓN SUCESIÓN PARTICIÓN ADICIONAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0116",
+   "descripcion": "ADJUDICACIÓN UNIDAD AGRICOLA FAMILIAR-PARCELA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0117",
+   "descripcion": "ADQUISICIÓN POR ABSORCIÓN DE ACCIONES Y PATRIMONIO DE ENTIDADES FINANCIERAS",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0118",
+   "descripcion": "APORTE A SOCIEDAD",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0119",
+   "descripcion": "TRANSFERENCIA A TÍTULO DE APORTE DE SUBSIDIO EN ESPECIE",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0120",
+   "descripcion": "DECLARATORIA DE CADUCIDAD ADMINISTRATIVA DE CONTRATOS",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0121",
+   "descripcion": "CESIÓN A TÍTULO GRATUITO DE BIENES FISCALES",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0122",
+   "descripcion": "CESIÓN DE BIENES OBLIGATORIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0124",
+   "descripcion": "CESIÓN OBLIGATORIA DE ZONAS CON DESTINO A USO PÚBLICO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0125",
+   "descripcion": "COMPRAVENTA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0126",
+   "descripcion": "COMPRAVENTA PARCIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0127",
+   "descripcion": "CONSOLIDACIÓN DE DOMINIO PLENO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0128",
+   "descripcion": "CONSTITUCIÓN DE FIDUCIA MERCANTIL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0129",
+   "descripcion": "DACIÓN EN PAGO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0130",
+   "descripcion": "DACIÓN EN PAGO OBLIGATORIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0131",
+   "descripcion": "DECLARACIÓN JUDICIAL DE EXPERIENCIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0132",
+   "descripcion": "DECLARATORIA DE NULIDAD DE ESCRITURA PÚBLICA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0133",
+   "descripcion": "DECLARATORIA DE PROPIEDAD PÚBLICA SOBRE ZONAS DE CESIÓN OBLIGATORIA GRATUITA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0135",
+   "descripcion": "DECLARATORIA SIMULACIÓN DE CONTRATO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0136",
+   "descripcion": "DECRETO DE POSESIÓN EFECTIVA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0137",
+   "descripcion": "DESTINACIÓN DEFINITIVA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0138",
+   "descripcion": "DONACIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0139",
+   "descripcion": "ESCISIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0140",
+   "descripcion": "EXPROPIACIÓN POR VÍA ADMINISTRATIVA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0141",
+   "descripcion": "EXPROPIACIÓN POR VÍA JUDICIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0142",
+   "descripcion": "EXTINCIÓN DEL DERECHO DE DOMINIO PRIVADO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0143",
+   "descripcion": "FUSIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0144",
+   "descripcion": "PERMUTA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0145",
+   "descripcion": "PRESCRIPCIÓN AGRARIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0146",
+   "descripcion": "RATIFICACIÓN CONTRATO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0147",
+   "descripcion": "RECUPERACIÓN PARCIAL TITULARIDAD BIEN EXPROPIADO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0148",
+   "descripcion": "RECUPERACIÓN TOTAL TITULARIDAD BIEN EXPROPIADO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0150",
+   "descripcion": "RENTA VITALICIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0151",
+   "descripcion": "RESCILIACIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0152",
+   "descripcion": "RESCISIÓN ONTRATO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0153",
+   "descripcion": "RESOLUCIÓN CONTRATO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0154",
+   "descripcion": "RESTITUCIÓN EN FIDEICOMISO CIVIL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0155",
+   "descripcion": "RESTITUCIÓN EN FIDUCIA MERCANTIL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0156",
+   "descripcion": "REVERSIÓN DEL BALDÍO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0157",
+   "descripcion": "REVOCACIÓN ADJUDICACIÓN BALDÍOS EN PROPIEDAD COLECTIVA A COMUNIDADES NEGRAS",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0158",
+   "descripcion": "REVOCATORIA ADMINISTRATIVA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0159",
+   "descripcion": "REVOCATORIA CONCURSAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0160",
+   "descripcion": "REVOCATORIA JUDICIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0161",
+   "descripcion": "REVOCATORIA VOLUNTARIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0162",
+   "descripcion": "TÍTULO DE MINAS CON ANTECEDENTE REGISTRAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0163",
+   "descripcion": "TRANSACCIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0164",
+   "descripcion": "TRANSFERENCIA DE DOMINIO A TITULO DE BENEFICIO EN FIDUCIA MERCANTIL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0165",
+   "descripcion": "TRANSFERENCIA DE DOMINIO POR SOLUCIÓN PAGO EFECTIVO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0166",
+   "descripcion": "ADJUDICACIÓN TERRENO EJIDO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0167",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD DE HECHO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0168",
+   "descripcion": "TRANSFERENCIA DE DOMINIO A TÍTULO DE LEASING HABITACIONAL DE VIVIENDA FAMILIAR",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0169",
+   "descripcion": "TRANSFERENCIA DE DOMINIO A TÍTULO DE LEASING HABITACIONAL DE VIVIENDA NO FAMILIAR",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0171",
+   "descripcion": "ENTREGA ANTICIPADA DE CESIONES",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0172",
+   "descripcion": "TRANSFERENCIA DE DOMINIO DE BIENES FISCALES",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0173",
+   "descripcion": "SANEAMIENTO TITULACIÓN LEY 1561 DE 2012",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0175",
+   "descripcion": "CESIÓN DE BALDÍO URBANO DE LA NACIÓN AL MUNICIPIO, INSTRUCCIÓN ADMINISTRATIVA NÚMERO 18 DE 2009 (ART. 123 DE LA LEY 388 DE 1997)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0177",
+   "descripcion": "SENTENCIA DE EXTINCIÓN DE DOMINIO EN PROCESO DE JUSTICIA Y PAZ – LEY 975 DE 2005",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0178",
+   "descripcion": "RESCILIACIÓN DE NEGOCIO JURÍDICO EN PROCESO DE JUSTICIA Y PAZ – LEY 975 DE 2005",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0179",
+   "descripcion": "ACUERDO REOGANIZACIÓN ART. 36 LEY 1116 DE 2006",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0180",
+   "descripcion": "ACUERDO DE ADJUDICACIÓN ART. 37 LEY 116 DE 2006",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0181",
+   "descripcion": "ADJUDICACIÓN EN PROCESO DE LIQUIDACIÓN JUDICIAL ART. 58 LEY 1116 DE 2006",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0182",
+   "descripcion": "RESTITUCIÓN DERECHO DE DOMINIO ART. 91 LEY 1448 DE 2011",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0183",
+   "descripcion": "TRANSFERENCIA DE DOMINIO POR COMPENSACIÓN EN ESPECIE LITERAL J) ART. 97 LEY 1448 DE 2011",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0184",
+   "descripcion": "OTORGAMIENTO DE DOMINIO EN COMÚN Y PROINDIVISO EN PROCESO DE RESTITUCIÓN. ART. 118 DE LA LEY 1448 DE 2011",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0185",
+   "descripcion": "DECLARATORIA DE SANEAMIENTO AUTOMÁTICO POR MINISTERIO DE LA LEY (LEY 1682 DE 2013, DECRETO 737 DE 2014)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0186",
+   "descripcion": "TRANSFERENCIA A TÍTULO DE SUBSIDIO EN ESPECIE (LEY 1537 DE 2012",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0187",
+   "descripcion": "MODIFICACIÓN FIDUCIA MERCANTIL (TÍTULO XI DEL C. DE CO)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0188",
+   "descripcion": "RECONSTITUCIÓN DE SOCIEDAD (ARTS. 250 Y 251 DEL C. DE CO)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0189",
+   "descripcion": "TRANSFERENCIA DE DOMINO POR ADICIÓN A FIDUCIA MERCANTIL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0190",
+   "descripcion": "COMISO DEFINITIVO (ART. 100 DE LA LEY 599 DE 2000, ARTS. 83, 84, 85 Y 86 DE LA LEY 906 DE 2004 Y EL PARÁGRAFO 2o DEL ARTÍCULO 67 DE LA LEY 600 DE 2004.",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0191",
+   "descripcion": "ADJUDICACIÓN, LIQUIDACIÓN ORGANIZACIÓN DE ACCIÓN COMUNAL. ARTÍCULOS 58 A 61 DE LA LEY 743 DE 2002.",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0192",
+   "descripcion": "CESIÓN A TÍTULO GRATUITO O DECLARATORIA DE SILENCIO ADMINISTRATIVO POSITIVO A FAVOR DE ENTIDAD DE ORDEN MUNICIPAL O DISTRITAL DE BIENES O TERRENOS DESTINADOS O QUE TENGAN VOCACIÓN DE USO PÚBLICO O ZONAS DE CESIÓN (ART. 48 LEY 1551 DE 2012) RESTITUCIÓN PARTE RESTANTE DE BIEN FIDEICOMITIDO (LEY 1537 DE 2012).",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0193",
+   "descripcion": "RESTITUCIÓN PARTE RESTANTE DE BIEN FIDEICOMITIDO (LEY 1537 DE 2012).",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0194",
+   "descripcion": "TRANSFERENCIA A TÍTULO DE LEASING INMOBILIARIO (DECRETO 193 DE 1993, DECRETO 2555 DE 2010)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0195",
+   "descripcion": "TRANSFERENCIA DE DOMINIO POR COMPENSACIÓN (ART. 1625 C. C.)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0196",
+   "descripcion": "TITULACIÓN DE LA POSESIÓN MATERIAL DE INMUEBLE URBANO (LEY 1561 DE 2012)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0197",
+   "descripcion": "ADJUDICACIÓN EN SUCESIÓN Y LIQUIDACIÓN DE LA SOCIEDAD CONYUGAL Y/O SOCIEDAD PATRIMONIAL DE HECHO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0198",
+   "descripcion": "DISMINUCIÓN DE CAPITAL BAJO LA MODALIDAD DE REEMBOLSO DE APORTES",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0199",
+   "descripcion": "ADJUDICACIÓN EXPROPIACIÓN PARCIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "01001",
+   "descripcion": "CONSTITUCIÓN RESGUARDO INDÍGENA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "01002",
+   "descripcion": "AMPLIACIÓN RESGUARDO INDÍGENA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "01003",
+   "descripcion": "ADICIÓN ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD COMERCIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "01004",
+   "descripcion": "PARTICIÓN DEL PATRIMONIO EN VIDA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "01005",
+   "descripcion": "TRANSFERENCIA A TÍTULO DE RESTITUCIÓN DE APORTE",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "01006",
+   "descripcion": "RESTITUCIÓN ADMINISTRATIVA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0201",
+   "descripcion": "AMPLIACIÓN DE HIPOTECA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0202",
+   "descripcion": "CONSTITUCIÓN DE MOBILIZACIÓN",
+   "tipo": "gravamen"
+  },
+  {
+   "codigo": "0203",
+   "descripcion": "HIPOTECA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0204",
+   "descripcion": "HIPOTECA ABIERTA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0205",
+   "descripcion": "HIPOTECA CON CUANTÍA INDETERMINADA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0206",
+   "descripcion": "HIPOTECA DE BIENES EN USUFRUCTO",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0207",
+   "descripcion": "HIPOTECA DE DERECHOS Y ACCIONES",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0208",
+   "descripcion": "HIPOTECA DE GANANCIALES",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0209",
+   "descripcion": "HIPOTECA DE MINAS CON ANTECEDENTE REGISTRAL",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0210",
+   "descripcion": "HIPOTECA DE UNIDAD AGRÍCOLA FAMILIAR",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0211",
+   "descripcion": "HIPOTECA DERECHOS DE CUOTA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0212",
+   "descripcion": "VALORIZACIÓN",
+   "tipo": "gravamen"
+  },
+  {
+   "codigo": "0213",
+   "descripcion": "HIPOTECA NUDA PROPIEDAD",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0214",
+   "descripcion": "LIQUIDACIÓN DEL EFECTO DE PLUSVALÍA",
+   "tipo": "gravamen"
+  },
+  {
+   "codigo": "0215",
+   "descripcion": "CONSERVACIÓN DE LA CALIDAD DE ACREEDOR HIPOTECARIO (ART. 3o LEY 1555 DE 2012, ART. 2.2 6.14.6 DECRETO 1310 DE 2015).",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0216",
+   "descripcion": "BENEFICIO DE SEPARACIÓN",
+   "tipo": "gravamen"
+  },
+  {
+   "codigo": "0217",
+   "descripcion": "RATIFICACIÓN AMPLIACIÓN HIPOTECA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0218",
+   "descripcion": "RATIFICACIÓN HIPOTECA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0219",
+   "descripcion": "HIPOTECA ABIERTA SIN LÍMITE DE CUANTÍA",
+   "tipo": "hipoteca"
+  },
+  {
+   "codigo": "0301",
+   "descripcion": "ADJUDICACIÓN SUCESIÓN DERECHO DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0302",
+   "descripcion": "ADJUDICACIÓN SUCESIÓN NUDA PROPIEDAD",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0303",
+   "descripcion": "ADJUDICACIÓN SUCESIÓN SUBSUELO CON ANTECEDENTE REGISTRAL",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0304",
+   "descripcion": "AFECTACIÓN A VIVIENDA FAMILIAR",
+   "tipo": "vivienda_familiar"
+  },
+  {
+   "codigo": "0305",
+   "descripcion": "AFECTACIÓN POR CAUSA DE UNA OBRA PÚBLICA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0306",
+   "descripcion": "CAMBIO RÉGIMEN DE COPROPIEDAD",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0307",
+   "descripcion": "COMPRAVENTA DERECHOS DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0308",
+   "descripcion": "COMPRAVENTA NUDA PROPIEDAD",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0309",
+   "descripcion": "COMPRAVENTA SUBSUELO CON ANTECEDENTE REGISTRAL",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0310",
+   "descripcion": "COMPRAVENTA USUFRUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0311",
+   "descripcion": "CONDICIÓN RESOLUTORIA EXPRESA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0312",
+   "descripcion": "CONDICIÓN SUSPENSIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0313",
+   "descripcion": "CONSTITUCIÓN DE FIDEICOMISO CIVIL",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0314",
+   "descripcion": "CONSTITUCIÓN DE USUFRUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0315",
+   "descripcion": "CONSTITUCIÓN PATRIMONIO DE FAMILIA",
+   "tipo": "patrimonio_familia"
+  },
+  {
+   "codigo": "0316",
+   "descripcion": "CONSTITUCIÓN RÉGIMEN DE CONDOMINIO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0317",
+   "descripcion": "CONSTITUCIÓN REGLAMENTO DE PROPIEDAD HORIZONTAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0318",
+   "descripcion": "DECLARATORIA DE INDIVISIÓN",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0319",
+   "descripcion": "DERECHO DE HABITACIÓN",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0320",
+   "descripcion": "DERECHO DE USO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0321",
+   "descripcion": "DESLINDE Y AMOJONAMIENTO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0322",
+   "descripcion": "DONACIÓN NUDA PROPIEDAD",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0323",
+   "descripcion": "DONACIÓN USUFRUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0325",
+   "descripcion": "MEDIANERÍA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0326",
+   "descripcion": "PACTO COMISORIO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0327",
+   "descripcion": "PACTO DE INDIVISIÓN",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0328",
+   "descripcion": "PACTO DE RESERVA DE DOMINIO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0329",
+   "descripcion": "PACTO DE RETROVENTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0330",
+   "descripcion": "REFORMA RÉGIMEN DE CONDOMINIO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0331",
+   "descripcion": "REFORMA REGLAMENTO DE PROPIEDAD HORIZONTAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0332",
+   "descripcion": "REMATE DERECHO DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0333",
+   "descripcion": "RESERVA DERECHO DE USUFRUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0334",
+   "descripcion": "SERVIDUMBRE DE ACUEDUCTO ACTIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0335",
+   "descripcion": "SERVIDUMBRE DE ACUEDUCTO PASIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0336",
+   "descripcion": "SERVIDUMBRE DE AGUAS NEGRAS ACTIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0337",
+   "descripcion": "SERVIDUMBRE DE AGUAS NEGRAS PASIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0338",
+   "descripcion": "SERVIDUMBRE DE AIRE",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0339",
+   "descripcion": "SERVIDUMBRE DE ENERGÍA ELÉCTRICA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0340",
+   "descripcion": "SERVIDUMBRE DE GASODUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0341",
+   "descripcion": "SERVIDUMBRE DE LUZ",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0342",
+   "descripcion": "SERVIDUMBRE DE OLEODUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0343",
+   "descripcion": "SERVIDUMBRE DE TRÁNSITO ACTIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0344",
+   "descripcion": "SERVIDUMBRE DE TRÁNSITO PASIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0346",
+   "descripcion": "ADICIÓN RÉGIMEN DE CONDOMINIO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0347",
+   "descripcion": "ADICIÓN RÉGIMEN DE PROPIEDAD HORIZONTAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0348",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN DE LA SOCIEDAD CONYUGAL DERECHO DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0349",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN DE LA SOCIEDAD CONYUGAL NUDA PROPIEDAD",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0350",
+   "descripcion": "SERVIDUMBRE DE AGUA ACTIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0351",
+   "descripcion": "SERVIDUMBRE DE AGUA PASIVA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0354",
+   "descripcion": "SERVIDUMBRE MINERA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0355",
+   "descripcion": "CONSTITUCIÓN TIEMPO COMPARTIDO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0356",
+   "descripcion": "DECLARATORIA DE ZONA FRANCA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0357",
+   "descripcion": "DECLARACIÓN DE RESERVA, ALINDERACIÓN Y CREACIÓN DE ÁREA DEL SISTEMA DE PARQUES NACIONALES Y NATURALES",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0358",
+   "descripcion": "SERVIDUMBRE LEGAL DE HIDROCARBUROS",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0359",
+   "descripcion": "DECLARATORIA DE BIEN INMUEBLE DE INTERÉS CULTURAL NUMERAL 1.2. ART. 7o DE LA LEY 1185 DE 2008",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0360",
+   "descripcion": "DECLARATORIA DE BIEN EXISTENCIA DEL PLAN ESPECIAL DE MANEJO Y PROTECCIÓN NUMERAL 1.2. ART. 7o DE LA LEY 1185 DE 2008",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0361",
+   "descripcion": "NO NEGOCIABLE POR ACTO ENTRE VIVOS DENTRO DE LOS DOS AÑOS SIGUIENTE A LA EJECUTORIA DE LA RESTITUCIÓN O ENTREGA DEL INMUEBLE, ART. 101 LEY 1448 DE 2011",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0362",
+   "descripcion": "PROHIBICIÓN DE TRANSFERENCIA “ART. 21 LEY 1537 DE 2012 QUE MODIFICÓ, EL ART. 8o DE LA LEY 3ª DE 1991”",
+   "tipo": "prohibicion_transferencia"
+  },
+  {
+   "codigo": "0363",
+   "descripcion": "DECLARACIÓN, ALINDERACIÓN Y CREACIÓN DE RESERVA FORESTAL Y PROTECTORA.",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0364",
+   "descripcion": "DECLARACIÓN DE RESERVA, ALINDERACIÓN Y CREACIÓN DE PARQUES NATURALES REGIONALES",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0369",
+   "descripcion": "DERECHO DE PREFERENCIA “ART. 21 LEY 1537 DE 2012 QUE MODIFICÓ EL ART. 8o DE LA LEY 3a DE 1991”",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0370",
+   "descripcion": "",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0371",
+   "descripcion": "DERECHO DE OPCIÓN ADQUISICIÓN INCODER CONFORME ART. 73 LEY 160/94",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0372",
+   "descripcion": "DURANTE LOS CINCO (5) AÑOS SIGUIENTES A LA ADJUDICACIÓN, SOLO PODRÁ HIPOTECARSE PARA CRÉDITOS AGROPECUARIOS CON ENTIDADES FINANCIERAS (ART. 73 LEY 160 DE 1994)”.",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0373",
+   "descripcion": "SERVIDUMBRE DE CATENARIA (DECRETO 738 DE 2014, LEY 1682 DE 2013)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0374",
+   "descripcion": "APORTE A SOCIEDAD DE DERECHOS DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0375",
+   "descripcion": "DACIÓN EN PAGO DERECHOS DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0376",
+   "descripcion": "DONACIÓN DERECHO DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0377",
+   "descripcion": "PERMUTA DERECHOS DE CUOTA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0378",
+   "descripcion": "ADJUDICACIÓN SUCESIÓN USUFRUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0379",
+   "descripcion": "REMATE NUDA PROPIEDAD",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0380",
+   "descripcion": "REMATE USUFRUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0381",
+   "descripcion": "SERVIDUMBRE DE ALCANTARILLADO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0382",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD CONYUGAL DERECHO DE USUFRUCTO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0401",
+   "descripcion": "COMISO ESPECIAL",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0402",
+   "descripcion": "DECLARACIÓN NO PODRÁ REMATARSE, ADJUDICARSE, NI ENAJENARSE A NINGÚN TÍTULO BIENES DEL GARANTE",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0403",
+   "descripcion": "DECLARATORIA DE INTERÉS SOCIAL",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0404",
+   "descripcion": "DECLARATORIA DE UTILIDAD PÚBLICA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0405",
+   "descripcion": "DECOMISO DE BIENES",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0406",
+   "descripcion": "DEMANDA EN ACCIÓN DE SIMULACIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0407",
+   "descripcion": "DEMANDA EN ACCIÓN REVOCATORIA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0408",
+   "descripcion": "DEMANDA EN ACUERDO DE REESTRUCTURACIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0409",
+   "descripcion": "DEMANDA EN PROCESO DE DECLARATORIA DE UNIÓN MARITAL DE HECHO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0410",
+   "descripcion": "DEMANDA EN PROCESO DE DESLINDE Y AMOJONAMIENTO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0411",
+   "descripcion": "DEMANDA EN PROCESO DE DIVORCIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0412",
+   "descripcion": "DEMANDA EN PROCESO DE PERTENENCIA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0413",
+   "descripcion": "DEMANDA EN PROCESO DE SEPARACIÓN DE CUERPOS",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0414",
+   "descripcion": "DEMANDA EN PROCESO DE SERVIDUMBRES",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0415",
+   "descripcion": "DEMANDA EN PROCESO DIVISORIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0416",
+   "descripcion": "DEMANDA EN PROCESO SEPARACIÓN DE BIENES",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0417",
+   "descripcion": "DEMANDA ORDINARIA DE ENRIQUECIMIENTO SIN JUSTA CAUSA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0418",
+   "descripcion": "DEMANDA ORDINARIA POR LESIÓN ENORME",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0419",
+   "descripcion": "DEMANDA POR EXPROPIACIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0420",
+   "descripcion": "DEMANDA POR INEFICACIA DEL ACUERDO DE REESTRUCTURACIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0421",
+   "descripcion": "DERECHO DE PREFERENCIA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0423",
+   "descripcion": "EMBARGO DE ALIMENTOS",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0424",
+   "descripcion": "EMBARGO DE BIENES Y HABERES DE PROPIEDAD DEL INTERVENIDO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0425",
+   "descripcion": "EMBARGO DE LA SUCESIÓN",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0426",
+   "descripcion": "EMBARGO DERECHOS Y ACCIONES POR GARANTÍA HIPOTECARIA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0427",
+   "descripcion": "EMBARGO EJECUTIVO CON ACCIÓN PERSONAL",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0428",
+   "descripcion": "EMBARGO EJECUTIVO CON ACCIÓN MIXTA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0429",
+   "descripcion": "EMBARGO EJECUTIVO CON ACCIÓN REAL",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0430",
+   "descripcion": "EMBARGO EJECUTIVO DERECHOS DE CUOTA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0431",
+   "descripcion": "EMBARGO EN ACCIÓN DE SIMULACIÓN",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0432",
+   "descripcion": "EMBARGO EN ACCIÓN REVOCATORIA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0433",
+   "descripcion": "EMBARGO EN ACUERDO DE REESTRUCTURACIÓN",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0434",
+   "descripcion": "EMBARGO EN LIQUIDACIÓN OBLIGATORIA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0435",
+   "descripcion": "EMBARGO EN PROCESO DE DIVORCIO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0436",
+   "descripcion": "EMBARGO EN PROCESO DE FISCALÍA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0437",
+   "descripcion": "EMBARGO EN PROCESO DE SEPARACIÓN DE BIENES",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0438",
+   "descripcion": "EMBARGO ESPECIAL ART. 66 CÓDIGO DE PROCEDIMIENTO PENAL (LEY 600 DE 2000)",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0439",
+   "descripcion": "EMBARGO LABORAL",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0440",
+   "descripcion": "EMBARGO PENAL",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0443",
+   "descripcion": "EMBARGO POR INEFICACIA DEL ACUERDO DE REESTRUCTURACIÓN",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0444",
+   "descripcion": "EMBARGO POR JURISDICCIÓN COACTIVA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0445",
+   "descripcion": "EMBARGO POR VALORIZACIÓN",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0446",
+   "descripcion": "INICIACIÓN DEL PROCESO DE ENAJENACIÓN FORZOSA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0447",
+   "descripcion": "INICIACIÓN DILIGENCIAS ADMINISTRATIVAS DE CLARIFICACIÓN DE LA PROPIEDAD",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0448",
+   "descripcion": "INICIACIÓN DILIGENCIAS ADMINISTRATIVAS DESLINDE DE TIERRAS DE PROPIEDAD DE LA NACIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0449",
+   "descripcion": "INICIACIÓN DILIGENCIAS ADMINISTRATIVAS POR INDEBIDA OCUPACIÓN DE BALDÍOS",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0450",
+   "descripcion": "INICIACIÓN PROCEDIMIENTO DE EXPROPIACIÓN POR VÍA ADMINISTRATIVA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0451",
+   "descripcion": "INICIACIÓN PROCEDIMIENTO DE EXTINCIÓN DEL DERECHO DE DOMINIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0452",
+   "descripcion": "INICIACIÓN PROCESO ADMINISTRATIVO DE ADQUISICIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0453",
+   "descripcion": "INSCRIPCIÓN DE LA DEMANDA EN PROCESO ARBITRAL (ARTÍCULO 32 DE LA LEY 1563 DE 2012, ARTICULO 590 DEL CÓDIGO GENERAL DEL PROCESO)",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0454",
+   "descripcion": "OFERTA DE COMPRA EN BIEN RURAL",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0455",
+   "descripcion": "OFERTA DE COMPRA EN BIEN URBANO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0456",
+   "descripcion": "PREVENCIÓN NO PROCEDE LA REALIZACIÓN DE NUEVOS EMBARGOS SOBRE BIENES DE LA INTERVENIDA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0458",
+   "descripcion": "PROHIBICIÓN ADMINISTRATIVA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0459",
+   "descripcion": "PROHIBICIÓN CANCELACIÓN GRAVÁMENES CONSTITUIDOS A FAVOR DE INTERVENIDA SIN AUTORIZACIÓN LIQUIDADOR",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0460",
+   "descripcion": "PROHIBICIÓN ENAJENAR SIN AUTORIZACIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0461",
+   "descripcion": "PROHIBICIÓN GRAVAR, CEDER, LIMITAR O ARRENDAR SIN AUTORIZACIÓN",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0462",
+   "descripcion": "PROHIBICIÓN INSCRIPCIÓN ACTOS AFECTEN DOMINIO DE BIENES INTERVENIDA SALVO LO REALIZADO POR AGENTE ESPECIAL",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0463",
+   "descripcion": "PROHIBICIÓN JUDICIAL",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0464",
+   "descripcion": "PROHIBICIÓN REGISTRO ACTOS AFECTEN DOMINIO BIENES PROPIEDAD DE INTERVENIDA SALVO AUTORIZACIÓN LIQUIDADOR",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0465",
+   "descripcion": "SUSPENSIÓN EXIGIBILIDAD DE GRAVÁMENES Y GARANTÍAS REALES Y FIDUCIARIAS",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0466",
+   "descripcion": "TOMA DE POSESIÓN INMEDIATA DE BIENES, HABERES Y NEGOCIOS DE ENTIDAD VIGILADA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0467",
+   "descripcion": "DEMANDA DE ACCIÓN DE PETICIÓN DE HERENCIA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0468",
+   "descripcion": "DEMANDA EN PROCESO ORDINARIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0469",
+   "descripcion": "DEMANDA EN PROCESO REIVINDICATORIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0470",
+   "descripcion": "ABSTENERSE INSCRIBIR ENAJENACIONES POR DECLARATORIA INMINENCIA DE RIESGO O DESPLAZAMIENTO FORZADO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0471",
+   "descripcion": "EMBARGO EN PROCESO DE JURISDICCIÓN VOLUNTARIA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0472",
+   "descripcion": "EMBARGO EN PROCESO ORDINARIO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0473",
+   "descripcion": "DEMANDA EN PROCESO LIQUIDATORIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0474",
+   "descripcion": "PROHIBICIÓN DE ENAJENAR DERECHOS INSCRITOS EN PREDIO DECLARADO ABANDONADO POR EL TITULAR",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0475",
+   "descripcion": "EMBARGO PROCESO ABREVIADO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0476",
+   "descripcion": "EMBARGO PROCESO DE REORGANIZACIÓN LEY 1116 DE 2006",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0477",
+   "descripcion": "DEMANDA PROCESO ESPECIAL DE SANEAMIENTO DE LA TITULACIÓN DE LA PROPIEDAD INMUEBLE ART. 14 DE LA LEY 1561 DE 2012",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0478",
+   "descripcion": "EMBARGO PROCESO ART. 95 DE LA LEY 1306 DE 2009",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0479",
+   "descripcion": "SUSPENSIÓN PROVISIONAL A LA LIBRE DISPOSICIÓN DE DOMINIO EN PROCESO DE JUSTICIA Y PAZ - LEY 975 DE 2005",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0480",
+   "descripcion": "INSCRIPCIÓN DE DENUNCIA DE DESPLAZAMIENTO Y USURPACIÓN DE BIENES",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0481",
+   "descripcion": "INICIO DE PROCESO DE LIQUIDACIÓN JUDICIAL ART. 47 LEY 1116 DE 2006",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0482",
+   "descripcion": "PROTECCIóN JURÍDICA DEL PREDIO ART. 13 No. 2 DECRETO 4829 DE 2011",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0483",
+   "descripcion": "ADMISIÓN SOLICITUD DE RESTITUCIÓN DE PREDIO - LITERAL A) ART. 86 LEY 1448 DE 2011",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0484",
+   "descripcion": "SUSTRACCIÓN PROVISIONAL DEL COMERCIO EN PROCESO DE RESTITUCIÓN LITERAL B) ART. 86 LEY 1448 DE 2011",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0485",
+   "descripcion": "EMBARGO EN PROCESO DE JUSTICIA Y PAZ - LEY 1592 DE 2012",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0486",
+   "descripcion": "LIQUIDACIÓN FORZOSA ADMINISTRATIVA",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0487",
+   "descripcion": "EMBARGO EN PROCESO DE RESPONSABILIDAD FISCAL",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0488",
+   "descripcion": "PROHIBICIÓN FRACCIONAMIENTO PREDIO EN ÁREA INFERIOR A UAF DE ZONA O MUNICIPIO, SALVO AUTORIZACIÓN INCODER O EXCEPCIONES ART. 45 LEY 160/94 (ART. 72 LEY 160/94).",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0489",
+   "descripcion": "EMBARGO EN PROCESO DE LIQUIDACIÓN JUDICIAL (ARTÍCULO 50 EN CONCORDANCIA CON EL ART. 54 DE LA LEY 1116 DE 2006)",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0490",
+   "descripcion": "DEMANDA EN PROCESO VERBAL DE RESPONSABILIDAD CIVIL EXTRACONTRACTUAL (CÓDIGO GENERAL DEL PROCESO. ART. 590)",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0491",
+   "descripcion": "EMBARGO DERECHOS DE DERECHO DE CUOTA",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0492",
+   "descripcion": "DEMANDA EN PROCESO VERBAL",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0493",
+   "descripcion": "EMBARGO PROCESO DIVISORIO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0494",
+   "descripcion": "PROHIBICIÓN DE ENAJENAR ART. 97 LEY 906 DE 2014",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0495",
+   "descripcion": "EMBARGO EN PROCESO VERBAL",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0496",
+   "descripcion": "EMBARGO EN PROCESO DECLARATIVO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0497",
+   "descripcion": "EMBARGO EN PROCESO LIQUIDATORIO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0498",
+   "descripcion": "EMBARGO EN PROCESO MONITORIO",
+   "tipo": "embargo"
+  },
+  {
+   "codigo": "0499",
+   "descripcion": "DEMANDA EN PROCESO MONITORIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "04001",
+   "descripcion": "DEMANDA EN PROCESO DECLARATIVO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "04002",
+   "descripcion": "LIQUIDACIÓN DE REVISIÓN (ART. 719-1 Y 719-2 DEL ESTATUTO TRIBUTARIO",
+   "tipo": "medida_cautelar"
+  },
+  {
+   "codigo": "0601",
+   "descripcion": "ADJUDICACIÓN SUCESIÓN DERECHOS Y ACCIONES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0602",
+   "descripcion": "ADJUDICACIÓN SUCESIÓN GANANCIALES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0603",
+   "descripcion": "AFECTACIÓN A VIVIENDA FAMILIAR SOBRE MEJORAS EN PREDIO AJENO PAR. ART. 5o LEY 258/96",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0604",
+   "descripcion": "COMPRAVENTA DE COSA AJENA",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0605",
+   "descripcion": "TRANSFERENCIA DE CUERPO CIERTO TENIENDO SOLO DERECHO DE CUOTA CON ANTECEDENTES REGISTRALES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0606",
+   "descripcion": "COMPRAVENTA DERECHOS GANANCIALES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0607",
+   "descripcion": "COMPRAVENTA DERECHOS Y ACCIONES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0608",
+   "descripcion": "COMPRAVENTA POSESIÓN CON ANTECEDENTE REGISTRAL",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0609",
+   "descripcion": "DECLARACIÓN MEJORAS EN PREDIO AJENO PAR. ART. 5o LEY 258/96",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0610",
+   "descripcion": "DONACIÓN DERECHOS Y ACCIONES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0611",
+   "descripcion": "DONACIÓN GANANCIALES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0612",
+   "descripcion": "PATRIMONIO DE FAMILIA SOBRE MEJORAS EN PREDIO AJENO PAR. ART. 5o LEY 258/96",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0613",
+   "descripcion": "REMATE DERECHOS Y ACCIONES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0614",
+   "descripcion": "REMATE GANANCIALES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0615",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD CONYUGAL DERECHOS Y ACCIONES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0616",
+   "descripcion": "COMPRAVENTA MEJORAS EN SUELO AJENO CON ANTECEDENTE REGISTRAL",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0617",
+   "descripcion": "DACIÓN EN PAGO DE DERECHOS Y ACCIONES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0618",
+   "descripcion": "TRANSFERENCIA DE POSESIÓN CON ANTECEDENTE REGISTRAL",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0619",
+   "descripcion": "DECLARATORIA DE POSESIÓN REGULAR ART. 1o LEY 1183 DE 2008",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0620",
+   "descripcion": "RESTITUCIÓN MATERIAL AL POSEEDOR LITERAL H) ART. 91 LEY 1448 DE 2011",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0621",
+   "descripcion": "COMPENSACIÓN INMUEBLE EN PROCESO DE RESTITUCIÓN LITERAL J) ART. 91 Y ART. 97 LEY 1448 DE 2011",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0622",
+   "descripcion": "ADJUDICACIÓN LIQUIDACIÓN SOCIEDAD PATRIMONIAL DE HECHO DERECHOS Y ACCIONES",
+   "tipo": "falsa_tradicion"
+  },
+  {
+   "codigo": "0841",
+   "descripcion": "CANCELACIÓN PROVIDENCIA JUDICIAL",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0842",
+   "descripcion": "CANCELACIÓN PROVIDENCIA ADMINISTRATIVA",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0843",
+   "descripcion": "CANCELACIÓN POR VOLUNTAD DE LAS PARTES",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0844",
+   "descripcion": "LEVANTAMIENTO DE DECLARATORIA DE INMINENCIA DE RIESGO O DESPLAZAMIENTO FORZADO",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0845",
+   "descripcion": "CANCELACIÓN DE PROHIBICIÓN DE ENAJENAR PREDIO DECLARADO EN ABANDONO",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0846",
+   "descripcion": "CANCELACIÓN PROTECCIÓN JURÍDICA DEL PREDIO ART. 17 DECRETO 4829 DE 2011",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0847",
+   "descripcion": "CANCELACIÓN SOLICITUD DE RESTITUCIÓN",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0848",
+   "descripcion": "CANCELACIÓN SUSTRACCIÓN PROVISIONAL DEL COMERCIO EN PROCESO DE RESTITUCIÓN",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0849",
+   "descripcion": "CANCELACIÓN INSCRIPCIONES EN PROCESO DE RESTITUCIÓN LITERAL N) ART. 91 LEY 1448 DE 2011",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0850",
+   "descripcion": "SUSTRACCIÓN DE ÁREA DE RESERVA FORESTAL PROTECTORA",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0851",
+   "descripcion": "SUSTRACCIÓN DE ÁREA DE DISTRITOS DE MANEJO INTEGRADO",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0852",
+   "descripcion": "SUSTRACCIÓN DE ÁREA DE DISTRITOS DE CONSERVACIÓN DE SUELOS",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0853",
+   "descripcion": "SUSTRACCIÓN DE ÁREA DE ÁREAS DE RECREACIÓN",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0854",
+   "descripcion": "SUSTRACCIÓN DE ÁREA DE RESERVAS NATURALES DE LA SOCIEDAD CIVIL",
+   "tipo": "cancelacion"
+  },
+  {
+   "codigo": "0855",
+   "descripcion": "CANCELACIÓN PARCIAL",
+   "tipo": "desconocida"
+  },
+  {
+   "codigo": "0901",
+   "descripcion": "ACLARACIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0902",
+   "descripcion": "CORRECCIÓN DEL TÍTULO RESPECTO A LOS LINDEROS Y ÁREA (ART. 49 DEL DECRETO 2148 DE 1983)",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0903",
+   "descripcion": "ACTUALIZACIÓN DE LINDEROS",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0904",
+   "descripcion": "ACTUALIZACIÓN DE NOMENCLATURA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0905",
+   "descripcion": "AUTORIZACIÓN REGISTRO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0906",
+   "descripcion": "CAMBIO DE NOMBRE",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0907",
+   "descripcion": "CAMBIO DE RAZÓN SOCIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0908",
+   "descripcion": "CONFIRMACIÓN SENTENCIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0909",
+   "descripcion": "CONSTITUCIÓN DE URBANIZACIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0910",
+   "descripcion": "DECLARACIÓN DE CONSTRUCCIÓN CON SUBSIDIO FAMILIAR DE VIVIENDA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0911",
+   "descripcion": "DECLARACIÓN DE CONSTRUCCIÓN EN SUELO PROPIO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0912",
+   "descripcion": "DECLARACIÓN DE MEJORA EN SUELO PROPIO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0913",
+   "descripcion": "DECLARACIÓN PARTE RESTANTE",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0914",
+   "descripcion": "DELIMITACIÓN UNIDAD DE ACTUACIÓN URBANÍSTICA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0915",
+   "descripcion": "DESENGLOBE",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0916",
+   "descripcion": "DESLINDE DE TERRENO DE PROPIEDAD DE LA NACIÓN",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0917",
+   "descripcion": "DETERMINACIÓN ÁREA Y LINDEROS PREDIO DEL MUNICIPIO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0918",
+   "descripcion": "DIVISIÓN MATERIAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0919",
+   "descripcion": "ENGLOBE",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0920",
+   "descripcion": "LOTEO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0921",
+   "descripcion": "PERMISO CONSTITUIR GRAVAMEN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0922",
+   "descripcion": "PERMISO VENTA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0923",
+   "descripcion": "REGLAMENTACIÓN URBANÍSTICA ESPECIAL",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0924",
+   "descripcion": "RELOTEO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0925",
+   "descripcion": "DECLARACIÓN EXTINCIÓN OBLIGACIÓN HIPOTECARIA",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0926",
+   "descripcion": "AUTORIZACIÓN CAMBIO DE DESTINACIÓN Y SUSTRACCIÓN DEL RÉGIMEN DE UNIDAD AGRÍCOLA FAMILIAR",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0927",
+   "descripcion": "PREDIO DECLARADO EN ABANDONO POR POSEEDOR-OCUPANTE, TENEDOR O ANTERIOR PROPIETARIO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0928",
+   "descripcion": "AUTORIZACIÓN DE ENAJENAR DADA POR EL COMITÉ DE ATENCIÓN DE LA POBLACIÓN DESPLAZADA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0929",
+   "descripcion": "DECLARATORIA DE INMINENCIA DE RIESGO O DESPLAZAMIENTO FORZADO EN TERRITORIO ÉTNICO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0930",
+   "descripcion": "INFORME DEL COMITÉ DE ATENCIÓN DE LA POBLACIÓN DESPLAZADA DE POSEEDOR - OCUPANTE O TENEDOR DE PREDIO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0931",
+   "descripcion": "BIENES DENUNCIADOS ANTE LA FISCALÍA COMO DESPOJADOS",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0932",
+   "descripcion": "BIENES ENTREGADOS POR POSTULADOS PARA REPARACIÓN DE VÍCTIMAS",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0933",
+   "descripcion": "PREDIO INGRESADO AL REGISTRO DE TIERRAS DESPOJADAS ART. 17 DECRETO 4829 DE 2011",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0934",
+   "descripcion": "IDENTIDAD DE INMUEBLE EN PROCESO DE RESTITUCIÓN DE TIERRAS No 2 ART. 13 DECRETO 4829 DE 2011",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0935",
+   "descripcion": "RESTITUCIÓN MATERIAL AL PROPIETARIO DEL INMUEBLE LITERAL P) ART. 91 LEY 1448 DE 2011",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0936",
+   "descripcion": "INICIACIÓN PROCESO DE CLARIFICACIÓN DE LA PROPIEDAD ART. 4 DECRETO 2663 DE 1991",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0937",
+   "descripcion": "PROCESO DE CLARIFICACIÓN - VIGENCIA DEL TÍTULO DE ORIGEN COLONIAL O REPUBLICANO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0938",
+   "descripcion": "PROCESO DE CLARIFICACIÓN - EL PREDIO NO HA SALIDO DEL DOMINIO DEL ESTADO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0939",
+   "descripcion": "IDENTIDAD REGISTRAL A PREDIO CON PRESUNCIÓN DE BALDÍO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0940",
+   "descripcion": "MEDIDA DE PROTECCIÓN A SOLICITUD DE LA COMUNIDAD INDÍGENA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0941",
+   "descripcion": "MEDIDA DE PROTECCIÓN A SOLICITUD DE COMUNIDADES NEGRAS",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0942",
+   "descripcion": "PROHIBICIÓN DE APORTAR BALDÍO A SOCIEDAD O COMUNIDAD, SI CON ELLAS DICHAS SOCIEDADES O COMUNIDADES CONSOLIDAN PROPIEDAD SOBRE ÁREA QUE EXCEDA A UAF (ART. 72 LEY 160 DE 1994)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0943",
+   "descripcion": "PROHIBICIÓN ADQUISICIÓN DE PREDIOS ADJUDICADOS INICIALMENTE COMO BALDÍOS SI LAS EXTENSIONES EXCEDEN LOS LÍMITES MÁXIMOS PARA LA TITULACIÓN SEÑALADOS POR LA JUNTA DIRECTIVA PARA LAS UAF DEL RESPECTIVO MUNICIPIO O REGIÓN (ART. 72 LEY 160 DE 1994).",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0944",
+   "descripcion": "INTENCIÓN DE ADELANTAR SANEAMIENTO AUTOMÁTICO (ARTÍCULO 4o DECRETO 737 DE 2014)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0945",
+   "descripcion": "DECLARACIÓN, ALINDERACIÓN Y CREACIÓN DE DISTRITOS DE CONSERVACIÓN DE SUELOS",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0946",
+   "descripcion": "DECLARACIÓN, ALINDERACIÓN Y CREACIÓN DE ÁREAS DE RECREACIÓN",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0947",
+   "descripcion": "DECLARACIÓN, ALINDERACIÓN Y CREACIÓN DE RESERVAS NATURALES DE LA SOCIEDAD CIVIL",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0948",
+   "descripcion": "DECLARACIÓN, ALINDERACIÓN Y CREACIÓN DE DISTRITOS DE MANEJO INTEGRADO",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0949",
+   "descripcion": "PROTECCIÓN PROVISIONAL DE LA POSESIÓN DE TERRITORIOS ANCESTRALES Y/O TRADICIONALES POR PUEBLOS INDÍGENAS",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0950",
+   "descripcion": "DECLARACIÓN DE DESARROLLO O CONSTRUCCIÓN PRIORITARIA (ARTS. 52 Y SIGUIENTES DE LA LEY 388 DE 1997, ADICIONADOS POR EL ARTÍCULO 64 DE LA LEY 1537 DE 2012, DECRETOS DISTRITALES 161 DE 1999 Y 502 DE 2003.",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0951",
+   "descripcion": "LEVANTAMIENTO DE DECLARACIÓN DE DESARROLLO O CONSTRUCCIÓN PRIORITARIA (ARTS. 52 Y SIGUIENTES DE LA LEY 388 DE 1997. ADICIONADOS POR EL ARTÍCULO 64 DE LA LEY 1537 DE 2012. DECRETOS DISTRITALES 161 DE 1999 Y 502 DE 2003).",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0952",
+   "descripcion": "INICIO DE PROCEDIMIENTO DE REVOCATORIA DIRECTA A LA ADJUDICACIÓN DEL BALDÍO POR AFECTACIÓN DEL DERECHO DE DOMINIO (DECRETO 1465 DE 2013)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0953",
+   "descripcion": "RESERVAS FORESTALES PRODUCTORAS (LEY 1076 DE 2015)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0954",
+   "descripcion": "RESERVAS FORESTALES PROTECTORAS-PRODUCTORAS. (LEY 1076 DE 2015)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0955",
+   "descripcion": "DECLARATORIAS DE RONDAS HÍDRICAS (LEY 1076 DE 2015)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0956",
+   "descripcion": "RESERVAS HÍDRICAS (LEY 1076 DE 2015)",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0957",
+   "descripcion": "CESIÓN DE POSICIÓN CONTRACTUAL DE FIDUCIARIO",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0958",
+   "descripcion": "ACTUALIZACIÓN CÉDULA CATASTRAL",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0959",
+   "descripcion": "INVENTARIO DE BIENES POR DECLARACIÓN JUDICIAL DE INTERDICCIÓN",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0960",
+   "descripcion": "CERTIFICACIÓN TÉCNICA DE OCUPACIÓN",
+   "tipo": "neutra"
+  },
+  {
+   "codigo": "0961",
+   "descripcion": "DECLARACIÓN, ALINDERACIÓN Y CREACIÓN DE RESERVA FORESTAL PROTECTORA",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0962",
+   "descripcion": "IDENTIFICACIÓN TERRENO BALDÍO DE LA NACIÓN-AGENCIA NACIONAL DE TIERRAS. SOLO PROCEDERÁ INSCRIPCIÓN DE ACTOS CON LA EXPRESA AUTORIZACIÓN DE LA ANT O LA CITA DE LA LEY QUE ASÍ LO AUTORICE.",
+   "tipo": "limitacion_dominio"
+  },
+  {
+   "codigo": "0963",
+   "descripcion": "IDENTIFICACIÓN TERRENO BALDÍO DE LA NACIÓN-PARQUES NACIONALES NATURALES DE COLOMBIA",
+   "tipo": "limitacion_dominio"
+  }
+ ]
+}

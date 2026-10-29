@@ -10,7 +10,7 @@ import { enIdioma, rellenar } from "@/i18n/textos";
 import { cargarTasa } from "@/lib/precio-datos";
 import {
   SUBSIDIOS,
-  TARIFAS,
+  tarifasPara,
   cargarNuevos,
   hoyNuevos,
 } from "@/lib/vivienda-nueva/datos";
@@ -82,7 +82,7 @@ export default async function TeAlcanzaPage({
   const { edicion, proyectos } = lectura.leida;
   const vigencia = edicionVigente([edicion], hoy);
   const tasa = await cargarTasa();
-  const v = vistaTeAlcanza(proyectos, SUBSIDIOS, TARIFAS, {
+  const v = vistaTeAlcanza(proyectos, SUBSIDIOS, tarifasPara(hoy), {
     tasaEA: tasa.tasaEA,
     fechaCorte: tasa.fechaCorte,
   });

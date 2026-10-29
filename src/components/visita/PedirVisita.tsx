@@ -129,6 +129,8 @@ export default function PedirVisita({
           formaPago: pago,
           mensaje: mensaje.trim() || null,
           email: correo.trim(),
+          // Sin la casilla marcada el formulario no llega aquí; la ruta y la base lo exigen igual (S16).
+          consentimiento: acepto,
         }),
       });
       if (res.ok) {

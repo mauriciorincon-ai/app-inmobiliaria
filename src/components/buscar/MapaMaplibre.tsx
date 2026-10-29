@@ -113,6 +113,7 @@ export default function MapaMaplibre({
   visible: boolean;
 }) {
   const contenedor = useRef<HTMLDivElement>(null);
+  const botonEsquina = useRef<HTMLButtonElement>(null);
   const mapa = useRef<MapLibreMap | null>(null);
   const listo = useRef(false);
   const [cargado, setCargado] = useState(false);
@@ -286,6 +287,8 @@ export default function MapaMaplibre({
     setPuntos([]);
     setAviso(null);
     setDibujando(true);
+    // «Dibujar zona» desaparece al empezar: el foco pasa a «Esquina en la cruz» en vez de perderse en el documento.
+    requestAnimationFrame(() => botonEsquina.current?.focus());
     const m = mapa.current;
     if (m) {
       (m.getSource("zona") as GeoJSONSource).setData(vacio);
@@ -301,6 +304,15 @@ export default function MapaMaplibre({
       (m.getSource("esquinas") as GeoJSONSource).setData(vacio);
     }
     if (cancelar) setPuntos([]);
+  }
+
+  // La esquina en el centro del mapa: el camino del teclado (las flechas mueven el mapa; deuda del S6).
+  function esquinaEnCentro() {
+    const m = mapa.current;
+    if (!m) return;
+    const c = m.getCenter();
+    setAviso(null);
+    setPuntos((prev) => [...prev, { lat: c.lat, lng: c.lng }]);
   }
 
   function listoClick() {
@@ -322,7 +334,7 @@ export default function MapaMaplibre({
 
   return (
     <div
-      className="relative h-full min-h-[22rem] overflow-hidden rounded-2xl border border-purple-200 bg-sky"
+      className="group/mapa relative h-full min-h-[22rem] overflow-hidden rounded-2xl border border-purple-200 bg-sky"
       role="region"
       aria-label={t.etiqueta}
       data-mapa-listo={cargado ? "true" : "false"}
@@ -357,7 +369,28 @@ export default function MapaMaplibre({
             {t.borrar}
           </button>
         )}
+        {dibujando && (
+          <button
+            ref={botonEsquina}
+            type="button"
+            onClick={esquinaEnCentro}
+            aria-describedby="mapa-guia-teclado"
+            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-purple-600 shadow-soft hover:bg-purple-tint"
+          >
+            <span aria-hidden="true">+ </span>
+            {t.esquinaCentro}
+          </button>
+        )}
       </div>
+
+      {dibujando && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-purple-600"
+        >
+          +
+        </span>
+      )}
 
       {dibujando && (
         <div
@@ -365,6 +398,13 @@ export default function MapaMaplibre({
           className="absolute inset-x-3 top-16 z-10 rounded-2xl bg-white p-3 shadow-card"
         >
           <p className="text-sm font-semibold text-ink">{t.guia}</p>
+          {/* Solo a la vista de quien usa el teclado dentro del mapa: en el teléfono el panel no tapa más mapa (S16). */}
+          <p
+            id="mapa-guia-teclado"
+            className="mt-1 hidden text-xs text-mute group-has-[:focus-visible]/mapa:block"
+          >
+            {t.guiaTeclado}
+          </p>
           <div className="mt-2 flex items-center justify-between gap-3">
             <span className="text-xs text-mute">
               {rellenar(t.puntos, { n: puntos.length })}

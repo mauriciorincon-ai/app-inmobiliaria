@@ -16,7 +16,7 @@ export type TextosColaAcciones = Pick<
   "acciones" | "hechos" | "descartar" | "errores"
 >;
 
-type Hecho = "pausado" | "reactivado" | "ctlPedido" | "descartado";
+type Hecho = "pausado" | "reactivado" | "ctlPedido" | "ctlCerrado" | "descartado";
 
 const BOTON =
   "inline-flex items-center justify-center rounded-full bg-purple px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-600 disabled:opacity-60";
@@ -115,6 +115,16 @@ export default function AccionesAntifraude({
             className={BOTON_SEC}
           >
             {t.acciones.pedirCtl}
+          </button>
+        )}
+        {posibles.cerrarCtl && (
+          <button
+            type="button"
+            disabled={ocupado}
+            onClick={() => void llamar({ cambio: "cerrar_ctl" }, "ctlCerrado")}
+            className={BOTON_SEC}
+          >
+            {t.acciones.cerrarCtl}
           </button>
         )}
         {posibles.descartar && (

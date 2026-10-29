@@ -4,6 +4,7 @@ import {
   PLAZOS,
   camposDesdeCapacidad,
   capacidadDe,
+  ingresoIlegible,
   enlaceAlerta,
   enlaceBuscar,
   enlaceCalculo,
@@ -236,5 +237,13 @@ describe("los textos del simulador dicen lo mismo que las constantes de la norma
         String(PLAZO_MAX_ANOS),
       );
     }
+  });
+});
+
+describe("ingresoIlegible (S16): lo guardado se olvida si el ingreso ya no se lee", () => {
+  it("vacío o ilegible → se olvida; un número → se conserva", () => {
+    expect(ingresoIlegible({ ...CAMPOS_INICIALES, ingresos: "" }, null)).toBe(true);
+    expect(ingresoIlegible({ ...CAMPOS_INICIALES, ingresos: "abc" }, null)).toBe(true);
+    expect(ingresoIlegible({ ...CAMPOS_INICIALES, ingresos: "5.000.000" }, null)).toBe(false);
   });
 });

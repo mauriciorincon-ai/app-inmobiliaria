@@ -167,8 +167,22 @@ export const CORREOS_VISITA = {
   },
 
   // S13 — la visita a la sala de ventas de un proyecto nuevo. Mientras la constructora no esté en la plataforma, el equipo de
-  // Innmobiliaria coordina con la sala: solo el comprador recibe correo (el equipo trabaja desde su panel). Ninguno lleva la
-  // dirección ni el teléfono de la sala: la dirección la manda el equipo por WhatsApp, a mano.
+  // Innmobiliaria coordina con la sala: al comprador le llegan los correos de abajo y el equipo trabaja desde su panel. Ninguno
+  // lleva la dirección ni el teléfono de la sala: la dirección la manda el equipo por WhatsApp, a mano.
+  //
+  // S16 (deuda del S13): el operador coordina la visita a la sala y nadie le avisaba de una solicitud nueva; el plazo de dos días
+  // hábiles corría sin que lo supiera. Lleva solo el proyecto y la franja: ningún dato del comprador viaja en este correo.
+  operadorSala: {
+    asunto: {
+      es: "Nueva visita a una sala: {proyecto}",
+      en: "New sales-room visit: {proyecto}",
+    },
+    cuerpo: {
+      es: "<p>Un comprador verificado pidió visitar la sala de ventas de <strong>{proyecto}</strong> ({franja}).</p><p>Tienes dos días hábiles para escribirle a la sala y proponerle horarios desde el panel.</p>",
+      en: "<p>A verified buyer asked to visit the sales room of <strong>{proyecto}</strong> ({franja}).</p><p>You have two business days to contact the room and offer times from the panel.</p>",
+    },
+    cta: { es: "Abrir las salas del panel →", en: "Open the panel's sales rooms →" },
+  },
   sala: {
     solicitud: {
       asunto: {

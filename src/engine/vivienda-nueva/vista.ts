@@ -217,10 +217,10 @@ export function franjasNuevos(tarifas: TarifasEscrituracion): Franja[] {
 }
 
 function franjaDe(p: ProyectoUnico, franjas: readonly Franja[]): ClaveFranja {
-  // Un precio que dos páginas imprimen distinto no ubica al proyecto en ninguna franja (S13, como el «al menos»).
-  if (typeof p.precio_desde !== "number" || enConflicto(p, "precio_desde")) {
-    return "sin_precio";
-  }
+  // Un precio que dos páginas imprimen distinto SÍ cuenta en su franja, como en el índice y en la maqueta aprobada («N con
+  // cifras en conflicto», en su franja); su tarjeta dice «en conflicto» y no entra a ninguna mediana (S16: antes iba a «sin
+  // precio» y la lista contradecía al índice).
+  if (typeof p.precio_desde !== "number") return "sin_precio";
   const precio = p.precio_desde;
   return (franjas.find((x) => x.hasta === null || precio <= x.hasta) as Franja)
     .clave as ClaveFranja;
@@ -641,6 +641,8 @@ export type ProgramaVisible = {
   ingresoMaximo: number | null;
   /** Solo un subsidio de compra baja el precio al firmar; el de la cuota alivia después. */
   restaAlPrecio: boolean;
+  /** La salvedad del programa tal como la leímos (S16; deuda del S13: la tabla la omitía): cupos, concurrencia, montos. */
+  nota: { es: string; en: string } | null;
 };
 
 export type VistaTeAlcanza = {
@@ -705,6 +707,7 @@ export function vistaTeAlcanza(
     maximo: p.monto.pesos_2026.maximo,
     ingresoMaximo: p.ingreso_maximo_pesos_2026,
     restaAlPrecio: p.destino === "compra",
+    nota: p.nota ?? null,
   }));
   const paraElMotor: Programa[] = visibles.map((p) => ({
     id: p.id,

@@ -488,6 +488,10 @@ const CAMPOS_CRITICOS = [
   "segmento",
   "ciudad",
   "entrega",
+  // S16 (deuda del S11): también cambian el «pagas al menos» (el parqueadero se suma; sin precio fijo, puede subir).
+  "parqueadero",
+  "parqueadero_precio",
+  "precio_fijo",
 ] as const satisfies readonly (keyof Proyecto)[];
 
 /** Lo que cambia entre dos lecturas es de dos clases: una cifra distinta, o solo cómo se llama o se cuenta el proyecto. */

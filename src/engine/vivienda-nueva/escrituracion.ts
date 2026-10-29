@@ -46,7 +46,27 @@ export type TarifasEscrituracion = {
     otras_aglomeraciones: readonly string[];
   };
   conceptos: readonly Concepto[];
+  /** El año de las tarifas (S16: pasado ese año, ninguna cifra se muestra como si fuera de hoy). */
+  vigencia?: number;
 };
+
+/**
+ * Las tarifas tal como valen a `hoy` (S16; deuda del S12/S14, «en su año»): pasado el año de su vigencia, cada concepto queda
+ * «no verificado», así que el precio verdadero NOMBRA el registro y la notaría sin monto en vez de cobrar las del año anterior.
+ * La fecha es parámetro (regla 23), nunca el reloj.
+ */
+export function tarifasDelAnio(
+  t: TarifasEscrituracion,
+  hoy: string,
+): TarifasEscrituracion {
+  if (t.vigencia === undefined || Number(hoy.slice(0, 4)) <= t.vigencia) {
+    return t;
+  }
+  return {
+    ...t,
+    conceptos: t.conceptos.map((c) => ({ ...c, estado: "no_verificado" })),
+  };
+}
 
 /** Cómo liquida la norma: tarifa ordinaria, la mitad de VIS o la exención de VIP. */
 export type ClaseVivienda = "general" | "vis" | "vip";

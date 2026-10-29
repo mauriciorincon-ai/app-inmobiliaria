@@ -36,7 +36,7 @@ overrides:
   brace-expansion@2: 2.1.7
   brace-expansion@>=5: 5.0.12
   js-yaml@4: 4.3.2
-  fast-uri: 3.1.8
+  fast-uri: 3.1.9
   sharp: 0.35.5
   undici: 7.30.1
   nanoid@3: 3.3.18
@@ -54,6 +54,9 @@ overrides:
   # (alto, DoS por bytes tras un cuerpo comprimido; transitivo de @opennextjs/aws > express; GHSA-27r3-jxmh-p828).
   zod@<4.6.6: 4.6.7
   body-parser@2: 2.4.0
+  # Avisos del 2026-10-25 (S16), moderados y con parche en su misma línea: qs <6.16.0 (transitivo de @opennextjs/aws > express)
+  # y fast-uri <3.1.9 (sube el pin de arriba).
+  qs@6: 6.16.1
 
 # Excepción de audit (regla 18: un advisory SIN parche es excepción con ADR, nunca silencio). Ver decisions/011.
 # braces <=3.0.3 (alto, agotamiento de pila con patrones anidados): la última publicada es 3.0.3, no existe 3.0.4.

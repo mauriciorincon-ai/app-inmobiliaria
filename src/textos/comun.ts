@@ -10,8 +10,8 @@ export const COMUN = {
       en: "Innmobiliaria — Sell your Bogotá home directly, no commission",
     },
     descripcion: {
-      es: "Publica tu inmueble en Bogotá como vendedor fundador: sin comisión, sin intermediarios. Publicar es registrarte. Te esperamos listo para el día que abramos a los compradores.",
-      en: "List your property in Bogotá as a founding seller: no commission, no middlemen. Listing is signing up. You'll be ready for the day we open to buyers.",
+      es: "Publica tu inmueble en Bogotá como vendedor fundador: sin comisión, sin intermediarios. Publicar es registrarte, y los compradores que verificaron su WhatsApp te escriben directo.",
+      en: "List your property in Bogotá as a founding seller: no commission, no middlemen. Listing is signing up, and buyers who verified their WhatsApp write to you directly.",
     },
   },
 
@@ -60,7 +60,7 @@ export const COMUN = {
       casa: { es: "Casa", en: "House" },
       apartaestudio: {
         es: "Apartaestudio",
-        en: "Studio apartment (apartaestudio)",
+        en: "Studio (apartaestudio)",
       },
       otro: { es: "Otro", en: "Other" },
       inmueble: { es: "Inmueble", en: "Property" },

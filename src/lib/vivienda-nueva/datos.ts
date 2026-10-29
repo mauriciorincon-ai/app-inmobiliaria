@@ -4,7 +4,10 @@
 // tumba la página: se vuelve `error` (o `null`) y la pantalla lo dice. Ni el ingreso ni el arriendo del comprador pasan
 // por aquí: ninguna petición los lleva.
 import { hoyBogota } from "@/engine/agenda/bogota";
-import type { TarifasEscrituracion } from "@/engine/vivienda-nueva/escrituracion";
+import {
+  tarifasDelAnio,
+  type TarifasEscrituracion,
+} from "@/engine/vivienda-nueva/escrituracion";
 import { deFila, type FilaProyecto } from "@/engine/vivienda-nueva/filas";
 import type { Subsidios } from "@/engine/vivienda-nueva/normas";
 import type { UsadoParaComparar } from "@/engine/vivienda-nueva/nuevo-o-usado";
@@ -15,6 +18,11 @@ import { crearClienteAnon } from "@/lib/supabase/server";
 
 /** Las tarifas de escrituración de este año, con su norma y su fecha (validadas en la CI por `vivienda-nueva-normas`). */
 export const TARIFAS = tarifas as unknown as TarifasEscrituracion;
+
+/** Las tarifas como valen a `hoy`: pasado su año, el registro y la notaría se nombran sin monto (S16). */
+export function tarifasPara(hoy: string): TarifasEscrituracion {
+  return tarifasDelAnio(TARIFAS, hoy);
+}
 
 /** Los programas de subsidio, con su norma, su estado y su fecha (validados en la CI por `vivienda-nueva-normas`). */
 export const SUBSIDIOS = subsidios as unknown as Subsidios;

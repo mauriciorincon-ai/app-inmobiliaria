@@ -131,6 +131,10 @@ describe("carnadas: cada fuga plantada cae", () => {
       codigos(hallazgosDeTexto("escribe a ventas@ejemplo.test", "x")),
     ).toEqual(["correo"]);
     expect(hallazgosDeTexto("solo texto del módulo", "x")).toEqual([]);
+    // S16: también un teléfono de Colombia, con o sin separadores; una fecha o una cifra no lo son.
+    expect(codigos(hallazgosDeTexto("sala: 310 555 0199", "x"))).toEqual(["telefono"]);
+    expect(codigos(hallazgosDeTexto("PBX +57 601 555 0199", "x"))).toEqual(["telefono"]);
+    expect(hallazgosDeTexto("edición del 2026-10-25, desde $250.000.000", "x")).toEqual([]);
   });
 });
 

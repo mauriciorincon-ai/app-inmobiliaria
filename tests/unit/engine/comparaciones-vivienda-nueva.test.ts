@@ -494,6 +494,12 @@ describe("¿Te alcanza?: la vista del servidor", () => {
     }
   });
 
+  it("la salvedad de cada programa llega a la tabla, en los dos idiomas (S16)", () => {
+    const cuota = v.programas.find((p) => p.id === "reduce_tu_cuota");
+    expect(cuota?.nota?.es).toMatch(/agotar cupos/);
+    expect(cuota?.nota?.en.length).toBeGreaterThan(0);
+  });
+
   it("cada programa que se muestra trae su norma, su año, su estado con fecha y la fecha en que se consultó; ni arriendo ni lo no verificado", () => {
     const fecha = /^\d{4}-\d{2}-\d{2}$/;
     expect(v.programas.length).toBeGreaterThan(0);

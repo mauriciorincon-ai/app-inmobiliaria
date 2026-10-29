@@ -49,6 +49,12 @@ export default function PapeleoCtl({
   return (
     <div className="space-y-5">
       <p className="text-sm text-gray">{t.intro}</p>
+      {/* S16 (decisión 1a): siempre a la vista, antes de pegar nada. */}
+      <div data-testid="ctl-en-prueba">
+        <Aviso clase={AVISO} simbolo="▲">
+          {t.enPrueba}
+        </Aviso>
+      </div>
       <Aviso clase="bg-sky text-ink" simbolo="i">
         {t.privacidad}
       </Aviso>
@@ -127,7 +133,11 @@ function Resultado({
       Number(b.vigente) - Number(a.vigente) || a.anotacion - b.anotacion,
   );
   const dias = lectura.diasDesdeExpedicion;
+  const { completitud } = lectura;
+  // S16: si falta una anotación, nada se da por limpio ni por cancelado con un ✓ verde.
+  const incompleto = completitud.estado === "no";
   const hayDudas =
+    incompleto ||
     lectura.noReconocidas.length > 0 ||
     lectura.cancelacionesSinNumero.length > 0 ||
     lectura.referenciasRotas.length > 0;
@@ -142,6 +152,35 @@ function Resultado({
           canceladas,
         })}
       </p>
+
+      {incompleto && (
+        <div data-testid="ctl-incompleto" className="space-y-2">
+          {completitud.faltan.length > 0 && (
+            <Aviso clase={AVISO} simbolo="▲">
+              {completitud.total !== null
+                ? rellenar(t.incompleto, {
+                    total: completitud.total,
+                    faltan: completitud.faltan.join(", "),
+                  })
+                : rellenar(t.incompletoSinTotal, {
+                    faltan: completitud.faltan.join(", "),
+                  })}
+            </Aviso>
+          )}
+          {completitud.sobran && (
+            <Aviso clase={AVISO} simbolo="▲">
+              {completitud.total !== null
+                ? rellenar(t.sobran, { total: completitud.total })
+                : t.sobranSinTotal}
+            </Aviso>
+          )}
+        </div>
+      )}
+      {completitud.estado === "sin_total" && (
+        <Aviso clase="bg-sky text-ink" simbolo="i">
+          {t.sinTotal}
+        </Aviso>
+      )}
 
       {dias !== null && dias >= 0 && (
         <div className="space-y-2">
@@ -175,6 +214,7 @@ function Resultado({
               m={m}
               ctl={ctl}
               lang={lang}
+              incompleto={incompleto}
             />
           ))}
         </ul>
@@ -226,10 +266,12 @@ function TarjetaMarca({
   m,
   ctl,
   lang,
+  incompleto,
 }: {
   m: Marca;
   ctl: TextosCtl;
   lang: Idioma;
+  incompleto: boolean;
 }) {
   const t = ctl.lector;
   const x = ctl.marcas[m.tipo];
@@ -246,10 +288,12 @@ function TarjetaMarca({
         <h4 className="font-semibold text-ink">{x.titulo}</h4>
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
-            m.vigente ? AVISO : "bg-mint text-ok"
+            m.vigente ? AVISO : incompleto ? "bg-sky text-ink" : "bg-mint text-ok"
           }`}
         >
-          <span aria-hidden="true">{m.vigente ? "▲" : "✓"}</span>
+          <span aria-hidden="true">
+            {m.vigente ? "▲" : incompleto ? "i" : "✓"}
+          </span>
           {m.vigente ? t.vigente : t.cancelada}
         </span>
       </div>
@@ -259,6 +303,13 @@ function TarjetaMarca({
           ? ` · ${rellenar(t.fecha, { fecha: formatearFecha(m.fecha, lang) })}`
           : ""}
       </p>
+      {(m.codigo === null || m.codigoFueraDeCatalogo) && (
+        <p className="mt-1 text-xs text-mute" data-testid="ctl-nota-codigo">
+          {m.codigo === null
+            ? t.sinCodigo
+            : rellenar(t.fueraDeCatalogo, { codigo: m.codigo })}
+        </p>
+      )}
       <dl className="mt-2 space-y-2 text-sm">
         <div>
           <dt className="font-semibold text-gray">{t.rotulos.queEs}</dt>

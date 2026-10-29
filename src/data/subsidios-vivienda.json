@@ -25,15 +25,15 @@
           "maximo": 52527150
         },
         "regla": {
-          "es": "30 salarios sin concurrencia con la caja de compensación y con una condición de prioridad (víctima, discapacidad, minoría étnica, reincorporado, mujer cabeza de familia, reasentamiento); 20 con concurrencia y una condición de prioridad; 10 sin esas condiciones.",
-          "en": "30 wages without family-compensation-fund concurrence and with a priority condition (victim, disability, ethnic minority, reincorporated, woman head of household, resettlement); 20 with concurrence and a priority condition; 10 without those conditions."
+          "es": "Hasta 30 salarios sin concurrencia con la caja de compensación y con al menos una de las condiciones del decreto (víctima del conflicto, discapacidad, minoría étnica, reincorporado, mujer en riesgo de feminicidio o violencia intrafamiliar, hogar monoparental con ingresos de hasta 2 salarios, persona trans, reasentamiento); hasta 20 con concurrencia y una de esas condiciones; hasta 10 sin esas condiciones.",
+          "en": "Up to 30 wages without family-compensation-fund concurrence and with at least one of the decree's conditions (armed-conflict victim, disability, ethnic minority, reincorporated, woman at risk of femicide or domestic violence, single-parent household earning up to 2 wages, trans person, resettlement); up to 20 with concurrence and one of those conditions; up to 10 without them."
         }
       },
       "ingreso_maximo_smmlv": 4,
       "ingreso_maximo_pesos_2026": 7003620,
       "vivienda": "VIS o VIP nueva, en proyectos con unidades separadas para el programa",
       "normas": [
-        "Decreto Distrital 653 de 2025",
+        "Decreto Distrital 653 de 2025, artículo 158 (modificado por el Decreto Distrital 386 de 2026, artículo 3)",
         "Resolución 836 de 2025 (Secretaría Distrital del Hábitat), artículo 23"
       ],
       "anio": 2026,
@@ -48,7 +48,8 @@
       "verificada_en": [
         "Oficio de la Dirección de Financiación de Vivienda de la Secretaría del Hábitat del 2026-06-01",
         "Respuestas oficiales de la Secretaría del Hábitat de septiembre de 2025 y de julio de 2026, que citan el Decreto 653 de 2025 y la Resolución 836 de 2025",
-        "Alcaldía de Bogotá: montos de 10 a 30 salarios (2025) y tope de ingresos de 4 salarios"
+        "Alcaldía de Bogotá: montos de 10 a 30 salarios (2025) y tope de ingresos de 4 salarios",
+        "Decreto Distrital 653 de 2025, art. 158 (texto según el Decreto Distrital 386 de 2026, art. 3), leído en el Régimen Legal de Bogotá el 2026-10-25: hasta 30, 20 y 10 salarios según concurrencia y condiciones; Resolución 836 de 2025, art. 23, num. 3: ingresos de hasta 4 salarios"
       ]
     },
     {
@@ -68,15 +69,15 @@
           "maximo": 21010860
         },
         "regla": {
-          "es": "Hasta 12 salarios mínimos en 2026, pagados en hasta 48 cuotas mensuales de un crédito hipotecario o leasing para una VIS o VIP nueva.",
-          "en": "Up to 12 minimum wages in 2026, paid over up to 48 monthly installments of a mortgage or leasing for a new VIS or VIP home."
+          "es": "Hasta 12 salarios mínimos en 2026 (lo que anunció la Alcaldía; el decreto permite hasta 14), pagados en 48 cuotas mensuales iguales de un crédito hipotecario o leasing para una VIS o VIP nueva.",
+          "en": "Up to 12 minimum wages in 2026 (what the city announced; the decree allows up to 14), paid in 48 equal monthly installments of a mortgage or leasing for a new VIS or VIP home."
         }
       },
       "ingreso_maximo_smmlv": 4,
       "ingreso_maximo_pesos_2026": 7003620,
       "vivienda": "VIS o VIP nueva, con crédito hipotecario o leasing aprobado",
       "normas": [
-        "Decreto Distrital 653 de 2025, artículo 159",
+        "Decreto Distrital 653 de 2025, artículos 159, 161 y 162",
         "Resolución 676 de 2024 (Secretaría Distrital del Hábitat)"
       ],
       "anio": 2026,
@@ -91,7 +92,8 @@
       "verificada_en": [
         "Oficio de la Dirección de Financiación de Vivienda de la Secretaría del Hábitat del 2026-06-01 (cupos cerrados)",
         "Alcaldía de Bogotá, 11 de agosto de 2026: nuevas postulaciones hasta agotar cupos",
-        "Alcaldía de Bogotá: $21.010.860 en 48 cuotas y tope de ingresos de $7.003.620 para 2026"
+        "Alcaldía de Bogotá: $21.010.860 en 48 cuotas y tope de ingresos de $7.003.620 para 2026",
+        "Decreto Distrital 653 de 2025, leído en el Régimen Legal de Bogotá el 2026-10-25: art. 161, hasta 14 salarios del año del desembolso en 48 mensualidades iguales; art. 162, num. 1, ingresos del hogar de hasta 4 salarios. Los 12 salarios de 2026 son lo anunciado por la Alcaldía, dentro de ese tope"
       ]
     },
     {
@@ -120,6 +122,7 @@
       "vivienda": "No compra: paga arriendo en Bogotá mientras se ahorra para la cuota inicial",
       "normas": [
         "Decreto Distrital 653 de 2025",
+        "Resolución 224 de 2025 (Secretaría Distrital del Hábitat), artículo 10",
         "Resolución 456 del 7 de mayo de 2026 (Secretaría Distrital del Hábitat), que modifica parcialmente la Resolución 224 de 2025"
       ],
       "anio": 2026,
@@ -134,7 +137,8 @@
       "verificada_en": [
         "Oficio de la Dirección de Financiación de Vivienda de la Secretaría del Hábitat del 2026-06-01",
         "Resolución 456 de 2026 (Secretaría del Hábitat), publicada en su marco legal: modifica parcialmente la Resolución 224 de 2025",
-        "Comunicado de la Secretaría del Hábitat: tope de ingresos de 2 salarios ($3.501.810 en 2026)"
+        "Comunicado de la Secretaría del Hábitat: tope de ingresos de 2 salarios ($3.501.810 en 2026)",
+        "Resolución 224 de 2025, art. 10, num. 1, leída en el Régimen Legal de Bogotá el 2026-10-25: ingresos de hasta 2 salarios (la Resolución 456 de 2026 no modifica ese artículo)"
       ]
     },
     {
@@ -170,13 +174,14 @@
       "estado_al": "2026-01-27",
       "estado_segun": "Página del Ministerio de Vivienda actualizada el 2026-01-27: cupos de 2025, 8.672 de 8.672 asignados; 2026, 762 preasignados; las postulaciones «son permanentes» pero no hay cupos libres",
       "nota": {
-        "es": "El ingreso máximo general no está en la página; para la concurrencia con la caja la página pide hasta 2 salarios y Sisbén IV entre A1 y D20. Los montos en pesos son aproximados al salario de 2026. La norma se cita sin artículo: no se encontró una segunda fuente que lo diga.",
-        "en": "The general income cap is not on the page; for concurrence with the compensation fund the page asks for up to 2 wages and Sisbén IV between A1 and D20. The peso amounts are approximate at the 2026 wage. The rule is cited without an article: no second source was found that states it."
+        "es": "El ingreso máximo general no está en la página; para la concurrencia con la caja la página pide hasta 2 salarios y Sisbén IV entre A1 y D20. Los montos en salarios son los que la página da para 2024; en pesos, aproximados al salario de 2026. La norma se cita sin artículo: no se encontró una segunda fuente que lo diga.",
+        "en": "The general income cap is not on the page; for concurrence with the compensation fund the page asks for up to 2 wages and Sisbén IV between A1 and D20. The amounts in wages are the ones the page gives for 2024; in pesos, approximate at the 2026 wage. The rule is cited without an article: no second source was found that states it."
       },
       "verificada_en": [
         "Página del Ministerio de Vivienda sobre Mi Casa Ya, consultada el 2026-01-27",
         "El Heraldo, 6 de marzo de 2025: no se abren cupos nuevos, solo se asigna a quienes ya estaban inscritos",
-        "Portafolio, 2026: subsidios de vivienda vigentes en 2026 «tras Mi Casa Ya»"
+        "Portafolio, 2026: subsidios de vivienda vigentes en 2026 «tras Mi Casa Ya»",
+        "Página del Ministerio de Vivienda releída el 2026-10-25 (actualizada el 2026-01-27): da los 30 y 20 salarios «durante la vigencia de 2024»; cupos de 2025, 8.672 de 8.672 asignados; 2026, 762 preasignados sin total publicado"
       ]
     }
   ],

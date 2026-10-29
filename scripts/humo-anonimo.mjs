@@ -32,6 +32,13 @@ if (!["ausente", "presente"].includes(antifraude)) {
   console.error("Uso: --antifraude ausente|presente");
   process.exit(2);
 }
+// --lote ausente|presente (S16; mismo default que --salas): la migración 19.
+const lote =
+  opcion("--lote") ?? (espera === "ausente" ? "ausente" : "presente");
+if (!["ausente", "presente"].includes(lote)) {
+  console.error("Uso: --lote ausente|presente");
+  process.exit(2);
+}
 if (!["ausente", "presente"].includes(salas)) {
   console.error("Uso: --salas ausente|presente");
   process.exit(2);
@@ -358,6 +365,59 @@ if (antifraude === "ausente") {
     ficha.estado === 200 && ficha.json === null,
     `HTTP ${ficha.estado}`,
   );
+}
+
+// S16 — la migración 19. Sin escribir nada: la firma vieja de la visita ya no existe, la nueva rechaza una sesión falsa antes de
+// leer el anuncio, y las tres funciones nuevas le están cerradas al anónimo.
+{
+  const SESION_FALSA = "0".repeat(64);
+  const base = {
+    p_sesion_hash: SESION_FALSA,
+    p_slug: "anuncio-que-no-existe",
+    p_intencion: "vivir",
+    p_presupuesto_min: null,
+    p_presupuesto_max: null,
+    p_forma_pago: [],
+    p_mensaje: null,
+    p_email: "humo@ejemplo.test",
+  };
+  const vieja = await rpc("solicitar_visita", base);
+  const nueva = await rpc("solicitar_visita", { ...base, p_consentimiento: true });
+  const sinFirmaVieja = vieja.json?.code === "PGRST202";
+  const nuevaRechaza =
+    nueva.json?.code === "42501" &&
+    String(nueva.json?.message ?? "").includes("no_verificado");
+  if (lote === "ausente") {
+    comprobar(
+      "la migración 19 NO está: solicitar_visita conserva la firma sin consentimiento",
+      !sinFirmaVieja,
+      `HTTP ${vieja.estado}`,
+    );
+  } else {
+    comprobar(
+      "solicitar_visita sin consentimiento (firma vieja) ya no existe",
+      sinFirmaVieja,
+      `HTTP ${vieja.estado}`,
+    );
+    comprobar(
+      "solicitar_visita con consentimiento rechaza una sesión falsa (exige el WhatsApp verificado)",
+      nuevaRechaza,
+      `HTTP ${nueva.estado}`,
+    );
+    const UUID_NULO = "00000000-0000-0000-0000-000000000000";
+    for (const [nombre, cuerpo] of [
+      ["cerrar_ctl_pedido", { p_inmueble_id: UUID_NULO }],
+      ["correos_libres_hoy", { p_tope: 0 }],
+      ["dato_de_bandera", { p_inmueble_id: UUID_NULO, p_regla: "precio" }],
+    ]) {
+      const r = await rpc(nombre, cuerpo);
+      comprobar(
+        `el anónimo no puede ejecutar ${nombre}`,
+        r.json?.code === "42501",
+        `HTTP ${r.estado}`,
+      );
+    }
+  }
 }
 
 const fallos = resultados.filter((ok) => !ok).length;

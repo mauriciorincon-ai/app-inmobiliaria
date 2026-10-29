@@ -8,6 +8,12 @@ import {
   deFila,
   type FilaProyecto,
 } from "../../src/engine/vivienda-nueva/filas";
+import tarifasJson from "../../src/data/tarifas-escrituracion.json";
+import {
+  tarifasDelAnio,
+  type TarifasEscrituracion,
+} from "../../src/engine/vivienda-nueva/escrituracion";
+import { precioVerdadero } from "../../src/engine/vivienda-nueva/precio-verdadero";
 
 // S14 «El papeleo, sin sorpresas» — la pantalla /papeleo (maqueta 11) POR LA UI, en español; el inglés, el teléfono y la accesibilidad
 // se prueban aquí también porque la ruta es nueva. Las cifras del caso Bogotá/1.150 M son las que la prueba unitaria recalcula a mano de
@@ -463,8 +469,30 @@ test.describe("desde las fichas", () => {
   }) => {
     await page.setExtraHTTPHeaders({ "x-hoy-simulado": DIA_DE_FICHAS });
     await page.goto(`/nuevos/${proyecto.f.slug}`);
+    // En 2026 las tarifas valen: «pagas al menos» es el del motor con las tarifas de su año, y cada peso trae su norma.
+    const pv = precioVerdadero(
+      proyecto.p,
+      tarifasDelAnio(
+        tarifasJson as unknown as TarifasEscrituracion,
+        DIA_DE_FICHAS,
+      ),
+    );
+    if (pv.estado !== "calculado") throw new Error("debía calcular");
+    await expect(
+      page.getByText(formatearCOP(pv.alMenos, "es"), { exact: true }),
+    ).toBeVisible();
+    for (const partida of pv.partidas) {
+      await expect(
+        page.getByText(formatearCOP(partida.monto, "es"), { exact: true }),
+      ).toBeVisible();
+    }
+    expect(pv.partidas.map((x) => x.id)).toContain("derechos_registro");
+    await expect(
+      page.getByText(/Resolución 2026-001726-6/).first(),
+    ).toBeVisible();
+    await expect(page.getByText(/consultada el .* 2026/).first()).toBeVisible();
     const enlace = page.getByRole("link", {
-      name: "Lo que te cuesta escriturar este",
+      name: "Lo que costaría escriturar al precio «desde»",
     });
     await expect(enlace).toBeVisible();
     const href = (await enlace.getAttribute("href")) ?? "";
@@ -482,6 +510,11 @@ test.describe("desde las fichas", () => {
     await expect(
       page.getByText(/Si vende una empresa o una constructora/),
     ).toBeVisible();
+    // Editado el precio, ya no «viene del anuncio» (S16).
+    await page.getByLabel("Precio de la compraventa (COP)").fill("123000000");
+    await expect(
+      page.getByText("Viene del anuncio que estabas mirando."),
+    ).toHaveCount(0);
   });
 
   test("la ficha de un anuncio usado manda con el precio del anuncio", async ({

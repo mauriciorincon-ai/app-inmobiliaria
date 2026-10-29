@@ -78,7 +78,9 @@ describe("mensajeReContacto", () => {
 
   it("no menciona cifras y degrada con nombre vacío", () => {
     const msg = mensajeReContacto("   ", "https://x/mi-anuncio#t=z");
-    expect(msg).toContain("Hola hola");
+    expect(msg).toMatch(/^Hola, te saludamos/);
+    expect(msg).not.toMatch(/Hola hola|\{nombre\}/);
+    expect(mensajeReContacto("", "https://x/m", "en")).toMatch(/^Hi, /);
     expect(msg).not.toMatch(/\d+%/);
   });
 
@@ -88,6 +90,6 @@ describe("mensajeReContacto", () => {
     expect(en).toMatch(/^Hi Ana,/);
     expect(en).toContain(link);
     expect(en).not.toMatch(/Hola/);
-    expect(mensajeReContacto("   ", link, "en")).toContain("Hi there,");
+    expect(mensajeReContacto("   ", link, "en")).toMatch(/^Hi, this is/);
   });
 });

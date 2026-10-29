@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { enIdioma } from "../../src/i18n/textos";
+import { CTL } from "../../src/textos/ctl";
 
 // S15 — el lector de CTL en /papeleo (maqueta 11) POR LA UI, en español. Lo que no puede fallar: lo pegado se queda en el teléfono
 // (ninguna petición lo lleva, nada queda guardado, ni siquiera el corrector del navegador lo ve) y la lectura marca lo que dice
@@ -143,11 +145,17 @@ test("un certificado limpio lo dice, y lo que no entiende lo nombra sin darlo po
     page.getByText("no encontramos nada de lo que este lector marca"),
   ).toBeVisible();
 
-  // Una anotación con un código que el lector no conoce queda como «no reconocida». Va ANTES del cierre del certificado.
+  // Una anotación sin código y con un acto que el lector no conoce queda como «no reconocida» (con código, el grupo del
+  // art. 8 decide). Va ANTES del cierre del certificado, numerada en orden y contada en el total: el texto está completo.
   const extra =
-    "ANOTACION: Nro 099 Fecha: 01-09-2026 Radicacion: 2026-000099\nESPECIFICACION: 0999 ACTO NUEVO QUE NADIE CONOCE\nDE: PERSONA Z\n\n";
+    "ANOTACION: Nro 003 Fecha: 01-09-2026 Radicacion: 2026-000099\nESPECIFICACION: ACTO NUEVO QUE NADIE CONOCE\nDE: PERSONA Z\n\n";
   await campo.fill(
-    certificado("limpio").replace("NRO TOTAL", `${extra}NRO TOTAL`),
+    certificado("limpio")
+      .replace("NRO TOTAL", `${extra}NRO TOTAL`)
+      .replace(
+        "NRO TOTAL DE ANOTACIONES: *2*",
+        "NRO TOTAL DE ANOTACIONES: *3*",
+      ),
   );
   await leer(page);
   await expect(page.getByTestId("ctl-no-reconocida")).toHaveCount(1);
@@ -159,13 +167,35 @@ test("un certificado limpio lo dice, y lo que no entiende lo nombra sin darlo po
     page.getByText("no encontramos nada de lo que este lector marca"),
   ).toHaveCount(0);
   await expect(page.getByTestId("ctl-no-reconocida")).toContainText(
-    "Anotación 99",
+    "Anotación 3",
   );
+  await expect(page.getByTestId("ctl-incompleto")).toHaveCount(0);
   await expect(
     page.getByText(
       "No sabemos qué dicen: pregúntale al dueño o a un abogado antes de firmar.",
     ),
   ).toBeVisible();
+});
+
+test("más anotaciones que el total impreso: dice que SOBRAN (¿dos certificados?), no que faltan, y no pinta el ✓ verde", async ({
+  page,
+}) => {
+  const campo = await abrirLector(page);
+  await campo.fill(
+    certificado("limpio").replace(
+      "NRO TOTAL DE ANOTACIONES: *2*",
+      "NRO TOTAL DE ANOTACIONES: *1*",
+    ),
+  );
+  await leer(page);
+  const aviso = page.getByTestId("ctl-incompleto");
+  await expect(aviso).toContainText(
+    "más anotaciones de las que el certificado dice (1)",
+  );
+  await expect(aviso).not.toContainText("faltan las número");
+  await expect(
+    page.getByText("no encontramos nada de lo que este lector marca"),
+  ).toHaveCount(0);
 });
 
 test("sin texto o sin anotaciones lo dice; borrar vacía el campo y el resultado", async ({
@@ -296,4 +326,38 @@ test("accesibilidad y teléfono: sin violaciones con el resultado a la vista y s
     visible: document.documentElement.clientWidth,
   }));
   expect(ancho).toBeLessThanOrEqual(visible);
+});
+
+// S16 — el mismo lector en inglés: los textos se leen del diccionario `{es, en}`, no se reescriben a mano, y la etiqueta «lectura en
+// prueba» y el aviso de texto incompleto salen también en el segundo idioma.
+test.describe("en inglés", () => {
+  test.use({ locale: "en-US" });
+  const L = enIdioma(CTL, "en").lector;
+
+  test("la sección, la etiqueta en prueba, el texto incompleto y el aviso salen en inglés", async ({
+    page,
+  }) => {
+    await page.goto("/papeleo");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await page.getByRole("button", { name: L.pestana }).click();
+    await expect(page.getByRole("heading", { name: L.titulo })).toBeVisible();
+    // La etiqueta de «lectura en prueba» se ve ANTES de pegar nada.
+    await expect(page.getByTestId("ctl-en-prueba")).toContainText(L.enPrueba);
+    const campo = page.getByLabel(L.campo);
+    await campo.fill(certificado("limpio"));
+    await page.getByRole("button", { name: L.leer }).click();
+    await expect(page.getByText(L.sinMarcas)).toBeVisible();
+    await expect(page.getByText(L.aviso)).toBeVisible();
+    // Falta la anotación del medio: lo dice en inglés y no pinta ningún ✓.
+    const sinSegunda = certificado("limpio").replace(
+      /ANOTACION: Nro 002[\s\S]*?(?=NRO TOTAL)/,
+      "",
+    );
+    await campo.fill(sinSegunda);
+    await page.getByRole("button", { name: L.leer }).click();
+    await expect(page.getByTestId("ctl-incompleto")).toContainText(
+      "The text looks incomplete",
+    );
+    await expect(page.getByText(L.sinMarcas)).toHaveCount(0);
+  });
 });

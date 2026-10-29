@@ -14,6 +14,10 @@ import { PHASE_PRODUCTION_BUILD } from "next/constants";
 // pasa a `/en/en/x` y cae en la 404 de captura: los segmentos internos no se exponen.
 const TODO_EL_SITIO = "/:path*";
 
+// La cabecera pide inglés si «en» aparece ANTES que cualquier «es» (Next la compara con `^…$`). Antes bastaba con no EMPEZAR
+// por «es»: `fr,es;q=0.8,en;q=0.5` (francés, luego español) recibía inglés (deuda del S5).
+export const PREFIERE_INGLES = "(?:(?!\\bes\\b).)*\\ben\\b.*";
+
 const idioma = (destino: "es" | "en") => ({
   source: TODO_EL_SITIO,
   destination: `/${destino}/:path*`,
@@ -47,7 +51,7 @@ const nextConfig: NextConfig = {
             {
               type: "header" as const,
               key: "accept-language",
-              value: "(?!es).*\\ben\\b.*",
+              value: PREFIERE_INGLES,
             },
           ],
           // Solo cuenta una cookie VÁLIDA: `idioma=fr` no debe impedir que decida la cabecera.

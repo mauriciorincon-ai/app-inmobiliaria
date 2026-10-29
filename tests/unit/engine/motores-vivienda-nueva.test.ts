@@ -9,6 +9,7 @@ import {
 import {
   derechosNotariales,
   derechosRegistro,
+  tarifasDelAnio,
   topeVis,
   type TarifasEscrituracion,
 } from "../../../src/engine/vivienda-nueva/escrituracion";
@@ -116,13 +117,20 @@ describe("precio verdadero", () => {
     const vip = precioVerdadero(entrada({ segmento: "VIP" }), tarifas);
     const general = precioVerdadero(entrada({ segmento: "No VIS" }), tarifas);
     const noDice = precioVerdadero(entrada({ segmento: NO_LO_DICE }), tarifas);
-    for (const r of [vip, general, noDice]) if (r.estado !== "calculado") throw new Error("debía calcular");
-    if (vip.estado !== "calculado" || general.estado !== "calculado" || noDice.estado !== "calculado") return;
+    for (const r of [vip, general, noDice])
+      if (r.estado !== "calculado") throw new Error("debía calcular");
+    if (
+      vip.estado !== "calculado" ||
+      general.estado !== "calculado" ||
+      noDice.estado !== "calculado"
+    )
+      return;
     expect(ids(vip.faltantes)).not.toContain("registro_sin_subsidio");
     expect(ids(general.faltantes)).not.toContain("registro_sin_subsidio");
-    expect(noDice.faltantes.find((f) => f.id === "registro_sin_subsidio")?.monto).toBe(2_884_100);
+    expect(
+      noDice.faltantes.find((f) => f.id === "registro_sin_subsidio")?.monto,
+    ).toBe(2_884_100);
   });
-
 
   it("VIS en Bogotá con parqueadero aparte y precio fijo: al menos 271.442.000", () => {
     // 250.000.000 + registro VIS 1.442.000 + parqueadero 20.000.000
@@ -269,6 +277,32 @@ describe("precio verdadero", () => {
     const r = precioVerdadero(entrada({ ciudad: ILEGIBLE }), tarifas);
     if (r.estado !== "calculado") throw new Error("debía calcular");
     expect(ids(r.faltantes)).toContain("supera_tope_vis");
+  });
+
+  it("«en su año» (S16): el 31 de diciembre valen las tarifas del año; el 1 de enero siguiente se nombran sin monto", () => {
+    expect(tarifas.vigencia).toBe(2026);
+    const ultimoDia = precioVerdadero(
+      entrada(),
+      tarifasDelAnio(tarifas, "2026-12-31"),
+    );
+    const primerDia = precioVerdadero(
+      entrada(),
+      tarifasDelAnio(tarifas, "2027-01-01"),
+    );
+    if (ultimoDia.estado !== "calculado" || primerDia.estado !== "calculado") {
+      throw new Error("debía calcular");
+    }
+    expect(ids(ultimoDia.partidas)).toContain("derechos_registro");
+    expect(ids(primerDia.partidas)).toEqual(["precio_desde", "parqueadero"]);
+    for (const id of ["derechos_registro", "derechos_notariales"]) {
+      expect(primerDia.faltantes.find((f) => f.id === id)).toEqual({ id });
+    }
+    // Sin registro sumado, la nota de la VIS («se sumó con la mitad; sin subsidio cuesta más») sería falsa: no sale.
+    expect(ultimoDia.clase).toBe("vis");
+    expect(ids(ultimoDia.faltantes)).toContain("registro_sin_subsidio");
+    expect(ids(primerDia.faltantes)).not.toContain("registro_sin_subsidio");
+    // Las mismas tarifas, no una copia, mientras valen.
+    expect(tarifasDelAnio(tarifas, "2026-06-01")).toBe(tarifas);
   });
 
   it("si las tarifas no están vigentes, el «al menos» es el precio y el parqueadero; registro y notaría se NOMBRAN sin monto", () => {
@@ -524,6 +558,15 @@ describe("la espera", () => {
   it("una fecha impresa que ya pasó se dice como vencida", () => {
     const r = espera(
       { entrega: "2026-06", entrega_precision: "mes", etapa: NO_LO_DICE },
+      "2026-10-20",
+      1_800_000,
+    );
+    expect(r).toMatchObject({ estado: "calculada", meses: 0, vencida: true });
+  });
+
+  it("la entrega de ESTE mes ya «llegó»: se dice igual que una pasada (S16: el texto pide preguntar si ya entregaron)", () => {
+    const r = espera(
+      { entrega: "2026-10", entrega_precision: "mes", etapa: NO_LO_DICE },
       "2026-10-20",
       1_800_000,
     );

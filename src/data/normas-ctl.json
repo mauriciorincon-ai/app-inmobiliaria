@@ -1,7 +1,7 @@
 {
   "version": 1,
   "consultado": "2026-10-25",
-  "nota": "Registro de los artículos que cita el lector de CTL (S15), cada uno leído en su texto oficial en la fecha de consulta. Una marca solo cita artículos de esta lista; una prueba lo comprueba.",
+  "nota": "Registro de los artículos que cita el lector de CTL (S15), cada uno leído en la fecha de consulta en el gestor normativo de una entidad pública (CRA, Función Pública o el Régimen Legal de Bogotá), que reproduce el texto: ninguno se contrastó con el Diario Oficial. Una marca solo cita artículos de esta lista; una prueba lo comprueba.",
   "normas": {
     "ley_1579_2012": {
       "nombre": "Ley 1579 de 2012 (Estatuto de Registro de Instrumentos Públicos)",
@@ -27,6 +27,16 @@
       "nombre": "Ley 70 de 1931 (patrimonio de familia)",
       "leida_en": "Texto de la Ley 70 de 1931 en el gestor normativo de Función Pública: art. 21 (no es embargable) y art. 23 (enajenación o cancelación con el consentimiento del cónyuge o de los hijos menores)",
       "articulos": [21, 23]
+    },
+    "ley_1537_2012": {
+      "nombre": "Ley 1537 de 2012 (vivienda de interés social y prioritario)",
+      "leida_en": "Texto de la Ley 1537 de 2012 en el gestor normativo de la CRA, leído el 2026-10-25: art. 21 (modifica el art. 8 de la Ley 3 de 1991: el subsidio familiar de vivienda se restituye si se transfiere antes del plazo; la prohibición de transferencia se inscribe en el folio de matrícula)",
+      "articulos": [21]
+    },
+    "ley_2079_2021": {
+      "nombre": "Ley 2079 de 2021 (vivienda y hábitat)",
+      "leida_en": "Texto de la Ley 2079 de 2021 en el gestor normativo de la CRA, leído el 2026-10-25: art. 13 (vuelve a modificar el art. 8 de la Ley 3 de 1991: el subsidio otorgado cien por ciento en especie se restituye si se transfiere antes de cinco años desde la transferencia)",
+      "articulos": [13]
     }
   }
 }

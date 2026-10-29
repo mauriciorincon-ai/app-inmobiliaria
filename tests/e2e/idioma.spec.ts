@@ -36,6 +36,11 @@ test.describe("reescrituras de idioma (HTTP)", () => {
       "en",
     ],
     [
+      "navegador en francés que prefiere español a inglés: español",
+      { "Accept-Language": "fr,es;q=0.8,en;q=0.5" },
+      "es-CO",
+    ],
+    [
       "navegador en portugués sin inglés: español (el mercado es Bogotá)",
       { "Accept-Language": "pt-BR,pt;q=0.9" },
       "es-CO",
@@ -177,6 +182,24 @@ test.describe("selector de idioma (navegador)", () => {
       grupo.getByRole("button", { name: "English" }),
     ).toHaveAttribute("aria-pressed", "false");
   });
+
+  // WCAG 2.2 AA 2.5.8 (tamaño del objetivo, mínimo): cada botón mide al menos 24 × 24 px, en la
+  // portada y en una pantalla interior, en escritorio y en móvil.
+  for (const ruta of ["/", "/privacidad"]) {
+    test(`en ${ruta} cada botón mide al menos 24 × 24 px`, async ({ page }) => {
+      await page.goto(ruta);
+      const botones = page
+        .getByRole("group", { name: "Idioma" })
+        .getByRole("button");
+      await expect(botones).toHaveCount(2);
+      for (const boton of await botones.all()) {
+        const caja = await boton.boundingBox();
+        expect(caja, "el botón se pinta").not.toBeNull();
+        expect(caja!.width).toBeGreaterThanOrEqual(24);
+        expect(caja!.height).toBeGreaterThanOrEqual(24);
+      }
+    });
+  }
 
   test("cambiar de idioma en /mi-anuncio conserva el token del fragmento", async ({
     page,

@@ -14,7 +14,7 @@ import {
 } from "@/engine/vivienda-nueva/vista";
 import { leerIdioma } from "@/i18n/ruta";
 import { enIdioma, rellenar } from "@/i18n/textos";
-import { TARIFAS, cargarNuevos, hoyNuevos } from "@/lib/vivienda-nueva/datos";
+import { cargarNuevos, hoyNuevos, tarifasPara } from "@/lib/vivienda-nueva/datos";
 import { VIVIENDA_NUEVA } from "@/textos/vivienda-nueva";
 
 // La ficha de un proyecto de vivienda nueva (maqueta 02). Se calcula en el servidor para el día de hoy en Bogotá; la edición
@@ -97,7 +97,7 @@ export default async function FichaNuevoPage({
   }
 
   const { edicion, proyectos } = lectura.leida;
-  const v = vistaProyecto(proyectos, slug, TARIFAS, hoy, tope);
+  const v = vistaProyecto(proyectos, slug, tarifasPara(hoy), hoy, tope);
   if (!v) notFound();
   return marco(
     <FichaNuevo

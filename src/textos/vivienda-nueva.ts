@@ -437,10 +437,6 @@ export const VIVIENDA_NUEVA = {
         es: "VIS: el registro se sumó con la mitad, que es solo con subsidio de vivienda del Estado o de una caja de compensación. Sin subsidio, el registro cuesta {monto} (Res. SNR 2026-001726-6, art. 17, parágrafo 2).",
         en: "VIS: registration was added at half, which only applies with a housing subsidy from the State or a family compensation fund. Without a subsidy, registration costs {monto} (SNR Res. 2026-001726-6, art. 17, paragraph 2).",
       },
-      registro_sin_subsidio_sin_monto: {
-        es: "VIS: el registro se sumó con la mitad, que es solo con subsidio de vivienda del Estado o de una caja de compensación. Sin subsidio cuesta más; la tarifa general no está verificada para este año.",
-        en: "VIS: registration was added at half, which only applies with a housing subsidy from the State or a family compensation fund. Without a subsidy it costs more; the general rate is not verified for this year.",
-      },
       supera_tope_vis: {
         es: "Se anuncia como VIS, pero su precio pasa el tope VIS de 2026 en {ciudad}: se calculó como vivienda general. Pregunta en qué año se liquida el precio.",
         en: "It is advertised as VIS, but its price is above the 2026 VIS cap in {ciudad}: computed as regular housing. Ask which year the price is set in.",
@@ -550,9 +546,10 @@ export const VIVIENDA_NUEVA = {
       },
     },
     papeleo: {
+      // S16 (deuda del S14): el enlace lleva el «desde» de la unidad más barata, no el precio de «este» apartamento.
       titulo: {
-        es: "Lo que te cuesta escriturar este",
-        en: "What it costs to close on this one",
+        es: "Lo que costaría escriturar al precio «desde»",
+        en: "What closing would cost at the «from» price",
       },
       detalle: {
         es: "Cuánto paga cada parte al escriturar, con la norma de cada cifra y lo que no pudimos verificar. El precio que escribes se queda en tu teléfono.",
@@ -658,8 +655,8 @@ export const VIVIENDA_NUEVA = {
         en: "A new home costs the same per m²",
       },
       detalle: {
-        es: "Medianas de lo que cabe en {presupuesto}. Lo nuevo se entrega después y calla datos; lo usado se ve hoy.",
-        en: "Medians of what fits in {presupuesto}. New homes are handed over later and leave facts out; resale homes can be seen today.",
+        es: "Medianas de lo que cabe en {presupuesto}. Lo nuevo se mide por m² privado y lo usado por el área que declara el dueño, que puede ser la construida. Lo nuevo se entrega después y calla datos; lo usado se ve hoy.",
+        en: "Medians of what fits in {presupuesto}. New homes are measured by private m² and resale homes by the area the owner declares, which may be the built area. New homes are handed over later and leave facts out; resale homes can be seen today.",
       },
       sin: {
         titulo: {
@@ -732,6 +729,11 @@ export const VIVIENDA_NUEVA = {
     resumen: {
       es: "Hogar de ejemplo con {ingresos} al mes: puede pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa de referencia {tasa} E. A. con corte al {fecha}).",
       en: "Sample household earning {ingresos} a month: can afford up to {tope} ({inicial}% down, {plazo} years, reference rate {tasa} effective annual as of {fecha}).",
+    },
+    // S16 (deuda del S13): el tope salía sin su norma; el simulador la cita y aquí faltaba.
+    normaTope: {
+      es: "El tope sale de la regla de la cuota frente al ingreso: {norma}.",
+      en: "The cap follows the payment-to-income rule: {norma}.",
     },
     resumenTuyo: {
       es: "Con {ingresos} al mes puedes pagar hasta {tope} ({inicial} % de cuota inicial, {plazo} años, tasa de referencia {tasa} E. A. con corte al {fecha}).",

@@ -18,6 +18,12 @@ if (!url || !serviceKey) {
   console.error("[seed-demo-fotos] Faltan SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY");
   process.exit(1);
 }
+// La misma guarda que `seed-demo.mjs` (S16; deuda del S12): contra una base que no es local no se toca nada, ni siquiera borrar
+// las fotos del anuncio demo.
+if (!/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(url)) {
+  console.error("[seed-demo-fotos] La base no es local: no se siembra nada.");
+  process.exit(1);
+}
 
 const DESTINO = join(process.cwd(), "public", "demo-fotos");
 mkdirSync(DESTINO, { recursive: true });

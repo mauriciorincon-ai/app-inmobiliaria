@@ -76,6 +76,20 @@ describe("contrato del brochure-export (schema v1.0.0)", () => {
     expect(Number(enPie)).toBe(exportJson.funcionalidades.total);
   });
 
+  it("el brochure trae una tarjeta por cada función del export, con el mismo nombre (S16: nadie vigilaba los nombres)", () => {
+    const enBrochure = [
+      ...brochure.matchAll(/<div class="feature"[^>]*>\s*<h4>([^<]+)<\/h4>/g),
+    ].map((m) =>
+      m[1].replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">"),
+    );
+    const enExport = exportJson.funcionalidades.grupos.flatMap(
+      (g: { features: { nombre: string }[] }) =>
+        g.features.map((f) => f.nombre),
+    );
+    expect(enBrochure.length).toBe(exportJson.funcionalidades.total);
+    expect([...enBrochure].sort()).toEqual([...enExport].sort());
+  });
+
   it("la métrica de funcionalidades coincide con el total", () => {
     const m = exportJson.metricas.find(
       (x: { clave: string }) => x.clave === "funcionalidades",

@@ -97,6 +97,7 @@ async function pedirVisita(
       formaPago: ["hipotecario"],
       mensaje: "Quisiera verlo un sábado",
       email: CORREO_COMPRADOR,
+      consentimiento: true,
       ...extra,
     },
     cookie,
@@ -264,11 +265,13 @@ test.describe("POST /api/identidad", () => {
       `select tablename from pg_tables where schemaname = 'public' order by 1`,
     );
     expect(tablas.length).toBeGreaterThan(10);
+    // La cédula como número entero, sin dígitos pegados: la huella de una foto es una cadena de 64 ceros y unos, y «1000000001»
+    // aparece dentro de una de cada veinte al azar (S16; la prueba fallaba con fotos acumuladas sin que hubiera cédula).
     for (const tabla of tablas) {
       for (const cedula of Object.values(CEDULAS_PRUEBA)) {
         expect(
           consultar(
-            `select count(*) from public."${tabla}" t where t::text like '%${cedula}%'`,
+            `select count(*) from public."${tabla}" t where t::text ~ '(^|[^0-9])${cedula}([^0-9]|$)'`,
           ),
           `${tabla} · ${cedula}`,
         ).toEqual(["0"]);
@@ -561,6 +564,11 @@ test.describe("POST /api/cron/diario", () => {
     ejecutar(
       `update public.compradores set created_at = now() - interval '31 days' where telefono = '${viejo}'`,
     );
+    // S16: la purga perdona a quien pidió un código hace poco; este lo pidió hace 31 días.
+    ejecutar(
+      `update public.verificaciones set created_at = now() - interval '31 days'
+        where comprador_id = (select id from public.compradores where telefono = '${viejo}')`,
+    );
 
     // Esta prueba es de los recordatorios: con `x-alertas-solo` apuntando a una alerta que no existe, el paso de
     // resúmenes no se lleva los de las pruebas de alertas que corren a la vez (S9).
@@ -575,12 +583,15 @@ test.describe("POST /api/cron/diario", () => {
     expect(r.status()).toBe(200);
     const cuerpo = await r.json();
     expect(cuerpo).toMatchObject({
-      correos: { fallidos: 0 },
+      correos: { enviados: expect.any(Number), fallidos: 0 },
       purga: {
         compradores: expect.any(Number),
         verificaciones: expect.any(Number),
       },
     });
+    // S16 (deuda del S8): se cuentan los CORREOS, no solo el reclamo. La visita de mañana manda dos (comprador y dueño); otras
+    // pruebas que corren a la vez pueden sumar más, nunca menos.
+    expect(cuerpo.correos.enviados).toBeGreaterThanOrEqual(2);
     // Sin datos de nadie en la respuesta.
     expect(JSON.stringify(cuerpo)).not.toContain("@");
 

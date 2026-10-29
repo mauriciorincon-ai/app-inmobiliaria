@@ -969,6 +969,8 @@ export type Database = {
           p_forma_pago: FormaPago[];
           p_mensaje: string | null;
           p_email: string;
+          // S16: el consentimiento también lo exige la base, no solo la ruta.
+          p_consentimiento: boolean;
         };
         Returns: ResultadoSolicitud;
       };
@@ -1051,6 +1053,10 @@ export type Database = {
         Returns: undefined;
       };
       pedir_ctl: { Args: { p_inmueble_id: string }; Returns: undefined };
+      // S16: el CTL pedido que el dueño no entregó sale de la cola (y un verificado sin CTL vuelve a fundador).
+      cerrar_ctl_pedido: { Args: { p_inmueble_id: string }; Returns: undefined };
+      // S16: lo que queda del cupo diario de correos (visitas, alertas y campañas de hoy).
+      correos_libres_hoy: { Args: { p_tope?: number }; Returns: number };
       descartar_revision: {
         Args: {
           p_inmueble_id: string;

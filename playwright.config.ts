@@ -38,5 +38,9 @@ export default defineConfig({
     // Sin esto Playwright DESCARTA el stdout del servidor (pino loggea a stdout) y los errores
     // del server component quedan invisibles en CI.
     stdout: "pipe",
+    // Las perillas de prueba que la CI pone en su job (S16; deuda del S10): así `pnpm test:e2e` en local levanta el mismo servidor
+    // sin depender de un `.env.local`. Playwright las suma al entorno del proceso. Jamás llegan a producción: la guarda de
+    // despliegue veta estos nombres.
+    env: { TASA_SIMULACRO: "1", NUEVOS_SIMULACRO: "1", LECTOR_CTL_ACTIVO: "1" },
   },
 });

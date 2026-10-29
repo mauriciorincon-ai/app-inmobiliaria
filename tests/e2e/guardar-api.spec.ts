@@ -271,6 +271,7 @@ async function visitaDeManana(): Promise<string> {
     p_forma_pago: [],
     p_mensaje: null,
     p_email: "comprador.s9@ejemplo.test",
+    p_consentimiento: true,
   });
   expect(sol.error).toBeNull();
   const { solicitud_id, token } = sol.data as {

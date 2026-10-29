@@ -51,6 +51,28 @@ describe("zona dibujada", () => {
     expect(seCruza(CUADRO)).toBe(false);
   });
 
+  it("dos lados alineados que se montan o un vértice sobre otro lado también se cruzan", () => {
+    // El 5.º vértice vuelve sobre el lado de abajo: el lado 4–5 se monta sobre el 0–1 (alineados).
+    const montado: Punto[] = [
+      { lat: 4.64, lng: -74.07 },
+      { lat: 4.64, lng: -74.05 },
+      { lat: 4.66, lng: -74.05 },
+      { lat: 4.66, lng: -74.06 },
+      { lat: 4.64, lng: -74.06 },
+      { lat: 4.64, lng: -74.065 },
+    ];
+    expect(seCruza(montado)).toBe(true);
+    // Un vértice que toca un lado que no es su vecino.
+    const toca: Punto[] = [
+      { lat: 4.64, lng: -74.07 },
+      { lat: 4.64, lng: -74.05 },
+      { lat: 4.66, lng: -74.06 },
+      { lat: 4.64, lng: -74.06 },
+      { lat: 4.66, lng: -74.07 },
+    ];
+    expect(seCruza(toca)).toBe(true);
+  });
+
   it("dentroDeBogota descarta NaN y coordenadas del otro lado del mundo", () => {
     expect(dentroDeBogota({ lat: 4.65, lng: -74.06 })).toBe(true);
     expect(dentroDeBogota({ lat: Number.NaN, lng: -74 })).toBe(false);

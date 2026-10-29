@@ -23,8 +23,8 @@ export const LANDING = {
     },
     subtitulo: {
       antes: {
-        es: "Publícala hoy como fundador —verificada y bien presentada— y que te espere lista el día que abramos las puertas a los compradores. Publicar tu inmueble ",
-        en: "List it today as a founding seller — verified and well presented — so it's ready the day we open the doors to buyers. Listing your property ",
+        es: "Publícala hoy como fundador —verificada y bien presentada— para que los compradores la encuentren y te escriban directo. Publicar tu inmueble ",
+        en: "List it today as a founding seller — verified and well presented — so buyers find it and write to you directly. Listing your property ",
       },
       resaltado: { es: "es", en: "is" },
       despues: { es: " tu registro.", en: " your sign-up." },
@@ -43,6 +43,8 @@ export const LANDING = {
       en: "Illustration of a house",
     },
     comision: { es: "Comisión", en: "Commission" },
+    // Cero pesos con la moneda como la escribe el resto de la app en cada idioma («$» en español, «COP» en inglés).
+    cero: { es: "$0", en: "COP 0" },
     paraTi: { es: "para ti", en: "for you" },
   },
 
@@ -138,8 +140,8 @@ export const LANDING = {
           en: "Describe your property",
         },
         texto: {
-          es: "Lo esencial: dónde queda, cuánto mide y cuánto esperas por él. Las fotos llegan en la siguiente etapa.",
-          en: "The essentials: where it is, how big it is and what you expect for it. Photos come in the next stage.",
+          es: "Lo esencial: dónde queda, cuánto mide y cuánto esperas por él. Las fotos las subes al terminar, desde tu teléfono.",
+          en: "The essentials: where it is, how big it is and what you expect for it. You add photos right after, from your phone.",
         },
       },
       {
@@ -148,8 +150,8 @@ export const LANDING = {
           en: "Done: you're registered",
         },
         texto: {
-          es: "Tu inmueble queda publicado como fundador. Si dejaste tu correo, te avisamos en cada paso hacia el lanzamiento.",
-          en: "Your property is listed as a founding listing. If you left your email, we'll let you know at each step toward launch.",
+          es: "Tu inmueble queda publicado como fundador y los compradores lo encuentran en la búsqueda.",
+          en: "Your property is listed as a founding listing, and buyers find it in the search.",
         },
       },
     ],
@@ -165,9 +167,8 @@ export const LANDING = {
       en: "On the buyer's side there is already search, verification and visits, and you can ask for a photo session from your listing.",
     },
     ya: { es: "Ya disponible", en: "Available now" },
-    pronto: { es: "Próximamente", en: "Coming soon" },
     // Cada tarjeta dice la verdad de HOY. Cualitativo y sin cifras (las de fotos están prohibidas por
-    // evidencia débil — design-system.md). `estrella` y «ya / próximamente» los pone el componente.
+    // evidencia débil — design-system.md). La estrella y «Ya disponible» los pone el componente.
     tarjetas: [
       {
         titulo: {
@@ -185,8 +186,8 @@ export const LANDING = {
           en: "Visits without the back-and-forth",
         },
         texto: {
-          es: "El comprador te propone cuándo y tú eliges la hora. A los dos les llega un recordatorio por correo el día antes.",
-          en: "The buyer suggests times and you pick one. Both of you get an email reminder the day before.",
+          es: "Tú propones hasta tres horarios y el comprador elige uno. A los dos les llega un recordatorio por correo el día antes.",
+          en: "You offer up to three times and the buyer picks one. Both of you get an email reminder the day before.",
         },
       },
       {
@@ -241,8 +242,8 @@ export const LANDING = {
           en: "When can I start receiving buyers?",
         },
         a: {
-          es: "Estamos preparando la apertura a compradores y, si dejaste tu correo, te avisamos cuando llegue. Publicar hoy te deja listo y de primero.",
-          en: "We're preparing to open to buyers, and if you left your email we'll let you know when it happens. Listing today gets you ready and first in line.",
+          es: "Desde que publicas: tu anuncio sale en la búsqueda y, si activas el contacto, los compradores que verificaron su WhatsApp te escriben. Tú decides si reciben solicitudes de visita.",
+          en: "From the moment you list: your listing shows up in the search and, if you turn on contact, buyers who verified their WhatsApp write to you. You decide whether they can request visits.",
         },
       },
       {
@@ -260,8 +261,8 @@ export const LANDING = {
 
   ctaFinal: {
     titulo: {
-      es: "Tu inmueble, listo antes que los demás",
-      en: "Your property, ready before everyone else's",
+      es: "Tu inmueble, listo hoy",
+      en: "Your property, ready today",
     },
     texto: {
       es: "Publícalo hoy como fundador. Sin comisión, sin intermediarios y en menos de tres minutos.",
@@ -269,8 +270,8 @@ export const LANDING = {
     },
   },
 
-  // Paquete fundador (4 guías gratuitas). Las guías siguen en español (decisión del S5): en inglés cada
-  // tarjeta lo avisa. Se redactan con el brochure, al cierre de H-2.
+  // Paquete fundador (4 guías gratuitas). Las guías siguen en español (decisión del S5, vigente): en inglés cada
+  // tarjeta lo avisa y el manual lo declara en «Limitaciones».
   paquete: {
     titulo: {
       es: "Tu paquete de fundador",
@@ -285,8 +286,8 @@ export const LANDING = {
       {
         titulo: { es: "Guía fotográfica", en: "Photo guide" },
         desc: {
-          es: "Fotos que venden cerca de un tercio más rápido.",
-          en: "Photos that sell about a third faster.",
+          es: "Cada espacio con buena luz y orden, desde tu teléfono.",
+          en: "Every room in good light and tidy, shot on your phone.",
         },
       },
       {

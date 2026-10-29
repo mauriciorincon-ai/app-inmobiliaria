@@ -13,7 +13,8 @@ export const runtime = "nodejs";
 
 const cuerpoSchema = z.discriminatedUnion("cambio", [
   z.object({
-    cambio: z.enum(["pausar", "reactivar", "pedir_ctl"]),
+    // S16: «cerrar_ctl» saca de la cola un CTL pedido que el dueño no entregó.
+    cambio: z.enum(["pausar", "reactivar", "pedir_ctl", "cerrar_ctl"]),
     inmuebleId: z.uuid(),
   }),
   z.object({
@@ -49,7 +50,9 @@ export async function POST(req: NextRequest) {
             ? "pausar_anuncio"
             : b.cambio === "reactivar"
               ? "reactivar_anuncio"
-              : "pedir_ctl",
+              : b.cambio === "pedir_ctl"
+                ? "pedir_ctl"
+                : "cerrar_ctl_pedido",
           { p_inmueble_id: b.inmuebleId },
         );
   if (error) {

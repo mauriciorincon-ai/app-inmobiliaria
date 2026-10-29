@@ -449,6 +449,14 @@ export const OPERADOR = {
       es: "No se pudo verificar. Intenta de nuevo.",
       en: "Verification failed. Try again.",
     },
+    sinSesion: {
+      es: "Tu sesión de operador se cerró. Vuelve a entrar y repite la verificación.",
+      en: "Your operator session ended. Sign in again and repeat the verification.",
+    },
+    noEncontrado: {
+      es: "Ese anuncio ya no existe.",
+      en: "That listing no longer exists.",
+    },
   },
 
   // S6 — asignar a mano un barrio del catálogo a un anuncio de antes del catálogo.
@@ -523,8 +531,8 @@ export const OPERADOR = {
     nombreEjemplo: { es: "Vendedor", en: "Seller" },
     // La vista previa se muestra en el idioma del panel; los destinatarios reciben el suyo.
     vistaPreviaNota: {
-      es: "Vista previa en español.",
-      en: "Preview in English.",
+      es: "Se muestra en español; cada destinatario lo recibe en su idioma.",
+      en: "Shown in English; each recipient gets it in their own language.",
     },
     verDestinatarios: { es: "Ver destinatarios", en: "View recipients" },
     destinatarioUno: {

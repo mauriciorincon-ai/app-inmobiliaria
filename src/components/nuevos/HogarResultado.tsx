@@ -7,6 +7,7 @@ import type {
 import type { ProgramaVisible } from "@/engine/vivienda-nueva/vista";
 import type { Idioma } from "@/i18n/idiomas";
 import { rellenar } from "@/i18n/textos";
+import { SIMULADOR } from "@/textos/simulador";
 import { esVacio, etiqueta, numero, type TextosNuevos } from "./etiquetas";
 import TablaProgramas, { precioCorto } from "./TablaProgramas";
 
@@ -66,6 +67,11 @@ export default function HogarResultado({
   return (
     <div>
       {resumen}
+      {h.tope !== null && (
+        <p className="mt-1 text-xs text-mute">
+          {rellenar(tt.normaTope, { norma: SIMULADOR.normas.cuota[lang] })}
+        </p>
+      )}
       {h.tope !== null && (
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <section className="flex flex-col gap-1 rounded-2xl border border-purple-200 bg-white p-4">

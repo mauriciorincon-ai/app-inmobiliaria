@@ -70,6 +70,30 @@ describe("guarda de despliegue", () => {
     ).toEqual([]);
   });
 
+  it("S16 · el lector de CTL pasa SOLO si el validador sale 0; validado, los demás interruptores se siguen vetando", () => {
+    let llamadas = 0;
+    const validado = () => {
+      llamadas++;
+      return true;
+    };
+    expect(
+      revisar({ entorno: { LECTOR_CTL_ACTIVO: "1" }, ctlValidado: validado }),
+    ).toEqual([]);
+    // DEMO EN ROJO: el validador en 1 (sin certificados o con un desacuerdo) lo veta.
+    expect(
+      revisar({ entorno: { LECTOR_CTL_ACTIVO: "1" }, ctlValidado: () => false }),
+    ).toEqual([{ nombre: "LECTOR_CTL_ACTIVO", donde: "entorno" }]);
+    // Validado no abre la puerta a ninguna otra perilla, y el validador corre una sola vez.
+    expect(
+      revisar({
+        entorno: { LECTOR_CTL_ACTIVO: "1", NUEVOS_SIMULACRO: "1" },
+        archivos: { ".env.production.local": "LECTOR_CTL_ACTIVO=1" },
+        ctlValidado: validado,
+      }),
+    ).toEqual([{ nombre: "NUEVOS_SIMULACRO", donde: "entorno" }]);
+    expect(llamadas).toBe(2);
+  });
+
   it("DEMO EN ROJO: cada perilla encendida en el entorno, en un .env o en wrangler detiene el despliegue", () => {
     const e = revisar({ entorno: { NUEVOS_SIMULACRO: "1", PATH: "/usr/bin" } });
     expect(e).toEqual([{ nombre: "NUEVOS_SIMULACRO", donde: "entorno" }]);

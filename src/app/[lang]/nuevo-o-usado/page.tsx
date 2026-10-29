@@ -15,7 +15,7 @@ import { leerIdioma } from "@/i18n/ruta";
 import { enIdioma, rellenar } from "@/i18n/textos";
 import { fuenteAnuncios } from "@/lib/precio-datos";
 import {
-  TARIFAS,
+  tarifasPara,
   cargarNuevos,
   cargarUsados,
   hoyNuevos,
@@ -103,7 +103,7 @@ export default async function NuevoOUsadoPage({
   const v = vistaNuevoOUsado(
     proyectos,
     usados,
-    TARIFAS,
+    tarifasPara(hoy),
     filtros,
     fuenteUsados,
     hoy,

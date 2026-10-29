@@ -65,7 +65,16 @@ export default function MarcarVerificado({
     });
     setGuardando(false);
     if (err) {
-      setError(t.error);
+      // Lo que la base dice, en palabras del operador (antes, siempre «no se pudo»: deuda del S6).
+      setError(
+        err.message.includes("ctl_fuera_de_plazo")
+          ? t.ctlVencido
+          : err.message.includes("inmueble_no_encontrado")
+            ? t.noEncontrado
+            : err.code === "42501" || err.code === "PGRST301"
+              ? t.sinSesion
+              : t.error,
+      );
       return;
     }
     setAbierto(false);

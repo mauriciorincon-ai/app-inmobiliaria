@@ -59,10 +59,19 @@ export function mensajeReContacto(
   link: string,
   idioma: Idioma = "es",
 ): string {
-  const primerNombre =
-    nombre.trim().split(/\s+/)[0] || enIdioma(MENSAJES.sinNombre, idioma);
-  return rellenar(enIdioma(MENSAJES.recontacto, idioma), {
-    nombre: primerNombre,
-    link,
-  });
+  const primerNombre = primerNombreDe(nombre);
+  return rellenar(
+    saludoSinNombre(enIdioma(MENSAJES.recontacto, idioma), primerNombre),
+    { nombre: primerNombre, link },
+  );
+}
+
+/** El primer nombre de quien recibe el mensaje; vacío si no lo dio. */
+export function primerNombreDe(nombre: string): string {
+  return nombre.trim().split(/\s+/)[0] ?? "";
+}
+
+/** Sin nombre, «Hola {nombre}, …» se lee «Hola, …» (antes salía «Hola hola, …»). */
+export function saludoSinNombre(plantilla: string, nombre: string): string {
+  return nombre ? plantilla : plantilla.replace(" {nombre}", "");
 }

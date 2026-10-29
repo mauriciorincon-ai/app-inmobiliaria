@@ -140,7 +140,7 @@ export function armarCorreo(
     `<p>${rellenar(t.saludo, { nombre: destinatario })},</p>` +
     partes.map((p) => rellenar(p, escapados)).join("") +
     `<p><a href="${escaparHtml(enlace)}" style="color:#7B5DD6;font-weight:bold">${cta}</a></p>` +
-    `<p style="color:#888;font-size:12px">${t.pie}</p>`;
+    `<p style="color:#6b7280;font-size:12px">${t.pie}</p>`;
   return { asunto: plano(rellenar(asunto, valores)), html };
 }
 
@@ -152,6 +152,28 @@ export type DatosCorreoSala = {
   horarios: string[];
   inicio: string | null;
 };
+
+/** El aviso al operador de una solicitud nueva a una sala (S16). Solo el proyecto y la franja: nada del comprador. */
+export function armarAvisoOperadorSala(
+  datos: Pick<DatosCorreoSala, "proyecto" | "franja">,
+  idioma: Idioma,
+  enlacePanel: string,
+): CorreoArmado {
+  const t = enIdioma(CORREOS_VISITA, idioma);
+  const c = t.operadorSala;
+  const franjas: Record<string, string> = t.franja;
+  const valores = {
+    proyecto: plano(datos.proyecto),
+    franja: franjas[datos.franja] ?? "",
+  };
+  const escapados = Object.fromEntries(
+    Object.entries(valores).map(([k, v]) => [k, escaparHtml(v)]),
+  );
+  const html =
+    rellenar(c.cuerpo, escapados) +
+    `<p><a href="${escaparHtml(enlacePanel)}" style="color:#7B5DD6;font-weight:bold">${c.cta}</a></p>`;
+  return { asunto: plano(rellenar(c.asunto, valores)), html };
+}
 
 /**
  * Un correo de la visita a la sala de ventas de un proyecto nuevo (S13): solo el comprador lo recibe. Misma forma que
@@ -204,6 +226,6 @@ export function armarCorreoSala(
     `<p>${rellenar(t.saludo, { nombre: escapados.comprador })},</p>` +
     partes.map((p) => rellenar(p, escapados)).join("") +
     `<p><a href="${escaparHtml(enlace)}" style="color:#7B5DD6;font-weight:bold">${c.cta}</a></p>` +
-    `<p style="color:#888;font-size:12px">${t.pie}</p>`;
+    `<p style="color:#6b7280;font-size:12px">${t.pie}</p>`;
   return { asunto: plano(rellenar(c.asunto, valores)), html };
 }

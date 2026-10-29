@@ -121,4 +121,54 @@ describe("el archivo de Catastro no viaja al navegador", () => {
       .map((ruta) => path.relative(RAIZ, ruta));
     expect(culpables).toEqual([]);
   });
+
+  // S16 (deuda del S10): la de arriba solo veía el import DIRECTO. Esta sigue la cadena de imports desde cada módulo de cliente
+  // (y desde el motor de zona): un módulo intermedio que lo importe también lo llevaría al navegador.
+  it("tampoco lo alcanzan por una cadena de imports", () => {
+    const DE = /(?:from|import)\s*\(?\s*["']([^"']+)["']/g;
+    const resolver = (desde: string, spec: string): string | null => {
+      const base = spec.startsWith("@/")
+        ? path.join(RAIZ, spec.slice(2))
+        : spec.startsWith(".")
+          ? path.resolve(path.dirname(desde), spec)
+          : null;
+      if (!base) return null;
+      for (const c of [base, `${base}.ts`, `${base}.tsx`, path.join(base, "index.ts")]) {
+        try {
+          if (statSync(c).isFile()) return c;
+        } catch {
+          // no existe con esa extensión
+        }
+      }
+      return null;
+    };
+    const objetivo = path.join(RAIZ, "engine", "zonas", "valor-referencia.ts");
+    const alcanza = (inicio: string): string[] | null => {
+      const visto = new Map<string, string | null>([[inicio, null]]);
+      const cola = [inicio];
+      while (cola.length) {
+        const actual = cola.shift()!;
+        if (!/\.(ts|tsx)$/.test(actual)) continue;
+        for (const m of readFileSync(actual, "utf8").matchAll(DE)) {
+          const sig = resolver(actual, m[1]);
+          if (!sig || visto.has(sig)) continue;
+          visto.set(sig, actual);
+          if (sig === objetivo || /zonas\/valor-referencia/.test(m[1])) {
+            const camino = [sig];
+            for (let p: string | null | undefined = actual; p; p = visto.get(p)) camino.unshift(p);
+            return camino.map((r) => path.relative(RAIZ, r));
+          }
+          cola.push(sig);
+        }
+      }
+      return null;
+    };
+    const inicios = archivos(RAIZ).filter(
+      (ruta) =>
+        /^\s*["']use client["']/.test(readFileSync(ruta, "utf8")) ||
+        ruta.endsWith(path.join("engine", "precio", "zona.ts")),
+    );
+    const caminos = inicios.map(alcanza).filter((c) => c !== null);
+    expect(caminos).toEqual([]);
+  });
 });

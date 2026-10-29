@@ -81,6 +81,11 @@ export default function TablaProgramas({
                       fecha: formatearFecha(p.estadoAl, lang),
                     })}
                   </span>
+                  {p.nota && (
+                    <span className="mt-1 block text-xs font-normal text-gray">
+                      {p.nota[lang]}
+                    </span>
+                  )}
                 </th>
                 <td className="px-4 py-3 align-top">
                   {r ? (

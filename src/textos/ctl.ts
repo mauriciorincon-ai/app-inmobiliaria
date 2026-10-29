@@ -20,6 +20,25 @@ export const CTL = {
         en: "Law 1579 of 2012, art. 8; Civil Code, arts. 2432 and 2452.",
       },
     },
+    // S16 (catálogo oficial): lo del grupo 02 que no es una hipoteca.
+    gravamen: {
+      titulo: {
+        es: "Gravamen (valorización, plusvalía u otro)",
+        en: "Charge on the property (betterment levy, capital-gain charge or other)",
+      },
+      queEs: {
+        es: "Una carga inscrita sobre el inmueble que no es una hipoteca, como una contribución de valorización o la participación en plusvalía.",
+        en: "A charge registered on the property that is not a mortgage, such as a betterment levy (valorización) or a capital-gain charge (plusvalía).",
+      },
+      queHacer: {
+        es: "Pregunta si ya está pagada y pide ver su cancelación registrada antes de firmar.",
+        en: "Ask whether it has been paid and ask to see its registered cancellation before signing.",
+      },
+      norma: {
+        es: "Ley 1579 de 2012, art. 8.",
+        en: "Law 1579 of 2012, art. 8.",
+      },
+    },
     embargo: {
       titulo: { es: "Embargo", en: "Seizure order (embargo)" },
       queEs: {
@@ -89,6 +108,44 @@ export const CTL = {
         en: "Law 1579 of 2012, art. 8; Law 70 of 1931, arts. 21 and 23.",
       },
     },
+    // S16: el código 0362 del catálogo, con su propia norma.
+    prohibicion_transferencia: {
+      titulo: {
+        es: "Prohibición de transferir (vivienda con subsidio)",
+        en: "Ban on transfer (home bought with a housing subsidy)",
+      },
+      queEs: {
+        es: "La vivienda se compró con un subsidio familiar de vivienda y quedó inscrita una prohibición de transferirla. Si se transfiere antes del plazo de la ley, el subsidio se puede tener que devolver: hoy, cinco años desde la transferencia cuando el subsidio se dio cien por ciento en especie.",
+        en: "The home was bought with a family housing subsidy and a ban on transferring it was registered. If it is transferred before the legal term, the subsidy may have to be paid back: today, five years from the transfer when the subsidy was given one hundred percent in kind.",
+      },
+      queHacer: {
+        es: "Pregunta desde cuándo rige y si ya se levantó o hay permiso; pide verlo registrado antes de firmar.",
+        en: "Ask since when it applies and whether it has been lifted or there is a permit; ask to see it registered before signing.",
+      },
+      norma: {
+        es: "Ley 1579 de 2012, art. 8; Ley 1537 de 2012, art. 21, modificado por la Ley 2079 de 2021, art. 13.",
+        en: "Law 1579 of 2012, art. 8; Law 1537 of 2012, art. 21, as amended by Law 2079 of 2021, art. 13.",
+      },
+    },
+    // S16: el resto del grupo 03, lo de tenencia (05) y lo del 09 que no es un trámite neutro. Se pregunta, no se acusa.
+    limitacion_dominio: {
+      titulo: {
+        es: "Limitación o afectación del dominio",
+        en: "Limitation on ownership",
+      },
+      queEs: {
+        es: "Una anotación que limita lo que el dueño puede hacer con el inmueble o que muestra que no tiene todo el derecho: una cuota, el usufructo o la nuda propiedad, una servidumbre, una condición, una declaratoria u otra.",
+        en: "An entry that limits what the owner can do with the property, or shows they don't hold the whole right: a share, a usufruct or bare ownership, an easement, a condition, an official declaration or another.",
+      },
+      queHacer: {
+        es: "Pregunta qué es y si afecta lo que vas a comprar; si no queda claro, pide un estudio de títulos.",
+        en: "Ask what it is and whether it affects what you are buying; if it isn't clear, ask for a title study.",
+      },
+      norma: {
+        es: "Ley 1579 de 2012, art. 8.",
+        en: "Law 1579 of 2012, art. 8.",
+      },
+    },
     falsa_tradicion: {
       titulo: {
         es: "Falsa tradición",
@@ -141,8 +198,8 @@ export const CTL = {
       en: "Read your title record",
     },
     intro: {
-      es: "Pega el texto del certificado de tradición y libertad (CTL). Te marcamos hipotecas, embargos, demandas y otras medidas cautelares, la afectación a vivienda familiar, el patrimonio de familia y la falsa tradición, con su anotación y si siguen vigentes.",
-      en: "Paste the text of the title record (certificado de tradición y libertad, CTL). We flag mortgages, seizures, lawsuits and other precautionary measures, family-home registrations, family estates and defective chains of title, with their entry number and whether they still stand.",
+      es: "Pega el texto del certificado de tradición y libertad (CTL). Te marcamos hipotecas y otros gravámenes, embargos, demandas y otras medidas cautelares, limitaciones del dominio, la prohibición de transferir una vivienda con subsidio, la afectación a vivienda familiar, el patrimonio de familia y la falsa tradición, con su anotación y si siguen vigentes.",
+      en: "Paste the text of the title record (certificado de tradición y libertad, CTL). We flag mortgages and other charges, seizures, lawsuits and other precautionary measures, limitations on ownership, bans on transferring a subsidised home, family-home registrations, family estates and defective chains of title, with their entry number and whether they still stand.",
     },
     privacidad: {
       es: "El texto se lee en tu teléfono: no sale de aquí, no lo guardamos y no lo vemos.",
@@ -207,6 +264,39 @@ export const CTL = {
     aviso: {
       es: "Esto es una lectura del texto, no un estudio de títulos: no reemplaza a un abogado.",
       en: "This is a reading of the text, not a title study: it doesn't replace a lawyer.",
+    },
+    // S16 (decisión 1a del usuario): siempre a la vista, encima del resultado.
+    enPrueba: {
+      es: "Lectura en prueba: validada con la tabla oficial de códigos y pocos certificados reales. Confírmala en tu certificado; no reemplaza el estudio de títulos.",
+      en: "Reading in testing: checked against the official code table and a few real certificates. Confirm it on your certificate; it doesn't replace a title study.",
+    },
+    incompleto: {
+      es: "El texto parece incompleto: el certificado dice {total} anotaciones y faltan las número {faltan}. Copia el certificado entero; una página sin copiar puede esconder la más reciente.",
+      en: "The text looks incomplete: the record says {total} entries and numbers {faltan} are missing. Copy the whole record; a page left out can hide the most recent entry.",
+    },
+    incompletoSinTotal: {
+      es: "El texto parece incompleto: faltan las anotaciones número {faltan}. Copia el certificado entero.",
+      en: "The text looks incomplete: entries {faltan} are missing. Copy the whole record.",
+    },
+    sobran: {
+      es: "El texto trae más anotaciones de las que el certificado dice ({total}) o repite números: ¿pegaste dos certificados? Copia uno solo, entero.",
+      en: "The text has more entries than the record says ({total}) or repeats numbers: did you paste two records? Copy a single one, whole.",
+    },
+    sobranSinTotal: {
+      es: "El texto repite números de anotación: ¿pegaste dos certificados? Copia uno solo, entero.",
+      en: "The text repeats entry numbers: did you paste two records? Copy a single one, whole.",
+    },
+    sinTotal: {
+      es: "El texto no trae el «número total de anotaciones»: no podemos comprobar que esté completo.",
+      en: "The text doesn't include the «total number of entries»: we can't check that it's complete.",
+    },
+    sinCodigo: {
+      es: "Sin código: la leímos por sus palabras.",
+      en: "No code: we read it by its words.",
+    },
+    fueraDeCatalogo: {
+      es: "El código {codigo} no está en la tabla de 2016 con la que revisamos: lo leímos por su grupo.",
+      en: "Code {codigo} isn't in the 2016 table we checked against: we read it by its group.",
     },
   },
 } as const satisfies Arbol;

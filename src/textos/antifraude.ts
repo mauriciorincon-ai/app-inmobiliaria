@@ -307,6 +307,11 @@ export const ANTIFRAUDE = {
         es: "Pedir el CTL al dueño",
         en: "Ask the owner for the title record",
       },
+      // S16 (deuda del S15): un CTL pedido que nunca llega dejaba el anuncio en la cola sin salida.
+      cerrarCtl: {
+        es: "El dueño no entregó el CTL",
+        en: "The owner didn't send the title record",
+      },
       descartar: { es: "Descartar las banderas", en: "Dismiss the flags" },
       escribir: {
         es: "Escribirle al dueño por WhatsApp",
@@ -327,6 +332,10 @@ export const ANTIFRAUDE = {
       ctlPedido: {
         es: "CTL pedido. Escríbele al dueño: el anuncio sigue visible y, si era verificado, con «re-verificación pendiente» hasta que muestre un CTL de 30 días o menos.",
         en: 'Title record requested. Message the owner: the listing stays visible and, if it was verified, shows "re-check pending" until they show a title record 30 days old or less.',
+      },
+      ctlCerrado: {
+        es: "Pedido cerrado: el anuncio sale de la cola y, si era verificado sin CTL vigente, vuelve a «fundador». Queda registrado.",
+        en: 'Request closed: the listing leaves the queue and, if it was verified without a current title record, goes back to "founder". It is on record.',
       },
       descartado: {
         es: "Banderas descartadas, con la razón y la fecha en el registro de la revisión.",

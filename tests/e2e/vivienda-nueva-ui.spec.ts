@@ -4,7 +4,10 @@ import { consultar, ejecutar } from "./utils/bd";
 import demo from "../../scripts/seed-demo-edicion.json";
 import { formatearCOP, formatearM2 } from "../../src/engine/format/cop";
 import tarifasJson from "../../src/data/tarifas-escrituracion.json";
-import type { TarifasEscrituracion } from "../../src/engine/vivienda-nueva/escrituracion";
+import {
+  tarifasDelAnio,
+  type TarifasEscrituracion,
+} from "../../src/engine/vivienda-nueva/escrituracion";
 import {
   deFila,
   type FilaProyecto,
@@ -79,7 +82,8 @@ const sinViolaciones = async (page: Page) => {
 
 const alMenosDe = (slug: string) => {
   const p = proyectos.find((x) => x.slug === slug)!;
-  const pv = precioVerdadero(p, tarifas);
+  // Las tarifas de SU año, como la página: en 2035 ninguna está verificada (regla 23; S16).
+  const pv = precioVerdadero(p, tarifasDelAnio(tarifas, HOY));
   if (pv.estado !== "calculado") throw new Error("debía calcular");
   return pv;
 };
@@ -188,7 +192,7 @@ test("el índice es el del motor: Suba con 5 proyectos tiene mediana, Kennedy co
   await sinViolaciones(page);
 });
 
-test("una tarjeta abre la ficha: «pagas al menos» del motor, cada peso con su norma, la fuente y la ficha honesta", async ({
+test("una tarjeta abre la ficha: «pagas al menos» del motor con las tarifas de su año, la fuente y la ficha honesta", async ({
   page,
 }) => {
   const pv = alMenosDe("torre-alba-ficticia");
@@ -202,7 +206,9 @@ test("una tarjeta abre la ficha: «pagas al menos» del motor, cada peso con su 
   await expect(
     page.getByText(`Fuente: Estrenar Vivienda, edición ${NUMERO}, p. 4 y 12`),
   ).toBeVisible();
-  // «Pagas al menos» = precio + derechos de registro + parqueadero que se paga aparte, tal como lo calcula el motor.
+  // «Pagas al menos» tal como lo calcula el motor. La ventana de esta spec está en 2035 y las tarifas son de 2026: el registro y
+  // la notaría se NOMBRAN sin monto, y la nota de la VIS («se sumó con la mitad») no sale porque no se sumó nada (S16). Cada
+  // peso con su norma, en un año con tarifas, lo prueba la ficha de `papeleo-ui` (junio de 2026).
   await expect(
     page.getByText(formatearCOP(pv.alMenos, "es"), { exact: true }),
   ).toBeVisible();
@@ -211,27 +217,21 @@ test("una tarjeta abre la ficha: «pagas al menos» del motor, cada peso con su 
       page.getByText(formatearCOP(partida.monto, "es"), { exact: true }),
     ).toBeVisible();
   }
-  // Lo que falta sumar se NOMBRA (no se suma): los derechos notariales con su monto, y lo no verificado sin cifra.
-  const notariales = pv.faltantes.find((f) => f.id === "derechos_notariales")!;
+  expect(pv.partidas.map((x) => x.id)).toEqual(["precio_desde", "parqueadero"]);
   await expect(
     page.getByText(
-      `Derechos notariales de la compraventa: ${formatearCOP(notariales.monto!, "es")}`,
+      "Derechos de registro: no pudimos verificar la tarifa en la norma, no se suman.",
     ),
   ).toBeVisible();
-  // El impuesto de registro ya no es un «no lo pudimos verificar»: se verificó (S14), se reparte y se ve con el precio en Papeleo.
+  await expect(page.getByText(/el registro se sumó con la mitad/)).toHaveCount(
+    0,
+  );
+  await expect(page.getByText(/Resolución 2026-001726-6/)).toHaveCount(0);
   await expect(
     page.getByText(
       "Impuesto de registro (la gente lo llama «beneficencia»): se reparte entre comprador y vendedor y no se suma aquí.",
     ),
   ).toBeVisible();
-  // La norma y la fecha de consulta de cada tarifa.
-  await expect(
-    page.getByText(/Resolución 2026-001726-6/).first(),
-  ).toBeVisible();
-  await expect(
-    page.getByText(/Resolución 2026-000964-6/).first(),
-  ).toBeVisible();
-  await expect(page.getByText(/consultada el .* 2026/).first()).toBeVisible();
   // El m² es aproximado y lo dice.
   await expect(
     page.getByText(/m² aproximado: .* por m² privado/),

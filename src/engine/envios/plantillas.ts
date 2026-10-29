@@ -1,5 +1,5 @@
 // Plantillas de campaña por lotes (C8) — 100% deterministas, cero IA. Cifras EXCLUSIVAMENTE
-// citables (comisión 3% · fotos 89 vs 123 días / Redfin · CTL $23.000 SNR · 7–7,5 meses de venta).
+// citables (comisión 3% · CTL $23.000 SNR · 7–7,5 meses de venta; la de Redfin está prohibida, ver design-system.md).
 // El correo enlaza a la app; el vendedor abre su anuncio con el enlace privado que guardó (no
 // metemos su magic link en el correo → sin rotación de tokens por campaña).
 //
@@ -69,7 +69,7 @@ export function cuerpoHtml(
     `<p>${saludo},</p>` +
     plantilla.cuerpo +
     `<p><a href="${escaparHtml(urlApp)}" style="color:#7B5DD6;font-weight:bold">${plantilla.cta}</a></p>` +
-    `<p style="color:#888;font-size:12px">${t.pie}</p>`
+    `<p style="color:#6b7280;font-size:12px">${t.pie}</p>`
   );
 }
 

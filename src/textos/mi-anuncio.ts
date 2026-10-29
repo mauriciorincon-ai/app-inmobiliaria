@@ -194,6 +194,11 @@ export const MI_ANUNCIO = {
         es: "Escribe un precio válido en pesos.",
         en: "Enter a valid price in pesos.",
       },
+      // S16 (deuda del S9): guardar el mismo precio no respondía nada.
+      igual: {
+        es: "Ese ya es el precio de tu anuncio.",
+        en: "That's already your listing's price.",
+      },
       demasiados: {
         es: "Cambiaste el precio varias veces hoy. Inténtalo de nuevo mañana.",
         en: "You changed the price several times today. Try again tomorrow.",

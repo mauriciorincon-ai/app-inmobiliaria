@@ -38,8 +38,8 @@ export const PRIVACIDAD = {
       en: "What data we collect and why",
     },
     texto: {
-      es: "Recogemos únicamente lo necesario para registrar tu inmueble y contactarte: tu nombre, tu número de WhatsApp, tu ciudad y los datos básicos del inmueble (tipo, zona, área, habitaciones y precio esperado). Los usamos para que el equipo de Innmobiliaria pueda escribirte a mano por WhatsApp sobre tu publicación y las siguientes etapas hacia el lanzamiento; Innmobiliaria no envía mensajes automáticos por WhatsApp. No los vendemos ni los compartimos con terceros con fines comerciales.",
-      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, locality, size, bedrooms and expected price). We use them so the Innmobiliaria team can write to you by hand on WhatsApp about your listing and the next stages toward launch; Innmobiliaria does not send automatic WhatsApp messages. We don't sell them or share them with third parties for commercial purposes.",
+      es: "Recogemos únicamente lo necesario para registrar tu inmueble y contactarte: tu nombre, tu número de WhatsApp, tu ciudad y los datos básicos del inmueble (tipo, zona, área, habitaciones y precio esperado). Los usamos para que el equipo de Innmobiliaria pueda escribirte a mano por WhatsApp sobre tu publicación; Innmobiliaria no envía mensajes automáticos por WhatsApp. No los vendemos ni los compartimos con terceros con fines comerciales.",
+      en: "We collect only what we need to register your property and contact you: your name, your WhatsApp number, your city and the basic details of the property (type, locality, size, bedrooms and expected price). We use them so the Innmobiliaria team can write to you by hand on WhatsApp about your listing; Innmobiliaria does not send automatic WhatsApp messages. We don't sell them or share them with third parties for commercial purposes.",
     },
     // Dice solo lo que el código hace: el correo del paso 3 sirve para los avisos de campaña
     // (`engine/envios/plantillas.ts`: fotos, sello, vigencia) y los envía un proveedor de correo
@@ -210,8 +210,8 @@ export const PRIVACIDAD = {
       en: "Security and retention",
     },
     texto: {
-      es: "Tus datos se almacenan con controles de acceso: solo el operador autorizado de Innmobiliaria puede consultarlos, salvo lo que cada ficha o solicitud muestra a quien corresponde (por ejemplo, el dueño de un anuncio ve las solicitudes de visita de ese anuncio). Los conservamos mientras dure la campaña de expectativa y el proceso de lanzamiento, salvo que solicites su supresión antes.",
-      en: "Your data is stored with access controls: only Innmobiliaria's authorized operator can view it, apart from what each listing or request shows to the person it concerns (for example, a listing's owner sees the viewing requests for that listing). We keep it for as long as the pre-launch campaign and the launch process last, unless you ask us to delete it sooner.",
+      es: "Tus datos se almacenan con controles de acceso: solo el operador autorizado de Innmobiliaria puede consultarlos, salvo lo que cada ficha o solicitud muestra a quien corresponde (por ejemplo, el dueño de un anuncio ve las solicitudes de visita de ese anuncio). Los conservamos hasta que pidas su supresión: un anuncio que vence deja de mostrarse, pero no lo borramos solos. Lo temporal sí se borra solo, al cabo de unos días o semanas: los códigos de verificación sin usar, las verificaciones de WhatsApp que nadie terminó, las alertas que nadie confirmó o que se dieron de baja y el historial de cambios de precio.",
+      en: "Your data is stored with access controls: only Innmobiliaria's authorized operator can view it, apart from what each listing or request shows to the person it concerns (for example, a listing's owner sees the viewing requests for that listing). We keep it until you ask us to delete it: a listing that expires stops being shown, but we don't delete it on our own. Temporary data does get deleted automatically, after a few days or weeks: unused verification codes, WhatsApp verifications nobody finished, alerts nobody confirmed or that were cancelled, and the price-change history.",
     },
   },
 } as const satisfies Arbol;

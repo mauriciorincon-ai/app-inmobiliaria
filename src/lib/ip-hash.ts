@@ -8,5 +8,11 @@ export async function hashIp(req: NextRequest): Promise<string> {
     req.headers.get("cf-connecting-ip") ??
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     "desconocida";
-  return sha256Hex((process.env.RATE_LIMIT_PEPPER ?? "") + ip);
+  const pepper = process.env.RATE_LIMIT_PEPPER ?? "";
+  // Sin pepper, el hash de una IPv4 se revierte probando las 2³² posibles: en producción se falla en vez de guardar eso (deuda
+  // del S7). La CI pone uno al azar; en desarrollo se tolera vacío.
+  if (!pepper && process.env.NODE_ENV === "production") {
+    throw new Error("RATE_LIMIT_PEPPER no configurado");
+  }
+  return sha256Hex(pepper + ip);
 }

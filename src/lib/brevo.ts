@@ -8,6 +8,7 @@ import {
   type Plantilla,
 } from "@/engine/envios/plantillas";
 import { IDIOMAS, type Idioma } from "@/i18n/idiomas";
+import { textoPlano } from "@/engine/format/texto-plano";
 
 // `idioma` es el que el vendedor guardó al publicar: su correo sale en ese idioma.
 export type Destinatario = { email: string; nombre: string; idioma: Idioma };
@@ -43,6 +44,7 @@ export async function enviarLote(
   for (const idioma of IDIOMAS) {
     const asunto = asuntoDe(plantilla.id, idioma);
     for (const d of grupos[idioma]) {
+      const html = cuerpoHtml(plantilla.id, idioma, d.nombre, urlApp);
       try {
         const res = await fetch("https://api.brevo.com/v3/smtp/email", {
           method: "POST",
@@ -55,7 +57,8 @@ export async function enviarLote(
             sender: remitente,
             to: [{ email: d.email, name: d.nombre }],
             subject: asunto,
-            htmlContent: cuerpoHtml(plantilla.id, idioma, d.nombre, urlApp),
+            htmlContent: html,
+            textContent: textoPlano(html),
           }),
         });
         if (res.ok) enviados++;
@@ -104,6 +107,7 @@ export async function enviarCorreo(
         ],
         subject: correo.asunto,
         htmlContent: correo.html,
+        textContent: textoPlano(correo.html),
         ...(correo.cabeceras ? { headers: correo.cabeceras } : {}),
       }),
     });

@@ -13,6 +13,7 @@ import {
   camposDesdeCapacidad,
   capacidadDe,
   enlaceAlerta,
+  ingresoIlegible,
   enlaceBuscar,
   leerFormulario,
   precioMaximoDe,
@@ -102,7 +103,7 @@ export default function Simulador({
     const siguiente = { ...campos, [campo]: valor };
     const c = capacidadDe(siguiente, tasa.tasaEA);
     if (c) guardarCapacidad(c);
-    else if (siguiente.ingresos.trim() === "") olvidarCapacidad();
+    else if (ingresoIlegible(siguiente, tasa.tasaEA)) olvidarCapacidad();
   }
 
   function olvidar() {

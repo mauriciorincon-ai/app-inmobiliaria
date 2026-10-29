@@ -48,25 +48,27 @@
   .detalle-futuro { fill: var(--futuro); }
   .flecha { stroke: var(--tinta-suave); stroke-width: 1.5; fill: none; marker-end: url(#punta); }
   .flecha-manual { stroke-dasharray: 2 4; }
-  .etiqueta-flecha { font: 600 10.5px system-ui, sans-serif; fill: var(--tinta-suave); }
+  .etiqueta-flecha { font: 600 10.5px system-ui, sans-serif; fill: var(--tinta-suave); paint-order: stroke; stroke: var(--tarjeta); stroke-width: 5px; stroke-linejoin: round; }
   table { width: 100%; border-collapse: collapse; font-size: .88rem; background: var(--tarjeta); border-radius: 8px; overflow: hidden; }
   th, td { text-align: left; padding: .55rem .7rem; border: 1px solid var(--borde); vertical-align: top; }
   th { background: var(--acento-suave); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
   tr.critica td { font-weight: 700; }
   td ul { margin: .2rem 0 0; padding-left: 1.1rem; font-weight: 400; }
   .tabla-scroll { overflow-x: auto; }
+  .falta { color: var(--alerta); font-weight: 700; }
+  .listo { color: var(--ok); font-weight: 700; }
   footer { margin-top: 3rem; font-size: .8rem; color: var(--tinta-suave); border-top: 1px solid var(--borde); padding-top: .8rem; }
 </style>
 </head>
 <body>
 <main>
   <h1>Innmobiliaria — Blueprint de infraestructura <span class="badge">as-built</span></h1>
-  <p class="meta">Hito: <strong>H-1 Vitrina funcional</strong> (arquitectura cerrada en S4) · Sprints: <strong>S1–S4</strong> · Última actualización: <strong>2026-10-17</strong></p>
-  <p class="nota">Mapa de lo que está <strong>escrito en el repo</strong> hoy: dónde vive el código, la base de datos, las fotos y qué servicios sostienen la app. Es <strong>vivo y acumulativo</strong>: cada cierre de hito lo actualiza y declara el cambio en el historial del pie. <strong>Sin URLs, sin dominio, sin identificadores de proyecto y sin nombres</strong> (reglas 9 y 15: la producción se muestra, jamás se entrega). Lo que el repo no puede probar —el uso real de los planes gratuitos, qué claves tiene producción— está marcado como <em>no medido</em>.</p>
+  <p class="meta">Hito: <strong>H-2 Producto completo</strong> (arquitectura al día al cierre del S16) · Sprints: <strong>S1–S16</strong> · Última actualización: <strong>2026-10-26</strong></p>
+  <p class="nota">Mapa de lo que está <strong>escrito en el repo</strong> hoy: dónde vive el código, la base de datos, las fotos y qué servicios sostienen la app. Es <strong>vivo y acumulativo</strong>: cada cierre de hito lo actualiza. Las cifras de tablas, funciones y rutas se <strong>contaron</strong> en las migraciones y en el árbol del repo el día de la actualización, no de memoria; los <strong>límites de cada proveedor</strong> son los que ellos publican y no se consultaron en vivo. <strong>No lleva ningún valor</strong>: ni claves, ni URL de producción, ni datos del responsable.</p>
 
   <h2>Diagrama</h2>
   <div class="diagrama">
-  <svg viewBox="0 0 960 510" role="img" aria-label="Diagrama de infraestructura de Innmobiliaria: usuarios, Worker de Cloudflare, Supabase, R2, Brevo, telemetría, GitHub y la máquina del responsable que despliega a mano">
+  <svg viewBox="0 0 960 610" role="img" aria-label="Diagrama de infraestructura de Innmobiliaria: usuarios (vendedores, compradores y operador), el mapa, el Worker de Cloudflare con su cron diario, Supabase, R2, Brevo, WhatsApp Cloud API que solo entra, Didit, la tasa de la Superfinanciera, la telemetría, GitHub y la máquina del responsable que despliega a mano">
     <defs>
       <marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" opacity="0.65"/>
@@ -74,22 +76,30 @@
     </defs>
 
     <!-- Usuarios -->
-    <rect class="caja" x="20" y="140" width="170" height="90" rx="10"/>
-    <text class="titulo-caja" x="105" y="168" text-anchor="middle">Vendedores y operador</text>
-    <text class="detalle-caja" x="105" y="187" text-anchor="middle">teléfono o PC · HTTPS</text>
-    <text class="detalle-caja" x="105" y="204" text-anchor="middle">vendedor sin cuenta</text>
+    <rect class="caja" x="20" y="110" width="170" height="100" rx="10"/>
+    <text class="titulo-caja" x="105" y="138" text-anchor="middle">Dueños, compradores</text>
+    <text class="titulo-caja" x="105" y="154" text-anchor="middle">y operador</text>
+    <text class="detalle-caja" x="105" y="175" text-anchor="middle">teléfono o PC · HTTPS</text>
+    <text class="detalle-caja" x="105" y="192" text-anchor="middle">sin cuenta salvo el operador</text>
+
+    <!-- Mapa -->
+    <rect class="caja" x="20" y="250" width="170" height="80" rx="10"/>
+    <text class="titulo-caja" x="105" y="276" text-anchor="middle">MapLibre + OpenFreeMap</text>
+    <text class="detalle-caja" x="105" y="295" text-anchor="middle">mosaicos: desde el navegador</text>
+    <text class="detalle-caja" x="105" y="312" text-anchor="middle">barrios Catastro: en la app</text>
 
     <!-- Equipo del responsable -->
-    <rect class="caja" x="20" y="260" width="170" height="80" rx="10"/>
-    <text class="titulo-caja" x="105" y="288" text-anchor="middle">Equipo del responsable</text>
-    <text class="detalle-caja" x="105" y="307" text-anchor="middle">pnpm deploy:cf (manual)</text>
-    <text class="detalle-caja" x="105" y="323" text-anchor="middle">build con .env.local</text>
+    <rect class="caja" x="20" y="365" width="170" height="80" rx="10"/>
+    <text class="titulo-caja" x="105" y="393" text-anchor="middle">Equipo del responsable</text>
+    <text class="detalle-caja" x="105" y="412" text-anchor="middle">pnpm deploy:cf (manual)</text>
+    <text class="detalle-caja" x="105" y="428" text-anchor="middle">guarda + .env.local</text>
 
     <!-- Futuro -->
-    <rect class="caja-futuro" x="20" y="400" width="170" height="90" rx="10"/>
-    <text class="titulo-caja detalle-futuro" x="105" y="428" text-anchor="middle">(futuro)</text>
-    <text class="detalle-caja detalle-futuro" x="105" y="447" text-anchor="middle">H-3/H-4: dominio propio,</text>
-    <text class="detalle-caja detalle-futuro" x="105" y="463" text-anchor="middle">CSP, rate limiting, alerta</text>
+    <rect class="caja-futuro" x="20" y="480" width="170" height="100" rx="10"/>
+    <text class="titulo-caja detalle-futuro" x="105" y="508" text-anchor="middle">(futuro)</text>
+    <text class="detalle-caja detalle-futuro" x="105" y="527" text-anchor="middle">H-3: topes de tasa, pruebas</text>
+    <text class="detalle-caja detalle-futuro" x="105" y="543" text-anchor="middle">H-4: CSP, alerta, legal,</text>
+    <text class="detalle-caja detalle-futuro" x="105" y="559" text-anchor="middle">indexación y apertura</text>
 
     <!-- Telemetría -->
     <rect class="caja" x="290" y="10" width="240" height="80" rx="10"/>
@@ -98,63 +108,95 @@
     <text class="detalle-caja" x="410" y="71" text-anchor="middle">inertes sin clave / DSN</text>
 
     <!-- Worker -->
-    <rect class="caja caja-principal" x="290" y="130" width="240" height="140" rx="10"/>
+    <rect class="caja caja-principal" x="290" y="130" width="240" height="230" rx="10"/>
     <text class="titulo-caja" x="410" y="158" text-anchor="middle">Cloudflare Workers + OpenNext</text>
     <text class="detalle-caja" x="410" y="178" text-anchor="middle">plan gratuito · uso comercial: sí</text>
     <text class="detalle-caja" x="410" y="195" text-anchor="middle">Next.js 16 · App Router · TypeScript</text>
-    <text class="detalle-caja" x="410" y="212" text-anchor="middle">subdominio del hosting hoy</text>
-    <text class="detalle-caja" x="410" y="229" text-anchor="middle">/api: registro · fotos · envíos</text>
-    <text class="detalle-caja" x="410" y="251" text-anchor="middle">deploy MANUAL: mergear no publica</text>
+    <text class="detalle-caja" x="410" y="212" text-anchor="middle">33 pantallas · 30 rutas /api</text>
+    <text class="detalle-caja" x="410" y="229" text-anchor="middle">es/en por reescritura (ADR 013)</text>
+    <text class="detalle-caja" x="410" y="251" text-anchor="middle">Cron Trigger 13:00 UTC = 8:00 Bogotá</text>
+    <text class="detalle-caja" x="410" y="268" text-anchor="middle">recordatorios · resúmenes · purga</text>
+    <text class="detalle-caja" x="410" y="285" text-anchor="middle">tasa · reglas antifraude</text>
+    <text class="detalle-caja" x="410" y="307" text-anchor="middle">/api/whatsapp/webhook: firma HMAC</text>
+    <text class="detalle-caja" x="410" y="338" text-anchor="middle">deploy MANUAL: mergear no publica</text>
 
     <!-- Supabase -->
-    <rect class="caja caja-bd" x="640" y="20" width="290" height="110" rx="10"/>
+    <rect class="caja caja-bd" x="640" y="20" width="290" height="125" rx="10"/>
     <text class="titulo-caja" x="785" y="46" text-anchor="middle">Supabase (Postgres + Auth)</text>
     <text class="detalle-caja" x="785" y="64" text-anchor="middle">plan gratuito · región sa-east-1</text>
-    <text class="detalle-caja" x="785" y="81" text-anchor="middle">7 tablas · RLS en todas · RPC SECURITY DEFINER</text>
-    <text class="detalle-caja" x="785" y="98" text-anchor="middle">operador: login + lista blanca</text>
-    <text class="detalle-caja" x="785" y="115" text-anchor="middle">vendedor: magic link propio (ADR 004)</text>
+    <text class="detalle-caja" x="785" y="81" text-anchor="middle">32 tablas · RLS en todas</text>
+    <text class="detalle-caja" x="785" y="98" text-anchor="middle">123 funciones · 117 SECURITY DEFINER</text>
+    <text class="detalle-caja" x="785" y="115" text-anchor="middle">19 migraciones · operador: lista blanca</text>
+    <text class="detalle-caja" x="785" y="132" text-anchor="middle">dueño: magic link · comprador: sesión</text>
 
     <!-- R2 -->
-    <rect class="caja" x="640" y="160" width="290" height="72" rx="10"/>
-    <text class="titulo-caja" x="785" y="184" text-anchor="middle">Cloudflare R2 (fotos)</text>
-    <text class="detalle-caja" x="785" y="202" text-anchor="middle">WebP 1600 + miniatura 400 · PUT prefirmado</text>
-    <text class="detalle-caja" x="785" y="219" text-anchor="middle">lectura por la URL pública de desarrollo</text>
+    <rect class="caja" x="640" y="165" width="290" height="62" rx="10"/>
+    <text class="titulo-caja" x="785" y="188" text-anchor="middle">Cloudflare R2 (fotos)</text>
+    <text class="detalle-caja" x="785" y="206" text-anchor="middle">WebP 1600 + miniatura 400 · PUT prefirmado</text>
 
     <!-- Brevo -->
-    <rect class="caja" x="640" y="252" width="290" height="72" rx="10"/>
-    <text class="titulo-caja" x="785" y="276" text-anchor="middle">Brevo (correo por lotes)</text>
-    <text class="detalle-caja" x="785" y="294" text-anchor="middle">plan gratuito: 300 correos/día</text>
-    <text class="detalle-caja" x="785" y="311" text-anchor="middle">sin API key cae a MOCK (no envía)</text>
+    <rect class="caja" x="640" y="245" width="290" height="62" rx="10"/>
+    <text class="titulo-caja" x="785" y="268" text-anchor="middle">Brevo (correo)</text>
+    <text class="detalle-caja" x="785" y="286" text-anchor="middle">250 correos/día · sin llave cae a MOCK</text>
+
+    <!-- WhatsApp -->
+    <rect class="caja" x="640" y="325" width="290" height="72" rx="10"/>
+    <text class="titulo-caja" x="785" y="348" text-anchor="middle">WhatsApp Cloud API (Meta)</text>
+    <text class="detalle-caja" x="785" y="366" text-anchor="middle">solo ENTRADA: el comprador envía su código</text>
+    <text class="detalle-caja" x="785" y="383" text-anchor="middle">la app nunca envía un mensaje (ADR 015)</text>
+
+    <!-- Didit -->
+    <rect class="caja" x="640" y="415" width="290" height="62" rx="10"/>
+    <text class="titulo-caja" x="785" y="438" text-anchor="middle">Didit (cédula, opcional)</text>
+    <text class="detalle-caja" x="785" y="456" text-anchor="middle">tope diario y mensual · cédula no se guarda</text>
+
+    <!-- Superfinanciera -->
+    <rect class="caja" x="640" y="495" width="290" height="62" rx="10"/>
+    <text class="titulo-caja" x="785" y="518" text-anchor="middle">Superfinanciera (datos abiertos)</text>
+    <text class="detalle-caja" x="785" y="536" text-anchor="middle">la tasa de vivienda, con su fecha de corte</text>
 
     <!-- GitHub -->
-    <rect class="caja" x="290" y="360" width="240" height="130" rx="10"/>
-    <text class="titulo-caja" x="410" y="386" text-anchor="middle">GitHub (repo público)</text>
-    <text class="detalle-caja" x="410" y="405" text-anchor="middle">ruleset main-protegida</text>
-    <text class="detalle-caja" x="410" y="422" text-anchor="middle">checks: quality · e2e · lighthouse</text>
-    <text class="detalle-caja" x="410" y="439" text-anchor="middle">+ un-pr-vivo (por sumar al ruleset)</text>
-    <text class="detalle-caja" x="410" y="456" text-anchor="middle">Dependabot · la CI no despliega</text>
+    <rect class="caja" x="290" y="400" width="240" height="150" rx="10"/>
+    <text class="titulo-caja" x="410" y="426" text-anchor="middle">GitHub (repo público)</text>
+    <text class="detalle-caja" x="410" y="445" text-anchor="middle">ruleset main-protegida</text>
+    <text class="detalle-caja" x="410" y="462" text-anchor="middle">checks: quality · e2e · lighthouse</text>
+    <text class="detalle-caja" x="410" y="479" text-anchor="middle">· un-pr-vivo</text>
+    <text class="detalle-caja" x="410" y="496" text-anchor="middle">Dependabot · la CI no despliega</text>
+    <text class="detalle-caja" x="410" y="513" text-anchor="middle">Actions: vigencia · keep-alive</text>
 
     <!-- Flechas -->
-    <path class="flecha" d="M 190 185 L 285 195"/>
-    <text class="etiqueta-flecha" x="237" y="176" text-anchor="middle">HTTPS</text>
+    <path class="flecha" d="M 190 160 L 285 200"/>
+    <text class="etiqueta-flecha" x="232" y="172" text-anchor="middle">HTTPS</text>
 
-    <path class="flecha" d="M 105 140 C 105 60 200 50 285 50"/>
+    <path class="flecha" d="M 105 110 C 105 50 200 50 285 50"/>
     <text class="etiqueta-flecha" x="170" y="62" text-anchor="middle">eventos sin PII</text>
 
-    <path class="flecha flecha-manual" d="M 190 295 C 240 295 262 285 300 271"/>
-    <text class="etiqueta-flecha" x="236" y="316" text-anchor="middle">deploy manual</text>
+    <path class="flecha" d="M 105 210 L 105 245"/>
+    <text class="etiqueta-flecha" x="150" y="233" text-anchor="middle">mosaicos</text>
 
-    <path class="flecha" d="M 530 160 L 635 90"/>
+    <path class="flecha flecha-manual" d="M 190 400 C 240 400 262 365 300 355"/>
+    <text class="etiqueta-flecha" x="228" y="392" text-anchor="middle">deploy manual</text>
+
+    <path class="flecha" d="M 530 170 L 635 95"/>
     <text class="etiqueta-flecha" x="590" y="118" text-anchor="middle">RPC · Auth</text>
 
-    <path class="flecha" d="M 530 200 L 635 196"/>
-    <text class="etiqueta-flecha" x="583" y="190" text-anchor="middle">URL prefirmada</text>
+    <path class="flecha" d="M 530 215 L 635 196"/>
+    <text class="etiqueta-flecha" x="583" y="203" text-anchor="middle">URL prefirmada</text>
 
-    <path class="flecha" d="M 530 240 L 635 272"/>
+    <path class="flecha" d="M 530 245 L 635 272"/>
     <text class="etiqueta-flecha" x="583" y="250" text-anchor="middle">API v3</text>
 
-    <path class="flecha" d="M 530 440 L 952 440 L 952 75 L 933 75"/>
-    <text class="etiqueta-flecha" x="745" y="432" text-anchor="middle">crons de Actions: vigencia (lunes) · ping (diario)</text>
+    <path class="flecha" d="M 635 345 L 535 310"/>
+    <text class="etiqueta-flecha" x="590" y="316" text-anchor="middle">webhook (entra)</text>
+
+    <path class="flecha" d="M 530 335 C 580 380 590 430 635 445"/>
+    <text class="etiqueta-flecha" x="568" y="438" text-anchor="middle">cédula</text>
+
+    <path class="flecha" d="M 530 350 C 570 450 575 520 635 525"/>
+    <text class="etiqueta-flecha" x="560" y="500" text-anchor="middle">tasa (cron)</text>
+
+    <path class="flecha" d="M 410 550 L 410 585 L 952 585 L 952 75 L 933 75"/>
+    <text class="etiqueta-flecha" x="720" y="578" text-anchor="middle">crons de Actions: vigencia (lunes) · keep-alive (diario)</text>
   </svg>
   </div>
 
@@ -163,30 +205,90 @@
   <table>
     <thead><tr><th>Pieza</th><th>Servicio + plan</th><th>Detalle operativo</th></tr></thead>
     <tbody>
-      <tr><td>Código / versionamiento</td><td>GitHub, repositorio público</td><td>Ruleset <code>main-protegida</code> con los checks requeridos <code>quality</code>, <code>e2e</code> y <code>lighthouse</code>; <code>un-pr-vivo</code> (regla 18) corre en cada PR pero se suma al ruleset después del merge del S4. Los cambios llegan a <code>main</code> por PR; el hook de Claude Code bloquea el push directo.</td></tr>
-      <tr><td>CI/CD</td><td>GitHub Actions (gratis en repo público)</td><td><code>quality</code>: tipos, lint, pruebas con cobertura, build, <code>pnpm audit</code>, cero enlaces y regla 18 (solo en PR). <code>e2e</code>: Playwright + axe contra Supabase local. <code>lighthouse</code>: presupuestos y 4 categorías ≥ 0,9. <strong>La CI no despliega.</strong></td></tr>
-      <tr><td>Hosting / publicación</td><td>Cloudflare Workers vía OpenNext, plan gratuito</td><td>Uso comercial permitido (ADR 001; Vercel Hobby lo prohíbe). <strong>Deploy manual</strong>: <code>pnpm deploy:cf</code> desde la máquina del responsable. Si nadie lo corre, <code>main</code> y producción divergen en silencio. Hoy sirve desde un subdominio del hosting.</td></tr>
-      <tr><td>Base de datos</td><td>Supabase Postgres, plan gratuito, región sa-east-1</td><td>Tablas: <code>vendedores</code>, <code>inmuebles</code>, <code>fotos</code>, <code>registro_intentos</code>, <code>zonas</code>, <code>referidos</code>, <code>envios</code>. RLS en todas; el anónimo no toca tablas, solo RPC <code>SECURITY DEFINER</code> con lista blanca de columnas (ADR 002, 005). 5 migraciones en <code>supabase/migrations/</code>. Permisos de funciones: lista blanca de 13 RPC públicas para <code>anon</code>; las del operador y de cron están cerradas, y un test de catálogo falla si una función nueva queda abierta a <code>anon</code> sin estar en la lista (ADR 012). <strong>Regla:</strong> toda migración nueva se aplica a la nube en el sprint que la crea y se verifica con <code>supabase migration list --linked</code>.</td></tr>
-      <tr><td>Auth</td><td>Supabase Auth + magic link propio</td><td>Operador: correo y contraseña, y además una lista blanca en el servidor (variable de entorno). Vendedor: sin cuenta; token de 256 bits en el fragmento de la URL, en BD solo su hash SHA-256 (ADR 004, 008).</td></tr>
-      <tr><td>Almacenamiento de archivos</td><td>Cloudflare R2, plan gratuito</td><td>Fotos WebP (1600 px y miniatura 400 px) comprimidas en el navegador y subidas con PUT prefirmado (ADR 003). Jamás Supabase Storage. Los CTL no se almacenan nunca. Se leen por la URL pública de desarrollo del proveedor.</td></tr>
-      <tr><td>Email / notificaciones</td><td>Brevo (API v3), plan gratuito</td><td>Lotes de campaña, máximo 300 correos/día. Sin <code>BREVO_API_KEY</code> el adaptador va en MOCK: ningún flujo se da por probado con el mock.</td></tr>
-      <tr><td>IA embebida</td><td><strong>NINGUNA</strong></td><td>Fase 1 determinista por regla (código primero). Una feature con LLM exige un ADR «código primero».</td></tr>
-      <tr><td>Observabilidad</td><td>Pino · Sentry · PostHog</td><td>Pino: logs JSON en el servidor. Sentry: solo navegador, solo metadatos, inerte sin DSN. PostHog: sin autocapture ni grabación, persistencia en memoria, eventos sin PII, inerte sin clave. <em>No verificable desde el repo:</em> si producción tiene DSN y clave activas.</td></tr>
-      <tr><td>Crons / keep-alives</td><td>GitHub Actions programadas</td><td><code>supabase-ping</code> (diario): el plan gratuito pausa el proyecto tras ~7 días sin actividad. <code>vigencia</code> (lunes): marca vencidos los anuncios de más de 60 días (ADR 007). Si cualquiera falla, abre un issue con la etiqueta <code>alerta</code>; si falta un secreto, falla en vez de pasar en verde.</td></tr>
-      <tr><td>Secretos</td><td>Variables del Worker (<code>wrangler secret</code>), secretos de GitHub Actions y <code>.env.local</code> local</td><td>Jamás el repo (gitleaks en hook de git y en hook de Claude Code). En <code>wrangler.jsonc</code> solo van valores públicos por diseño. Los datos del responsable (Ley 1581) entran por variable de build.</td></tr>
-      <tr><td>Dominio</td><td>Previsto: dominio propio administrado en Cloudflare</td><td>Hoy la app sirve desde un subdominio del hosting. El dominio propio llega con H-4 (ADR 001, ≈ US$12/año declarado). Su nombre no se versiona.</td></tr>
-      <tr class="critica"><td>Costo real / mes</td><td>US$0 en servicios; dominio ≈ US$12/año</td><td>Todo en niveles gratuitos. Límites publicados por cada proveedor (no consultados en vivo en este sprint): Workers 100.000 solicitudes/día, Supabase 500 MB de base de datos, R2 10 GB, Brevo 300 correos/día. <em>Uso real frente a esos límites: no medido</em> (no hay métricas de producción en el repo). Origen: declarado.</td></tr>
-      <tr class="critica"><td>Punto único de falla</td><td>Supabase, plan gratuito (una sola instancia)</td><td>Si se pausa o se cae, no hay registro, ficha ni panel. Mitigación: ping diario con alerta. <strong>Sin mitigar:</strong> el plan gratuito no incluye copias de seguridad gestionadas (a verificar con la documentación de Supabase antes de H-4). Otros puntos débiles, en orden: el deploy manual desde una sola máquina; una sola cuenta de Cloudflare con Worker, R2 y DNS (mitigación: autenticación en dos pasos); la URL pública de desarrollo de R2 sirve las fotos (según la documentación del proveedor está pensada para desarrollo y con límites de tasa — a verificar; se reemplaza por dominio propio en H-4).</td></tr>
+      <tr><td>Código / versionamiento</td><td>GitHub, repositorio público</td><td>Ruleset <code>main-protegida</code> con los checks requeridos <code>quality</code>, <code>e2e</code>, <code>lighthouse</code> y <code>un-pr-vivo</code> (regla 18: un PR vivo por app; Dependabot cuenta). Squash por el responsable, rama borrada. Hooks de git: gitleaks y bloqueo de push a <code>main</code>. Barrido de cero enlaces en el job <code>quality</code>.</td></tr>
+      <tr><td>CI/CD</td><td>GitHub Actions (gratis en repo público)</td><td><code>quality</code>: tipos, lint, pruebas con cobertura (umbral 80 % en <code>src/engine</code>), build, <code>pnpm audit</code>, cero enlaces, regla 18 y el contrato del export. <code>e2e</code>: Playwright contra Supabase local en dos navegadores (móvil y escritorio). <code>lighthouse</code>: una corrida contra <code>perf-budget.json</code> en las rutas de <code>lighthouse-urls.json</code>. <code>un-pr-vivo</code>: falla el segundo PR sin «complementa #N». La CI <strong>no despliega</strong>.</td></tr>
+      <tr><td>Hosting / publicación</td><td>Cloudflare Workers vía OpenNext, plan gratuito</td><td>Uso comercial permitido (ADR 001; Vercel Hobby lo prohíbe). <strong>Deploy manual</strong>: <code>pnpm deploy:cf</code> desde la máquina del responsable, precedido de la <strong>guarda de despliegue</strong> (<code>scripts/guarda-despliegue.mjs</code>): veta cualquier <code>*_SIMULACRO</code>, <code>*_MOCK</code>, freno apagado y el interruptor del lector de CTL si <code>ctl-validar</code> no sale en 0. Un Worker propio (<code>custom-worker.ts</code>) reexporta el de OpenNext y suma el Cron Trigger. Si nadie corre el deploy, <code>main</code> y producción divergen en silencio.</td></tr>
+      <tr><td>Base de datos</td><td>Supabase Postgres, plan gratuito, región sa-east-1</td><td>32 tablas, <strong>todas con RLS</strong>; 123 funciones, 117 <code>SECURITY DEFINER</code>; 19 migraciones en <code>supabase/migrations/</code> (las 19 están aplicadas en la nube). El anónimo no toca ninguna tabla: lee solo por RPC con lista blanca de columnas (58 funciones abiertas al anónimo, 86 a usuarios autenticados, 18 solo a la llave de servicio). Dominios de datos: <em>campaña y anuncios</em> (<code>vendedores</code>, <code>inmuebles</code>, <code>fotos</code>, <code>zonas</code>, <code>sectores</code>, <code>referidos</code>, <code>envios</code>, <code>registro_intentos</code>); <em>comprador</em> (<code>compradores</code>, <code>verificaciones</code>, <code>contactos</code>, <code>identificaciones</code>, <code>identidad_consultas</code>, <code>favoritos</code>, <code>listas</code>, <code>lista_inmuebles</code>, <code>notas_lista</code>, <code>alertas</code>, <code>enlaces_alerta</code>, <code>cambios_de_precio</code>, <code>correos_dia</code>); <em>visitas</em> (<code>solicitudes_visita</code>, <code>horarios_propuestos</code>, <code>visitas</code>, <code>enlaces_visita</code>, <code>salas_ventas</code>); <em>vivienda nueva</em> (<code>ediciones</code>, <code>proyectos_nuevos</code>); <em>números</em> (<code>tasas_vivienda</code>); <em>confianza</em> (<code>reportes</code>, <code>banderas</code>, <code>sesiones_fotos</code>).</td></tr>
+      <tr><td>Auth</td><td>Supabase Auth + magic link propio + sesión de comprador</td><td>Operador: correo y contraseña, y además una lista blanca en el servidor (variable de entorno). Dueño: sin cuenta; token de 256 bits en el fragmento de la URL, así que jamás llega al servidor ni a los registros; en la base solo su hash (ADR 004, 008). Comprador: sin cuenta; una cookie <code>httpOnly</code> de 32 bytes identifica su navegador y la base guarda solo su hash; «verificado» significa que un código de esa sesión se canjeó (ADR 015).</td></tr>
+      <tr><td>Almacenamiento de archivos</td><td>Cloudflare R2, plan gratuito</td><td>Fotos WebP (1600 px y miniatura 400 px) comprimidas en el navegador y subidas con PUT prefirmado (ADR 003). Jamás Supabase Storage. Los CTL no se almacenan: se ven y solo persisten la matrícula y la fecha. El texto de un CTL pegado en el lector no sale del teléfono.</td></tr>
+      <tr><td>Email / notificaciones</td><td>Brevo (API v3), plan gratuito</td><td>Campañas por lotes, recordatorios de visita, resúmenes de alertas y aviso al operador de una sala nueva; el proveedor permite 300 correos al día y la app se queda en 250 en total (<code>correos_libres_hoy</code>), con las visitas y las alertas primero en el cupo. Cada correo trae versión de texto y sale en el idioma guardado. Sin <code>BREVO_API_KEY</code> el adaptador va en MOCK: ningún flujo se da por probado con el mock.</td></tr>
+      <tr><td>Mensajería</td><td>WhatsApp Cloud API (Meta)</td><td><strong>Solo entrada</strong> (ADR 015): el comprador envía un código a Innmobiliaria y el webhook lo canjea; <code>X-Hub-Signature-256</code> se valida antes de leer el cuerpo y el cuerpo tiene tope. La app jamás envía un mensaje: el equipo escribe a mano con el texto ya preparado.</td></tr>
+      <tr><td>Identidad</td><td>Didit (proveedor de Registraduría), nivel gratuito</td><td>Opcional. Cédula, fecha de expedición y nombre; <strong>el número no se guarda</strong>, solo que salió bien y cuándo. Tope diario y mensual que impide cobrar, 3 intentos por comprador; simulador solo en desarrollo y pruebas (ADR 016).</td></tr>
+      <tr><td>Mapa</td><td>MapLibre GL + OpenFreeMap; barrios de Catastro Bogotá (CC BY 4.0)</td><td>Estilo y mosaicos los pide el navegador; los barrios viajan con la app. El anuncio se ubica por el área de su barrio, nunca por un punto (ADR 014). Si el mapa falla, la lista sigue.</td></tr>
+      <tr><td>Datos externos procesados</td><td>Superfinanciera, Catastro, normas, la revista Estrenar Vivienda</td><td>La tasa de vivienda la guarda el cron con su fecha de corte; el valor de referencia del m² viene de Catastro; las tarifas y las normas viven en <code>src/data/*.json</code> con su artículo y su fecha de lectura. La revista se consigue y se procesa <strong>fuera de la app</strong> (ADR 019), con la página de origen de cada cifra y una muestra revisada por una persona; la edición cruda nunca entra a ningún repo.</td></tr>
+      <tr><td>IA embebida</td><td><strong>NINGUNA</strong></td><td>Todo es código determinista (código primero). Una feature con LLM exige un ADR «código primero».</td></tr>
+      <tr><td>Observabilidad</td><td>Pino · Sentry · PostHog</td><td>Pino: logs JSON en el servidor, con id de petición y sin datos de nadie. Sentry: solo navegador, solo metadatos, inerte sin DSN. PostHog: sin autocapture ni grabación, persistencia en memoria, eventos sin datos personales.</td></tr>
+      <tr><td>Crons / keep-alives</td><td>Cron Trigger del Worker + GitHub Actions</td><td><strong>Trabajo diario</strong> (13:00 UTC = 8:00 de Bogotá, <code>/api/cron/diario</code> con <code>CRON_SECRET</code>): recordatorios de visita y aviso de sala sin respuesta, resúmenes de alertas, purga Ley 1581, tasa de vivienda y las cuatro reglas antifraude; correrlo dos veces el mismo día no repite nada (ADR 016). Actions: <code>supabase-ping</code> (diario; el plan gratuito pausa el proyecto tras ~7 días sin actividad), <code>vigencia</code> (lunes; marca vencidos los anuncios de más de 60 días, ADR 007) y <code>recordatorios</code> (respaldo, hoy solo a mano). Si una falla abre un issue con la etiqueta <code>alerta</code>.</td></tr>
+      <tr><td>Pruebas</td><td>Vitest · Playwright · axe · Lighthouse</td><td>1959 pruebas unitarias en 101 archivos, con 99,73 % de líneas en <code>src/engine</code> (los motores del lector de CTL y de antifraude, al 100 % de ramas); 836 pruebas de punta a punta en 38 archivos y dos navegadores; gates propios con su demo en rojo (cifras prohibidas, paridad es/en, barrido de literales, cero enlaces, catálogo de códigos del CTL, contrato del export, catálogo de permisos de las funciones y de la pausa). <code>pnpm sonda:nube</code> prueba por comportamiento que cada migración quedó aplicada en la nube; corre a mano tras cada <code>db push</code> y no entra a la CI.</td></tr>
+      <tr><td>Secretos</td><td>Variables del Worker (<code>wrangler secret</code>), secretos de GitHub Actions y <code>.env.local</code> local</td><td>Jamás el repo (gitleaks en hook de git y en hook de Claude Code). En <code>wrangler.jsonc</code> solo van valores públicos por diseño. Los datos del responsable (Ley 1581) entran por variable de build. La matriz está abajo, sin valores.</td></tr>
+      <tr><td>Dominio</td><td>Dominio propio administrado en Cloudflare</td><td>Configurado en el S9 para la app y el correo. Su nombre no se versiona (regla 9). La app sigue <strong>privada y sin indexar</strong> (<code>noindex</code> global) hasta H-4; robots y sitemap llegan con la apertura.</td></tr>
+      <tr class="critica"><td>Costo real / mes</td><td>US$0 en servicios; dominio ≈ US$12/año</td><td>Todo en niveles gratuitos; la verificación por WhatsApp es por mensaje entrante y no cuesta, y la identificación va con tope que impide cobrar. Límites publicados por cada proveedor (no consultados en vivo): Workers 100.000 solicitudes/día, Supabase 500 MB de base de datos, R2 10 GB, Brevo 300 correos/día. Uso real frente a esos límites: no medido (no hay métricas de producción en el repo). Origen: declarado.</td></tr>
+      <tr class="critica"><td>Punto único de falla</td><td>Supabase, plan gratuito (una sola instancia)</td><td>Si se pausa o se cae, no hay registro, ficha, búsqueda ni panel. Mitigación: ping diario con alerta. <strong>Sin mitigar:</strong> el plan gratuito no incluye copias de seguridad gestionadas (a verificar con la documentación de Supabase antes de H-4). Otros puntos débiles, en orden: el deploy manual desde una sola máquina; una sola cuenta de Cloudflare con Worker, R2 y DNS (mitigación: autenticación en dos pasos); la URL pública de desarrollo de R2 sirve las fotos (según la documentación del proveedor está pensada para desarrollo y con límites de tasa: a verificar; se reemplaza por dominio propio en H-4); y WhatsApp y Didit son terceros: sin ellos el comprador no puede contactar ni identificarse.</td></tr>
     </tbody>
   </table>
   </div>
+
+  <h2>Servicios reales y secretos (sin valores)</h2>
+  <p class="nota">Estado de los <strong>nombres</strong> en el Worker según <code>wrangler secret list</code> el 2026-10-26. Un valor nunca se escribe aquí. Los secretos del Worker los pone el responsable: ninguna herramienta ni agente los pone.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th>Nombre</th><th>Servicio</th><th>En el Worker hoy</th><th>Sin él, qué pasa</th></tr></thead>
+    <tbody>
+      <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>Supabase</td><td class="listo">puesto</td><td>No funcionan el webhook de WhatsApp ni el trabajo diario.</td></tr>
+      <tr><td><code>CRON_SECRET</code></td><td>Cron del Worker y su respaldo</td><td class="listo">puesto</td><td>El trabajo diario responde 401 y no corre.</td></tr>
+      <tr><td><code>OPERADOR_EMAIL</code></td><td>Lista blanca del operador y aviso de salas</td><td class="listo">puesto</td><td>Nadie entra a <code>/operador</code>; no llega el aviso de una sala nueva.</td></tr>
+      <tr><td><code>RATE_LIMIT_PEPPER</code></td><td>Huellas de IP</td><td class="listo">puesto</td><td>En producción, calcular la huella de la IP lanza un error (el registro del dueño y la verificación del comprador fallan) en vez de guardar un hash que se revierte.</td></tr>
+      <tr><td><code>BREVO_API_KEY</code>, <code>BREVO_FROM_EMAIL</code></td><td>Brevo</td><td class="listo">puestos</td><td>Los correos van a MOCK: no se envía nada.</td></tr>
+      <tr><td><code>R2_ACCOUNT_ID</code>, <code>R2_ACCESS_KEY_ID</code>, <code>R2_SECRET_ACCESS_KEY</code></td><td>Cloudflare R2</td><td class="listo">puestos</td><td>No se pueden subir fotos.</td></tr>
+      <tr><td><code>WHATSAPP_APP_SECRET</code>, <code>WHATSAPP_VERIFY_TOKEN</code>, <code>WHATSAPP_NUMERO</code></td><td>WhatsApp Cloud API</td><td class="falta">FALTAN</td><td>«Verificar tu WhatsApp» responde «no disponible»: el comprador no puede contactar ni agendar. Necesita una app de Meta, un número propio fuera de la app de WhatsApp y el webhook suscrito a <code>messages</code> (<code>docs/APROVISIONAMIENTO.md</code>, bloque 5).</td></tr>
+      <tr><td><code>DIDIT_API_KEY</code></td><td>Didit</td><td class="falta">FALTA</td><td>«Identificarse» responde que no pudo consultar la Registraduría (bloque 6).</td></tr>
+      <tr><td><code>LECTOR_CTL_ACTIVO</code></td><td>Interruptor del lector de CTL</td><td>apagado hasta validarlo con certificados reales</td><td>Apagado, la pestaña del lector no aparece; encendido, siempre dice «lectura en prueba». Solo pasa la guarda de despliegue si <code>ctl-validar</code> sale en 0 (ADR 021).</td></tr>
+      <tr><td>Variables <code>NEXT_PUBLIC_*</code></td><td>Build (máquina del responsable)</td><td>se hornean al construir</td><td>Ninguna va en <code>wrangler.jsonc</code>: el repo es público.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Flujos de punta a punta</h2>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th>Rol</th><th>Recorrido</th><th>Piezas que toca</th></tr></thead>
+    <tbody>
+      <tr><td>Dueño</td><td>Publicar en 3 pasos → confirmación con su enlace privado → «Mi anuncio» (fotos, descripción, precio con el rango de su zona, solicitudes de visita, sesión de fotos, avisos del equipo) → verificarse con un CTL de ≤ 30 días (lo registra el operador; el documento se ve y no se guarda) → renovar cada 60 días.</td><td>Worker · Supabase (RPC) · R2 (URL prefirmada) · Brevo</td></tr>
+      <tr><td>Comprador</td><td>Buscar (filtros y zona dibujada) → ficha («¿Está caro?», datos de la zona, sello) → verificar su WhatsApp (envía un código) → escribirle al dueño → pedir y agendar una visita → guardar, comparar, listas y alertas → simulador, papeleo y lector → vivienda nueva (precio verdadero, nuevo o usado, subsidio, sala de ventas) → reportar un anuncio.</td><td>Worker · Supabase (RPC) · WhatsApp (entra) · Didit (opcional) · Brevo · cron</td></tr>
+      <tr><td>Operador</td><td>Entrar → registros y verificación de CTL → campaña (envíos por lotes) → zonas y cupos → cola antifraude (pausar, pedir o cerrar el CTL, descartar) → sesiones de fotos → visitas a salas de ventas → bandeja de ediciones (procesa la revista, fuera de la app).</td><td>Worker · Supabase (Auth + RPC del operador) · Brevo</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Seguridad y privacidad por construcción</h2>
+  <ul>
+    <li><strong>Ley 1581:</strong> consentimiento con fecha en la misma fila, mínimo dato, RLS en las 32 tablas, <code>consentimiento_at NOT NULL</code> y purga diaria de lo que caduca; la visita exige la casilla de autorización también en la base.</li>
+    <li><strong>Lectura pública solo por RPC</strong> con lista blanca de columnas; toda RPC nueva trae su prueba negativa de RLS y el catálogo de permisos de las funciones falla si una nueva queda abierta sin clasificar.</li>
+    <li><strong>La pausa de un anuncio</strong> es una propiedad de toda función que lee <code>inmuebles</code>: un gate sobre <code>pg_proc</code> falla si una función nueva no la respeta (ADR 020).</li>
+    <li><strong>Ninguna señal acusa:</strong> el antifraude deja banderas, no oculta nada; solo una persona del equipo actúa.</li>
+    <li><strong>El sello no se falsifica:</strong> un trigger (<code>proteger_sello</code>) impide que <code>anon</code> o <code>authenticated</code> escriban a mano el nivel, la fecha del CTL, la matrícula o <code>verificado_at</code>. Solo lo cambian tres funciones del operador: <code>marcar_verificado_ctl</code> (otorga el sello), <code>pedir_ctl</code> (lo deja en «re-verificación pendiente») y <code>cerrar_ctl_pedido</code> (lo devuelve a «fundador»). Las marcas «CTL pedido» y «no entregado» no las cubre el trigger: son del operador.</li>
+    <li><strong>Cero enlaces:</strong> el dominio de producción vive en el producto, no en el repo; el barrido de árbol y de homepage corre en la CI.</li>
+    <li><strong>Lo que se pega no sale:</strong> los ingresos, el precio del papeleo, el arriendo de «la espera» y el texto de un CTL se quedan en el teléfono; una prueba veta <code>console</code> en la isla del papeleo.</li>
+    <li><strong>Dependencias:</strong> <code>pnpm audit --audit-level high</code> en la CI; las excepciones viven en <code>pnpm-workspace.yaml</code>.</li>
+  </ul>
+
+  <h2>Decisiones (ADRs)</h2>
+  <p class="nota">21 decisiones numeradas en <code>decisions/</code>: 001 hosting · 002 esquema, RPC y RLS · 003 fotos en R2 · 004 magic link · 005 ficha pública · 006 score de completitud · 007 vigencia de 60 días · 008 renovar con token en el fragmento · 009 correo opcional · 010 paquete de fundador · 011 excepción de auditoría · 012 lista blanca de RPC · 013 idioma por reescrituras · 014 ubicación por barrio · 015 comprador verificado por mensaje entrante · 016 identidad con tope y recordatorio por correo · 017 guardar y avisar · 018 rango y no avalúo · 019 la revista como fuente procesada y privada · <strong>020 antifraude: señales, no sentencias</strong> · <strong>021 el lector de CTL: el código manda</strong>.</p>
+
+  <h2>Lo que falta (H-3 y H-4)</h2>
+  <ul>
+    <li><strong>H-3 Robustez:</strong> topes de tasa por IP y por correo en las RPC (hoy una llamada directa puede elegir otra huella), purgas a escala, envío de correos en serie, el costo O(n²) de la regla de precio con miles de anuncios, la huella de fotos del lado del servidor, <code>datos.ts</code> de vivienda nueva sin caché, persistencia definitiva de los borrados con fecha, cobertura de módulos que no son motores.</li>
+    <li><strong>H-4 Producción:</strong> CSP y cabeceras, <code>Vary</code> y caché del borde, allowlist del operador también en la base, copias de seguridad, alerta activa, legal (política y términos), indexación, robots y sitemap, renovación anual de las tarifas, <code>/release-check</code>.</li>
+    <li><strong>Aprovisionamiento pendiente para el ensayo:</strong> los cuatro secretos de WhatsApp y Didit y un segundo teléfono; los certificados reales del lector de CTL.</li>
+  </ul>
 
   <h2>Historial del blueprint</h2>
   <div class="tabla-scroll">
   <table>
     <thead><tr><th>Fecha</th><th>Ciclo</th><th>Cambios</th></tr></thead>
     <tbody>
-      <tr><td>2026-10-17</td><td>H-1 · S4</td><td>Versión inicial as-built, escrita desde el código del repo. En el S4 se aplicaron a la nube las migraciones de campaña (S3) y de lista blanca de RPC (verificado: <code>migration list --linked</code> sin diferencias, 5 de 5), el ping pasó a diario con alerta y <code>vigencia</code> volvió a verde tras ocho semanas en rojo (sus 8 corridas programadas, del 24-08 al 12-10). Permisos de funciones leídos en producción antes y después del cambio: ver ADR 012.</td></tr>
+      <tr><td>2026-10-26</td><td>H-2 · S16</td><td>Reescrito as-built en el sprint de cierre del hito (el ensayo general decide si cierra): de 7 a 32 tablas, las integraciones reales (WhatsApp de entrada, Didit, mapa, tasa), el cron del Worker, la guarda de despliegue, la matriz de secretos con su estado, los flujos por rol, la seguridad y las decisiones 013 a 021. Cifras contadas en el repo ese día.</td></tr>
+      <tr><td>2026-10-17</td><td>H-1 · S4</td><td>Versión inicial as-built, escrita desde el código del repo. En el S4 se aplicaron a la nube las migraciones de campaña (S3) y de lista blanca de RPC.</td></tr>
     </tbody>
   </table>
   </div>

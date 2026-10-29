@@ -329,6 +329,57 @@
         margin: 22px 0 4px;
         font-size: 16px;
       }
+      .ruta .sub {
+        font-weight: 400;
+        color: var(--gray);
+      }
+      .donde {
+        margin: 4px 0 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray);
+      }
+      .pasos {
+        margin: 6px 0 0 20px;
+        padding: 0;
+        font-size: 14px;
+      }
+      .pasos li,
+      .esperar ul li,
+      .antes li {
+        display: list-item;
+        border-top: none;
+        padding: 0;
+        margin: 4px 0;
+      }
+      .esperar ul,
+      .antes ul {
+        list-style: disc;
+        margin: 4px 0 0 18px;
+        padding: 0;
+      }
+      .cubre {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: var(--gray);
+      }
+      .antes {
+        border: 1px solid #fde68a;
+        background: #fffbeb;
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin: 14px 0 6px;
+        color: #78350f;
+        font-size: 14px;
+      }
+      .antes h3 {
+        margin: 4px 0 6px;
+        font-size: 15px;
+      }
+      .o-cubierto {
+        background: #ecfdf5;
+        color: #065f46;
+      }
       .o-clave {
         background: #fef3c7;
         color: #92400e;
@@ -347,6 +398,15 @@
         .o-clave {
           background: #422006;
           color: #fcd34d;
+        }
+        .o-cubierto {
+          background: #052e16;
+          color: #6ee7b7;
+        }
+        .antes {
+          background: #2a1d05;
+          border-color: #5a3a05;
+          color: #fde68a;
         }
       }
       .esperar {
@@ -393,17 +453,17 @@
         sprint hereda las pruebas del anterior (regresión, marcadas con su
         sprint <span class="origen o-s1">S1</span>) y añade las nuevas
         <span class="origen o-s16">Nuevo · S16</span>. Este sprint prepara el
-        cierre del hito del producto completo y suma el <b>bloque S: tu ensayo
-        general</b>, que es lo que decide si cierra, con las tres rutas (dueño, comprador y operador) contra
-        servicios reales. Los bloques A a R siguen igual; el lector de
-        certificados de tradición está construido pero <b>apagado</b> hasta
+        cierre del hito del producto completo. Para decidirlo usa el <b>bloque S: tu ensayo
+        general</b>, una sola historia de 18 paradas (dueño → comprador → números → equipo →
+        mañana) que cubre los ⭐ de todos los bloques sin repetirlos. Los bloques A a R siguen
+        como regresión (sin ⭐: los marcados «Se prueba en el ensayo» ya están dentro de una parada);
+        el lector de certificados de tradición está construido pero <b>apagado</b> hasta
         validarlo con certificados reales.
       </p>
       <div class="urlbox">
-        Pruébalo con la app de esta rama, en local o ya desplegada (el
-        despliegue es manual). Rama:
-        <code>sprint-016/listo-para-abrir</code>. En un teléfono real
-        cuando el filtro lo pida.
+        El ensayo se hace sobre el sitio <b>ya desplegado</b> con la app de esta rama (la dirección te la
+        paso por el chat, no va en este archivo). Rama:
+        <code>sprint-016/listo-para-abrir</code>. Cada parada dice en qué aparato se hace.
       </div>
 
       <div class="barra">
@@ -421,7 +481,7 @@
             ⭐⭐ Solo servicios reales
           </button>
           <button data-filtro="s16" aria-pressed="false">
-            Solo el ensayo del S16
+            El ensayo (recorrido)
           </button>
           <button data-filtro="s15" aria-pressed="false">
             Solo lo del S15
@@ -455,14 +515,14 @@
           La página principal para vendedores directos de Bogotá.
         </p>
         <ul>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="a1" />
             <div>
               <label for="a1" class="qué"
                 >En un teléfono real, el titular del hero aparece
                 <b>al instante</b> al abrir la página<span class="origen o-s1"
                   >S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 1</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> "Vende tu casa directo, sin comisión" se ve de
@@ -473,13 +533,13 @@
               </p>
             </div>
           </li>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="a2" />
             <div>
               <label for="a2" class="qué"
                 >El mensaje es 100% para <b>vendedores</b> y el tono es
                 honesto<span class="origen o-s1">S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 1</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> nada dirigido a compradores ni inmobiliarias;
@@ -487,13 +547,13 @@
               </p>
             </div>
           </li>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="a3" />
             <div>
               <label for="a3" class="qué"
                 >Solo aparecen cifras <b>citables</b
                 ><span class="origen o-s1">S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 1</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> solo 3% / ≈$12M y 7–7,5 meses (la cifra de
@@ -542,13 +602,13 @@
           El corazón de la app: publicar el inmueble ES registrarse.
         </p>
         <ul>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="b1" />
             <div>
               <label for="b1" class="qué"
                 >Recorrido completo en un teléfono real en
                 <b>menos de 3 minutos</b><span class="origen o-s1">S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 1</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> landing → "Publica tu inmueble" → 3 pasos →
@@ -584,13 +644,13 @@
               </p>
             </div>
           </li>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="b4" />
             <div>
               <label for="b4" class="qué"
                 >Sin marcar la casilla de consentimiento <b>no</b> se puede
                 enviar<span class="origen o-s1">S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 1</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> en el paso 3, con la casilla sin marcar,
@@ -637,13 +697,13 @@
           Donde el equipo ve los registros. Ruta <code>/operador</code>.
         </p>
         <ul>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="c1" />
             <div>
               <label for="c1" class="qué"
                 >Tras publicar un inmueble de prueba en la preview, el operador
                 lo <b>ve</b> en el panel<span class="origen o-s1">S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 3</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> entra a <code>/operador</code>, inicia sesión y
@@ -703,14 +763,14 @@
               </p>
             </div>
           </li>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="d2" />
             <div>
               <label for="d2" class="qué"
                 >La política es correcta y comprensible para un vendedor<span
                   class="origen o-s1"
                   >S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 1</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> menciona Ley 1581, qué datos se recogen, para
@@ -726,13 +786,13 @@
         <h2><span class="letra">E</span> Diseño y accesibilidad</h2>
         <p class="intro">Fidelidad visual y uso con teclado.</p>
         <ul>
-          <li data-origen="s1 clave">
+          <li data-origen="s1">
             <input type="checkbox" id="e1" />
             <div>
               <label for="e1" class="qué"
                 >Aprobación visual: la app es fiel al
                 <code>design-system.md</code><span class="origen o-s1">S1</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 15</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> acento morado, bandas pastel, píldoras, radios
@@ -782,14 +842,14 @@
           confirmación tras publicar; empieza por <code>/mi-anuncio#t=</code>).
         </p>
         <ul>
-          <li data-origen="s2 clave">
+          <li data-origen="s2">
             <input type="checkbox" id="f1" />
             <div>
               <label for="f1" class="qué"
                 >Abre tu enlace "mi anuncio" en el <b>teléfono</b> y sube una
                 foto <b>real</b> de la cámara: aparece en la galería y el
                 porcentaje sube<span class="origen o-s2">Nuevo · S2</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 2</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> tras un momento ("Procesando tu foto…") la foto
@@ -852,14 +912,14 @@
           pensada para compartir por WhatsApp.
         </p>
         <ul>
-          <li data-origen="s2 clave">
+          <li data-origen="s2">
             <input type="checkbox" id="g1" />
             <div>
               <label for="g1" class="qué"
                 >Pega el enlace de la ficha en un chat de <b>WhatsApp real</b>:
                 aparece la vista previa con la foto de portada, el barrio y el
                 precio<span class="origen o-s2">Nuevo · S2</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 4</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> WhatsApp muestra una tarjeta con la foto y el
@@ -920,13 +980,13 @@
               </p>
             </div>
           </li>
-          <li data-origen="s2 clave">
+          <li data-origen="s2">
             <input type="checkbox" id="g5" />
             <div>
               <label for="g5" class="qué"
                 >Juicio de contenido: la ficha se ve bien y el copy es claro; no
                 hay cifras inventadas<span class="origen o-s2">Nuevo · S2</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 5</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> se entiende de qué inmueble se trata; solo
@@ -944,14 +1004,14 @@
         </h2>
         <p class="intro">Desde el panel del operador (con sesión).</p>
         <ul>
-          <li data-origen="s2 clave">
+          <li data-origen="s2">
             <input type="checkbox" id="h1" />
             <div>
               <label for="h1" class="qué"
                 >Marca un inmueble como verificado (número de matrícula +
                 casilla "vi el CTL original"): el sello ⭐ aparece en su
                 ficha<span class="origen o-s2">Nuevo · S2</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 3</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la fila pasa a "Propietario verificado" y la
@@ -1001,7 +1061,7 @@
           <b>ES | EN</b> de la parte de arriba.
         </p>
         <ul>
-          <li data-origen="s5 clave">
+          <li data-origen="s5">
             <input type="checkbox" id="i1" />
             <div>
               <label for="i1" class="qué"
@@ -1009,7 +1069,7 @@
                 registro salen en inglés de punta a punta<span
                   class="origen o-s5"
                   >Nuevo · S5</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 9</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> portada «Sell your home direct, with no
@@ -1093,14 +1153,14 @@
           mapa usa internet real: así ves las calles de verdad.
         </p>
         <ul>
-          <li data-origen="s6 clave">
+          <li data-origen="s6">
             <input type="checkbox" id="j1" />
             <div>
               <label for="j1" class="qué"
                 >En tu <b>teléfono real</b>, abre <b>Buscar</b> → <b>Mapa</b> →
                 <b>Dibujar zona</b>, toca 3 o más esquinas sobre Chapinero y
                 toca <b>Listo</b><span class="origen o-s6">Nuevo · S6</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 4</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> el mapa muestra las calles y los barrios (los
@@ -1136,7 +1196,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s6 clave">
+          <li data-origen="s6">
             <input type="checkbox" id="j3" />
             <div>
               <label for="j3" class="qué"
@@ -1144,7 +1204,7 @@
                 al publicar y mira también su tarjeta en la búsqueda<span
                   class="origen o-s6"
                   >Nuevo · S6</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 4</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> solo se ven el <b>barrio</b> y la
@@ -1157,14 +1217,14 @@
               </p>
             </div>
           </li>
-          <li data-origen="s6 clave">
+          <li data-origen="s6">
             <input type="checkbox" id="j4" />
             <div>
               <label for="j4" class="qué"
                 >En el panel, verifica un inmueble con la
                 <b>fecha en que se expidió el CTL</b>; prueba también una fecha
                 de hace más de 30 días<span class="origen o-s6">Nuevo · S6</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · paradas 3 y 4</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> con una fecha de hoy o de hace unos días,
@@ -1288,7 +1348,7 @@
           prueba.
         </p>
         <ul>
-          <li data-origen="s7 clave">
+          <li data-origen="s7">
             <input type="checkbox" id="k1" />
             <div>
               <label for="k1" class="qué"
@@ -1296,7 +1356,7 @@
                 webhook (<code>/api/whatsapp/webhook</code> de tu sitio) y el
                 token de verificación que elegiste<span class="origen o-s7"
                   >Nuevo · S7</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · Antes de empezar</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> Meta acepta la dirección («verificado y
@@ -1309,7 +1369,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s7 clave">
+          <li data-origen="s7">
             <input type="checkbox" id="k2" />
             <div>
               <label for="k2" class="qué"
@@ -1319,7 +1379,7 @@
                 envía el código que WhatsApp te deja escrito<span
                   class="origen o-s7"
                   >Nuevo · S7</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 6</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> WhatsApp se abre hacia el número de
@@ -1334,14 +1394,14 @@
               </p>
             </div>
           </li>
-          <li data-origen="s7 clave">
+          <li data-origen="s7">
             <input type="checkbox" id="k3" />
             <div>
               <label for="k3" class="qué"
                 >Ya verificado, vuelve a la ficha →
                 <b>Escribirle por WhatsApp</b> → <b>Abrir WhatsApp</b
                 ><span class="origen o-s7">Nuevo · S7</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 6</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> primero ves el mensaje que se abrirá; al tocar
@@ -1430,7 +1490,7 @@
           local con el simulador de identidad y Brevo en prueba.
         </p>
         <ul>
-          <li data-origen="s8 clave">
+          <li data-origen="s8">
             <input type="checkbox" id="l1" />
             <div>
               <label for="l1" class="qué"
@@ -1438,7 +1498,7 @@
                 <b>/identificarse</b> y valida <b>tu propia cédula</b> (la fecha
                 de expedición está al respaldo)<span class="origen o-s8"
                   >Nuevo · S8</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 7</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> queda «Identificado». Con el nombre mal escrito
@@ -1455,7 +1515,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s8 clave">
+          <li data-origen="s8">
             <input type="checkbox" id="l2" />
             <div>
               <label for="l2" class="qué"
@@ -1463,7 +1523,7 @@
                 dueño, y espera a las <b>8:00 a. m.</b> (hora de Bogotá)<span
                   class="origen o-s8"
                   >Nuevo · S8</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 18</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> a los dos les llega un correo «Mañana es tu
@@ -1480,7 +1540,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s8 clave">
+          <li data-origen="s8">
             <input type="checkbox" id="l3" />
             <div>
               <label for="l3" class="qué"
@@ -1490,7 +1550,7 @@
                 Mi anuncio; vuelve como comprador, <b>Confirmar la visita</b> y
                 toca <b>Agregar a mi calendario</b
                 ><span class="origen o-s8">Nuevo · S8</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 7</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> el formulario te pide para qué buscas y tu
@@ -1664,7 +1724,7 @@
           general. Las demás corren local, con el correo en prueba.
         </p>
         <ul>
-          <li data-origen="s9 clave">
+          <li data-origen="s9">
             <input type="checkbox" id="m1" />
             <div>
               <label for="m1" class="qué"
@@ -1672,7 +1732,7 @@
                 anuncio de búsqueda toca <b>Guardar como alerta</b>, escribe
                 <b>tu correo real</b> y crea la alerta<span class="origen o-s9"
                   >Nuevo · S9</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 8</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> te dice «Revisa tu correo». Llega un correo de
@@ -1691,7 +1751,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s9 clave">
+          <li data-origen="s9">
             <input type="checkbox" id="m2" />
             <div>
               <label for="m2" class="qué"
@@ -1700,7 +1760,7 @@
                 después prueba el enlace
                 <b>«Dejar de recibirla: un clic»</b> del cuerpo desde otro
                 navegador sin sesión<span class="origen o-s9">Nuevo · S9</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 18</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la baja se hace en un solo toque,
@@ -1714,7 +1774,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s9 clave">
+          <li data-origen="s9">
             <input type="checkbox" id="m3" />
             <div>
               <label for="m3" class="qué"
@@ -1723,7 +1783,7 @@
                 al resumen de las <b>8:00 a. m.</b> (hora de Bogotá)<span
                   class="origen o-s9"
                   >Nuevo · S9</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · paradas 8 y 18</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> llega <b>un solo correo</b> con el anuncio
@@ -1872,7 +1932,7 @@
           necesitan el servidor desplegado.
         </p>
         <ul>
-          <li data-origen="s10 clave">
+          <li data-origen="s10">
             <input type="checkbox" id="n1" />
             <div>
               <label for="n1" class="qué"
@@ -1880,7 +1940,7 @@
                 lee la tarjeta <b>«¿Está caro?»</b> y toca
                 <b>«Ver el detalle»</b
                 ><span class="origen o-s10">Nuevo · S10</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 5</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> una de cuatro respuestas, siempre con símbolo y
@@ -1900,7 +1960,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s10 clave">
+          <li data-origen="s10">
             <input type="checkbox" id="n2" />
             <div>
               <label for="n2" class="qué"
@@ -1908,7 +1968,7 @@
                 un plazo y <b>tus ingresos reales</b>; compara la cuota con la
                 de un simulador de tu banco<span class="origen o-s10"
                   >Nuevo · S10</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 11</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la cuota es parecida a la del banco (puede
@@ -1925,14 +1985,14 @@
               </p>
             </div>
           </li>
-          <li data-origen="s10 clave">
+          <li data-origen="s10">
             <input type="checkbox" id="n3" />
             <div>
               <label for="n3" class="qué"
                 >Con el servidor desplegado, abre <b>Herramientas</b> al día
                 siguiente del despliegue (después del cron de las 8:00 a. m. de
                 Bogotá)<span class="origen o-s10">Nuevo · S10</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 18</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la tasa de referencia lleva una fecha de corte
@@ -2071,7 +2131,7 @@
           proyecto con su página.
         </p>
         <ul>
-          <li data-origen="s12 clave">
+          <li data-origen="s12">
             <input type="checkbox" id="o1" />
             <div>
               <label for="o1" class="qué"
@@ -2079,7 +2139,7 @@
                 <b>«Nuevos»</b> y recorre el índice y las primeras tarjetas<span
                   class="origen o-s12"
                   >Nuevo · S12</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 9</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la fuente
@@ -2099,7 +2159,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s12 clave">
+          <li data-origen="s12">
             <input type="checkbox" id="o2" />
             <div>
               <label for="o2" class="qué"
@@ -2107,7 +2167,7 @@
                 <b>su página de la revista</b>: nombre, constructora, precio
                 «desde», áreas y fecha de entrega<span class="origen o-s12"
                   >Nuevo · S12</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 9</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> cada cifra de la ficha coincide con la página
@@ -2182,7 +2242,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s12 clave">
+          <li data-origen="s12">
             <input type="checkbox" id="o5" />
             <div>
               <label for="o5" class="qué"
@@ -2190,7 +2250,7 @@
                 ingresos y toca <b>«Ver lo que puedo pagar»</b>; luego toca la
                 pestaña <b>«Nuevos»</b
                 ><span class="origen o-s12">Nuevo · S12</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 11</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> «Nuevos» conserva el tope y dice
@@ -2267,7 +2327,7 @@
           punta: comprador y operador.
         </p>
         <ul>
-          <li data-origen="s13 clave">
+          <li data-origen="s13">
             <input type="checkbox" id="p1" />
             <div>
               <label for="p1" class="qué"
@@ -2275,7 +2335,7 @@
                 <b>Buscar → Nuevos</b> y toca <b>«¿Nuevo o usado?»</b>. Cambia
                 entre <b>Bogotá</b> y <b>Sabana</b
                 ><span class="origen o-s13">Nuevo · S13</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 11</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> «Tu presupuesto: $X» con la nota de que tus
@@ -2298,14 +2358,14 @@
               </p>
             </div>
           </li>
-          <li data-origen="s13 clave">
+          <li data-origen="s13">
             <input type="checkbox" id="p2" />
             <div>
               <label for="p2" class="qué"
                 >Abre <b>«¿Te alcanza con subsidio?»</b>, recorre los tres
                 hogares ($4 M, $6 M y $8 M) y compara <b>un programa</b> con su
                 página oficial<span class="origen o-s13">Nuevo · S13</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 12</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> cada programa trae su <b>norma</b> (decreto y
@@ -2354,7 +2414,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s13 clave">
+          <li data-origen="s13">
             <input type="checkbox" id="p4" />
             <div>
               <label for="p4" class="qué"
@@ -2366,7 +2426,7 @@
                 <b>«Escribirle a la sala por WhatsApp»</b> y
                 <b>«Proponer horarios»</b
                 ><span class="origen o-s13">Nuevo · S13</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 10</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> sin tu WhatsApp verificado la pantalla te lleva
@@ -2387,7 +2447,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s13 clave">
+          <li data-origen="s13">
             <input type="checkbox" id="p5" />
             <div>
               <label for="p5" class="qué"
@@ -2395,7 +2455,7 @@
                 confírmalo; después, en el panel, toca
                 <b>«Mandarle la dirección al comprador por WhatsApp»</b
                 ><span class="origen o-s13">Nuevo · S13</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 10</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> «Visita confirmada» con el horario en hora de
@@ -2461,7 +2521,7 @@
           liquidador oficial y si una cláusula se entiende y no afirma de más.
         </p>
         <ul>
-          <li data-origen="s14 clave">
+          <li data-origen="s14">
             <input type="checkbox" id="q1" />
             <div>
               <label for="q1" class="qué"
@@ -2472,7 +2532,7 @@
                 liquidador de la Superintendencia de Notariado y Registro<span
                   class="origen o-s14"
                   >Nuevo · S14</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 5</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> cada línea trae su <b>norma</b> y el año de la
@@ -2552,14 +2612,14 @@
               </p>
             </div>
           </li>
-          <li data-origen="s14 clave">
+          <li data-origen="s14">
             <input type="checkbox" id="q5" />
             <div>
               <label for="q5" class="qué"
                 >Abre <b>«Qué dice cada documento»</b> y lee con calma
                 <b>dos cláusulas</b> (por ejemplo las arras y la afectación a
                 vivienda familiar)<span class="origen o-s14">Nuevo · S14</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 5</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> tres documentos (promesa, escritura, registro),
@@ -2631,14 +2691,14 @@
           el recorrido en un teléfono real.
         </p>
         <ul>
-          <li data-origen="s15 clave">
+          <li data-origen="s15">
             <input type="checkbox" id="r1" />
             <div>
               <label for="r1" class="qué"
                 >Abre una ficha, toca <b>«Reportar este anuncio»</b> y, en esa
                 página, <b>«Así revisamos los anuncios»</b>. Lee las cuatro
                 reglas<span class="origen o-s15">Nuevo · S15</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 13</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> cuatro reglas en palabras simples, cada una con
@@ -2657,14 +2717,14 @@
               </p>
             </div>
           </li>
-          <li data-origen="s15 clave">
+          <li data-origen="s15">
             <input type="checkbox" id="r2" />
             <div>
               <label for="r2" class="qué"
                 >En tu <b>teléfono</b>, con el WhatsApp ya verificado, reporta
                 un anuncio de prueba: elige un motivo, escribe un detalle y
                 envía<span class="origen o-s15">Nuevo · S15</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 13</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> «Gracias: una persona del equipo lo revisa»; la
@@ -2676,7 +2736,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s15 clave">
+          <li data-origen="s15">
             <input type="checkbox" id="r3" />
             <div>
               <label for="r3" class="qué"
@@ -2684,7 +2744,7 @@
                 anuncio reportado, toca <b>«Pausar el anuncio»</b> y abre el
                 enlace <b>«Escribirle al dueño por WhatsApp»</b
                 ><span class="origen o-s15">Nuevo · S15</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · parada 13</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> la tarjeta muestra los motivos y el detalle,
@@ -2738,7 +2798,7 @@
               </p>
             </div>
           </li>
-          <li data-origen="s15 clave">
+          <li data-origen="s15">
             <input type="checkbox" id="r6" />
             <div>
               <label for="r6" class="qué"
@@ -2747,7 +2807,7 @@
                 abre <b>Sesiones de fotos</b>, agéndala y márcala como hecha<span
                   class="origen o-s15"
                   >Nuevo · S15</span
-                ><span class="origen o-clave">⭐ gate mínimo</span></label
+                ><span class="origen o-cubierto">Se prueba en el ensayo · paradas 2 y 3</span></label
               >
               <p class="esperar">
                 <b>Esperado:</b> «Mi anuncio» pasa por Pedida → Agendada (con la
@@ -2788,245 +2848,250 @@
       <section class="bloque">
         <h2><span class="letra">S</span> Ensayo general del H-2</h2>
         <p class="intro">
-          Este es <b>tu ensayo general</b>: recorres la app como lo hará un
-          cliente, con los servicios reales (correo, WhatsApp, fotos, mapa,
-          cédula), y <b>lo que no ves no cuenta</b>. Lo que una máquina ya
-          comprueba no está aquí. <b>No hay pasos de preparación:</b> en la
-          primera parada publicas tu propio anuncio y de ahí sale todo lo
-          demás (tu enlace privado, tu comprador, tu visita); la edición de
-          vivienda nueva del mes ya está publicada. <span class="origen o-clave">⭐ gate mínimo</span> es
-          lo que el hito exige; <span class="origen o-clave2">⭐⭐ servicio real</span>
-          solo se prueba con un servicio de verdad: si el ensayo no lo vio, no
-          está probado. Dos paradas necesitan una segunda sentada (los correos
-          de las 8:00 del día siguiente). La <b>bandeja de IA</b> (la carga
-          mensual de la edición de vivienda nueva) no tiene parada: es una
-          orden de la línea de comandos del equipo, no una pantalla.
+          Este es <b>tu ensayo general</b>: <b>una sola historia</b>, de principio a fin, como la viviría un cliente de
+          verdad. Primero eres el <b>dueño</b> que publica (teléfono A); luego el <b>comprador</b> que lo encuentra
+          (teléfono B); entre medias, el <b>equipo</b> (computador). Cada parada se hace <b>una vez</b> y reemplaza a las
+          pruebas ⭐ de los bloques A–R que dicen «Se prueba en el ensayo»: no hay nada repetido. Las demás pruebas son
+          regresión que ya corre la CI. Son <b>18 paradas, ≈ 1 h 49 min</b> en total: la
+          primera sentada llega hasta la parada 8 (≈ 54 min), y la última es mañana a las 8:00.
+          <span class="origen o-clave">⭐ gate mínimo</span> es lo que el hito exige;
+          <span class="origen o-clave2">⭐⭐ servicio real</span> (9 paradas) solo se prueba con un servicio de
+          verdad (correo, WhatsApp, cédula o el trabajo diario): si el ensayo no lo vio, no está probado.
         </p>
-        <h3 class="ruta">Como dueño</h3>
+        <div class="antes">
+          <h3>Antes de empezar (10 minutos, una sola vez)</h3>
+          <ul>
+            <li><b>Dos teléfonos y un computador.</b> A = el dueño; B = el comprador, con WhatsApp y <b>un número distinto</b> del de A; el computador, con la sesión del operador. Los dos teléfonos en <b>tema claro</b> (sin «forzar oscuro»), B en español.</li>
+            <li><b>Dos correos reales distintos</b> (el del dueño y el del comprador): así ves quién recibe qué.</li>
+            <li><b>WhatsApp listo en el servidor</b> (si no, las paradas 6, 7, 10 y 13 salen «no vistas»): los secretos <code>WHATSAPP_APP_SECRET</code>, <code>WHATSAPP_VERIFY_TOKEN</code>, <code>WHATSAPP_NUMERO</code> y <code>DIDIT_API_KEY</code> en el Worker y, en Meta, la dirección <code>/api/whatsapp/webhook</code> de tu sitio con tu token de verificación. <b>Esperado:</b> Meta la acepta («verificado y guardado») y deja suscribir el evento <code>messages</code>. Si la rechaza, revisa que el token y el secreto de la app estén en el servidor y que el despliegue sea el de esta rama.</li>
+            <li><b>A la mano:</b> un CTL de 30 días o menos (con su fecha de expedición), la revista Estrenar Vivienda de la edición del mes, tu cédula (parada 7, opcional) y, para la parada 16, el VoiceOver activable.</li>
+            <li><b>Datos reales de prueba:</b> el anuncio que publicas en la parada 1 queda en el sitio real (privado y sin indexar); la campaña de la parada 14 solo se envía si el lote es de 1.</li>
+          </ul>
+        </div>
+        <h3 class="ruta">Escena 1 · Eres el dueño<span class="sub"> — Publicas, completas tu anuncio y el equipo lo verifica.</span></h3>
         <ul>
           <li data-origen="s16 clave clave2">
             <input type="checkbox" id="s1" />
             <div>
-              <label for="s1" class="qué"
-                >Desde tu <b>teléfono</b>, publica un anuncio con tu <b>correo real</b> en el paso 3. Abre el correo que llega y toca el enlace privado<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el correo llega en minutos, del remitente de Innmobiliaria, con un texto legible y en el idioma con que publicaste; el enlace abre «Mi anuncio» con tu anuncio. La confirmación dice «Tu inmueble quedó registrado como fundador» y que los compradores lo encuentran en la búsqueda: <b>ninguna frase promete una apertura futura</b>.</p>
-              <p class="mal">Mala señal: el correo no llega (o llega a spam con el enlace roto), el enlace no abre tu anuncio, o algún texto habla de «cuando abramos» a los compradores.</p>
+              <label for="s1" class="qué">1. Entras por la portada y publicas tu anuncio<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📱 Teléfono A (dueño) · ≈ 6 min</p>
+              <ol class="pasos"><li>Abre la portada en el teléfono, sin haberla visitado antes. Lee el titular y la primera pantalla unos 20 segundos.</li><li>Toca <b>«Publica tu inmueble como fundador»</b> y llena los 3 pasos. En el paso 2 pon <b>también una dirección</b> (es opcional; la usas en la parada 4) y en el paso 3 el <b>correo real del dueño</b>.</li><li>Antes de enviar, abre el enlace de la <b>política de privacidad</b>, léela por encima y vuelve. Intenta publicar <b>sin marcar la casilla</b> de consentimiento; luego márcala y publica.</li><li>Abre el correo que llega y toca el enlace privado.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Portada:</b> el titular «Vende tu casa directo, sin comisión» se ve de inmediato, sin parpadeo; el mensaje es solo para vendedores, sin promesas infladas ni urgencia falsa; las únicas cifras son 3 % / ≈$12M y 7–7,5 meses (nada de «32% más rápido», «+118% vistas», «3× contactos» ni contadores inventados).</li><li><b>Política:</b> menciona la Ley 1581, qué datos se recogen, para qué y cómo ejercer derechos, sin jerga impenetrable.</li><li><b>Registro:</b> en menos de 3 minutos y sin trabarte; sin la casilla, «Publicar» muestra un error y no envía. La confirmación dice «Tu inmueble quedó registrado como fundador» y que los compradores lo encuentran en la búsqueda: <b>ninguna frase promete una apertura futura</b>.</li><li><b>Correo:</b> llega en minutos, del remitente de Innmobiliaria, legible y en el idioma con que publicaste; el enlace abre «Mi anuncio» con tu anuncio.</li></ul></div>
+              <p class="mal">Mala señal: El titular aparece con retraso o con «fade-in»; una cifra inventada; un texto que habla de «cuando abramos»; el correo no llega (o llega a spam con el enlace roto); el enlace no abre tu anuncio.</p>
+              <p class="cubre">Cubre las pruebas: A1, A2, A3, B1, B4, D2.</p>
             </div>
           </li>
           <li data-origen="s16 clave">
             <input type="checkbox" id="s2" />
             <div>
-              <label for="s2" class="qué"
-                >En «Mi anuncio», sube <b>3 fotos de la cámara de tu teléfono</b> y marca una portada<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> se comprimen antes de subir (con datos móviles, en segundos), aparecen en la ficha pública y la barra de completitud sube. La ficha dice cuántas fotos tiene y muestra la portada en la vista previa de la búsqueda.</p>
-              <p class="mal">Mala señal: una espera larga sin avisar, una foto girada, o un error que no dice qué hacer.</p>
+              <label for="s2" class="qué">2. Completas tu anuncio y pides una sesión de fotos<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">📱 Teléfono A (dueño) · ≈ 5 min</p>
+              <ol class="pasos"><li>En «Mi anuncio», sube <b>3 fotos de la cámara</b> del teléfono (no de la galería) y marca una como portada.</li><li>Escribe una descripción corta y <b>activa «Mostrar mi WhatsApp a compradores verificados»</b>: sin esto nadie podrá escribirte en la parada 6.</li><li>Baja hasta «Fotos que venden» y pide una <b>sesión de fotos</b> (elige una franja).</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>Tras «Procesando tu foto…» (se comprime antes de subir; con datos móviles son segundos) la foto aparece en la galería y el porcentaje sube (la primera lleva a 55 %); dejar el anuncio completo toma menos de 5 minutos.</li><li>La sesión pasa a «Pedida», con símbolo y texto; mientras esté abierta solo se puede cancelar; la pantalla dice que pedirla no cuesta ni compromete.</li></ul></div>
+              <p class="mal">Mala señal: Una espera larga sin avisar, una foto girada, un error que no dice qué hacer, o una sesión que parece tener costo.</p>
+              <p class="cubre">Cubre las pruebas: F1, R6.</p>
             </div>
           </li>
           <li data-origen="s16 clave">
             <input type="checkbox" id="s3" />
             <div>
-              <label for="s3" class="qué"
-                >Llévale al equipo un <b>CTL de 30 días o menos</b>: como operador, regístralo en el panel (matrícula y fecha). Después abre tu ficha como comprador<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> la ficha muestra <b>«⭐ Propietario verificado»</b> con la fecha del CTL; el documento no quedó guardado en ningún lado (solo la matrícula y la fecha). Si el CTL tiene más de 30 días, el panel lo rechaza con un mensaje que lo explica: eso también es lo esperado.</p>
-              <p class="mal">Mala señal: el sello sale sin fecha, el panel acepta un CTL viejo, o te pide subir el PDF.</p>
+              <label for="s3" class="qué">3. El equipo atiende tu anuncio: CTL y sesión de fotos<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">💻 Computador (operador) · ≈ 6 min</p>
+              <ol class="pasos"><li>Entra a <b>/operador</b> con tu correo y contraseña de operador. Tu anuncio aparece arriba.</li><li>Toca <b>«Verificar ⭐»</b>: escribe una matrícula, marca «Vi el CTL original» y primero pon una fecha de <b>hace 31 días o más</b>; luego la fecha real de tu CTL (30 días o menos) y confirma.</li><li>En <b>«Sesiones de fotos»</b> agenda la que pediste, toca el enlace de WhatsApp y márcala como hecha.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>El panel muestra tu anuncio con su contacto, inmueble, estado y fecha. Con 31 días o más, el formulario dice «Ese CTL tiene más de 30 días» y no deja confirmar; con la fecha real, el sello <b>«⭐ Propietario verificado»</b> aparece en el panel (la búsqueda y la ficha lo mostrarán en la parada 4). El documento nunca se sube: solo se guardan la matrícula y las fechas.</li><li>La sesión pasa de «Pedida» a «Agendada» (fecha en hora de Bogotá) y a «Hecha»; el enlace de WhatsApp abre el texto ya escrito en el idioma del dueño; la app no envía nada sola.</li></ul></div>
+              <p class="mal">Mala señal: El sello sale sin fecha; el panel acepta un CTL viejo o te pide subir el PDF; la app manda un mensaje por su cuenta o la hora sale en otra zona.</p>
+              <p class="cubre">Cubre las pruebas: C1, H1, J4, R6.</p>
             </div>
           </li>
         </ul>
-        <h3 class="ruta">Como comprador (con tu segundo teléfono)</h3>
-        <p class="intro">Usa el anuncio que acabas de publicar, con el contacto activado en «Mi anuncio». Nada de esta ruta necesita preparación.</p>
+        <h3 class="ruta">Escena 2 · Eres el comprador<span class="sub"> — Lo buscas y lo compartes, decides con números, le escribes, pides una visita y dejas una alerta.</span></h3>
         <ul>
           <li data-origen="s16 clave clave2">
             <input type="checkbox" id="s4" />
             <div>
-              <label for="s4" class="qué"
-                >En la ficha toca <b>«Escribirle por WhatsApp»</b> y verifica tu WhatsApp con <b>WhatsApp real</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> WhatsApp se abre con un código <code>INN-…</code> ya escrito hacia el número de Innmobiliaria; lo envías sin cambiarlo y en unos segundos la página dice <b>«Tu WhatsApp quedó verificado»</b>. Innmobiliaria no te escribe nada.</p>
-              <p class="mal">Mala señal: la página dice «no disponible» (faltan secretos del servicio), se queda esperando, o el código llega y no se reconoce.</p>
+              <label for="s4" class="qué">4. Buscas tu anuncio en el mapa y lo compartes<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📱 Teléfono B (comprador), con datos móviles y WhatsApp real · ≈ 6 min</p>
+              <ol class="pasos"><li>Abre <b>Buscar → Mapa → «Dibujar zona»</b>. Con el dedo, toca 3 o más esquinas alrededor del barrio de tu anuncio y toca <b>«Listo»</b>.</li><li>Encuentra tu anuncio en la lista y mira su tarjeta. Toca <b>«Borrar zona»</b>.</li><li>Abre la ficha, toca <b>«Compartir este inmueble»</b> y mándaselo por WhatsApp al teléfono A (o a ti mismo). Mira la tarjeta que se arma y abre el enlace.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Mapa:</b> el mapa real carga con las calles y los barrios (los que tienen anuncios, en morado); cada toque deja una esquina; abajo a la derecha se leen las atribuciones («OpenStreetMap», «OpenFreeMap» y «Barrios: Catastro Bogotá (CC BY 4.0)»). Al terminar la lista queda con lo de adentro, arriba dice «N anuncios vivos en tu zona» y la dirección de la página guarda la zona; «Borrar zona» la quita. Si el mapa no carga, una nota lo dice y la lista sigue viva con «Reintentar».</li><li><b>Tarjeta y ficha:</b> traen la portada y el sello «⭐ CTL del 14 oct 2026» (en la ficha, «expedido el 14 oct 2026»), y muestran <b>solo el barrio y la localidad</b>: la dirección que escribiste no aparece (ni como punto exacto en el mapa).</li><li><b>Compartir:</b> WhatsApp muestra una <b>tarjeta con la foto de portada, el barrio y el precio</b>. Fíjate en el idioma de la tarjeta (precio como «$420.000.000» o «COP 420,000,000»): el rastreador de WhatsApp no manda tu cookie y queremos saber si sale en español. <b>Anótalo aunque esté bien.</b> La ficha muestra «Escribirle por WhatsApp», pero <b>tu número no está escrito en la página</b>.</li></ul></div>
+              <p class="mal">Mala señal: El mapa en blanco sin aviso, esquinas que no se marcan, una zona que no filtra, la dirección a la vista o tu anuncio como un punto exacto; ninguna vista previa en WhatsApp o una rota; tu número completo a la vista.</p>
+              <p class="cubre">Cubre las pruebas: J1, J3, G1, G3.</p>
             </div>
           </li>
-          <li data-origen="s16 clave clave2">
+          <li data-origen="s16 clave">
             <input type="checkbox" id="s5" />
             <div>
-              <label for="s5" class="qué"
-                >Toca <b>«Abrir WhatsApp»</b> y envía el mensaje. Con tu teléfono de dueño, abre «Mi anuncio» → <b>«Compradores que abrieron tu chat»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el chat se abre con el mensaje del anuncio ya escrito; el dueño ve tu nombre, los últimos 4 dígitos de tu número y la fecha. Tu número completo no aparece en ninguna página pública.</p>
-              <p class="mal">Mala señal: el número completo a la vista, o el contacto sin registrar en «Mi anuncio».</p>
+              <label for="s5" class="qué">5. Abres la ficha y decides con números<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">📱 Teléfono B (comprador) · ≈ 8 min</p>
+              <ol class="pasos"><li>Abre tu anuncio. Lee la tarjeta <b>«¿Está caro?»</b> y toca «Ver el detalle».</li><li>Toca <b>«Lo que te cuesta escriturar este»</b> (Papeleo). Con el precio del anuncio mira «Paga el comprador» y «Paga el vendedor»; compara una cifra (la notaría o el registro) con el liquidador de la Superintendencia de Notariado y Registro.</li><li>En «Qué dice cada documento» lee con calma dos cláusulas (las arras y la afectación a vivienda familiar).</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>¿Está caro?:</b> una de cuatro respuestas, siempre con símbolo y texto (En rango, Por encima del rango, Sospechosamente barato o Sin datos suficientes). El detalle trae una barra con el rango (P25–P75), cuántos anuncios entraron, la fecha y la fuente; «Cómo lo calculamos» dice que es el precio que piden los dueños, no el de cierre, y no un avalúo; «Datos de la zona» trae tres cifras, cada una con su fuente, y la de Catastro dice que es solo del terreno.</li><li><b>Papeleo:</b> cada línea trae su norma y el año de la tarifa (2026); el impuesto de registro se llama así (la gente lo llama «beneficencia») y se parte por mitades; el vendedor tiene la retención en la fuente de 1 %. El IVA de los derechos notariales sale «▲ Sin cifra» y el total dice «Falta 1 concepto sin verificar: este total es lo mínimo que pagas». Los tres documentos (promesa, escritura, registro) dicen «no es asesoría legal» y cada cláusula trae «Qué dice», «Qué mirar» y «De dónde sale».</li><li>Es tu juicio: ¿se entiende de qué inmueble se trata, el diseño luce cuidado y solo hay cifras citables (nada inventado)? ¿La cifra que comparaste cuadra con la oficial o se acerca como un estimado? ¿Alguna frase suena a promesa («siempre», «nunca»)?</li></ul></div>
+              <p class="mal">Mala señal: La palabra «avalúo» como si lo fuera, un valor sin rango, un número sin fecha o fuente, un rango con menos de 5 anuncios, una línea sin norma, un total que no avisa lo que falta, o una cifra inventada.</p>
+              <p class="cubre">Cubre las pruebas: G5, N1, Q1, Q5.</p>
             </div>
           </li>
           <li data-origen="s16 clave clave2">
             <input type="checkbox" id="s6" />
             <div>
-              <label for="s6" class="qué"
-                >Opcional: en <b>«Identificarse»</b> valida tu cédula real<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> dice <b>«Identificado»</b>; la tarjeta que ve el dueño lo muestra; el número de cédula no aparece en ninguna pantalla ni en los correos. Si escribes un dato mal, dice qué corregir y no te descuenta el intento cuando el servicio no responde.</p>
-              <p class="mal">Mala señal: un error del proveedor sin explicación, o que tu cédula se vea después en cualquier parte.</p>
+              <label for="s6" class="qué">6. Le escribes al dueño por WhatsApp<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📱 Teléfono B (comprador, WhatsApp real) y luego 📱 A · ≈ 6 min</p>
+              <ol class="pasos"><li>En la ficha toca <b>«Escribirle por WhatsApp» → «Verificar mi WhatsApp»</b>. Escribe tu nombre y tu celular y envía el código <b>INN-XXXXXX</b> que WhatsApp te deja escrito, sin cambiarlo.</li><li>Vuelve a la página y espera unos segundos (si pasa un minuto, toca «Ya lo envié»).</li><li>Ya verificado, vuelve a la ficha → «Escribirle por WhatsApp» → <b>«Abrir WhatsApp»</b> y envía el mensaje.</li><li>En el teléfono A abre <b>«Mi anuncio» → «Compradores que abrieron tu chat»</b>.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>WhatsApp se abre hacia el número de Innmobiliaria con el código ya escrito; la página dice <b>«Tu WhatsApp quedó verificado»</b> y Innmobiliaria no te escribe nada. Antes de abrir el chat ves el mensaje que se va a enviar, y el chat con el dueño se abre con ese mensaje.</li><li>El dueño ve tu nombre, los <b>últimos 4 dígitos</b> de tu número y la fecha; tu número completo no aparece en ninguna página pública.</li></ul></div>
+              <p class="mal">Mala señal: «No disponible» (faltan secretos del servicio), una espera de más de un minuto, el código llega y no se reconoce, el número completo a la vista, o el contacto sin registrar en «Mi anuncio».</p>
+              <p class="cubre">Cubre las pruebas: K2, K3.</p>
             </div>
           </li>
           <li data-origen="s16 clave clave2">
             <input type="checkbox" id="s7" />
             <div>
-              <label for="s7" class="qué"
-                >Pide una <b>visita</b> a tu anuncio (marca la casilla de autorización), propón un horario como dueño, confírmalo como comprador y toca <b>«Agregar a mi calendario»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> llega un correo real a cada parte en cada paso; el dueño ve tu WhatsApp completo <b>solo después</b> de confirmar; el archivo del calendario abre en hora de Bogotá. Sin la casilla de autorización el formulario no se envía.</p>
-              <p class="mal">Mala señal: un correo que no llega, una hora corrida, o el WhatsApp del comprador visible antes de confirmar.</p>
+              <label for="s7" class="qué">7. Pides una visita y la agendas<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📱 Teléfono B ↔ 📱 Teléfono A · ≈ 12 min</p>
+              <ol class="pasos"><li><i>(Opcional, antes de pedirla)</i> En <b>«Identificarse»</b> valida tu cédula real (la fecha de expedición está al respaldo).</li><li>En la ficha toca <b>«Pedir una visita»</b>: para qué buscas, el <b>correo del comprador</b> (distinto del del dueño) y la <b>casilla de autorización</b>. Envía y toca «Ver mi solicitud».</li><li>Teléfono A: «Mi anuncio» → la tarjeta del comprador → propón un horario para <b>mañana por la tarde</b> (así el recordatorio de las 8:00 de la parada 18 te toca).</li><li>Teléfono B: abre el correo con el horario, toca <b>Confirmar la visita</b> y luego <b>«Agregar a mi calendario»</b>.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Identificarse:</b> dice «Identificado»; con el nombre mal escrito, «Los datos no coinciden con la Registraduría» y gasta un intento; el número de cédula no aparece en ninguna pantalla ni correo. Solo funciona con la cuenta real de Didit (40 consultas gratis al mes).</li><li><b>Visita:</b> sin la casilla de autorización el formulario no se envía. El dueño ve tu tarjeta (nombre, últimos 4 dígitos, lo que declaraste, «Primera visita en Innmobiliaria») y nunca tu correo; llega un correo real a cada parte en cada paso; al confirmar, el calendario abre el evento a la <b>hora correcta de Bogotá</b> y solo entonces el dueño ve «Escribirle por WhatsApp» con tu número completo.</li></ul></div>
+              <p class="mal">Mala señal: Un correo que no llega, una hora corrida, el WhatsApp del comprador visible antes de confirmar, un error del proveedor sin explicación o tu cédula visible en cualquier parte.</p>
+              <p class="cubre">Cubre las pruebas: L1, L3.</p>
             </div>
           </li>
           <li data-origen="s16 clave clave2">
             <input type="checkbox" id="s8" />
             <div>
-              <label for="s8" class="qué"
-                ><b>Segunda sentada:</b> la mañana anterior a esa visita, a las <b>8:00 (hora de Bogotá)</b>, revisa tu correo y el del dueño<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> llega <b>un recordatorio por visita</b> a cada uno, ninguno si la cancelaste; no se repite si el trabajo diario corre dos veces. Mira también en Cloudflare que exista el cron de las 13:00 UTC.</p>
-              <p class="mal">Mala señal: a las 9:00 no llegó nada: revisa en el Worker los registros de la línea «cron» con sus conteos.</p>
+              <label for="s8" class="qué">8. Guardas una alerta<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📱 Teléfono B (correo real) y 📱 A · ≈ 5 min</p>
+              <ol class="pasos"><li>En Buscar, con un filtro que incluya tu anuncio (tipo, precio máximo), toca <b>«Guardar como alerta»</b> y escribe el correo del comprador.</li><li>Abre el correo, toca <b>Confirmar</b> y, en Alertas, toca <b>«Confirmar mi correo»</b>.</li><li>Teléfono A: «Mi anuncio» → «Precio» y <b>baja el precio un 2 %</b> o más. El resumen te llega mañana (parada 18).</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>«Revisa tu correo»; llega un correo con un botón Confirmar y, abajo, «No la pedí: borrarla» (no lo toques). El botón te lleva a Alertas, que te pide tocar «Confirmar mi correo»: <b>abrir el enlace no confirma</b>, y hasta confirmar no llega ningún aviso. Al confirmar, Alertas la muestra «Activa».</li></ul></div>
+              <p class="mal">Mala señal: Una alerta que avisa sin confirmar, un correo que no llega (mira spam) o un enlace que confirma solo.</p>
+              <p class="cubre">Cubre las pruebas: M1, M3.</p>
             </div>
           </li>
+        </ul>
+        <h3 class="ruta">Escena 3 · Vivienda nueva y números<span class="sub"> — En inglés primero, luego de vuelta en español con tus cuentas.</span></h3>
+        <ul>
           <li data-origen="s16 clave">
             <input type="checkbox" id="s9" />
             <div>
-              <label for="s9" class="qué"
-                >En <b>«Buscar»</b>, con el dedo, toca <b>«Dibujar zona»</b> y marca 3 esquinas alrededor de tu barrio<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el mapa real carga con las calles de Bogotá; al tocar «Listo» la lista se queda con lo de adentro y la dirección guarda la zona; «Borrar zona» la quita. Si el mapa no carga, una nota lo dice y la lista sigue viva con «Reintentar».</p>
-              <p class="mal">Mala señal: el mapa en blanco sin aviso, esquinas que no se marcan, o una zona que no filtra.</p>
+              <label for="s9" class="qué">9. Pasas el teléfono a inglés y miras vivienda nueva<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">📱 Teléfono B (en inglés) · ≈ 8 min</p>
+              <ol class="pasos"><li>Cambia el idioma del teléfono B a <b>inglés</b>, cierra el navegador y abre la portada de nuevo. Toca el selector <b>ES | EN</b> con el pulgar.</li><li>En Buscar toca la pestaña <b>«New»</b> (Nuevos) y recorre el índice y las primeras tarjetas.</li><li>Abre la ficha de un proyecto y compárala con su página de la revista que tienes en la mano: nombre, constructora, precio «desde», áreas y fecha de entrega.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Inglés:</b> la portada dice «Sell your home direct, with no commission»; todo está redactado en inglés (no traducido palabra por palabra), los precios salen «COP 420,000,000», los términos de Bogotá («Locality (localidad)») se explican en una línea y no queda español suelto (salvo el nombre de las guías del paquete); el selector se toca sin fallar. (El registro completo en inglés ya lo recorre la CI.)</li><li><b>Nuevos:</b> la fuente («Fuente: Estrenar Vivienda, edición N») y la ventana de la edición a la vista; el índice con la mediana del m² privado de Bogotá y de la Sabana (o «Sin datos suficientes» si hay menos de 5 proyectos); cada tarjeta con el «Desde» y, más grande, «Pagas al menos».</li><li><b>Ficha:</b> cada cifra coincide con la revista (o dice «No lo dice»); «Pagas al menos» es el «desde» más los derechos de registro (con la Resolución 2026-001726-6 y su fecha de consulta) y el parqueadero solo si el aviso da su precio; «Lo que falta sumar» nombra lo que no se sumó; la fuente dice «p.» con las páginas del proyecto. Es tu juicio: cada peso con su norma.</li></ul></div>
+              <p class="mal">Mala señal: Español mezclado, un «$» suelto, un botón muy chico para el dedo, un «desde» presentado como el precio final, una cifra que no está en la revista, un peso sin norma, o un teléfono, una dirección o una foto de la revista.</p>
+              <p class="cubre">Cubre las pruebas: I1, O1, O2.</p>
             </div>
           </li>
           <li data-origen="s16 clave clave2">
             <input type="checkbox" id="s10" />
             <div>
-              <label for="s10" class="qué"
-                >Guarda una <b>alerta</b> con tu correo real, confírmala con el enlace del correo y, como dueño, baja el precio de tu anuncio <b>al menos un 1 %</b>. A las 8:00 del día siguiente revisa el correo<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el correo de confirmación llega y la alerta queda activa solo después de confirmar; el resumen trae el anuncio con el precio anterior tachado; <b>«Dejar de recibirla: un clic»</b> funciona sin sesión. Una baja menor de 1 % no avisa a nadie.</p>
-              <p class="mal">Mala señal: una alerta que avisa sin confirmar, un resumen duplicado, o un enlace de baja que pide iniciar sesión.</p>
+              <label for="s10" class="qué">10. Pides una visita a una sala de ventas<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📱 Teléfono B (en inglés) ↔ 💻 Computador · ≈ 8 min</p>
+              <ol class="pasos"><li>En la ficha del proyecto toca <b>«Request a visit»</b> (Pedir una visita) con tu WhatsApp ya verificado, elige una franja y escribe un correo tuyo.</li><li>Computador: <b>«Visitas a salas»</b> → guarda el contacto de la sala (el teléfono y la dirección que ves en la revista), toca «Escribirle a la sala por WhatsApp» y «Proponer horarios».</li><li>Teléfono B: abre el correo, elige un horario y confírmalo. Computador: toca <b>«Mandarle la dirección al comprador por WhatsApp»</b>.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>Al operador le llega un correo con solo el proyecto, la franja y el enlace (ningún dato del comprador). La solicitud sale en «Por atender» con el proyecto, su página de la revista, tu nombre y solo los 4 últimos dígitos de tu WhatsApp; el WhatsApp de la sala se abre con un mensaje ya escrito que no trae ningún dato tuyo (el sistema no envía nada).</li><li>Al proponer, te llega un correo con los horarios; al confirmar ves «Visita confirmada» en hora de Bogotá y que la dirección te llega por WhatsApp (tu solicitud no la muestra); en el panel la fila pasa a «Confirmadas» y ya ves tu número completo; el WhatsApp se abre con un mensaje en tu idioma que sí trae la dirección. Es tu juicio del flujo y del copy.</li></ul></div>
+              <p class="mal">Mala señal: Tu número completo o tu correo en el panel antes de confirmar, datos tuyos en el mensaje a la sala, un WhatsApp enviado sin que lo envíes tú, el teléfono de la sala visible fuera del panel o la dirección en tu solicitud o en el correo.</p>
+              <p class="cubre">Cubre las pruebas: P4, P5.</p>
             </div>
           </li>
           <li data-origen="s16 clave">
             <input type="checkbox" id="s11" />
             <div>
-              <label for="s11" class="qué"
-                >En <b>«Buscar → Nuevos»</b> abre un proyecto de la edición del mes y compara <b>una cifra con la página de la revista</b> que tienes en la mano<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el «desde» coincide con la página impresa; la ficha dice «Fuente: Estrenar Vivienda, edición N, p. X»; «Pagas al menos» trae sus pesos con su norma; lo que el aviso no dice se nombra y no se adivina. <b>Es tu juicio:</b> ¿se entiende sin ser experto?</p>
-              <p class="mal">Mala señal: una cifra distinta de la página, un «pagas» sin norma, o una frase que acuse a la constructora.</p>
-            </div>
-          </li>
-          <li data-origen="s16 clave clave2">
-            <input type="checkbox" id="s12" />
-            <div>
-              <label for="s12" class="qué"
-                >En la ficha de un proyecto toca <b>«Pedir una visita»</b> (con tu WhatsApp verificado) y, como operador, atiende la solicitud en <b>«Visitas a salas»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> al operador le llega un correo con solo el proyecto, la franja y el enlace (ningún dato del comprador); guardas el contacto de la sala, abres su WhatsApp con el mensaje ya escrito, propones horarios y el comprador elige; la dirección de la sala le llega por WhatsApp al confirmar.</p>
-              <p class="mal">Mala señal: el correo no llega, el comprador ve el teléfono de la sala, o algún dato del comprador viaja a la sala sin que lo haya aceptado.</p>
+              <label for="s11" class="qué">11. Calculas cuánto puedes pagar<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">📱 Teléfono B (vuelve a español) · ≈ 7 min</p>
+              <ol class="pasos"><li>Toca <b>«Español»</b> en el selector (y devuelve el idioma del teléfono al tuyo).</li><li>En <b>Herramientas</b> escribe un precio, una cuota inicial, un plazo y tus ingresos reales; compara la cuota con la de un simulador de tu banco.</li><li>Toca <b>«Ver lo que puedo pagar»</b> y luego la pestaña <b>«Nuevos»</b>.</li><li>Toca <b>«¿Nuevo o usado?»</b> y cambia entre Bogotá y Sabana.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Simulador:</b> la cuota es parecida a la del banco (puede diferir por seguros y comisiones); dice si cabe o pasa del 40 % de tus ingresos, cita el Decreto 583 de 2025 y muestra «Un cálculo, no una aprobación»; la tasa de referencia trae su fecha de corte y su fuente.</li><li><b>Nuevos:</b> conserva el tope y dice «Lo que puedes pagar: $X» (se compara con «pagas al menos», no con el «desde»; tus ingresos no salen de tu teléfono); la lista separa lo que cabe, lo que queda fuera y lo que no trae precio, con sus cuentas.</li><li><b>¿Nuevo o usado?:</b> «Tu presupuesto: $X»; a la izquierda los nuevos que caben con su m² mediano, a la derecha los usados en venta de Innmobiliaria con su m² mediano y «Anuncios vivos en Innmobiliaria al [fecha]»; abajo «Estrenar cuesta N % más (o menos) por m²». Con menos de 5 usados dice «Sin datos suficientes» y «No hay comparación honesta»; en la Sabana dice que Innmobiliaria publica solo en Bogotá. Es tu juicio: ¿el número tiene sentido para ti?</li></ul></div>
+              <p class="mal">Mala señal: Un tope del 30 % (norma derogada), una tasa sin fecha, algo que suene a «te aprobamos», comparar con el «desde», perder el tope al cambiar de pestaña, tus ingresos en el enlace, o una comparación con menos de 5 usados.</p>
+              <p class="cubre">Cubre las pruebas: N2, O5, P1.</p>
             </div>
           </li>
           <li data-origen="s16 clave">
-            <input type="checkbox" id="s13" />
+            <input type="checkbox" id="s12" />
             <div>
-              <label for="s13" class="qué"
-                >Cambia a <b>EN</b> y recorre portada → buscar → una ficha → pedir una visita<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> todo está redactado en inglés (no traducido palabra por palabra), los precios salen como «COP 420,000,000», los términos de Bogotá se explican en una línea y no queda un fragmento en español. El selector ES | EN se toca con el pulgar sin fallar.</p>
-              <p class="mal">Mala señal: español mezclado, un «$» suelto, o un botón demasiado pequeño para el dedo.</p>
+              <label for="s12" class="qué">12. ¿Te alcanza con subsidio?<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">📱 Teléfono B · ≈ 4 min</p>
+              <ol class="pasos"><li>Abre <b>«¿Te alcanza con subsidio?»</b>, recorre los tres hogares ($4 M, $6 M y $8 M) y compara un programa con su página oficial.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>Cada programa trae su norma (decreto y resolución), su monto de 2026, lo que dice para el hogar (Aplica · Por confirmar · No aplica · Sin cupos, con símbolo y texto) y «estado al [fecha]». El hogar de $8 M dice «Tus ingresos pasan el tope del programa»; el subsidio nacional dice «Sin cupos» y no suma; «Lo que no mostramos» solo nombra lo que no se pudo verificar, sin montos; «Con el mejor caso» queda por confirmar y nunca suma dos programas. Es tu juicio de las normas.</li></ul></div>
+              <p class="mal">Mala señal: Un monto sin norma ni fecha, dos programas sumados, un programa sin cupos presentado como disponible, o un programa no verificado con cifras.</p>
+              <p class="cubre">Cubre las pruebas: P2.</p>
             </div>
           </li>
         </ul>
-        <h3 class="ruta">Como operador</h3>
-        
+        <h3 class="ruta">Escena 4 · Pasa algo y el equipo actúa<span class="sub"> — Un reporte y una campaña.</span></h3>
         <ul>
+          <li data-origen="s16 clave">
+            <input type="checkbox" id="s13" />
+            <div>
+              <label for="s13" class="qué">13. Alguien reporta tu anuncio y el equipo actúa<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">📱 Teléfono B → 💻 Computador (y 📱 A) · ≈ 9 min</p>
+              <ol class="pasos"><li>Teléfono B: ficha de tu anuncio → <b>«Reportar este anuncio»</b> → lee <b>«Así revisamos los anuncios»</b> (las cuatro reglas) → elige un motivo, escribe un detalle y envía. Repite el reporte.</li><li>Computador: <b>Antifraude</b> → la tarjeta del anuncio reportado → <b>«Pausar el anuncio»</b>. En el teléfono B comprueba que la ficha, su enlace y la búsqueda ya no lo muestran. Abre «Escribirle al dueño por WhatsApp».</li><li><b>«Reactivar el anuncio»</b> → <b>«Pedir el CTL al dueño»</b> (mira «Mi anuncio» en el teléfono A) → ciérralo con <b>«El dueño no entregó el CTL»</b>.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Reglas:</b> cuatro, en palabras simples y con su número (30 % por debajo de la mediana y al menos 5 anuncios; 6 de 64 puntos de diferencia en una foto; matrícula con otro teléfono; el mismo WhatsApp con 2 nombres) y la frase «una señal no acusa a nadie ni oculta un anuncio». Reportar: «Gracias: una persona del equipo lo revisa»; la ficha sigue igual; la segunda vez dice «Ya reportaste este anuncio».</li><li><b>Operador:</b> la tarjeta muestra los motivos y el detalle <b>sin quién reportó</b>; al pausar, la ficha, la búsqueda, el enlace y el contacto dejan de mostrarlo; el WhatsApp se abre con el mensaje ya escrito, en el idioma del dueño, sin acusarlo, y nada se envía solo. Reactivar lo devuelve; pedir el CTL lo deja visible y «re-verificación pendiente»; cerrarlo lo devuelve a «fundador» y queda registrado (el sello ⭐ de la parada 3 se va: es lo esperado). Ningún texto dice «estafa»: dice «una señal».</li></ul></div>
+              <p class="mal">Mala señal: Que aparezca el nombre o el número de quien reportó, una señal que oculta el anuncio sin que una persona lo decida, un texto que afirme fraude o que prometa que el anuncio «se baja solo».</p>
+              <p class="cubre">Cubre las pruebas: R1, R2, R3.</p>
+            </div>
+          </li>
           <li data-origen="s16 clave clave2">
             <input type="checkbox" id="s14" />
             <div>
-              <label for="s14" class="qué"
-                >Envía un <b>lote de campaña de 1 correo</b> a tu propio correo (plantilla de bienvenida)<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el correo llega con el remitente verificado, en el idioma guardado, con texto legible y <b>sin datos de nadie más</b>; el registro de envíos lo anota. Un lote nunca pasa del cupo del día: 250 correos en total, repartidos con los avisos de visita y las alertas (ellos van primero).</p>
-              <p class="mal">Mala señal: llega a spam por el remitente, sin versión de texto, o se envía a alguien que no eligió.</p>
+              <label for="s14" class="qué">14. Mandas un correo de campaña<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">💻 Computador (operador) · ≈ 3 min</p>
+              <ol class="pasos"><li>En <b>Campaña</b> elige la plantilla <b>«Gana tu sello ⭐ (verificación)»</b>: a esta altura tu anuncio ya no tiene sello.</li><li>Toca <b>«Ver destinatarios»</b>. <b>Tiene que decir 1 (tú).</b> Si dice más de uno, <b>no envíes</b>: serían vendedores reales y esta parada queda «no vista».</li><li>Envía el lote.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>El correo llega con el remitente verificado, en el idioma guardado, con texto legible y <b>sin datos de nadie más</b>; el registro de envíos lo anota. Un lote nunca pasa del cupo del día: 250 correos en total, repartidos con los avisos de visita y las alertas (ellos van primero).</li></ul></div>
+              <p class="mal">Mala señal: Llega a spam por el remitente, sin versión de texto, o se envía a alguien que no eligió.</p>
+              <p class="cubre">Es una prueba nueva del ensayo: no reemplaza a ninguna prueba de los bloques anteriores.</p>
             </div>
           </li>
+        </ul>
+        <h3 class="ruta">Escena 5 · Tu mirada<span class="sub"> — Sin repetir nada: lo que ya viste, juzgado de una vez.</span></h3>
+        <ul>
           <li data-origen="s16 clave">
             <input type="checkbox" id="s15" />
             <div>
-              <label for="s15" class="qué"
-                >En <b>«Antifraude»</b>, reporta un anuncio desde tu teléfono de comprador y, como operador: <b>pausa</b> el anuncio, comprueba que sale de la búsqueda y de su enlace, <b>reactívalo</b>, pide el CTL y cierra el pedido con <b>«El dueño no entregó el CTL»</b><span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> la tarjeta muestra el motivo <b>sin nombre ni número</b> de quien reportó; pausar saca el anuncio de la búsqueda, de su enlace y del contacto; reactivar lo devuelve; pedir el CTL lo deja visible y «re-verificación pendiente», y cerrarlo lo devuelve a «fundador» y queda registrado. Ningún texto acusa: dice «una señal», no «una estafa».</p>
-              <p class="mal">Mala señal: el reporte revela quién lo hizo, una señal que oculta el anuncio sin que una persona lo decida, o un texto que afirma fraude.</p>
+              <label for="s15" class="qué">15. Miras el conjunto<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">Sin navegar: lo que viste hasta aquí · ≈ 2 min</p>
+              <ol class="pasos"><li>Piensa en todo lo que recorriste. Tu teléfono estuvo en <b>tema claro</b> todo el tiempo.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Marca:</b> acento morado, bandas pastel, píldoras, radios amplios y tipografía Poppins; se ve cuidado y coherente con el design-system.</li><li><b>Lectura:</b> el texto se leyó, el color nunca fue la única señal (✓ ● ▲ siempre con texto) y nada se salió por los lados ni se solapó con la barra de abajo.</li></ul></div>
+              <p class="mal">Mala señal: Texto gris sobre fondo claro que no se alcanzaba a leer, un estado que solo se distinguía por el color, o algo que se salía de la pantalla.</p>
+              <p class="cubre">Cubre las pruebas: E1.</p>
             </div>
           </li>
           <li data-origen="s16 clave">
             <input type="checkbox" id="s16" />
             <div>
-              <label for="s16" class="qué"
-                >Como dueño, pide una <b>sesión de fotos</b>; como operador, agéndala y toca el enlace de WhatsApp<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el estado pasa de «Pedida» a «Agendada» con la fecha en hora de Bogotá; el enlace abre <b>tu</b> WhatsApp con el texto ya escrito en el idioma del dueño; la app no envía nada sola; el dueño puede cancelarla mientras esté abierta.</p>
-              <p class="mal">Mala señal: la app manda un mensaje por su cuenta, o la hora sale en otra zona.</p>
-            </div>
-          </li>
-        </ul>
-        <h3 class="ruta">Tu juicio y tu cuerpo</h3>
-        
-        <ul>
-          <li data-origen="s16 clave">
-            <input type="checkbox" id="s17" />
-            <div>
-              <label for="s17" class="qué"
-                >En «Herramientas → <b>Papeleo</b>», escribe el precio de tu anuncio y compáralo con lo que sabes de tu notaría<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> cada cifra dice la norma de donde sale y el año de la tarifa; lo que no se pudo verificar se nombra con <b>▲ No verificado</b> y sin cifra; el total dice cuántos conceptos faltan; cada documento repite que <b>no es asesoría legal</b>. <b>Es tu juicio:</b> ¿te dice más de lo que sabías antes de firmar?</p>
-              <p class="mal">Mala señal: una cifra sin norma, un «no verificado» con número, o un texto que suene a asesoría.</p>
-            </div>
-          </li>
-          <li data-origen="s16 clave">
-            <input type="checkbox" id="s18" />
-            <div>
-              <label for="s18" class="qué"
-                >Con el sistema en <b>tema claro</b> (sin «forzar oscuro» del navegador), recorre portada, ficha y Papeleo en el teléfono<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> el texto se lee, el color nunca es la única señal (✓ ● ▲ siempre con texto), nada se sale por los lados ni se solapa con la barra de abajo.</p>
-              <p class="mal">Mala señal: texto gris sobre fondo claro que no se alcanza a leer, o un estado que solo se distingue por el color.</p>
-            </div>
-          </li>
-          <li data-origen="s16 clave">
-            <input type="checkbox" id="s19" />
-            <div>
-              <label for="s19" class="qué"
-                >Con <b>VoiceOver</b> encendido, abre la ficha de un anuncio y el formulario de «Pedir una visita»<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> cada control se anuncia con su nombre (corazón, «Escribirle por WhatsApp», la casilla de autorización con su texto completo); «¿Está caro?» se lee con su estado en palabras; el foco no queda atrapado y se puede cerrar todo.</p>
-              <p class="mal">Mala señal: un botón anunciado como «botón» sin nombre, o una casilla de autorización que VoiceOver no lee entera.</p>
+              <label for="s16" class="qué">16. Lo recorres con VoiceOver<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave">⭐ gate mínimo</span></label>
+              <p class="donde">📱 Teléfono B, con VoiceOver · ≈ 4 min</p>
+              <ol class="pasos"><li>Enciende VoiceOver, abre la ficha de un anuncio y el formulario de <b>«Pedir una visita»</b>.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>Cada control se anuncia con su nombre (el corazón, «Escribirle por WhatsApp», la casilla de autorización con su texto completo); «¿Está caro?» se lee con su estado en palabras; el foco no queda atrapado y se puede cerrar todo.</li></ul></div>
+              <p class="mal">Mala señal: Un botón anunciado como «botón» sin nombre, o una casilla de autorización que VoiceOver no lee entera.</p>
+              <p class="cubre">Es una prueba nueva del ensayo: no reemplaza a ninguna prueba de los bloques anteriores.</p>
             </div>
           </li>
           <li data-origen="s16 clave clave2">
-            <input type="checkbox" id="s20" />
+            <input type="checkbox" id="s17" />
             <div>
-              <label for="s20" class="qué"
-                ><b>Solo si la pestaña «Certificado (CTL)» aparece en Papeleo:</b> pega el texto de tu CTL real y compara marca por marca con tu lectura. Si no aparece, el lector está apagado y esta parada se salta<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label
-              >
-              <p class="esperar"><b>Esperado:</b> cada anotación sale con su tipo y su norma; una cancelada se separa de las vigentes; si copiaste solo parte del texto dice <b>«El texto parece incompleto»</b> y no pinta ningún ✓; arriba dice siempre <b>«lectura en prueba»</b>; lo pegado no sale de tu teléfono.</p>
-              <p class="mal">Mala señal: una marca que no está en tu certificado (o una que falta), un ✓ con texto incompleto, o que pida subir el PDF.</p>
+              <label for="s17" class="qué">17. Lees tu certificado en el lector (solo si está encendido)<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📱 Teléfono B o 💻 · ≈ 4 min</p>
+              <ol class="pasos"><li>Solo si la pestaña <b>«Certificado (CTL)»</b> aparece en Papeleo: pega el texto de tu CTL real y compara marca por marca con tu lectura. <b>Si no aparece, el lector está apagado y esta parada se salta.</b></li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li>Cada anotación sale con su tipo y su norma; una cancelada se separa de las vigentes; si copiaste solo parte del texto dice «El texto parece incompleto» y no pinta ningún ✓; si pegaste dos certificados dice que sobran anotaciones; arriba dice siempre «lectura en prueba»; lo pegado no sale de tu teléfono.</li></ul></div>
+              <p class="mal">Mala señal: Una marca que no está en tu certificado (o una que falta), un ✓ con texto incompleto, o que pida subir el PDF.</p>
+              <p class="cubre">Es una prueba nueva del ensayo: no reemplaza a ninguna prueba de los bloques anteriores.</p>
+            </div>
+          </li>
+        </ul>
+        <h3 class="ruta">Escena 6 · Mañana<span class="sub"> — Segunda sentada, a las 8:00.</span></h3>
+        <ul>
+          <li data-origen="s16 clave clave2">
+            <input type="checkbox" id="s18" />
+            <div>
+              <label for="s18" class="qué">18. Mañana a las 8:00: lo que hace el trabajo diario<span class="origen o-s16">Nuevo · S16</span><span class="origen o-clave2">⭐⭐ servicio real</span></label>
+              <p class="donde">📧 Tus dos buzones y 💻 (segunda sentada) · ≈ 6 min</p>
+              <ol class="pasos"><li>A las 8:00 (hora de Bogotá) abre los dos buzones: el del dueño y el del comprador.</li><li>En Gmail, en el correo de la alerta, usa <b>«Cancelar suscripción»</b> (arriba, junto al remitente); luego prueba el enlace <b>«Dejar de recibirla: un clic»</b> del cuerpo desde otro navegador sin sesión.</li><li>Abre <b>Herramientas</b>: mira la tasa de referencia.</li><li>Si a las 9:00 no llegó nada: Cloudflare → tu Worker → Triggers (el cron de las 13:00 UTC) y, en sus registros, la línea «cron» con sus conteos.</li></ol>
+              <div class="esperar"><b>Esperado:</b><ul><li><b>Visita:</b> a los dos les llega «Mañana es tu visita» / «Mañana recibes a …», con la hora de Bogotá y sin la dirección; si hubieras cancelado la visita, no llega ninguno; no se repite si el trabajo del día corre dos veces.</li><li><b>Alerta:</b> llega <b>un solo</b> correo con el anuncio que bajó de precio (precio anterior tachado). La baja se hace en un solo toque, sin sesión ni contraseña, dice «Listo: no recibirás más avisos», repetir el enlace no rompe nada y la alerta desaparece de Alertas.</li><li><b>Tasa:</b> la tasa de referencia lleva una fecha de corte reciente de la Superintendencia Financiera y no dice «Aún no hemos guardado una tasa propia».</li></ul></div>
+              <p class="mal">Mala señal: A las 9:00 no llegó nada (mira el cron en el Worker); un resumen duplicado; Gmail no muestra «Cancelar suscripción» (avisa con el remitente); la tasa sigue diciendo «la última que leímos» (el cron no la guarda).</p>
+              <p class="cubre">Cubre las pruebas: L2, M2, M3, N3.</p>
             </div>
           </li>
         </ul>
       </section>
 
       <div class="aviso-final">
-        <b>Qué mandarme al terminar:</b> por bloque (A–S), qué pasó. En especial
-        las pruebas <b>⭐ del gate mínimo</b> (las que ninguna automatización
-        cubre): el recorrido real en tu teléfono (registro y
-        <b>subir una foto de verdad</b>), <b>pegar la ficha en WhatsApp</b> y
-        ver su vista previa, tu juicio del copy y las cifras, la aprobación
-        visual, y la verificación del CTL desde el panel; y, del <b>bloque S</b>, cada parada con una fila: lo que viste, lo que no viste y qué dijo cada servicio real (<b>lo no visto no cuenta</b>). El resto (axe, tests
-        unitarios, e2e, Lighthouse) ya lo cubre la CI.
+        <b>Qué mandarme al terminar:</b> por parada (1 a 18), una fila: <b>lo que viste</b>, <b>lo que no viste</b> y,
+        en las ⭐⭐, <b>qué dijo el servicio real</b> (el correo que llegó, el WhatsApp, la cédula, el cron). Lo
+        que no viste no cuenta. Anota aparte lo que te sorprendió aunque estuviera bien (por ejemplo, el idioma
+        de la tarjeta de WhatsApp de la parada 4). El resto (axe, pruebas unitarias, e2e, Lighthouse) ya lo
+        cubre la CI.
       </div>
 
       <footer>
@@ -3050,19 +3115,19 @@
         <h3>Historial</h3>
         <p>
           <b>Sprint 016 (2026-10-26):</b><br />
-          <b>Nuevo:</b> bloque S (tu ensayo general del H-2): 20 paradas en
-          tres rutas (dueño, comprador y operador) más tu juicio y tu cuerpo
-          (papeleo, tema claro, VoiceOver y el lector de CTL si está
-          encendido); 10 son <b>⭐⭐ servicio real</b>, que solo se prueban con
-          correo, WhatsApp, cédula o el cron de verdad. Dos paradas necesitan
-          una segunda sentada (los correos de las 8:00 del día siguiente).<br />
-          <b>Mejorado:</b> M3 (la baja de precio avisa solo desde un 1 %); el
-          filtro «Solo lo del S1» ya no muestra también S10 a S16 (compara la
-          etiqueta entera); el filtro nuevo «⭐⭐ Solo servicios reales».<br />
+          <b>Nuevo:</b> bloque S (tu ensayo general del H-2): <b>una sola historia de 18 paradas</b>
+          (dueño → comprador → vivienda nueva y números → equipo → tu mirada → mañana a las 8:00), ≈ 1 h 49 min;
+          9 son <b>⭐⭐ servicio real</b>, que solo se prueban con correo, WhatsApp, cédula o el cron de verdad. La
+          última es una segunda sentada (los correos de las 8:00 del día siguiente).<br />
+          <b>Mejorado:</b> las 41 pruebas ⭐ de los bloques A–R se prueban ahora <b>dentro de una parada del ensayo</b> (cada una dice
+          cuál) y dejan de ser un gate aparte: antes el gate eran 61 pruebas con la mitad repetida. M3 (la baja de precio avisa solo desde
+          un 1 %); el filtro «Solo lo del S1» ya no muestra también S10 a S16; los filtros «⭐⭐ Solo servicios reales» y «El ensayo
+          (recorrido)», que es con el que abre la guía. Corregido en el recorrido: la campaña ya no puede salir a vendedores reales (se
+          mira «Ver destinatarios» antes), la plantilla se llama «Gana tu sello ⭐», y hace falta activar el contacto para que exista el botón
+          de WhatsApp.<br />
           <b>Eliminado:</b> —<br />
-          <b>Total acumulado:</b> 130 pruebas, 61 del gate mínimo ⭐. Los
-          avances guardados en tu navegador empiezan de cero (la guía pasó a la
-          versión 13).
+          <b>Total acumulado:</b> 128 pruebas, 18 del gate mínimo ⭐ (todas en el ensayo). Los avances guardados en tu navegador
+          empiezan de cero (la guía pasó a la versión 14).
         </p>
         <p>
           <b>Sprint 015 (2026-10-25):</b><br />
@@ -3212,7 +3277,7 @@
     <script>
       (function () {
         "use strict";
-        var CLAVE = "guia-inmobiliaria-v13:";
+        var CLAVE = "guia-inmobiliaria-v14:";
         var checks = Array.prototype.slice.call(
           document.querySelectorAll('input[type="checkbox"]'),
         );
@@ -3277,6 +3342,8 @@
         });
 
         pintar();
+        // La guía abre en el ensayo: es lo que hay que hacer. «Ver todo» deja la regresión a la vista.
+        filtros.querySelector('[data-filtro="s16"]').click();
       })();
     </script>
   </body>
